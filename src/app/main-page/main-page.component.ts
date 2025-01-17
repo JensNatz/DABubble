@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { MessageComponent } from './message/message.component';
+import { TimeSeperatorComponent } from './time-seperator/time-seperator.component';
 import { Message } from '../models/message';
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [MessageComponent],
+  imports: [MessageComponent, TimeSeperatorComponent],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })

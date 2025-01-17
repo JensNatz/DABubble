@@ -1,0 +1,21 @@
+@import '../../../styles.scss';
+
+.time-seperator {
+    @include flex($justify: space-between);
+    gap: 8px;
+
+    .line {
+        width: 100%;
+        height: 1px;
+        background-color: $light-purple;
+    }
+
+    .date {
+        @include rounded();
+        border: 1px solid $light-purple;
+        flex-shrink: 0;
+        color: $gray;
+        font-size: 14px;
+        padding: 4px 8px;
+    }
+}
