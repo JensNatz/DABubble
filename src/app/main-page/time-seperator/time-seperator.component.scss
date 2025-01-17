@@ -2,7 +2,6 @@
 
 .time-seperator {
     @include flex($justify: space-between);
-    gap: 8px;
 
     .line {
         width: 100%;
