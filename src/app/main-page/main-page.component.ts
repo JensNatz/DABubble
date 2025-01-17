@@ -15,8 +15,8 @@ export class MainPageComponent {
 
   constructor() {
     this.messages = [
-      { id: '1', content: 'Hello, how are you?', timestamp: new Date(1737047891), isOwn: true, userId: '1' },
-      { id: '2', content: 'I am fine, thank you!', timestamp: new Date(1737047891), isOwn: false, userId: '2' },
+      { id: '1', content: 'Hello, how are you?', timestamp: 1737047891, isOwn: true, userId: '1' },
+      { id: '2', content: 'I am fine, thank you!', timestamp: 1737047891, isOwn: false, userId: '2' },
     ];
   }
 }

@@ -14,13 +14,13 @@ export class MessageComponent implements OnInit {
   @Input() message!: Message;
   isOwn: boolean;
   content: string;
-  timestamp: Date;
+  timestamp: number;
   userId: string;
 
   constructor() {
     this.isOwn = false;
     this.content = '';
-    this.timestamp = new Date();
+    this.timestamp = 0;
     this.userId = '';
   }
 
