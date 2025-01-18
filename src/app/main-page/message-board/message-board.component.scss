@@ -1,0 +1,8 @@
+@import '../../../styles.scss';
+
+.message-board {
+    @include rounded();
+    background-color: $white;
+    padding: 16px;
+    margin: 48px;
+}
