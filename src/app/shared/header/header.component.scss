@@ -1,3 +1,5 @@
+@import './../../styles/variables';
+
 .header {
     height: 120px;
     // max-width: 1440px;
@@ -28,7 +30,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 70px;
+    cursor: pointer;
+
+    &:hover {
+        color: $purple-2;
+    }
+
+    h2 {
+        font-size: 32px;        
+    }
 }
 
 .user_foto {
@@ -38,7 +48,13 @@
 
 .arrow_down {
     height: 8px;
-    width: 14px;
+    width: 14px;    
+    filter: invert(0%);
+    transition: filter 0.3s ease;
+}
+
+.user_name:hover .arrow_down {
+    filter: invert(46%) sepia(99%) saturate(1444%) hue-rotate(213deg) brightness(100%) contrast(91%);
 }
 
 .search {
