@@ -4,3 +4,14 @@
   align-items: $align;
   flex-direction: $direction;
 }
+
+@mixin rounded($top-left: 30px, $top-right: 30px, $bottom-left: 30px, $bottom-right: 30px, $all: null) {
+  @if $all != null {
+    border-radius: $all;
+  } @else {
+    border-top-left-radius: $top-left;
+    border-top-right-radius: $top-right;
+    border-bottom-left-radius: $bottom-left;
+    border-bottom-right-radius: $bottom-right;
+  }
+}
