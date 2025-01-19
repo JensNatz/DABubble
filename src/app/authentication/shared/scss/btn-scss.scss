@@ -1,0 +1,52 @@
+@import '../../../styles/variables';
+
+
+
+
+.register-btn{
+    color: $white;
+    background-color: $purple-1;
+    font-size: 18px;
+    width: 136px;
+    height: 49px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 700;
+
+    &:hover{
+        cursor: pointer;
+        background-color: $purple-2;
+    }
+}
+
+.guest-login-btn{
+    color: $purple-2;
+    background-color: $white;
+    border: 1px solid $purple-2;
+    font-size: 18px;
+    width: 136px;
+    height: 49px;
+    border-radius: 25px;
+    font-weight: 700;
+
+    &:hover{
+        cursor: pointer;
+        background-color: $purple-1;
+        color: $white;
+    }
+}
+
+.next-btn{
+    width: 106px;
+    color: $white;
+    background-color: $purple-1;
+    height: 49px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 700;
+
+    &:hover{
+        cursor: pointer;
+        background-color: $purple-2;
+    }
+}
