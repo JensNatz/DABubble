@@ -1,10 +1,10 @@
 <div class="message-container" [ngClass]="{'own': isOwn}">
     <div class="avatar">
-        <app-avatar></app-avatar>
+        <app-avatar [avatarId]="avatarId"></app-avatar>
     </div>
     <div class="message">
         <div class="message-header">
-                <div class="message-header-name">John Doe</div>
+                <div class="message-header-name">{{ authorName }}</div>
                 <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
         </div>
         <div class="message-text">

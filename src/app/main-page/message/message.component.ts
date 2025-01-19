@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { Message } from '../../models/message';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-message',
@@ -12,22 +13,23 @@ import { Message } from '../../models/message';
 })
 export class MessageComponent implements OnInit {
   @Input() message!: Message;
-  isOwn: boolean;
-  content: string;
-  timestamp: number;
-  userId: string;
+  content: string = '';
+  timestamp: number = 0;
+  authorName: string = 'Unknown User';
+  isOwn: boolean = false;
+  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
+  avatarId: string = '0';
 
-  constructor() {
-    this.isOwn = false;
-    this.content = '';
-    this.timestamp = 0;
-    this.userId = '';
-  }
+  constructor(private userService: UserService) {}
 
-  ngOnInit() {
-    this.isOwn = this.message.isOwn;
+  async ngOnInit() {
     this.content = this.message.content;
     this.timestamp = this.message.timestamp;
-    this.userId = this.message.userId;
+    this.authorName = await this.userService.getUserName(this.message.author);
+    this.avatarId = await this.userService.getUserAvatar(this.message.author);
+
+    if (this.message.author === this.userId) {
+      this.isOwn = true;
+    }
   }
 }
