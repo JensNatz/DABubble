@@ -19,6 +19,7 @@ export class MessageComponent implements OnInit {
   isOwn: boolean = false;
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   avatarId: string = '0';
+  reactions: [] = [];
 
   constructor(private userService: UserService) {}
 
@@ -27,6 +28,9 @@ export class MessageComponent implements OnInit {
     this.timestamp = this.message.timestamp;
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
+    this.reactions = this.message.reactions || [];
+
+    console.log(this.message);
 
     if (this.message.author === this.userId) {
       this.isOwn = true;

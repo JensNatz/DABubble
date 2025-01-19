@@ -10,5 +10,10 @@
         <div class="message-text">
             {{ content }}
         </div>
+        <div *ngIf="reactions.length > 0" class="message-reactions">
+            <div class="message-reaction" *ngFor="let reaction of reactions; let i = index">
+               reaction
+            </div>
+        </div>
     </div>
 </div>

@@ -3,4 +3,5 @@ export interface Message {
     content: string;
     timestamp: number;
     author: string;
+    reactions?: [];
 }
