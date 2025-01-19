@@ -1,0 +1,73 @@
+@import '../../../styles.scss';
+
+.message-container {
+    @include flex($direction: row, $align: start, $justify: start);
+    gap: 24px;
+    padding: 16px 32px;
+    background-color: $white;
+    cursor: pointer;
+
+    .message {
+        @include flex($direction: column, $align: start);
+        gap: 12px;
+      
+        .message-header {
+          @include flex();
+          gap: 16px;
+      
+          .message-header-name {
+            font-weight: 700;
+
+            &:hover {
+                color: $purple-1;
+            }
+          }
+      
+          .message-header-time {
+            color: $gray;
+            font-size: 14px;
+          }
+        } 
+      
+        .message-text {
+          @include rounded($top-left: 0);
+          padding: 16px;
+          background-color: $bg-color;
+      
+          &.own {
+            @include rounded($top-left: 0);
+            background-color: $purple-2;
+            color: $white;
+          }
+        }
+      }
+
+    &:hover {
+        background-color: $bg-color;
+
+        .message-text:not(.own) {
+            background-color: $white;
+        }
+    }
+
+    &.own {
+        @include flex($direction: row-reverse, $align: start, $justify: end);
+
+        .message {
+            @include flex($direction: column, $align: end);
+
+            .message-header {
+                @include flex($direction: row-reverse);
+            }
+
+            .message-text {
+                @include rounded($top-right: 0);
+                background-color: $purple-2;
+                color: $white;
+            }
+        }
+    }
+
+}
+
+
