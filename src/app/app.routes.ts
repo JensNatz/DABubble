@@ -15,5 +15,9 @@ export const routes: Routes = [
   {
     path: 'imprint',
     component: ImprintComponent
+  },
+  {
+    path: 'main',
+    component: MainPageComponent
   }
 ];

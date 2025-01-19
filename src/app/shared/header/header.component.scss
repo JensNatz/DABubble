@@ -1,0 +1,81 @@
+@import './../../styles/variables';
+
+.header {
+    height: 120px;
+    // max-width: 1440px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+   
+}
+
+.content {
+    // max-width: 1440px;
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 45px 0;
+}
+
+.logo {
+    height: 70px;
+    width: 242px;
+}
+
+.user_name {
+    width: 342px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    &:hover {
+        color: $purple-2;
+    }
+
+    h2 {
+        font-size: 32px;        
+    }
+}
+
+.user_foto {
+    height: 75px;
+    width: 75px;
+}
+
+.arrow_down {
+    height: 8px;
+    width: 14px;    
+    filter: invert(0%);
+    transition: filter 0.3s ease;
+}
+
+.user_name:hover .arrow_down {
+    filter: invert(46%) sepia(99%) saturate(1444%) hue-rotate(213deg) brightness(100%) contrast(91%);
+}
+
+.search {
+    width: 26px;
+    height: 26px;
+    top: 22px;
+    right: 24px;
+    position: absolute;
+}
+
+.input_search {
+    width: 50%;
+    position: relative;       
+
+    input {
+        color: #686868;
+        width: 100%;
+        height: 70px;
+        border-radius: 42px;
+        border: 0;
+        padding: 0 30px;
+        font-size: 24px;
+    }
+}
