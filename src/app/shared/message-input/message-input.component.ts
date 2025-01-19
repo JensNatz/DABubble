@@ -23,8 +23,10 @@ export class MessageInputComponent {
   };
 
   postMessage() {
-    console.log(this.message);
-    this.messageService.postMessageToChannel(this.channelId, this.message);
-    this.message.content = '';
+    if (this.message.content.trim()) {
+      this.messageService.postMessageToChannel(this.channelId, this.message);
+      this.message.content = '';
+    }
   }
 }
+
