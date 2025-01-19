@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './workspace-menu.component.scss'
 })
 export class WorkspaceMenuComponent {
-
+  workspaceActive = false;
 }
+

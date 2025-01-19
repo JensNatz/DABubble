@@ -13,5 +13,5 @@ import { WorkspaceMenuComponent } from './workspace-menu/workspace-menu.componen
   styleUrl: './main-page.component.scss'
 })
 export class MainPageComponent {
-
+  
 }
