@@ -3,11 +3,18 @@ import { CommonModule } from '@angular/common';
 import { TimeSeperatorComponent } from '../time-seperator/time-seperator.component';
 import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
+import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { MessageServiceService } from '../../services/firebase-services/message-service.service';
+
 @Component({
   selector: 'app-message-board',
   standalone: true,
-  imports: [MessageComponent, TimeSeperatorComponent, CommonModule],
+  imports: [
+    CommonModule,
+    MessageComponent,
+    TimeSeperatorComponent,
+    MessageInputComponent
+  ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
 })

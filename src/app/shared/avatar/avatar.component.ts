@@ -11,9 +11,4 @@ import { CommonModule } from '@angular/common';
 export class AvatarComponent {
   @Input() size: 'small' | 'standard' | 'large' = 'standard';
   @Input() avatarId: string = '1';
-
-
-  async ngOnInit() {
-    console.log('avatarId: ', this.avatarId);
-  }
 }

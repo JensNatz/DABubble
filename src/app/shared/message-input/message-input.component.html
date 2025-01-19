@@ -1,0 +1,6 @@
+<div class="message-input">
+    <textarea [(ngModel)]="message.content" placeholder="Nachricht an #Entwicklerteam"></textarea>
+    <button (click)="postMessage()" [disabled]="!message.content.trim()">
+        <img src="assets/img/iconSend.svg" alt="Send">
+    </button>
+</div>

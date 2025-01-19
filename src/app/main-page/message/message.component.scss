@@ -2,7 +2,7 @@
 
 .message-container {
     @include flex($direction: row, $align: start, $justify: start);
-    gap: 12px;
+    gap: 24px;
     padding: 16px 32px;
     background-color: $white;
     cursor: pointer;

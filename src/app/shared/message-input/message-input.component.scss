@@ -1,0 +1,12 @@
+@import '../../../styles.scss';
+
+.message-input {
+    @include rounded($all: 20px);
+    border: 1px solid $light-purple;
+    height: 145px;
+    padding: 24px 16px;
+
+    textarea {
+        width: 100%;
+    }
+}
