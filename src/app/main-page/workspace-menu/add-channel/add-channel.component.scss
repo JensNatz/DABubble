@@ -1,8 +1,51 @@
-p{    
-    color: black;
-    background-color: white;
+@import './../../../styles/variables';
+@import './../../../styles/mixins';
+
+.add_chanel_form {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    word-wrap: break-word;
+
+    h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+
+    p {
+        font-size: 18px;        
+    }
+
+    span {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 20px 0;
+    }
+
+    input {
+        height: 60px;
+        width: 100%;
+        border: 1px $light-purple solid;
+        font-size: 18px;
+        padding: 0 24px;
+        @include rounded();
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 20px 30px;
+        border-radius: 30px;
+        border: 0;
+        width: 200px;
+        background-color: $purple-1;
+        color: white;
+        font-family: 'Nunito';
+        font-size: 18px;
+    }
 }
 
-body {
-    background-color: white;
+.button_add {
+    display: flex;
+    justify-content: end;
 }

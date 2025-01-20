@@ -14,9 +14,14 @@
         </div>
         <img class="add" src="assets/img/add.png" (click)="openAddChannel()">
 
+        <!-- <div class="modal-overlay"></div>
+        <div class="modal">
+            <img src="assets/img/close.svg">            
+            <app-add-channel></app-add-channel>
+        </div> -->
         <div class="modal-overlay" *ngIf="showModal" (click)="closeAddChannel()"></div>
         <div class="modal" *ngIf="showModal">
-            <button class="close-button" (click)="closeAddChannel()">X</button>            
+            <img src="assets/img/close.svg"(click)="closeAddChannel()">                        
             <app-add-channel></app-add-channel>
         </div>
 
@@ -28,7 +33,7 @@
             }
         </div>
     </div>
-    <div class="add_chanel">
+    <div class="add_chanel" (click)="openAddChannel()">
         <img src="assets/img/add_circle.png">
         <p>Channel hinzufügen</p>
     </div>
