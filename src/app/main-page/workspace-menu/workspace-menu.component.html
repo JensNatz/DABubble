@@ -4,7 +4,7 @@
             <img class="logo" src="assets/img/Workspace logo.png">
             <h2>Devspace</h2>
         </div>
-        <img class="edit" src="assets/img/edit_square.png">
+        <img class="edit" src="assets/img/edit_square.svg">
     </div>
     <div class="channels_content">
         <div class="channel_title">
@@ -29,7 +29,7 @@
     <div class="channels">
         <div class="chanel_name">
             @for (channel of (this.channelService.channels| async); track channel) {
-            <p><b>#</b> {{ channel['name'] }}</p>
+            <p><b>#</b>{{ channel['name'] }}</p>
             }
         </div>
     </div>
