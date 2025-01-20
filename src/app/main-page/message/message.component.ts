@@ -30,7 +30,7 @@ export class MessageComponent implements OnInit {
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactions = this.message.reactions || [];
 
-    console.log(this.message);
+    // console.log(this.message);
 
     if (this.message.author === this.userId) {
       this.isOwn = true;

@@ -7,17 +7,25 @@
         <img class="edit" src="assets/img/edit_square.png">
     </div>
     <div class="channels_content">
-        <div>
+        <div class="channel_title">
             <img class="arrow" src="assets/img/arrow_drop_down.png">
             <img class="space" src="assets/img/workspaces.png">
             <p>Channels</p>
-        </div>       
-        <img class="add" src="assets/img/add.png">
-        
+        </div>
+        <img class="add" src="assets/img/add.png" (click)="openAddChannel()">
+
+        <div class="modal-overlay" *ngIf="showModal" (click)="closeAddChannel()"></div>
+        <div class="modal" *ngIf="showModal">
+            <button class="close-button" (click)="closeAddChannel()">X</button>            
+            <app-add-channel></app-add-channel>
+        </div>
+
     </div>
     <div class="channels">
         <div class="chanel_name">
-            <p># Channel Name</p>
+            @for (channel of (this.channelService.channels| async); track channel) {
+            <p><b>#</b> {{ channel['name'] }}</p>
+            }
         </div>
     </div>
     <div class="add_chanel">

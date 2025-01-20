@@ -1,13 +1,35 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
+import { AddChannelComponent } from './add-channel/add-channel.component';
+
 
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AddChannelComponent
+  ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss'
 })
 export class WorkspaceMenuComponent {
-  workspaceActive = false;
+
+  public showModal: boolean = false;
+
+  constructor(public channelService: ChannelServiceService) {
+    
+  }
+
+  openAddChannel() {
+    this.showModal = true;
+  }
+
+  closeAddChannel() {
+    this.showModal = false;
+  }
 }
 
