@@ -4,6 +4,11 @@ body {
     background-color: $purple-2;
 }
 
+.main_content {
+    display: flex;
+    width: 100%;
+}
+
 .workspace-open {
     display: flex;
     align-items: center;

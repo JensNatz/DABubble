@@ -3,7 +3,7 @@
 .message-board {
     @include rounded();
     background-color: $white;
-    margin: 48px;
+    margin-left: 20px;
     padding: 16px 0;
 
     .message-input-container {
