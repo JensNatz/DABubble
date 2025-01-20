@@ -1,3 +1,8 @@
+@import './variables';
+
+
+
+
 @mixin flex($justify: center, $align: center, $direction: row) {
   display: flex;
   justify-content: $justify;
@@ -6,12 +11,31 @@
 }
 
 @mixin rounded($top-left: 30px, $top-right: 30px, $bottom-left: 30px, $bottom-right: 30px, $all: null) {
-  @if $all != null {
+  @if $all !=null {
     border-radius: $all;
-  } @else {
+  }
+
+  @else {
     border-top-left-radius: $top-left;
     border-top-right-radius: $top-right;
     border-bottom-left-radius: $bottom-left;
     border-bottom-right-radius: $bottom-right;
+  }
+}
+
+@mixin btn($text-color: $white, $bg-color: $purple-1, $width: 136px, $height: 48px, $bg-color-hover: $purple-2, $text-color-hover: $white ) {
+  color: $text-color ;
+  background-color: $bg-color;
+  font-size: 18px;
+  width: $width;
+  height: $height;
+  border-radius: 25px;
+  border: none;
+  font-weight: 700;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $bg-color-hover;
+    color: $text-color-hover;
   }
 }

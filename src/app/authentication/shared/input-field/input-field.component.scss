@@ -3,7 +3,7 @@
 
 .input-container {
 
-
+position: relative;
     
     input {
         max-width: 500px;
@@ -37,4 +37,12 @@
             border: 1px solid $purple-1;
         }
     }
+}
+
+.error-message{
+    color: $rose;
+    font-size: 14px;
+    margin-top: 6px;
+    position: absolute;
+    left: 0;
 }

@@ -15,6 +15,8 @@ export class InputFieldComponent {
   @Input() type: string = 'text';
   @Input() value: string = '';
   @Input() placeholder: string = '';
-  
+  @Input() pattern: any ="";
+  @Input() showError: boolean = false;
+  @Input() errorMessage: string = '';
 
 }

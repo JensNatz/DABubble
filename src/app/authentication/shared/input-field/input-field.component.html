@@ -1,3 +1,4 @@
 <div class="input-container">    
-    <input required [type]="type" [value]="value" [placeholder]="placeholder" />
+    <input required [pattern]="pattern" [type]="type" [value]="value" [placeholder]="placeholder" />
+    <div *ngIf="showError" class="error-message">{{ errorMessage }}</div>
 </div>

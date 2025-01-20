@@ -5,11 +5,22 @@
         <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</span>
     </div>
 
-gf
+
     <form (ngSubmit)="onSubmit">
-        <div class="input-field-section">
-            <input class="input-field-design" type="email" placeholder="beispielname@email.com">#
-            <input class="input-field-design" type="password" placeholder="Password">
+        <div class="input-field-section">            
+            <app-input-field
+                 type="email"
+                 placeholder="beispielname@email.com"
+                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                 [showError]="usernameInvalid || true"
+                 errorMessage = "Diese E-Mail-Adresse ist leider ungültig">
+            </app-input-field>
+            <app-input-field
+                type="password"
+                placeholder="Passwort"
+                [showError]="usernameInvalid || true"
+                errorMessage = "Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen">
+                ></app-input-field>            
         </div>
 
         <p class="pw-forget-btn br-30">Passwort vergessen?</p>

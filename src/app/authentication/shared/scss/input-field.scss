@@ -1,6 +1,10 @@
 @import '../../../styles/variables';
 
 
+.input-container{
+    position: relative;
+}
+
 .input-field-design {
     max-width: 500px;
     width: 100%;
@@ -32,4 +36,12 @@
         outline: none;
         border: 1px solid $purple-1;
     }
+}
+
+.error-message{
+    color: rgba(237, 30, 121, 1);
+    font-size: 14px;
+    margin-top: 6px;
+    position: absolute;
+    left: 0;
 }
