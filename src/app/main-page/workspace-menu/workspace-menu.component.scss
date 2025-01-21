@@ -100,7 +100,12 @@
     justify-content: start;
     margin-right: 30px;
     max-height: 140px;
-    overflow: auto;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+        overflow: auto;
+    }
 
     img {
         height: 20px;
