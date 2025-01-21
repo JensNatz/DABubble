@@ -18,6 +18,9 @@ import { AddChannelComponent } from './add-channel/add-channel.component';
 })
 export class WorkspaceMenuComponent { 
   
+  isOpenChannelListe = true;
+  isOpenUserListe = true;
+
   public showModal: boolean = false;
 
   constructor(public channelService: ChannelServiceService) { }
@@ -30,5 +33,12 @@ export class WorkspaceMenuComponent {
     this.showModal = false;
   }
 
+  toggleMenuChannel() {
+    this.isOpenChannelListe = !this.isOpenChannelListe;    
+  
+  }
+  toggleMenuUser() {
+    this.isOpenUserListe  = !this.isOpenUserListe ; 
+  }
 }
 

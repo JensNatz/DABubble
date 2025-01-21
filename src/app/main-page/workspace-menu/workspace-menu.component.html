@@ -7,7 +7,7 @@
         <img class="edit" src="assets/img/edit_square.svg">
     </div>
     <div class="channels_content">
-        <div class="channel_title">
+        <div class="channel_title"  (click)="toggleMenuChannel()">
             <img class="arrow" src="assets/img/arrow_drop_down.png">
             <img class="space" src="assets/img/workspaces.png">
             <p>Channels</p>
@@ -26,23 +26,25 @@
         </div>
 
     </div>
-    <div class="channels">
-        <div class="chanel_name">
-            @for (channel of (this.channelService.channels | async); track channel) {
-            <p><b>#</b>{{ channel['name'] }}</p>
-            }
+    <div *ngIf="isOpenChannelListe">
+        <div class="channels" >
+            <div class="chanel_name">
+                @for (channel of (this.channelService.channels | async); track channel) {
+                <p><b>#</b>{{ channel['name'] }}</p>
+                }
+            </div>
+        </div>
+        <div class="add_chanel" (click)="openAddChannel()">
+            <img src="assets/img/add_circle.png">
+            <p>Channel hinzufügen</p>
         </div>
     </div>
-    <div class="add_chanel" (click)="openAddChannel()">
-        <img src="assets/img/add_circle.png">
-        <p>Channel hinzufügen</p>
-    </div>
-    <div class="message_content">
+    <div class="message_content" (click)="toggleMenuUser()">
         <img class="arrow" src="assets/img/arrow_drop_down.png">
         <img class="account_circle" src="assets/img/account_circle.png">
         <p>Direktnachrichten</p>
     </div>
-    <div class="user_liste">
+    <div class="user_liste" *ngIf="isOpenUserListe">
         @for (user of (this.channelService.users | async); track user) {
             <div>
                 <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
