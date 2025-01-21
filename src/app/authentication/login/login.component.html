@@ -1,3 +1,5 @@
+<app-register-button></app-register-button>
+
 <div class="login-container br-30">
 
     <div class="headline-section">
@@ -12,7 +14,7 @@
                  type="email"
                  placeholder="beispielname@email.com"
                  pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                 [showError]="usernameInvalid || true"
+                 [showError]="usernameInvalid ||false"
                  errorMessage = "Diese E-Mail-Adresse ist leider ungültig">
             </app-input-field>
             <app-input-field
@@ -43,3 +45,4 @@
 
 
 </div>
+

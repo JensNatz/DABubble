@@ -1,0 +1,45 @@
+<div class="register-container">
+
+    <div [routerLink]="['']" class="arrow-back">
+        <img src="../../../assets/img/arrow_back.svg" alt="">
+    </div>
+
+    <div class="headline-section">
+        <h2>Konto erstellen</h2>
+        <span>Mit deinem Namen und deiner E-Mail_Adreese hast du dein neue DABubble-Konto</span>
+    </div>
+
+    <form (ngSubmit)="onSubmit">
+        <div class="input-field-section">
+            <app-input-field
+                type="text"
+                placeholder="Name und Nachname"
+                [showError]="passwordInvalid || true"
+                errorMessage="Bitte schreiben Sie einen Namen">
+                >
+            </app-input-field>
+            <app-input-field 
+                type="email"
+                placeholder="beispielname@email.com"
+                pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                [showError]="usernameInvalid || true"
+                errorMessage="Diese E-Mail-Adresse ist leider ungültig">
+            </app-input-field>
+            <app-input-field 
+                type="password"
+                placeholder="Passwort"
+                [showError]="passwordInvalid || true"
+                errorMessage="Bitte geben Sie ein Passwort ein">
+            ></app-input-field>
+        </div>
+
+        <div class="data-protection-container">
+            <span>Ich stimme der <a>Datenschutzerklärung</a> zu</span>
+        </div>
+
+        <div class="btn-container">
+            <button [routerLink]="['/register/avatar']"  class="next-btn">Weiter</button>
+        </div>
+    </form>
+
+</div>
