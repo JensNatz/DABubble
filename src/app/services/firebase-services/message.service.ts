@@ -29,18 +29,15 @@ export class MessageService {
   removeReactionFromMessage(channelId: string, messageId: string, reactionType: string, userId: string) {
     const messageRef = doc(this.firestore, `channels/${channelId}/messages/${messageId}`);
     updateDoc(messageRef, {
-      reactions: {
-        [reactionType]: arrayRemove(userId)
-      }
+      ///TO DO: ??? if no more reactions, remove the reaction type from the message ??? not sure if this is needed
+      [`reactions.${reactionType}`]: arrayRemove(userId)
     });
   }
 
   addReactionToMessage(channelId: string, messageId: string, reactionType: string, userId: string) {
     const messageRef = doc(this.firestore, `channels/${channelId}/messages/${messageId}`);
     updateDoc(messageRef, {
-      reactions: {
-        [reactionType]: arrayUnion(userId)
-      }
+      [`reactions.${reactionType}`]: arrayUnion(userId)
     });
   }
 }
