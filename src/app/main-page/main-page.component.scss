@@ -22,16 +22,18 @@ body {
     transform: rotate(270deg);
     height: 60px;
     width: 340px;
-    gap: 12px;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
     -webkit-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
     -moz-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
     box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
 
-    
+
     h2 {
         font-size: 20px;
+        display: inline-block;
+        width: 255px;
+        white-space: nowrap;
     }
 
     img {

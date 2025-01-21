@@ -1,10 +1,13 @@
 <app-header></app-header>
 <div class="main_content">
-    <app-workspace-menu></app-workspace-menu>
-    <app-message-board></app-message-board>
+    <div class="none" *ngIf="isOpen">
+        <app-workspace-menu></app-workspace-menu>
+    </div>
+    <div>
+        <app-message-board></app-message-board>
+    </div>
 </div>
 <div class="workspace-open">
-    <h2>Workspace-Menü open</h2>
+    <h2 (click)="toggleMenu()">Workspace-Menü {{ isOpen ? closed : open }}</h2>
     <img src="assets/img/Group 2.png">
 </div>
-
