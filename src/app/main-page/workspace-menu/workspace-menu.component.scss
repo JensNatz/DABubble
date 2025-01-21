@@ -1,5 +1,6 @@
 @import './../../styles/variables';
 @import './../../styles/mixins';
+@import './../../shared/avatar/avatar.component.scss';
 
 .workspace-content {
     height: calc(100vh - 145px);
@@ -97,10 +98,36 @@
 .channels {
     display: flex;
     justify-content: start;
+    margin-right: 30px;
+    max-height: 140px;
+    overflow: auto;
 
     img {
         height: 20px;
         width: 20px;
+    }
+
+    &::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        border-radius: 4px;
+        background-color: #DFE9EB;
+    }
+
+    &::-webkit-scrollbar-track:active {
+        background-color: #B8C0C2;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: $light-purple;
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+        background-color: $light-purple;
     }
 }
 
@@ -109,15 +136,20 @@
     padding-top: 30px;
     display: flex;
     justify-content: center;
+    flex-direction: column;
 
     p {
-        background-color: $bg-color;
         border-radius: 20px;
         padding: 4px 22px;
-        color: $purple-3;
-        font-weight: 700;
         font-size: 18px;
         margin-left: 21px;
+        margin-bottom: 12px;
+        cursor: pointer;
+
+        &:hover {
+            color: $purple-3;
+            background-color: $bg-color;
+        }
     }
 
     b {
@@ -204,4 +236,23 @@
     border: none;
     font-size: 16px;
     cursor: pointer;
+}
+
+.user_liste {
+    display: flex;
+    flex-direction: column;
+    padding: 25px 30px 0 60px;
+    font-size: 18px;
+
+    >div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
+
+        >img {
+            height: 50px !important;
+            width: 50px !important;
+        }
+    }
 }

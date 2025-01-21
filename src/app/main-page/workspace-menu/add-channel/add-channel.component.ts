@@ -9,7 +9,7 @@ import { Channel } from '../../../models/channel';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './add-channel.component.html',
   styleUrl: './add-channel.component.scss'
