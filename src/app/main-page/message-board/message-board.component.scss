@@ -6,7 +6,37 @@
     margin-left: 20px;
     padding: 16px 0;
 
+    .message-board-content {
+        height: calc(100vh - 340px);
+        overflow: auto;
+        margin-right: 5px;
+
+        &::-webkit-scrollbar {
+            height: 5px;
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            border-radius: 4px;
+            background-color: #DFE9EB;
+        }
+
+        &::-webkit-scrollbar-track:active {
+            background-color: #B8C0C2;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background-color: $light-purple;
+        }
+
+        &::-webkit-scrollbar-thumb:active {
+            background-color: $light-purple;
+        }
+    }
+
     .message-input-container {
         padding: 0 32px;
+        margin-top: 20px;
     }
 }
