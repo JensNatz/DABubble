@@ -40,6 +40,11 @@
             color: $white;
           }
         }
+
+        .message-reactions {
+            @include flex();
+            gap: 8px;
+        }
       }
 
     &:hover {
@@ -69,5 +74,6 @@
     }
 
 }
+
 
 

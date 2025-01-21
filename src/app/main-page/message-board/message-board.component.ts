@@ -4,7 +4,7 @@ import { TimeSeperatorComponent } from '../time-seperator/time-seperator.compone
 import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
-import { MessageServiceService } from '../../services/firebase-services/message-service.service';
+import { MessageService } from '../../services/firebase-services/message.service';
 
 @Component({
   selector: 'app-message-board',
@@ -21,7 +21,7 @@ import { MessageServiceService } from '../../services/firebase-services/message-
 export class MessageBoardComponent {
 
   channelId: string = '9kacAebjb6GEQZJC7jFL';
-  messageService: MessageServiceService = inject(MessageServiceService);
+  messageService: MessageService = inject(MessageService);
   messages: Message[] = [];
 
   constructor() {

@@ -10,10 +10,14 @@
         <div class="message-text">
             {{ content }}
         </div>
-        <div *ngIf="reactions.length > 0" class="message-reactions">
-            <div class="message-reaction" *ngFor="let reaction of reactions; let i = index">
-               reaction
-            </div>
+        <div class="message-reactions">
+            <ng-container *ngFor="let reaction of reactions">
+                <app-reaction-indicator 
+                    *ngIf="reaction[1].length > 0"
+                    [reaction]="reaction"
+                    (toggleReaction)="handleReactionToggle($event)">
+                </app-reaction-indicator>
+            </ng-container>
         </div>
     </div>
 </div>

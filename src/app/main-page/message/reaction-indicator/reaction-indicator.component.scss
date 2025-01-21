@@ -1,0 +1,54 @@
+@import '../../../../styles.scss';
+
+
+.reaction-indicator {
+  position: relative;
+  @include flex();
+  gap: 12px;
+  @include rounded($all: 20px);
+  border: 1px solid $purple-1;
+  background-color: $white;
+  padding: 4px 8px;
+  height: 32px;
+
+  &:hover {
+    .reaction-bubble {
+        @include flex($direction: column, $justify: start);
+    }
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .reaction-bubble {
+    display: none;
+    position: absolute;
+    transform: translateX(50%) translateY(-4px);
+    bottom: 100%;
+    gap: 4px;
+    @include rounded($bottom-left: 0px);
+    background-color: $purple-1;
+    padding: 16px;
+    min-height: 120px;
+
+    img {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 8px;
+    }
+
+    span {
+      color: $white;
+      font-size: 16px;
+      text-align: center;
+      white-space: nowrap;
+      min-width: fit-content;
+
+      &.reaction-names {
+        font-weight: 700;
+      }
+    }
+  }
+}

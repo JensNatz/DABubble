@@ -1,0 +1,10 @@
+<div class="reaction-indicator" (click)="handleReactionClick()">
+    <div class="reaction-bubble" (click)="$event.stopPropagation()">
+        <img src="assets/img/{{reactionImage}}.svg" alt="Reaction">
+        <span class="reaction-names">{{ reactionNames }}</span>
+        <span class="reaction-text">{{ reactionText }}</span>
+      </div>
+  <img src="assets/img/{{reactionImage}}.svg" alt="Reaction">
+  <div class="reaction-count">{{ reactionCount }}</div>
+</div>
+
