@@ -6,10 +6,12 @@ import { ReactionUser } from '../../models/reaction-user';
 import { UserService } from '../../services/user.service';
 import { ReactionIndicatorComponent } from "./reaction-indicator/reaction-indicator.component";
 import { MessageService } from '../../services/firebase-services/message.service';
+import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.component';
+
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [CommonModule, AvatarComponent, ReactionIndicatorComponent],
+  imports: [CommonModule, AvatarComponent, ReactionIndicatorComponent, EmojiPickerComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
@@ -20,6 +22,7 @@ export class MessageComponent implements OnInit {
   timestamp: number = 0;
   authorName: string = 'Unknown User';
   isOwn: boolean = false;
+  showEmojiPicker: boolean = false;
   // TODO: get user id from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   // TODO: get channel id from ???
@@ -38,6 +41,15 @@ export class MessageComponent implements OnInit {
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
+  }
+
+  toggleEmojiPicker() {
+    this.showEmojiPicker = !this.showEmojiPicker;
+  }
+
+  handleEmojiSelection(event: any) {
+    console.log('Selected emoji:', event.emoji.id);
+    this.showEmojiPicker = false;
   }
 
   handleReactionToggle(reactionType: string) {

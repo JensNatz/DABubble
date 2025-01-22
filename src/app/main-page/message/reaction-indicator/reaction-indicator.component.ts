@@ -1,14 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { UserService } from '../../../services/user.service';
-import { MessageService } from '../../../services/firebase-services/message.service';
 import { CommonModule } from '@angular/common';
 import { ReactionUser } from '../../../models/reaction-user';
-
-
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 @Component({
   selector: 'app-reaction-indicator',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EmojiComponent],
   templateUrl: './reaction-indicator.component.html',
   styleUrl: './reaction-indicator.component.scss'
 })

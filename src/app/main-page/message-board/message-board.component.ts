@@ -13,19 +13,20 @@ import { MessageService } from '../../services/firebase-services/message.service
     CommonModule,
     MessageComponent,
     TimeSeperatorComponent,
-    MessageInputComponent
+    MessageInputComponent,
   ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
 })
 export class MessageBoardComponent {
 
+  // TODO: get channelId from parent component
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   messageService: MessageService = inject(MessageService);
   messages: Message[] = [];
 
   constructor() {
-     this.messageService.getMessagesFromChannelOrderByTimestampASC(this.channelId).subscribe((messages) => {
+    this.messageService.getMessagesFromChannelOrderByTimestampASC(this.channelId).subscribe((messages) => {
       this.messages = messages as Message[];
     });
   }
@@ -35,5 +36,7 @@ export class MessageBoardComponent {
     const date2 = new Date(timestamp2);
     return date1.toDateString() === date2.toDateString();
   }
+
+ 
 
 }

@@ -4,7 +4,7 @@
 .reaction-indicator {
   position: relative;
   @include flex();
-  gap: 12px;
+  gap: 8px;
   @include rounded($all: 20px);
   border: 1px solid $purple-1;
   background-color: $white;
@@ -17,9 +17,8 @@
     }
   }
 
-  img {
-    width: 24px;
-    height: 24px;
+  .emoji {
+    @include flex();
   }
 
   .reaction-bubble {

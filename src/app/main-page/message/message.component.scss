@@ -6,6 +6,7 @@
     padding: 16px 32px;
     background-color: $white;
     cursor: pointer;
+    position: relative;
 
     .message {
         @include flex($direction: column, $align: start);
@@ -71,6 +72,12 @@
                 color: $white;
             }
         }
+    }
+
+    .emoji-picker {
+        position: absolute;
+        bottom: 0;
+        right: 0;
     }
 
 }
