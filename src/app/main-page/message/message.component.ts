@@ -23,12 +23,13 @@ export class MessageComponent implements OnInit {
   timestamp: number = 0;
   authorName: string = 'Unknown User';
   isOwn: boolean = false;
-  showEmojiPicker: boolean = false;
+  displayEmojiPicker: boolean = false;
   // TODO: get user id from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   // TODO: get channel id from ???
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   avatarId: string = '0';
+  emojiPickerPosition: string = 'top: 50px; left: 50px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
   constructor(private userService: UserService) {}
 
@@ -43,12 +44,36 @@ export class MessageComponent implements OnInit {
     }
   }
 
-  toggleEmojiPicker() {
-    this.showEmojiPicker = !this.showEmojiPicker;
+  private calcPickerPosition(event: MouseEvent): string {
+    const buffer = 20; 
+    const viewportHeight = window.innerHeight - buffer;
+    const viewportWidth = window.innerWidth - buffer;
+    const pickerHeight = 339;
+    const pickerWidth = 426;
+    
+    let position = '';
+    
+    if (event.clientY + pickerHeight > viewportHeight) {
+      position += `bottom: ${buffer}px; `;
+    } else {
+      position += `top: ${Math.max(buffer, event.clientY)}px; `;
+    }
+    
+    if (event.clientX + pickerWidth > viewportWidth) {
+      position += `right: ${buffer}px;`;
+    } else {
+      position += `left: ${Math.max(buffer, event.clientX)}px;`;
+    }
+    return position;
+  }
+
+  showEmojiPicker(event: MouseEvent) {
+    this.displayEmojiPicker = true;
+    this.emojiPickerPosition = this.calcPickerPosition(event);
   }
 
   hideEmojiPicker() {
-    this.showEmojiPicker = false;
+    this.displayEmojiPicker = false;
   }
 
   handleEmojiSelection(event: any) {

@@ -3,4 +3,6 @@
         <ngx-emoji [emoji]="emoji" [size]="24" class="toolbar-icon" (click)="handleReactionClick(emoji)"></ngx-emoji>
       </div>
       <img src="assets/img/add_reaction.svg" alt="add reaction" class="toolbar-icon" (click)="handleAddReactionClick($event)">
+      <img src="assets/img/comment.svg" alt="comment" class="toolbar-icon">
+      <img *ngIf="isOwn" src="assets/img/more_vert.svg" alt="more" class="toolbar-icon">
 </div>
