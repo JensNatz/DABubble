@@ -4,7 +4,8 @@
         [pattern]="pattern" 
         [type]="type" [value]="value" 
         [placeholder]="placeholder" 
-        [ngStyle]="{'background-image': imagePath ? 'url(' + imagePath + ')' : 'none'}" />
+        [ngStyle]="{'background-image': imagePath ? 'url(' + imagePath + ')' : 'none'}"
+        [(ngModel)]="ngModel" />
         
     <div *ngIf="showError" class="error-message">{{ errorMessage }}</div>
 </div>

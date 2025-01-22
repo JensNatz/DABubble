@@ -20,6 +20,7 @@ export class InputFieldComponent {
   @Input() showError: boolean = false;
   @Input() errorMessage: string = '';
   @Input() imagePath: string = '';
+  @Input() ngModel: string = '';
   ngStyle: any;
 
 }
