@@ -20,6 +20,7 @@ export class MessageInputComponent {
     content: '',
     timestamp: Date.now(),
     author: this.userId,
+    channelId: this.channelId
   };
 
   postMessage() {

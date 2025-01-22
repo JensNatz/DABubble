@@ -25,7 +25,7 @@ export class MessageBoardComponent {
   messages: Message[] = [];
 
   constructor() {
-     this.messageService.getMessagesSortedByTimestampASC(this.channelId).subscribe((messages) => {
+     this.messageService.getMessagesFromChannelOrderByTimestampASC(this.channelId).subscribe((messages) => {
       this.messages = messages as Message[];
     });
   }
