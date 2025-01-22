@@ -24,5 +24,8 @@
         (toggleReaction)="handleReactionToggle($event)" 
         (addReaction)="toggleEmojiPicker()">
     </app-message-toolbar>
-    <app-emoji-picker class="emoji-picker" *ngIf="showEmojiPicker" (emojiSelected)="handleEmojiSelection($event)"></app-emoji-picker>
+    <app-emoji-picker class="emoji-picker" *ngIf="showEmojiPicker"
+     (emojiSelected)="handleEmojiSelection($event)"
+     (clickOutside)="hideEmojiPicker()"
+     ></app-emoji-picker>
 </div>

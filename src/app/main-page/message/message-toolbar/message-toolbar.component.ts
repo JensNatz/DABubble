@@ -27,7 +27,8 @@ export class MessageToolbarComponent {
     this.toggleReaction.emit(emoji);
   }
 
-  handleAddReactionClick() {
+  handleAddReactionClick(event: MouseEvent) {
+    event.stopPropagation();
     this.addReaction.emit();
   }
 }

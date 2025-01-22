@@ -7,11 +7,12 @@ import { ReactionIndicatorComponent } from "./reaction-indicator/reaction-indica
 import { MessageService } from '../../services/firebase-services/message.service';
 import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.component';
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
+import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [CommonModule, AvatarComponent, ReactionIndicatorComponent, EmojiPickerComponent, MessageToolbarComponent],
+  imports: [CommonModule, AvatarComponent, ReactionIndicatorComponent, EmojiPickerComponent, MessageToolbarComponent, ClickOutsideDirective],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
@@ -37,7 +38,6 @@ export class MessageComponent implements OnInit {
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
-
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
@@ -47,10 +47,14 @@ export class MessageComponent implements OnInit {
     this.showEmojiPicker = !this.showEmojiPicker;
   }
 
+  hideEmojiPicker() {
+    this.showEmojiPicker = false;
+  }
+
   handleEmojiSelection(event: any) {
     let emoji = event.emoji.id;
     this.addReaction(emoji);
-    this.showEmojiPicker = false;
+    this.hideEmojiPicker();
   }
 
   addReaction(reactionType: string) {
