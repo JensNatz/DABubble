@@ -19,6 +19,10 @@
     max-width: 608px;
     max-height: 680px;
 
+    a{
+        text-decoration: none
+    }
+
 }
 
 .headline-section {
@@ -55,6 +59,7 @@ form {
 
 
 .data-protection-container{
+    @include flex(normal,center, normal);
    margin-top: 32px;
    width: 100%;
    
@@ -85,4 +90,17 @@ form {
 
 .next-btn {
     @include btn($white, $purple-1, 108px, 48px, $purple-2, $white);
+}
+
+.checkbox{
+    width: 18px;
+    height: 18px;
+    border-color: $purple-2;
+    margin-right:8px ;
+
+    &:hover{
+        cursor: pointer;
+        border-radius: 38px;
+        background-color: $gray;
+    }
 }

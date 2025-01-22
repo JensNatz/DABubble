@@ -14,6 +14,7 @@
 }
 
 .user-name{
+    margin-top: 32px;
     color: $black;
     font-weight: 700;
     font-size: 32px;
@@ -21,7 +22,7 @@
 
 .user-select-images{
     width: 100%;
-    @include flex(space-evenly, center, row);
+    @include flex(space-around, center, row);
 
     img{
         &:hover{
@@ -59,6 +60,9 @@
     max-width: 608px;
     max-height: 680px;
 
+    padding-left:66px;
+    padding-right: 66px 
+
 }
 
 .headline-section {
@@ -92,6 +96,14 @@
         background-color: $bg-color;
         border-radius: 30px;
     }
+}
+
+.choose-description{
+    width: 100%;
+    color: $black;
+    font-size: 20px;
+    margin-bottom: 16px;
+    margin-top: 8px;
 }
 
 
