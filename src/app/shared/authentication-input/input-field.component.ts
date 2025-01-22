@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports:[CommonModule],
   templateUrl: './input-field.component.html',
-  styleUrl: './input-field.component.scss'
+  styleUrls: ['./input-field.component.scss']
 })
 export class InputFieldComponent {
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InputFieldComponent } from '../shared/input-field/input-field.component';
+import { InputFieldComponent } from "../../shared/authentication-input/input-field.component";
 import { FormsModule } from '@angular/forms';
 
 import { RouterModule } from '@angular/router';
@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [InputFieldComponent,RouterModule,FormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrls: ['./register.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })
 export class RegisterComponent {
 onSubmit: any;

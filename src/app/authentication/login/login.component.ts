@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InputFieldComponent } from "../shared/input-field/input-field.component";
+import { InputFieldComponent } from "../../shared/authentication-input/input-field.component";
 import { RegisterButtonComponent } from "./register-button/register-button.component";
 
 
@@ -8,7 +8,7 @@ import { RegisterButtonComponent } from "./register-button/register-button.compo
   standalone: true,
   imports: [InputFieldComponent, RegisterButtonComponent],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss','../shared/scss/input-field.scss',]
+  styleUrls: ['./login.component.scss','../../shared/authentication-input/input-field.component.scss',]
 })
 export class LoginComponent {
 onSubmit: any;
