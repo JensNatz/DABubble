@@ -14,15 +14,14 @@ export class ReactionIndicatorComponent  {
   @Input() reaction: any = [];
   @Output() toggleReaction = new EventEmitter<string>();
 
+  // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   reactionType: string = '';
-  reactionImage: string = '';
   reactedUsers: Array<string> = [];
 
   ngOnInit() {
     this.reactionType = this.reaction.type;
     this.reactedUsers = this.reaction.users;
-    this.setReactionImage();
   }
 
   get reactionText(): string {
@@ -65,21 +64,5 @@ export class ReactionIndicatorComponent  {
        this.toggleReaction.emit(this.reaction.type);
    }
 
-  setReactionImage() {
-    switch (this.reactionType) {
-      case 'highFives':
-        this.reactionImage = 'highFive';
-        break;
-      case 'likes':
-        this.reactionImage = 'like';
-        break;
-      case 'nerdFace':
-        this.reactionImage = 'nerdFace';
-        break;
-      case 'rockets':
-        this.reactionImage = 'rocket';
-        break;
-    }
-  }
   }
 
