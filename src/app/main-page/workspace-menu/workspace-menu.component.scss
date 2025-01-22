@@ -63,7 +63,7 @@
 }
 
 .arrow {
-    height: 6px;
+    height: 9px;
     width: 9px;
     margin-right: 20px;
 }
@@ -229,6 +229,13 @@
         top: 50px;
         right: 50px;
         cursor: pointer;
+        padding: 10px;
+
+        &:hover {
+            background-color: rgba(99, 61, 189, 0.2);
+            @include rounded();
+            filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
+        }
     }
 }
 

@@ -20,7 +20,7 @@ export class ChannelServiceService {
   async addNewChanel(item: Channel) {
     try {
       const docRef = await addDoc(this.getChannelsRef(), item);
-      console.log('Document ID:', docRef.id);
+      // console.log('Document ID:', docRef.id);
     } catch (err) {
       console.error('Error adding document:', err);
     }
@@ -33,15 +33,6 @@ export class ChannelServiceService {
   getSingleChannelRef(chanellId: string, docId: string) {
     return doc(collection(this.firestore, chanellId), docId);
   }
-
-  // async addNewChanel(item: Channel) {
-  //   try {
-  //     const docRef = await addDoc(this.getChannelsRef(), item);
-  //     console.log('Document ID:', docRef.id);
-  //   } catch (err) {
-  //     console.error('Error adding document:', err);
-  //   }
-  // }
 
   getUsersRef() {
     return collection(this.firestore, 'users');

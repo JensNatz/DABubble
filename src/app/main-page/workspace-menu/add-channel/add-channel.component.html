@@ -1,12 +1,22 @@
-<div class="add_chanel_form">
+<div class="add_chanel_form">   
     <h1>Channel erstellen</h1>
-    <p>Channnels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum Beispiel. </p>
-    <span>Channel-Name</span>
-    <input [(ngModel)]="name" type="text" placeholder="# z.B. Kooperationsprojekte">
-    <span>Beschreibung (optional)</span>
-    <input [(ngModel)]="description" type="text" placeholder="">
-    <div class="button_add">
-        <button (click)="addNewChannel()">Erstellen</button>
-    </div>
+    <form (ngSubmit)="onSubmit(channelForm)" #channelForm="ngForm">
 
+        <p>Channnels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum
+            Beispiel. </p>
+        <div class="name_input">
+            <label for="name">Channel-Name</label>
+            <input #name="ngModel" [(ngModel)]="channel.name" type="text" id="name" name="name" required>
+            @if (!name.valid && name.touched && !name.disabled) {
+            <span>Bitte geben Sie den Channelnamen ein</span>
+            }
+        </div>
+        <div class="description_input">
+            <label for="escription">Beschreibung <b>(optional)</b></label>
+            <input [(ngModel)]="channel.description" type="text" id="description" name="description">
+        </div>
+        <div class="button_add">
+            <button type="submit">Erstellen</button>
+        </div>
+    </form>
 </div>

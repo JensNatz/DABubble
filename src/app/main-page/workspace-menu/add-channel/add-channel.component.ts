@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ChannelServiceService } from '../../../services/firebase-services/channel-service.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Channel } from '../../../models/channel';
 
 @Component({
@@ -16,20 +16,22 @@ import { Channel } from '../../../models/channel';
 })
 export class AddChannelComponent {
 
-  name = "";
-  description = "";
+  channel: Channel = {
+    name: "",
+    description: "",
+    creator: "",
+    members: []
+  }
+  
 
   constructor(public channelService: ChannelServiceService) {
 
   }
 
-  addNewChannel() {
-    let channel: Channel  = {
-      name: this.name,
-      description: this.description,
-      creator: "",
-      members: [],
-    }
-    this.channelService.addNewChanel(channel)
+  onSubmit(ngForm: NgForm) {
+    if(ngForm.valid && ngForm.submitted) {
+      console.log(this.channel);
+      this.channelService.addNewChanel(this.channel);
+    }   
   }
 }

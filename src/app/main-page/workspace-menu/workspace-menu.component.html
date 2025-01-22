@@ -8,7 +8,7 @@
     </div>
     <div class="channels_content">
         <div class="channel_title"  (click)="toggleMenuChannel()">
-            <img class="arrow" src="assets/img/arrow_drop_down.png">
+            <img class="arrow" src="{{ isOpenChannelListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
             <img class="space" src="assets/img/workspaces.png">
             <p>Channels</p>
         </div>
@@ -40,7 +40,7 @@
         </div>
     </div>
     <div class="message_content" (click)="toggleMenuUser()">
-        <img class="arrow" src="assets/img/arrow_drop_down.png">
+        <img class="arrow" src="{{ isOpenUserListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
         <img class="account_circle" src="assets/img/account_circle.png">
         <p>Direktnachrichten</p>
     </div>
