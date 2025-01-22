@@ -1,0 +1,32 @@
+<div class="avatar-container">
+
+    <div [routerLink]="['/register']" class="arrow-back">
+        <img src="../../../assets/img/arrow_back.svg" alt="">
+    </div>
+
+    <div class="headline-section">
+        <h2>Wähle dein Avatar</h2>        
+    </div>
+
+    <div class="avatar-section">
+        <div class="current-avatar">
+            <img class="current-avatar-img" [src]="selectedAvatar" alt="Current Avatar">
+        </div>
+
+        <span class="user-name">{{ userName }}</span>
+        <span class="choose-description">Aus der Liste Wählen</span>
+
+        <div class="user-select-images">         
+            <div *ngFor="let avatar of avatarImages | keyvalue">
+                <img class="avatar-img-select" [src]="avatar.value" [alt]="'Avatar ' + avatar.key" (click)="selectAvatar(avatar.value)">
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="btn-container">
+        <button class="next-btn">Weiter</button>
+    </div>  
+
+</div>
