@@ -15,13 +15,15 @@
                  placeholder="beispielname@email.com"
                  pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
                  [showError]="usernameInvalid ||false"
-                 errorMessage = "Diese E-Mail-Adresse ist leider ungültig">
+                 errorMessage = "Diese E-Mail-Adresse ist leider ungültig"
+                 imagePath="../../../assets/img/authentications-icons/mail.svg">
             </app-input-field>
             <app-input-field
                 type="password"
                 placeholder="Passwort"
                 [showError]="usernameInvalid || true"
-                errorMessage = "Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen">
+                errorMessage = "Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen"
+                imagePath="../../../assets/img/authentications-icons/lock.svg">
                 ></app-input-field>            
         </div>
 

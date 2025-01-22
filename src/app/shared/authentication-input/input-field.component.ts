@@ -18,5 +18,7 @@ export class InputFieldComponent {
   @Input() pattern: any ="";
   @Input() showError: boolean = false;
   @Input() errorMessage: string = '';
+  @Input() imagePath: string = '';
+ngStyle: any;
 
 }
