@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { EmojiStatsService } from '../../../services/emoji-stats.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
@@ -12,11 +12,22 @@ import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
   styleUrl: './message-toolbar.component.scss'
 })
 export class MessageToolbarComponent {
+
+  @Output() toggleReaction = new EventEmitter<string>();
+  @Output() addReaction = new EventEmitter<void>();
   topEmojis$ = this.emojiStatsService.topEmojis$;
 
   constructor(private emojiStatsService: EmojiStatsService) {}
 
   ngOnInit(): void {
     this.emojiStatsService.getTopEmojis();
+  }
+
+  handleReactionClick(emoji: string) {
+    this.toggleReaction.emit(emoji);
+  }
+
+  handleAddReactionClick() {
+    this.addReaction.emit();
   }
 }

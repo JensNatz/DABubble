@@ -48,24 +48,45 @@ export class MessageComponent implements OnInit {
   }
 
   handleEmojiSelection(event: any) {
-    console.log('Selected emoji:', event.emoji.id);
+    let emoji = event.emoji.id;
+    this.addReaction(emoji);
     this.showEmojiPicker = false;
   }
 
+  addReaction(reactionType: string) {
+    if (!this.message.id) return;
+    let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
+    
+    if (!reaction) {
+      reaction = { type: reactionType, users: [] };
+      this.reactionWithNames.push(reaction);
+    }
+    
+    if (!reaction.users.some(user => user.id === this.userId)) {
+      reaction.users.push({ id: this.userId, name: 'Du' });
+      this.messageService.addReactionToMessage(this.message.id, reactionType, this.userId);
+    }
+  }
+
+  removeReaction(reactionType: string) {
+    if (!this.message.id) return;
+    let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
+    
+    if (reaction?.users.some(user => user.id === this.userId)) {
+      reaction.users = reaction.users.filter(user => user.id !== this.userId);
+      this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.userId);
+    }
+  }
+
   handleReactionToggle(reactionType: string) {
-    console.log('Reaction type:', reactionType);
-    let reaction = this.reactionWithNames.find((reaction: { type: string, users: Array<{ id: string; name: string }> }) => reaction.type === reactionType);
-    if(reaction && this.message.id) {
-      const hasUser = reaction.users.some((user: { id: string; name: string }) => user.id === this.userId);
-      if (hasUser) {
-        console.log('remove reaction', reactionType);
-        reaction.users = reaction.users.filter((user: { id: string; name: string }) => user.id !== this.userId);
-        this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.userId);
-      } else {
-        console.log('add reaction');
-        reaction.users.push({ id: this.userId, name: 'Du' }); 
-        this.messageService.addReactionToMessage(this.message.id, reactionType, this.userId);
-      }
+    if (!this.message.id) return;
+    let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
+    const hasReaction = reaction?.users.some(user => user.id === this.userId) ?? false;
+
+    if (hasReaction) {
+      this.removeReaction(reactionType);
+    } else {
+      this.addReaction(reactionType);
     }
   }
 

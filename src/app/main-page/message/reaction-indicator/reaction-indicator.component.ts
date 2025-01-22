@@ -59,9 +59,9 @@ export class ReactionIndicatorComponent  {
     return this.reaction.users.length;
   }
 
-  async handleReactionClick() {
-       this.toggleReaction.emit(this.reaction.type);
-   }
-
+  handleReactionClick() {
+    this.toggleReaction.emit(this.reaction.type);
   }
+
+}
 
