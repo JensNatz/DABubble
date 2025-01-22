@@ -7,12 +7,11 @@ import { ReactionIndicatorComponent } from "./reaction-indicator/reaction-indica
 import { MessageService } from '../../services/firebase-services/message.service';
 import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.component';
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
-import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [CommonModule, AvatarComponent, ReactionIndicatorComponent, EmojiPickerComponent, MessageToolbarComponent, ClickOutsideDirective],
+  imports: [CommonModule, AvatarComponent, ReactionIndicatorComponent, EmojiPickerComponent, MessageToolbarComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
