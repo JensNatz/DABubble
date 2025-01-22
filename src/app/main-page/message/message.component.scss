@@ -6,6 +6,7 @@
     padding: 16px 32px;
     background-color: $white;
     cursor: pointer;
+    position: relative;
 
     .message {
         @include flex($direction: column, $align: start);
@@ -42,8 +43,9 @@
         }
 
         .message-reactions {
-            @include flex();
+            @include flex($justify: start);
             gap: 8px;
+            flex-wrap: wrap;
         }
       }
 
@@ -53,6 +55,23 @@
         .message-text:not(.own) {
             background-color: $white;
         }
+
+        .message-toolbar {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
+        }
+    }
+
+    .message-toolbar {
+        position: absolute;
+        top: 0;
+        left: auto;
+        right: 100px;
+        transform: translateY(-50%) translateX(20%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s;
     }
 
     &.own {
@@ -71,8 +90,31 @@
                 color: $white;
             }
         }
+
+        .message-toolbar {
+            left: 100px;
+            right: auto;
+            transform: translateY(-50%) translateX(-20%);
+        }
+
+        &:hover .message-toolbar {
+            transform: translateY(-50%) translateX(0);
+        }
     }
 
+    .emoji-picker-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1000;
+    }
+
+    .emoji-picker {
+        position: absolute;
+        
+      }
 }
 
 

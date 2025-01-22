@@ -4,20 +4,25 @@
     </div>
     <div class="message">
         <div class="message-header">
-                <div class="message-header-name">{{ authorName }}</div>
-                <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
+            <div class="message-header-name">{{ authorName }}</div>
+            <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
         </div>
         <div class="message-text">
             {{ content }}
         </div>
         <div class="message-reactions">
-             <ng-container *ngFor="let reaction of reactionWithNames">
-                <app-reaction-indicator 
-                    *ngIf="reaction.users.length > 0"
-                    [reaction]="reaction"
+            <ng-container *ngFor="let reaction of reactionWithNames">
+                <app-reaction-indicator *ngIf="reaction.users.length > 0" [reaction]="reaction"
                     (toggleReaction)="handleReactionToggle($event)">
                 </app-reaction-indicator>
             </ng-container>
         </div>
+    </div>
+    <app-message-toolbar class="message-toolbar" [isOwn]="isOwn" (toggleReaction)="handleReactionToggle($event)"
+        (addReaction)="showEmojiPicker($event)">
+    </app-message-toolbar>
+    <div class="emoji-picker-overlay" *ngIf="displayEmojiPicker" (click)="hideEmojiPicker()">
+        <app-emoji-picker [attr.style]="emojiPickerPosition" class="emoji-picker" (emojiSelected)="handleEmojiSelection($event)">
+        </app-emoji-picker>
     </div>
 </div>
