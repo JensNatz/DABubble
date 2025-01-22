@@ -1,9 +1,9 @@
-@import '../../../styles/_variables';
-@import '../../../styles/_mixins';
+@import '../../styles/variables';
+@import '../../styles/mixins';
 
 .input-container {
 
-
+position: relative;
     
     input {
         max-width: 500px;
@@ -11,12 +11,16 @@
         max-height: 60px;
         height: 100%;
 
+        background-repeat: no-repeat;
+        background-position: 32px center;
+        background-size: 24px 24px;
+
 
         background-color: $bg-color;
 
         padding-top: 18px;
         padding-bottom: 18px;
-        padding-left: 32px;
+        padding-left: 86px;
         padding-right: 32px;
 
         border-radius: 100px;
@@ -35,6 +39,15 @@
         &:focus {
             outline: none;
             border: 1px solid $purple-1;
+            
         }
     }
+}
+
+.error-message{
+    color: $rose;
+    font-size: 14px;
+    margin-top: 6px;
+    position: absolute;
+    left: 0;
 }

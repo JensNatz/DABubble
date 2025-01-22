@@ -1,0 +1,34 @@
+@import '../../../styles/variables';
+@import '../../../styles/_mixins';
+
+
+.register-button-container{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    gap: 5px;
+
+    @include flex(normal, flex-end, column);
+
+    span{
+        color: $black;
+        font-size: 18px;
+        font-weight: 400;
+        
+    }
+
+    a{
+        @include flex(center,center, normal);
+        height: 42px;
+        width: 154px;
+        color: $purple-2;
+        text-decoration: none;
+
+        &:hover{
+            cursor: pointer;
+            border: 1px solid $purple-2;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+    }
+}
