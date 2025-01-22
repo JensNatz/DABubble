@@ -4,7 +4,7 @@ import { TimeSeperatorComponent } from '../time-seperator/time-seperator.compone
 import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
-import { MessageServiceService } from '../../services/firebase-services/message-service.service';
+import { MessageService } from '../../services/firebase-services/message.service';
 
 @Component({
   selector: 'app-message-board',
@@ -13,19 +13,20 @@ import { MessageServiceService } from '../../services/firebase-services/message-
     CommonModule,
     MessageComponent,
     TimeSeperatorComponent,
-    MessageInputComponent
+    MessageInputComponent,
   ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
 })
 export class MessageBoardComponent {
 
+  // TODO: get channelId from parent component
   channelId: string = '9kacAebjb6GEQZJC7jFL';
-  messageService: MessageServiceService = inject(MessageServiceService);
+  messageService: MessageService = inject(MessageService);
   messages: Message[] = [];
 
   constructor() {
-     this.messageService.getMessagesSortedByTimestampASC(this.channelId).subscribe((messages) => {
+    this.messageService.getMessagesFromChannelOrderByTimestampASC(this.channelId).subscribe((messages) => {
       this.messages = messages as Message[];
     });
   }
@@ -35,5 +36,7 @@ export class MessageBoardComponent {
     const date2 = new Date(timestamp2);
     return date1.toDateString() === date2.toDateString();
   }
+
+ 
 
 }
