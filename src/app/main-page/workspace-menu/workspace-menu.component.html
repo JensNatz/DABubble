@@ -4,30 +4,63 @@
             <img class="logo" src="assets/img/Workspace logo.png">
             <h2>Devspace</h2>
         </div>
-        <img class="edit" src="assets/img/edit_square.png">
-    </div>
-    <div class="channels_content">
-        <div>
-            <img class="arrow" src="assets/img/arrow_drop_down.png">
-            <img class="space" src="assets/img/workspaces.png">
-            <p>Channels</p>
-        </div>       
-        <img class="add" src="assets/img/add.png">
-        
-    </div>
-    <div class="channels">
-        <div class="chanel_name">
-            <p># Channel Name</p>
+        <div class="edit">
+            <img src="assets/img/edit_square.svg">
         </div>
     </div>
-    <div class="add_chanel">
-        <img src="assets/img/add_circle.png">
-        <p>Channel hinzufügen</p>
+
+    <div class="channels_content">
+        <div class="channel_title"  (click)="toggleMenuChannel()">
+            <img class="arrow" src="{{ isOpenChannelListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
+            <img class="space" src="assets/img/workspaces.png">
+            <p>Channels</p>
+        </div>
+        <div class="add" >
+            <img src="assets/img/add.png" (click)="openAddChannel()">
+        </div>
+
+        <!-- <div class="modal-overlay"></div>
+        <div class="modal">
+            <img src="assets/img/close.svg">            
+            <app-add-channel></app-add-channel>
+        </div> -->
+        <div class="modal-overlay" *ngIf="showModal" (click)="closeAddChannel()"></div>
+        <div class="modal" *ngIf="showModal">
+            <img src="assets/img/close.svg"(click)="closeAddChannel()">                        
+            <app-add-channel [closeFunction]="closeAddChannel.bind(this)"></app-add-channel>
+        </div>
+
     </div>
-    <div class="message_content">
-        <img class="arrow" src="assets/img/arrow_drop_down.png">
+
+    <div *ngIf="isOpenChannelListe">
+        <div class="channels" >
+            <div class="chanel_name">
+                @for (channel of (this.channelService.channels | async); track channel) {
+                <p><b>#</b>{{ channel['name'] }}</p>
+                }
+            </div>
+        </div>
+        <div class="add_chanel" (click)="openAddChannel()">
+            <img src="assets/img/add_circle.png">
+            <p>Channel hinzufügen</p>
+        </div>
+    </div>
+
+    <div class="message_content" (click)="toggleMenuUser()">
+        <img class="arrow" src="{{ isOpenUserListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
         <img class="account_circle" src="assets/img/account_circle.png">
         <p>Direktnachrichten</p>
+    </div>
+
+    <div class="user_liste" *ngIf="isOpenUserListe">
+        @for (user of (this.channelService.users | async); track user) {
+            <div>
+                <div class="name_plus_icon">
+                    <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
+                    <span>{{user['name']}}</span>
+                </div>
+            </div>
+        }
     </div>
 
 </div>
