@@ -26,8 +26,7 @@ body {
     border-bottom-right-radius: 30px;
     -webkit-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
     -moz-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
-    box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
-
+    box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);  
 
     h2 {
         font-size: 20px;
@@ -40,6 +39,16 @@ body {
         height: 16px;
         width: 16px;
     }
+}
+
+.workspace-open:hover h2 {
+    color: rgb(83, 90, 241);
+    transition: color 0.3s ease;
+}
+
+.workspace-open:hover img {
+    filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
+    transition: filter 0.3s ease;
 }
 
 .message_board_content {

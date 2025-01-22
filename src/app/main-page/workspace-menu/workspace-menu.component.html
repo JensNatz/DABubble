@@ -4,15 +4,20 @@
             <img class="logo" src="assets/img/Workspace logo.png">
             <h2>Devspace</h2>
         </div>
-        <img class="edit" src="assets/img/edit_square.svg">
+        <div class="edit">
+            <img src="assets/img/edit_square.svg">
+        </div>
     </div>
+
     <div class="channels_content">
         <div class="channel_title"  (click)="toggleMenuChannel()">
             <img class="arrow" src="{{ isOpenChannelListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
             <img class="space" src="assets/img/workspaces.png">
             <p>Channels</p>
         </div>
-        <img class="add" src="assets/img/add.png" (click)="openAddChannel()">
+        <div class="add" >
+            <img src="assets/img/add.png" (click)="openAddChannel()">
+        </div>
 
         <!-- <div class="modal-overlay"></div>
         <div class="modal">
@@ -26,6 +31,7 @@
         </div>
 
     </div>
+
     <div *ngIf="isOpenChannelListe">
         <div class="channels" >
             <div class="chanel_name">
@@ -39,16 +45,20 @@
             <p>Channel hinzufügen</p>
         </div>
     </div>
+
     <div class="message_content" (click)="toggleMenuUser()">
         <img class="arrow" src="{{ isOpenUserListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
         <img class="account_circle" src="assets/img/account_circle.png">
         <p>Direktnachrichten</p>
     </div>
+
     <div class="user_liste" *ngIf="isOpenUserListe">
         @for (user of (this.channelService.users | async); track user) {
             <div>
-                <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
-                <span>{{user['name']}}</span>
+                <div class="name_plus_icon">
+                    <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
+                    <span>{{user['name']}}</span>
+                </div>
             </div>
         }
     </div>

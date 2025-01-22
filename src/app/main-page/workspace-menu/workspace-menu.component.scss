@@ -26,28 +26,37 @@
     }
 }
 
+.edit {    
+    img {
+        width: 20px;
+        height: 20px;
+        margin: 10px;
+        cursor: pointer;
+    }
+}
+
+
+.edit:hover {
+    background-color: rgba(99, 61, 189, 0.2);
+    @include rounded();
+}
+
+.edit:hover img {
+    filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
+
+}
+
 .logo {
     width: 60px;
     height: 60px;
     margin-right: 15px;
 }
 
-.edit {
-    height: 20px;
-    width: 20px;
-    cursor: pointer;
-
-    &:hover {
-        // background-color: rgba(99, 61, 189, 0.2);
-        filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
-    }
-}
-
 .channels_content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px 0 40px;
+    padding: 0 32px 0 40px;
 }
 
 .channel_title {
@@ -75,14 +84,23 @@
 }
 
 .add {
-    height: 24px;
-    width: 24px;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 100px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        height: 24px;
+        width: 24px;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 100px;
+    }
 
     &:hover {
         background-color: rgba(99, 61, 189, 0.2);
+        @include rounded();
         filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
     }
 }
@@ -97,52 +115,22 @@
 .channels {
     display: flex;
     justify-content: start;
-    margin-right: 30px;
-    max-height: 140px;
-    overflow: hidden;
-    cursor: pointer;
-
-    &:hover {
-        overflow: auto;
-    }
+    margin-right: 30px;    
+    cursor: pointer;   
 
     img {
         height: 20px;
         width: 20px;
-    }
-
-    &::-webkit-scrollbar {
-        height: 5px;
-        width: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-        border-radius: 4px;
-        background-color: #DFE9EB;
-    }
-
-    &::-webkit-scrollbar-track:active {
-        background-color: #B8C0C2;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-        background-color: $light-purple;
-    }
-
-    &::-webkit-scrollbar-thumb:active {
-        background-color: $light-purple;
     }
 }
 
 .chanel_name {
     padding-left: 30px;
     padding-top: 30px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
 
     p {
+        display: inline-block;
+        white-space: nowrap;
         border-radius: 20px;
         padding: 4px 22px;
         font-size: 18px;
@@ -250,26 +238,29 @@
 }
 
 .user_liste {
-    display: flex;
-    flex-direction: column;
     padding: 25px 30px 0 60px;
     font-size: 18px;
 
     >div {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 10px;
-        padding: 4px 6px;
+        display: inline-block;
+        white-space: nowrap;
+    }
+}
 
-        &:hover {
-            @include rounded();
-            background-color: $bg-color;
-        }
+.name_plus_icon {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    padding: 4px 16px 4px 8px;
 
-        >img {
-            height: 50px !important;
-            width: 50px !important;
-        }
+    >img {
+        height: 50px !important;
+        width: 50px !important;
+    }
+
+    &:hover {
+        @include rounded();
+        background-color: $bg-color;
     }
 }
