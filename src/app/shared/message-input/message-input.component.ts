@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MessageServiceService } from '../../services/firebase-services/message-service.service';
+import { MessageService } from '../../services/firebase-services/message.service';
 import { Message } from '../../models/message';
 import { FormsModule } from '@angular/forms';
 
@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './message-input.component.scss'
 })
 export class MessageInputComponent {
-  messageService: MessageServiceService = inject(MessageServiceService);
+  messageService: MessageService = inject(MessageService);
 
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
@@ -20,6 +20,7 @@ export class MessageInputComponent {
     content: '',
     timestamp: Date.now(),
     author: this.userId,
+    channelId: this.channelId
   };
 
   postMessage() {

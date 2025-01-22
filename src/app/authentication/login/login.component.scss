@@ -114,15 +114,20 @@ form {
         font-weight: 600;
         border: 1px solid $purple-1;
     }
-
-
 }
-
-
 
 .btn-container {
     @include flex(center, center, normal);
     width: 100%;
     gap: 30px;
     margin-top: 42px;
+}
+
+.register-btn {
+    @include btn();
+}
+
+.guest-login-btn {
+    @include btn($purple-2, $white, 136px, 48px, $purple-1, $white);
+    border: 1px solid $purple-2;
 }
