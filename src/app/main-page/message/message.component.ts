@@ -2,12 +2,10 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { Message } from '../../models/message';
-import { ReactionUser } from '../../models/reaction-user';
 import { UserService } from '../../services/user.service';
 import { ReactionIndicatorComponent } from "./reaction-indicator/reaction-indicator.component";
 import { MessageService } from '../../services/firebase-services/message.service';
 import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.component';
-import { log } from 'console';
 
 @Component({
   selector: 'app-message',
@@ -29,7 +27,7 @@ export class MessageComponent implements OnInit {
   // TODO: get channel id from ???
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   avatarId: string = '0';
-  reactionWithNames: Array<{ type: string; users: ReactionUser[] }> = [];
+  reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
   constructor(private userService: UserService) {}
 
   async ngOnInit() {
@@ -55,12 +53,12 @@ export class MessageComponent implements OnInit {
 
   handleReactionToggle(reactionType: string) {
     console.log('Reaction type:', reactionType);
-    let reaction = this.reactionWithNames.find((reaction: { type: string, users: ReactionUser[] }) => reaction.type === reactionType);
+    let reaction = this.reactionWithNames.find((reaction: { type: string, users: Array<{ id: string; name: string }> }) => reaction.type === reactionType);
     if(reaction && this.message.id) {
-      const hasUser = reaction.users.some((user: ReactionUser) => user.id === this.userId);
+      const hasUser = reaction.users.some((user: { id: string; name: string }) => user.id === this.userId);
       if (hasUser) {
         console.log('remove reaction', reactionType);
-        reaction.users = reaction.users.filter((user: ReactionUser) => user.id !== this.userId);
+        reaction.users = reaction.users.filter((user: { id: string; name: string }) => user.id !== this.userId);
         this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.userId);
       } else {
         console.log('add reaction');
