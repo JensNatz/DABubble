@@ -56,6 +56,14 @@
         }
     }
 
+    .message-toolbar {
+        position: absolute;
+        top: 0;
+        left: auto;
+        right: 100px;
+        transform: translateY(-50%);
+    }
+
     &.own {
         @include flex($direction: row-reverse, $align: start, $justify: end);
 
@@ -72,6 +80,11 @@
                 color: $white;
             }
         }
+
+        .message-toolbar {
+            left: 100px;
+            right: auto;
+        }
     }
 
     .emoji-picker {
@@ -79,7 +92,6 @@
         bottom: 0;
         right: 0;
     }
-
 }
 
 

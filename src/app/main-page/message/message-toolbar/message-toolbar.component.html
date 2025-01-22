@@ -1,0 +1,5 @@
+<div class="message-toolbar">
+    <div *ngFor="let emoji of topEmojis$ | async">
+        <ngx-emoji [emoji]="emoji" [size]="24" class="toolbar-icon"></ngx-emoji>
+      </div>
+</div>

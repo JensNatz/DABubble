@@ -1,0 +1,21 @@
+@import '../../../../styles.scss';
+
+.message-toolbar {
+    @include flex();
+    gap: 4px;
+    @include rounded($top-left: 16px, $top-right: 16px, $bottom-left: 16px, $bottom-right: 0);
+    background-color: $white;
+    border: 1px solid $light-purple;
+    padding: 8px;
+
+    .toolbar-icon {
+        cursor: pointer;
+        @include flex();
+        padding: 4px;
+        @include rounded($all: 50%);
+
+        &:hover {
+            background-color: $bg-color;
+        }
+    }
+}
