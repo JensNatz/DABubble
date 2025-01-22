@@ -29,7 +29,6 @@ export class MessageComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   async ngOnInit() {
-    console.log('this.message', this.message);
     this.content = this.message.content;
     this.timestamp = this.message.timestamp;
     this.authorName = await this.userService.getUserName(this.message.author);
@@ -48,11 +47,11 @@ export class MessageComponent implements OnInit {
       if (hasUser) {
         console.log('remove reaction');
         reaction.users = reaction.users.filter((user: ReactionUser) => user.id !== this.userId);
-        this.messageService.removeReactionFromMessage(this.channelId, this.message.id, reactionType, this.userId);
+        this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.userId);
       } else {
         console.log('add reaction');
         reaction.users.push({ id: this.userId, name: 'Du' }); 
-        this.messageService.addReactionToMessage(this.channelId, this.message.id, reactionType, this.userId);
+        this.messageService.addReactionToMessage(this.message.id, reactionType, this.userId);
       }
     }
   }
