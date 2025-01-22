@@ -8,7 +8,7 @@
             <label for="name">Channel-Name</label>
             <input #name="ngModel" [(ngModel)]="channel.name" type="text" id="name" name="name" required>
             @if (!name.valid && name.touched && !name.disabled) {
-            <span>Bitte geben Sie den Channelnamen ein</span>
+            <span>Bitte geben Sie den Channelname ein</span>
             }
         </div>
         <div class="description_input">
