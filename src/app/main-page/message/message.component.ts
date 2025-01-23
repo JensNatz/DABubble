@@ -161,10 +161,12 @@ export class MessageComponent implements OnInit {
 
   handleSaveEditClick(content: string) {
     if (content.trim() !== '' && this.messageId) {
+      if (this.content !== content) {
+        this.content = content;
+        this.edited = true;
+        this.messageService.editMessage(this.messageId, content);
+      }
       this.isEditing = false;
-      this.content = content;
-      this.messageService.editMessage(this.messageId, content);
-      console.log(content);
     }
   }
 }

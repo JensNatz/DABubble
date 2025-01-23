@@ -27,7 +27,8 @@ export class MessageService {
       content: message.content,
       timestamp: message.timestamp,
       author: message.author,
-      channelId: channelId
+      channelId: channelId,
+      edited: false
     });
   }
 

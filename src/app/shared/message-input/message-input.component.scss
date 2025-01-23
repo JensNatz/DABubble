@@ -12,6 +12,20 @@
         width: 100%;
     }
 
+    .toolbar {
+        @include flex($justify: space-between);
+
+        .emoji-icon {
+            cursor: pointer;
+            @include rounded($all: 50%);
+            padding: 4px;
+
+            &:hover {
+                background-color: $bg-color;
+            }
+        }
+    }
+
     .send-button {
         width: 45px;
         height: 45px;
@@ -21,7 +35,6 @@
         border: none;
         background-color: transparent;
         cursor: pointer;
-
 
         &:hover {
             background-image: url('/assets/img/iconSendHover.svg');

@@ -1,17 +1,20 @@
 <div class="message-input">
     <textarea [(ngModel)]="content" [attr.placeholder]="placeholder"></textarea>
     <div class="toolbar">
+        <img class="emoji-icon" src="assets/img/emoji.svg" alt="Emojis" />
         <ng-container *ngIf="type === 'send'">
             <button  class="send-button"  [disabled]="!content.trim()">
             </button>
         </ng-container>
         <ng-container *ngIf="type === 'edit'">
+            <div class="edit-buttons">
             <button (click)="onCancelEditClick()">
                 Abbrechen
             </button>
             <button [disabled]="!content.trim()" (click)="onSaveEditClick()">
-                Speichern
-            </button>
+                    Speichern
+                </button>
+            </div>
         </ng-container>
     </div>
 </div>

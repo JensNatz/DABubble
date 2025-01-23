@@ -11,7 +11,7 @@
         <div class="message-text">
             {{ content }}
         </div>
-        <div class="message-edit-info" *ngIf="edited">Bearbeitet</div>
+        <div class="message-edit-info" *ngIf="edited">(Bearbeitet)</div>
         <div class="message-reactions">
             <ng-container *ngFor="let reaction of reactionWithNames">
                 <app-reaction-indicator *ngIf="reaction.users.length > 0" [reaction]="reaction"
