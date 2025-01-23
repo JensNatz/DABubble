@@ -7,21 +7,30 @@ import { ReactionIndicatorComponent } from "./reaction-indicator/reaction-indica
 import { MessageService } from '../../services/firebase-services/message.service';
 import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.component';
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
+import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [CommonModule, AvatarComponent, ReactionIndicatorComponent, EmojiPickerComponent, MessageToolbarComponent],
+  imports: [CommonModule,
+    AvatarComponent,
+    ReactionIndicatorComponent,
+    EmojiPickerComponent,
+    MessageToolbarComponent,
+    MessageInputComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
 export class MessageComponent implements OnInit {
   messageService: MessageService = inject(MessageService);
   @Input() message!: Message;
+  messageId: string | undefined = undefined;
   content: string = '';
   timestamp: number = 0;
   authorName: string = 'Unknown User';
+  edited: boolean = false;
   isOwn: boolean = false;
+  isEditing: boolean = false;
   displayEmojiPicker: boolean = false;
   // TODO: get user id from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
@@ -30,11 +39,13 @@ export class MessageComponent implements OnInit {
   avatarId: string = '0';
   emojiPickerPosition: string = 'top: 50px; left: 50px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   async ngOnInit() {
+    this.messageId = this.message.id;
     this.content = this.message.content;
     this.timestamp = this.message.timestamp;
+    this.edited = this.message.edited;
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
@@ -44,20 +55,20 @@ export class MessageComponent implements OnInit {
   }
 
   private calcPickerPosition(event: MouseEvent): string {
-    const buffer = 20; 
+    const buffer = 20;
     const viewportHeight = window.innerHeight - buffer;
     const viewportWidth = window.innerWidth - buffer;
     const pickerHeight = 339;
     const pickerWidth = 426;
-    
+
     let position = '';
-    
+
     if (event.clientY + pickerHeight > viewportHeight) {
       position += `bottom: ${buffer}px; `;
     } else {
       position += `top: ${Math.max(buffer, event.clientY)}px; `;
     }
-    
+
     if (event.clientX + pickerWidth > viewportWidth) {
       position += `right: ${buffer}px;`;
     } else {
@@ -90,12 +101,12 @@ export class MessageComponent implements OnInit {
   addReaction(reactionType: string) {
     if (!this.message.id) return;
     let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
-    
+
     if (!reaction) {
       reaction = { type: reactionType, users: [] };
       this.reactionWithNames.push(reaction);
     }
-    
+
     if (!reaction.users.some(user => user.id === this.userId)) {
       reaction.users.push({ id: this.userId, name: 'Du' });
       this.messageService.addReactionToMessage(this.message.id, reactionType, this.userId);
@@ -105,7 +116,7 @@ export class MessageComponent implements OnInit {
   removeReaction(reactionType: string) {
     if (!this.message.id) return;
     let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
-    
+
     if (reaction?.users.some(user => user.id === this.userId)) {
       reaction.users = reaction.users.filter(user => user.id !== this.userId);
       this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.userId);
@@ -138,5 +149,22 @@ export class MessageComponent implements OnInit {
         )
       }))
     );
+  }
+
+  handleEditMessageClick() {
+    this.isEditing = true;
+  }
+
+  handleCancelEditClick() {
+    this.isEditing = false;
+  }
+
+  handleSaveEditClick(content: string) {
+    if (content.trim() !== '' && this.messageId) {
+      this.isEditing = false;
+      this.content = content;
+      this.messageService.editMessage(this.messageId, content);
+      console.log(content);
+    }
   }
 }

@@ -16,7 +16,9 @@ export class MessageToolbarComponent {
   @Input() isOwn: boolean = false;
   @Output() toggleReaction = new EventEmitter<string>();
   @Output() addReaction = new EventEmitter<MouseEvent>();
+  @Output() editMessage = new EventEmitter<void>();
   topEmojis$ = this.emojiStatsService.topEmojis$;
+  isOptionsMenuOpen = false;
 
   constructor(private emojiStatsService: EmojiStatsService) {}
 
@@ -30,5 +32,13 @@ export class MessageToolbarComponent {
 
   handleAddReactionClick(event: MouseEvent) {
     this.addReaction.emit(event);
+  }
+
+  toggleOptionsMenu() {
+    this.isOptionsMenuOpen = !this.isOptionsMenuOpen;
+  }
+
+  handleEditMessageClick() {
+    this.editMessage.emit();
   }
 }

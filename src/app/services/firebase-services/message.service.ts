@@ -31,6 +31,14 @@ export class MessageService {
     });
   }
 
+  editMessage(messageId: string, content: string) {
+    const messageRef = doc(this.firestore, 'messages', messageId);
+    updateDoc(messageRef, {
+      content: content,
+      edited: true
+    });
+  }
+
   removeReactionFromMessage(messageId: string, reactionType: string, userId: string) {
     const messageRef = doc(this.firestore, 'messages', messageId);
     updateDoc(messageRef, {

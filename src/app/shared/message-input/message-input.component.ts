@@ -1,12 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
-import { Message } from '../../models/message';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-message-input',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
@@ -16,18 +16,33 @@ export class MessageInputComponent {
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
-  message: Message = {
-    content: '',
-    timestamp: Date.now(),
-    author: this.userId,
-    channelId: this.channelId
-  };
+  @Input() placeholder: string | null = null;
+  @Input() content: string = '';
+  @Input() type: string = '';
+  @Output() sendMessage = new EventEmitter<string>();
+  @Output() cancelEdit = new EventEmitter<void>();
+  @Output() saveEdit = new EventEmitter<string>();
 
-  postMessage() {
-    if (this.message.content.trim()) {
-      this.messageService.postMessageToChannel(this.channelId, this.message);
-      this.message.content = '';
-    }
+  onCancelEditClick() {
+    this.cancelEdit.emit();
   }
+
+  onSaveEditClick() {
+    this.saveEdit.emit(this.content);
+  }
+
+  // message: Message = {
+  //   content: '',
+  //   timestamp: Date.now(),
+  //   author: this.userId,
+  //   channelId: this.channelId
+  // };
+
+  // postMessage() {
+  //   if (this.message.content.trim()) {
+  //     this.messageService.postMessageToChannel(this.channelId, this.message);
+  //     this.message.content = '';
+  //   }
+  // }
 }
 

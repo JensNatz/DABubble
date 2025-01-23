@@ -4,5 +4,6 @@ export interface Message {
     timestamp: number;
     author: string;
     channelId: string;
+    edited: boolean;
     reactions?: [];
 }

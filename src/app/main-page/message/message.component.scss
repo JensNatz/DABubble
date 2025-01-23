@@ -42,6 +42,13 @@
           }
         }
 
+        .message-edit-info {
+            color: $gray;
+            font-size: 12px;
+            margin-top: -4px;
+            margin-left: 16px;
+        }
+
         .message-reactions {
             @include flex($justify: start);
             gap: 8px;
@@ -89,6 +96,11 @@
                 background-color: $purple-2;
                 color: $white;
             }
+
+            .message-edit-info {
+                margin-left: 0;
+                margin-right: 16px;
+            }
         }
 
         .message-toolbar {
@@ -114,7 +126,11 @@
     .emoji-picker {
         position: absolute;
         
-      }
+    }
+
+    .message-input {
+        width: 100%;
+    }
 }
 
 

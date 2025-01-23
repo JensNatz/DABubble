@@ -1,5 +1,17 @@
 <div class="message-input">
-    <textarea [(ngModel)]="message.content" placeholder="Nachricht an #Entwicklerteam"></textarea>
-    <button  class="send-button" (click)="postMessage()" [disabled]="!message.content.trim()">
-    </button>
+    <textarea [(ngModel)]="content" [attr.placeholder]="placeholder"></textarea>
+    <div class="toolbar">
+        <ng-container *ngIf="type === 'send'">
+            <button  class="send-button"  [disabled]="!content.trim()">
+            </button>
+        </ng-container>
+        <ng-container *ngIf="type === 'edit'">
+            <button (click)="onCancelEditClick()">
+                Abbrechen
+            </button>
+            <button [disabled]="!content.trim()" (click)="onSaveEditClick()">
+                Speichern
+            </button>
+        </ng-container>
+    </div>
 </div>
