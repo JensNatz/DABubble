@@ -81,6 +81,12 @@ export class MessageComponent implements OnInit {
     this.hideEmojiPicker();
   }
 
+  onEmojiOverlayClick(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.hideEmojiPicker();
+    }
+  }
+
   addReaction(reactionType: string) {
     if (!this.message.id) return;
     let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
