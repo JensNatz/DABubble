@@ -16,7 +16,7 @@ export class MessageService {
     const queryRef = query(
       messagesRef,
       where('channelId', '==', channelId),
-      orderBy('timestamp', 'asc')
+      orderBy('timestamp', 'desc')
     );
     return collectionData(queryRef, { idField: 'id' });
   }

@@ -8,8 +8,10 @@
 
     .message-board-content {
         height: calc(100vh - 349px);
-        overflow: auto;
+        overflow-y: auto;
         margin-right: 5px;
+        display: flex;
+        flex-direction: column-reverse;
 
         &::-webkit-scrollbar {
             height: 5px;
