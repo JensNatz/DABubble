@@ -22,6 +22,8 @@ export class MessageBoardComponent {
 
   // TODO: get channelId from parent component
   channelId: string = '9kacAebjb6GEQZJC7jFL';
+  // TODO: get userId from auth service
+  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   messageService: MessageService = inject(MessageService);
   messages: Message[] = [];
 
@@ -37,6 +39,21 @@ export class MessageBoardComponent {
     return date1.toDateString() === date2.toDateString();
   }
 
- 
+  onSendMessage(content: string) {
+    if (content.trim() === '') {
+      return;
+    }
+    let message: Message = {
+      content: content,
+      timestamp: Date.now(),
+      author: this.userId,
+      channelId: this.channelId,
+      edited: false
+    };
+
+    this.messageService.postMessageToChannel(this.channelId, message);
+  
+    console.log(message);
+  }
 
 }

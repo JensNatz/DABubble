@@ -15,6 +15,10 @@
     .toolbar {
         @include flex($justify: space-between);
 
+        .emoji-container {
+            position: relative;
+        }
+
         .emoji-icon {
             cursor: pointer;
             @include rounded($all: 50%);
@@ -22,6 +26,21 @@
 
             &:hover {
                 background-color: $bg-color;
+            }
+        }
+
+        .emoji-picker-overlay {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100vw;
+            height: 100vh;
+
+            .emoji-picker {
+                position: absolute;
+                bottom: 20px;
+                right: 20px;
             }
         }
     }

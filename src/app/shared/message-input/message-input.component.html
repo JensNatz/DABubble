@@ -1,9 +1,16 @@
 <div class="message-input">
     <textarea [(ngModel)]="content" [attr.placeholder]="placeholder"></textarea>
     <div class="toolbar">
-        <img class="emoji-icon" src="assets/img/emoji.svg" alt="Emojis" />
+        <div class="emoji-container">
+            <img class="emoji-icon" src="assets/img/emoji.svg" alt="Emojis" (click)="onEmojiButtonClick()" />
+            <div class="emoji-picker-overlay" *ngIf="isEmojiPickerOpen" (click)="onEmojiOverlayClick($event)">
+                <app-emoji-picker class="emoji-picker"
+                    (emojiSelected)="onEmojiSelected($event)"
+                ></app-emoji-picker>
+             </div>
+        </div>
         <ng-container *ngIf="type === 'send'">
-            <button  class="send-button"  [disabled]="!content.trim()">
+            <button class="send-button" [disabled]="!content.trim()" (click)="onSendClick()">
             </button>
         </ng-container>
         <ng-container *ngIf="type === 'edit'">
