@@ -1,4 +1,4 @@
-<div class="message-container" [ngClass]="{'own': isOwn}">
+<div class="message-container" [ngClass]="{'own': isOwn} " (clickOutside)="handleOutsideClick()">
     <div class="avatar">
         <app-avatar [avatarId]="avatarId"></app-avatar>
     </div>
@@ -37,6 +37,7 @@
         [content]="content"
         (cancelEdit)="handleCancelEditClick()"
         (saveEdit)="handleSaveEditClick($event)"
+        
         >
         </app-message-input>
     </ng-container>

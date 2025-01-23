@@ -8,6 +8,7 @@ import { MessageService } from '../../services/firebase-services/message.service
 import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.component';
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
+import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({
   selector: 'app-message',
@@ -17,6 +18,7 @@ import { MessageInputComponent } from '../../shared/message-input/message-input.
     ReactionIndicatorComponent,
     EmojiPickerComponent,
     MessageToolbarComponent,
+    ClickOutsideDirective,
     MessageInputComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
@@ -168,5 +170,9 @@ export class MessageComponent implements OnInit {
       }
       this.isEditing = false;
     }
+  }
+
+  handleOutsideOfMessageClick() {
+     this.isEditing = false;
   }
 }

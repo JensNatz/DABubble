@@ -47,7 +47,6 @@ export class MessageInputComponent {
   onEmojiSelected(event: { emoji: { native: string } }) {
     this.content += ' ' + event.emoji.native + ' ';
     this.isEmojiPickerOpen = false;
-    console.log('terst');
   }
 
   onSendClick() {
