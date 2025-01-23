@@ -21,11 +21,11 @@
                 <img src="assets/img/add.png" (click)="openAddChannel()">
             </div>
 
-            <!-- <div class="modal-overlay"></div>
-        <div class="modal">
-            <img src="assets/img/close.svg">            
-            <app-add-channel></app-add-channel>
-        </div> -->
+                <!-- <div class="modal-overlay"></div>
+            <div class="modal">
+                <img src="assets/img/close.svg">            
+                <app-add-channel></app-add-channel>
+            </div> -->
             <div class="modal-overlay" *ngIf="showModal" (click)="closeAddChannel()"></div>
             <div class="modal" *ngIf="showModal">
                 <img src="assets/img/close.svg" (click)="closeAddChannel()">
@@ -36,13 +36,11 @@
 
         <div *ngIf="isOpenChannelListe">
             <div class="channels">
-                <div class="chanel_name">
-                    @for (channel of (this.channelService.channels | async); track channel) {
+                <div class="channel_name" *ngFor="let channel of (this.channelService.channels | async)">
                     <p><b>#</b>{{ channel['name'] }}</p>
-                    }
                 </div>
             </div>
-            <div class="add_chanel" (click)="openAddChannel()">
+            <div class="add_channel" (click)="openAddChannel()">
                 <img src="assets/img/add_circle.png">
                 <p>Channel hinzufügen</p>
             </div>

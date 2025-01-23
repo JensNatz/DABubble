@@ -134,46 +134,40 @@
     filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
 }
 
-
 .channels {
     display: flex;
-    justify-content: start;
+    flex-direction: column;
     margin-right: 30px;
-    cursor: pointer;
+    padding-top: 10px;
 
-    img {
-        height: 20px;
-        width: 20px;
-    }
-}
+    .channel_name {
+        display: flex;
+        align-items: center;
+        padding-left: 50px;
 
-.chanel_name {
-    padding-left: 30px;
-    padding-top: 30px;
+        p {
+            display: inline-block;
+            white-space: nowrap;
+            border-radius: 20px;
+            padding: 4px 22px;
+            font-size: 18px;
+            margin-left: 0;
+            margin-bottom: 12px;
+            cursor: pointer;
 
-    p {
-        display: inline-block;
-        white-space: nowrap;
-        border-radius: 20px;
-        padding: 4px 22px;
-        font-size: 18px;
-        margin-left: 21px;
-        margin-bottom: 12px;
-        cursor: pointer;
+            &:hover {
+                color: $purple-3;
+                background-color: $bg-color;
+            }
+        }
 
-        &:hover {
-            color: $purple-3;
-            background-color: $bg-color;
+        b {
+            margin-right: 16px;
         }
     }
-
-    b {
-        margin-right: 10px;
-    }
-
 }
 
-.add_chanel {
+.add_channel {
     display: flex;
     align-items: center;
     padding-left: 68px;
