@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, updateDoc, arrayRemove, arrayUnion, where } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, updateDoc, arrayRemove, arrayUnion, where, getDoc } from '@angular/fire/firestore';
 import { Message } from '../../models/message';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,37 @@ export class MessageService {
       parentMessageId: null,
       edited: false
     });
+  }
+
+  private async updateParentMessageMetadata(parentMessageId: string, replyTimestamp: number) {
+    const parentMessageRef = doc(this.firestore, 'messages', parentMessageId);
+    const parentDoc = await getDoc(parentMessageRef);
+    
+    if (!parentDoc.exists()) {
+      throw "Parent message document does not exist!";
+    }
+
+    console.log(replyTimestamp, 'replyTimestamp');
+
+    await updateDoc(parentMessageRef, {
+      numberOfReplies: (parentDoc.data()['numberOfReplies'] || 0) + 1,
+      lastReplyTimestamp: replyTimestamp
+    });
+  }
+
+  async postReplyToMessage(channelId: string, parentMessageId: string, message: Message) {
+    const messagesRef = collection(this.firestore, 'messages');
+    
+    await addDoc(messagesRef, {
+      content: message.content,
+      timestamp: message.timestamp,
+      author: message.author,
+      channelId: channelId,
+      parentMessageId: parentMessageId,
+      edited: false
+    });
+
+    await this.updateParentMessageMetadata(parentMessageId, message.timestamp);
   }
 
   editMessage(messageId: string, content: string) {

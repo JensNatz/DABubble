@@ -60,9 +60,9 @@ export class MessageComponent implements OnInit {
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
-    if (this.message.numberOfReplies && this.message.numberOfReplies > 0) {
+    if (this.message.numberOfReplies && this.message.numberOfReplies > 0 && this.message.lastReplyTimestamp) {
       this.numberOfReplies = this.message.numberOfReplies;
-      this.lastReplyTimestamp = this.message.timestamp;
+      this.lastReplyTimestamp = this.message.lastReplyTimestamp;
     }
   }
 
