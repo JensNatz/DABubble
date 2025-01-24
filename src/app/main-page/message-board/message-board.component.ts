@@ -47,8 +47,10 @@ export class MessageBoardComponent {
       console.log(this.threadMessages, 'thread öffnen im board');
     });
     this.isThreadOpen = true;
+  }
 
-    
+  closeThread() {
+    this.isThreadOpen = false;
   }
 
   onSendMessage(content: string) {

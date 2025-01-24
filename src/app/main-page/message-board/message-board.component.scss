@@ -3,7 +3,7 @@
 .message-board {
     @include flex($align: start);
     gap: 16px;
-    // margin-left: 20px;
+    // margin-left: 20px; //TODO: get distancy by dispay flex & gap in parent element
 
     .message-container {
         @include rounded();
@@ -21,6 +21,37 @@
 
         &.thread-channel {
             width: 35%; 
+        }
+    }
+
+    .message-board-header {
+        @include flex($justify: space-between);
+        padding: 8px 24px;
+
+        h2 {
+            font-size: 24px;
+        }
+
+        .header-left {
+            @include flex($justify: start);
+            gap: 8px;
+
+            span {
+                font-size: 14px;
+                color: $purple-2;
+            }
+        }
+
+        .header-right {
+            .close-icon {
+                @include rounded($all: 50%);
+                padding: 8px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: $bg-color;
+                }
+            }
         }
     }
 
