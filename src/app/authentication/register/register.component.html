@@ -9,7 +9,7 @@
         <span>Mit deinem Namen und deiner E-Mail_Adreese hast du dein neue DABubble-Konto</span>
     </div>
 
-    <form (ngSubmit)="onSubmit(form)"  #form="ngForm">
+    <form (ngSubmit)="onSubmit(fregisterForm)"  #fregisterForm="ngForm">
         <div class="input-field-section">
             <app-input-field
                 [(ngModel)]="name"
@@ -18,7 +18,8 @@
                 placeholder="Name und Nachname"
                 [showError]="nameInvalid || false"
                 errorMessage="Bitte schreiben Sie einen Namen"
-                imagePath="../../../assets/img/authentications-icons/person_filled.svg">
+                imagePath="../../../assets/img/authentications-icons/person_filled.svg"
+                (ngModelChange)="resetNameError()">
             </app-input-field>
             <app-input-field
             required   
@@ -29,7 +30,8 @@
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
                 [showError]="emailInvalid || false"
                 errorMessage="Diese E-Mail-Adresse ist leider ungültig"
-                imagePath="../../../assets/img/authentications-icons/mail.svg">
+                imagePath="../../../assets/img/authentications-icons/mail.svg"
+                (ngModelChange)="resetEmailError()">
             </app-input-field>
             <app-input-field 
             required  
@@ -39,7 +41,8 @@
                 placeholder="Passwort"
                 [showError]="passwordInvalid || false"
                 errorMessage="Bitte geben Sie ein Passwort ein"
-                imagePath="../../../assets/img/authentications-icons/lock.svg">
+                imagePath="../../../assets/img/authentications-icons/lock.svg"
+                (ngModelChange)="resetPasswordError()">
             </app-input-field>
         </div>
 

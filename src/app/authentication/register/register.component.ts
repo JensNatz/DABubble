@@ -18,15 +18,16 @@ export class RegisterComponent {
   nameInvalid: boolean = false;
   emailInvalid: boolean = false;
   passwordInvalid: boolean = false;
+registerForm: NgForm | undefined;
 
   constructor(private router: Router) {}
 
-  onSubmit(form: NgForm) {
+  onSubmit(registerForm: NgForm) {
     this.nameInvalid = !this.name;
-    this.emailInvalid = !this.email || !form.controls['email'].valid;
+    this.emailInvalid = !this.email || !registerForm.controls['email'].valid;
     this.passwordInvalid = !this.password;
 
-    if (form.valid) {      
+    if (registerForm.valid) {      
       console.log('Formular erfolgreich übermittelt');
       this.router.navigate(['/register/avatar'], {
         queryParams: {
@@ -38,5 +39,17 @@ export class RegisterComponent {
     } else {
       console.log('Formular ist ungültig');
     }
+  }
+
+  resetPasswordError() {
+    this.passwordInvalid = false;
+  }
+
+  resetNameError() {
+    this.nameInvalid = false;
+  }
+
+  resetEmailError() {
+    this.emailInvalid = false;
   }
 }
