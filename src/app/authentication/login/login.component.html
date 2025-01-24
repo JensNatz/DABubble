@@ -8,22 +8,27 @@
     </div>
 
 
-    <form (ngSubmit)="onSubmit">
+    <form (ngSubmit)="onSubmit()">
         <div class="input-field-section">            
-            <app-input-field                                                
+            <app-input-field                                                                                                  
                  type="email"
                  placeholder="beispielname@email.com"
                  pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
                  [showError]="usernameInvalid ||false"
                  errorMessage = "Diese E-Mail-Adresse ist leider ungültig"
-                 imagePath="../../../assets/img/authentications-icons/mail.svg">
+                 imagePath="../../../assets/img/authentications-icons/mail.svg"
+                 [(ngModel)]="email"
+                 name="email"
+                 >
             </app-input-field>
             <app-input-field                                 
                 type="password"
                 placeholder="Passwort"
                 [showError]="usernameInvalid || true"
                 errorMessage = "Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen"
-                imagePath="../../../assets/img/authentications-icons/lock.svg">
+                imagePath="../../../assets/img/authentications-icons/lock.svg"
+                [(ngModel)]="password"
+                name="password">
                 ></app-input-field>            
         </div>
 

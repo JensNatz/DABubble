@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./login.component.scss','../../shared/authentication-input/input-field.component.scss',]
 })
 export class LoginComponent {
-onSubmit: any;
+
 usernameInvalid: boolean | undefined;
 
 users: Observable<User[]>;
@@ -28,12 +28,19 @@ password: any;
   }
 
 
+
+
 guestLogin() {
   this.users.subscribe(users => {
     console.log(users);
   });
 }
 
+onSubmit() {
+  // Hier wird der Wert aus den Eingabefeldern verarbeitet
+  console.log('E-Mail:', this.email);
+  console.log('Passwort:', this.password);
+}
 
 test(){
   console.log(this.email);
