@@ -8,7 +8,7 @@
     </div>
 
 
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()" #form="ngForm">
         <div class="input-field-section">            
             <app-input-field                                                                                                  
                  type="email"
@@ -32,7 +32,7 @@
                 ></app-input-field>            
         </div>
 
-        <p class="pw-forget-btn br-30">Passwort vergessen?</p>
+        <p class="pw-forget-btn br-30" (click)="sendPasswordResetEmail()">Passwort vergessen?</p>
 
         <div class="or-container">
             ODER
@@ -43,8 +43,8 @@
         </div>
 
         <div class="btn-container">
-            <button class="register-btn">Anmelden</button>
-            <button (click)="guestLogin()" class="guest-login-btn">Gäste-Login</button>
+            <button type="submit" class="register-btn">Anmelden</button>
+            <button class="guest-login-btn">Gäste-Login</button>
         </div>
 
     </form>

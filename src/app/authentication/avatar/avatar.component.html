@@ -13,7 +13,7 @@
             <img class="current-avatar-img" [src]="selectedAvatar" alt="Current Avatar">
         </div>
 
-        <span class="user-name">{{ userName }}</span>
+        <span class="user-name">{{ name }}</span>
         <span class="choose-description">Aus der Liste Wählen</span>
 
         <div class="user-select-images">         
@@ -26,7 +26,7 @@
 
 
     <div class="btn-container">
-        <button class="next-btn">Weiter</button>
+        <button (click)="registerUser()" class="next-btn">Weiter</button>
     </div>  
 
 </div>

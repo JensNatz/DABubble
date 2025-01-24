@@ -9,39 +9,47 @@
         <span>Mit deinem Namen und deiner E-Mail_Adreese hast du dein neue DABubble-Konto</span>
     </div>
 
-    <form (ngSubmit)="onSubmit">
+    <form (ngSubmit)="onSubmit(form)"  #form="ngForm">
         <div class="input-field-section">
             <app-input-field
+                [(ngModel)]="name"
+                name="name"           
                 type="text"
                 placeholder="Name und Nachname"
-                [showError]="passwordInvalid || true"
+                [showError]="nameInvalid || false"
                 errorMessage="Bitte schreiben Sie einen Namen"
                 imagePath="../../../assets/img/authentications-icons/person_filled.svg">
             </app-input-field>
-            <app-input-field 
+            <app-input-field
+            required   
+                [(ngModel)]="email"
+                name="email"
                 type="email"
                 placeholder="beispielname@email.com"
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                [showError]="usernameInvalid || true"
+                [showError]="emailInvalid || false"
                 errorMessage="Diese E-Mail-Adresse ist leider ungültig"
                 imagePath="../../../assets/img/authentications-icons/mail.svg">
             </app-input-field>
             <app-input-field 
+            required  
+                [(ngModel)]="password"
+                name="password"
                 type="password"
                 placeholder="Passwort"
-                [showError]="passwordInvalid || true"
+                [showError]="passwordInvalid || false"
                 errorMessage="Bitte geben Sie ein Passwort ein"
                 imagePath="../../../assets/img/authentications-icons/lock.svg">
             </app-input-field>
         </div>
 
         <div class="data-protection-container">
-            <input class="checkbox" type="checkbox">
+            <input class="checkbox" type="checkbox" [(ngModel)]="dataProtection" name="dataProtection" required>
             <span>Ich stimme der <a href="http://">Datenschutzerklärung</a> zu.</span>
         </div>
 
         <div class="btn-container">
-            <button [routerLink]="['/register/avatar']"  class="next-btn">Weiter</button>
+            <button type="submit" class="next-btn">Weiter</button>
         </div>
     </form>
 
