@@ -1,16 +1,34 @@
 <div class="message-board">
-    <div class="message-board-content">
-        @for (message of messages; track message.id; let i = $index) {
-            
-            <app-message [message]="message"></app-message>
+    <div class="message-container main-channel">
+        <div class="message-board-content">
+            @for (message of messages; track message.id; let i = $index) {
+
+            <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"></app-message>
             @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
-                <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-            } 
-        }
+            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+            }
+            }
+        </div>
+        <div class="message-input-container">
+            <app-message-input [type]="'send'" [placeholder]="'Nachricht an #Entwicklerteam'"
+                (sendMessage)="onSendMessage($event)"></app-message-input>
+        </div>
     </div>
-    <div class="message-input-container">
-        <app-message-input [type]="'send'"
-         [placeholder]="'Nachricht an #Entwicklerteam'"
-         (sendMessage)="onSendMessage($event)"></app-message-input>
+    @if (isThreadOpen) {
+    <div class="message-container thread-channel">
+        <div class="message-board-content">
+            @for (message of threadMessages; track message.id; let i = $index) {
+            <app-message [message]="message"></app-message>
+            @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
+            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+            }
+            }
+        </div>
+        <div class="message-input-container">
+            <app-message-input [type]="'send'" [placeholder]="'Antworten...'"
+                (sendMessage)="onSendMessage($event)"></app-message-input>
+        </div>
     </div>
+    }
+
 </div>

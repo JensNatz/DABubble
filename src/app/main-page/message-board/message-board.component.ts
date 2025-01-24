@@ -26,9 +26,11 @@ export class MessageBoardComponent {
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   messageService: MessageService = inject(MessageService);
   messages: Message[] = [];
+  threadMessages: Message[] = [];
+  isThreadOpen: boolean = false;
 
   constructor() {
-    this.messageService.getMessagesFromChannelOrderByTimestampASC(this.channelId).subscribe((messages) => {
+    this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channelId).subscribe((messages) => {
       this.messages = messages as Message[];
     });
   }
@@ -37,6 +39,16 @@ export class MessageBoardComponent {
     const date1 = new Date(timestamp1);
     const date2 = new Date(timestamp2);
     return date1.toDateString() === date2.toDateString();
+  }
+
+  openTheadWithMessageId(messageId: string) {
+    this.messageService.getRepliesFromMessageOrderByTimestampDESC(messageId).subscribe((messages) => {
+      this.threadMessages = messages as Message[];
+      console.log(this.threadMessages, 'thread öffnen im board');
+    });
+    this.isThreadOpen = true;
+
+    
   }
 
   onSendMessage(content: string) {
@@ -54,6 +66,10 @@ export class MessageBoardComponent {
     this.messageService.postMessageToChannel(this.channelId, message);
   
     console.log(message);
+  }
+
+  handleRepliesClick(messageId: string) {
+    this.openTheadWithMessageId(messageId);
   }
 
 }

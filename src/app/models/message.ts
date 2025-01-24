@@ -5,5 +5,8 @@ export interface Message {
     author: string;
     channelId: string;
     edited: boolean;
+    numberOfReplies?: number;
+    lastReplyTimestamp?: number;
+    parentMessageId?: string;
     reactions?: [];
 }

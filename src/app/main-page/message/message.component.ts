@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { Message } from '../../models/message';
@@ -26,6 +26,9 @@ import { ClickOutsideDirective } from '../../directives/click-outside.directive'
 export class MessageComponent implements OnInit {
   messageService: MessageService = inject(MessageService);
   @Input() message!: Message;
+  @Output() repliesClicked = new EventEmitter<string>();
+
+
   messageId: string | undefined = undefined;
   content: string = '';
   timestamp: number = 0;
@@ -39,8 +42,11 @@ export class MessageComponent implements OnInit {
   // TODO: get channel id from ???
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   avatarId: string = '0';
+  numberOfReplies: number | null = null;
+  lastReplyTimestamp: number | null = null;
   emojiPickerPosition: string = 'top: 50px; left: 50px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
+
   constructor(private userService: UserService) { }
 
   async ngOnInit() {
@@ -54,6 +60,20 @@ export class MessageComponent implements OnInit {
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
+    if (this.message.numberOfReplies && this.message.numberOfReplies > 0) {
+      this.numberOfReplies = this.message.numberOfReplies;
+      this.lastReplyTimestamp = this.message.timestamp;
+    }
+  }
+
+  get repliesText(): string {
+    if (this.numberOfReplies) {
+      if (this.numberOfReplies === 1) {
+        return '1 Antwort';
+      }
+      return `${this.numberOfReplies} Antworten`;
+    }
+    return '';
   }
 
   private calcPickerPosition(event: MouseEvent): string {
@@ -174,5 +194,9 @@ export class MessageComponent implements OnInit {
 
   handleOutsideOfMessageClick() {
      this.isEditing = false;
+  }
+
+  handleRepliesClick() {
+    this.repliesClicked.emit(this.messageId);
   }
 }

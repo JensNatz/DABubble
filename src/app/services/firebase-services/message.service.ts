@@ -11,11 +11,22 @@ export class MessageService {
   
   constructor() { }
 
-  getMessagesFromChannelOrderByTimestampASC(channelId: string) {
+  getMessagesFromChannelOrderByTimestampDESC(channelId: string) {
     const messagesRef = collection(this.firestore, 'messages');
     const queryRef = query(
       messagesRef,
       where('channelId', '==', channelId),
+      where('parentMessageId', '==', null),
+      orderBy('timestamp', 'desc')
+    );
+    return collectionData(queryRef, { idField: 'id' });
+  }
+
+  getRepliesFromMessageOrderByTimestampDESC(messageId: string) {
+    const messagesRef = collection(this.firestore, 'messages');
+    const queryRef = query(
+      messagesRef,
+      where('parentMessageId', '==', messageId),
       orderBy('timestamp', 'desc')
     );
     return collectionData(queryRef, { idField: 'id' });
@@ -28,6 +39,7 @@ export class MessageService {
       timestamp: message.timestamp,
       author: message.author,
       channelId: channelId,
+      parentMessageId: null,
       edited: false
     });
   }

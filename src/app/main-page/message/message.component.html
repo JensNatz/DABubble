@@ -11,10 +11,16 @@
         <div class="message-text">
             {{ content }}
         </div>
-        <div class="message-edit-info" *ngIf="edited">(Bearbeitet)</div>
+        <div class="message-meta-info" *ngIf="numberOfReplies || edited">
+            <div class="message-edit-info" *ngIf="edited">(Bearbeitet)</div>
+            <div class="message-replies" *ngIf="numberOfReplies">
+                <span class="replies-text" (click)="handleRepliesClick()">{{ repliesText }}</span>
+                <span class="replies-time">Letzte Antwort: {{ lastReplyTimestamp | date:'HH:mm' }}</span>
+            </div>
+        </div>
         <div class="message-reactions">
             <ng-container *ngFor="let reaction of reactionWithNames">
-                <app-reaction-indicator *ngIf="reaction.users.length > 0" [reaction]="reaction"
+                <app-reaction-indicator class="reaction-indicator" *ngIf="reaction.users.length > 0" [reaction]="reaction"
                     (toggleReaction)="handleReactionToggle($event)">
                 </app-reaction-indicator>
             </ng-container>
