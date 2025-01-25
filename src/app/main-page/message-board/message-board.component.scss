@@ -61,6 +61,11 @@
         margin-right: 5px;
         display: flex;
         flex-direction: column-reverse;
+
+        .no-messages-container {
+           color: $gray;
+           padding: 16px 32px;
+        }
     }
 
     .message-input-container {

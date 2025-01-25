@@ -29,14 +29,20 @@
             <div class="header-right">
                 <img src="assets/img/close.svg" class="close-icon" (click)="closeThread()">
             </div>
-            
+
         </div>
         <div class="message-board-content">
-            @for (message of threadMessages; track message.id; let i = $index) {
-            <app-message [message]="message"></app-message>
-            @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
-            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-            }
+            @if (threadMessages.length === 0) {  
+                <div class="no-messages-container">
+                    Verfasse eine Antwort...
+                </div>
+            } @else {
+                @for (message of threadMessages; track message.id; let i = $index) {
+                    <app-message [message]="message"></app-message>
+                    @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
+                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                    }
+                }
             }
         </div>
         <div class="message-input-container">

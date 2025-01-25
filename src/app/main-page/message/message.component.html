@@ -29,7 +29,7 @@
         <app-message-toolbar class="message-toolbar" 
             [isOwn]="isOwn" [isMessageInMainChannel]="isMessageInMainChannel"
             (toggleReaction)="handleReactionToggle($event)" (addReaction)="showEmojiPicker($event)"
-            (editMessage)="handleEditMessageClick()">
+            (addReply)="handleAddReplyClick()" (editMessage)="handleEditMessageClick()">
         </app-message-toolbar>
         <div class="emoji-picker-overlay" *ngIf="displayEmojiPicker" (click)="onEmojiOverlayClick($event)">
             <app-emoji-picker [attr.style]="emojiPickerPosition" class="emoji-picker"

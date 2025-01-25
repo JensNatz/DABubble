@@ -28,7 +28,6 @@ export class MessageComponent implements OnInit {
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
 
-
   messageId: string | undefined = undefined;
   content: string = '';
   timestamp: number = 0;
@@ -203,6 +202,10 @@ export class MessageComponent implements OnInit {
   }
 
   handleRepliesClick() {
+    this.repliesClicked.emit(this.messageId);
+  }
+
+  handleAddReplyClick() {
     this.repliesClicked.emit(this.messageId);
   }
 }
