@@ -8,26 +8,31 @@
     </div>
 
 
-    <form (ngSubmit)="onSubmit">
+    <form (ngSubmit)="onSubmit()" #form="ngForm">
         <div class="input-field-section">            
-            <app-input-field                                                
+            <app-input-field                                                                                                  
                  type="email"
                  placeholder="beispielname@email.com"
                  pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                 [showError]="usernameInvalid ||false"
-                 errorMessage = "Diese E-Mail-Adresse ist leider ungültig"
-                 imagePath="../../../assets/img/authentications-icons/mail.svg">
+                 [showError]="emailInvalid ||false"
+                 [errorMessage]="emailErrorMessage"
+                 imagePath="../../../assets/img/mail.svg"
+                 [(ngModel)]="email"
+                 name="email"
+                 >
             </app-input-field>
             <app-input-field                                 
                 type="password"
                 placeholder="Passwort"
-                [showError]="usernameInvalid || true"
-                errorMessage = "Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen"
-                imagePath="../../../assets/img/authentications-icons/lock.svg">
+                [showError]="passwordInvalid || false"
+                [errorMessage]="passwordErrorMessage"
+                imagePath="../../../assets/img/lock.svg"
+                [(ngModel)]="password"
+                name="password">
                 ></app-input-field>            
         </div>
 
-        <p class="pw-forget-btn br-30">Passwort vergessen?</p>
+        <p class="pw-forget-btn br-30" (click)="sendPasswordResetEmail()">Passwort vergessen?</p>
 
         <div class="or-container">
             ODER
@@ -38,8 +43,8 @@
         </div>
 
         <div class="btn-container">
-            <button class="register-btn">Anmelden</button>
-            <button (click)="guestLogin()" class="guest-login-btn">Gäste-Login</button>
+            <button type="submit" class="btn-primary">Anmelden</button>
+            <button class="btn-secondary">Gäste-Login</button>
         </div>
 
     </form>

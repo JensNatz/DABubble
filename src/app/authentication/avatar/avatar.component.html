@@ -10,15 +10,15 @@
 
     <div class="avatar-section">
         <div class="current-avatar">
-            <img class="current-avatar-img" [src]="selectedAvatar" alt="Current Avatar">
+            <img class="current-avatar-img" [src]="selectedAvatar || '../../../assets/img/standard_avatar.svg'" alt="Current Avatar">
         </div>
 
-        <span class="user-name">{{ userName }}</span>
+        <span class="user-name">{{ name }}</span>
         <span class="choose-description">Aus der Liste Wählen</span>
 
         <div class="user-select-images">         
             <div *ngFor="let avatar of avatarImages | keyvalue">
-                <img class="avatar-img-select" [src]="avatar.value" [alt]="'Avatar ' + avatar.key" (click)="selectAvatar(avatar.value)">
+                <img class="avatar-img-select" [src]="avatar.value" [alt]="'Avatar ' + avatar.key" (click)="selectAvatar(avatar.value, avatar.key)">
             </div>
         </div>
     </div>
@@ -26,7 +26,12 @@
 
 
     <div class="btn-container">
-        <button class="next-btn">Weiter</button>
+        <button
+            [ngClass]="{'btn-disabled': !selectedAvatar || isSubmitting}"
+            [disabled]="!selectedAvatar || isSubmitting"
+            (click)="registerUser()"
+            class="btn-primary"
+        >Weiter</button>
     </div>  
 
 </div>
