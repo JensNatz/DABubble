@@ -46,6 +46,16 @@ export class UserServiceService {
     }
   }
 
+  async emailExists(email: string): Promise<boolean> {
+    try {
+      const users = await firstValueFrom(this.getUsers());
+      return users ? users.some(user => user.email === email) : false;
+    } catch (err) {
+      console.error('Error checking if email exists:', err);
+      return false;
+    }
+  }
+
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.auth, email);

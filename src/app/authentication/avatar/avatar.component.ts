@@ -18,6 +18,7 @@ export class AvatarComponent {
   email: string = '';
   password: string = '';
   avatar: string = '';
+  avatarKey: string='';
 
   avatarImages={
     '1': '../../../assets/img/avatar1.svg',
@@ -40,20 +41,26 @@ export class AvatarComponent {
   }
   
 
-  selectedAvatar: string = '../../../assets/img/standard_avatar.svg';
-  userName: string = 'Stephan Zager';
+  selectedAvatar: string = '';
+  
 
-  selectAvatar(avatar: string) {
+  selectAvatar(avatar: string, avatarKey:string) {
     this.selectedAvatar = avatar;
+    this.avatarKey = avatarKey;
+    console.log(avatar)
+    console.log(avatarKey)
   }
 
 
   async registerUser() {
+    if (!this.selectedAvatar) {
+      return;
+    }
     const newUser: User = {
       name: this.name,
       email: this.email,
       password: this.password,
-      avatar: this.avatar,
+      avatar: this.avatarKey,
       onlineStatusbar: 'offline'
     };
 

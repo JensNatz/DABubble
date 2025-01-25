@@ -14,8 +14,8 @@
                  type="email"
                  placeholder="beispielname@email.com"
                  pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                 [showError]="usernameInvalid ||false"
-                 errorMessage = "Diese E-Mail-Adresse ist leider ungültig"
+                 [showError]="emailInvalid ||false"
+                 [errorMessage]="emailErrorMessage"
                  imagePath="../../../assets/img/authentications-icons/mail.svg"
                  [(ngModel)]="email"
                  name="email"
@@ -24,8 +24,8 @@
             <app-input-field                                 
                 type="password"
                 placeholder="Passwort"
-                [showError]="usernameInvalid || true"
-                errorMessage = "Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen"
+                [showError]="passwordInvalid || false"
+                [errorMessage]="passwordErrorMessage"
                 imagePath="../../../assets/img/authentications-icons/lock.svg"
                 [(ngModel)]="password"
                 name="password">

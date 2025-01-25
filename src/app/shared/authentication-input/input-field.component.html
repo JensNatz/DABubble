@@ -6,8 +6,10 @@
         (ngModelChange)="onInputChange($event)"
         [type]="type" 
         [placeholder]="placeholder" 
-        [ngStyle]="{'background-image': imagePath ? 'url(' + imagePath + ')' : 'none'}"           
+        [ngStyle]="{'background-image': imagePath ? 'url(' + imagePath + ')' : 'none'}"
+        (blur)="onTouched()"
+        #inputField="ngModel"           
         />
         
-    <div *ngIf="showError" class="error-message">{{ errorMessage }}</div>
+        <div *ngIf="showError || (inputField.invalid && inputField.touched)" class="error-message">{{ errorMessage }}</div>
 </div>

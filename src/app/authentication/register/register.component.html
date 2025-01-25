@@ -12,37 +12,44 @@
     <form (ngSubmit)="onSubmit(fregisterForm)"  #fregisterForm="ngForm">
         <div class="input-field-section">
             <app-input-field
+                required
+                [minlength]="3"
                 [(ngModel)]="name"
                 name="name"           
                 type="text"
                 placeholder="Name und Nachname"
                 [showError]="nameInvalid || false"
-                errorMessage="Bitte schreiben Sie einen Namen"
+                [errorMessage]="nameErrorMessage"
                 imagePath="../../../assets/img/authentications-icons/person_filled.svg"
-                (ngModelChange)="resetNameError()">
+                (ngModelChange)="resetNameError()"
+                (blur)="validateName()">
             </app-input-field>
             <app-input-field
-            required   
+                required
                 [(ngModel)]="email"
                 name="email"
                 type="email"
                 placeholder="beispielname@email.com"
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
                 [showError]="emailInvalid || false"
-                errorMessage="Diese E-Mail-Adresse ist leider ungültig"
+                [errorMessage]="emailErrorMessage"
                 imagePath="../../../assets/img/authentications-icons/mail.svg"
-                (ngModelChange)="resetEmailError()">
+                (ngModelChange)="resetEmailError()"
+                (blur)="validateEmail()">
             </app-input-field>
             <app-input-field 
-            required  
+                required
+                [minlength]="5"
                 [(ngModel)]="password"
                 name="password"
                 type="password"
                 placeholder="Passwort"
                 [showError]="passwordInvalid || false"
-                errorMessage="Bitte geben Sie ein Passwort ein"
+                [errorMessage]="passwordErrorMessage"
                 imagePath="../../../assets/img/authentications-icons/lock.svg"
-                (ngModelChange)="resetPasswordError()">
+                pattern="^(?=.*[A-Z])(?=.*[!?@#$%^&*]).+$"
+                (ngModelChange)="resetPasswordError()"
+                (blur)="validatePassword()">
             </app-input-field>
         </div>
 
