@@ -23,19 +23,3 @@
   }
 }
 
-@mixin btn($text-color: $white, $bg-color: $purple-1, $width: 136px, $height: 48px, $bg-color-hover: $purple-2, $text-color-hover: $white ) {
-  color: $text-color ;
-  background-color: $bg-color;
-  font-size: 18px;
-  width: $width;
-  height: $height;
-  border-radius: 25px;
-  border: none;
-  font-weight: 700;
-
-  &:hover {
-    cursor: pointer;
-    background-color: $bg-color-hover;
-    color: $text-color-hover;
-  }
-}

@@ -4,11 +4,13 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
+import { NgClass } from '@angular/common';
+
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [InputFieldComponent, RouterModule, FormsModule],
+  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })

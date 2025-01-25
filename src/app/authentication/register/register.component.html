@@ -59,7 +59,10 @@
         </div>
 
         <div class="btn-container">
-            <button type="submit" class="next-btn">Weiter</button>
+            <button type="submit"
+                    class="btn-primary"          
+                    [ngClass]="{'btn-disabled': fregisterForm.invalid}"  
+                    [disabled]="fregisterForm.invalid">Weiter</button>
         </div>
     </form>
 

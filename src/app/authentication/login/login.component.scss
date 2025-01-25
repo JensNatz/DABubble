@@ -123,11 +123,3 @@ form {
     margin-top: 42px;
 }
 
-.register-btn {
-    @include btn();
-}
-
-.guest-login-btn {
-    @include btn($purple-2, $white, 136px, 48px, $purple-1, $white);
-    border: 1px solid $purple-2;
-}

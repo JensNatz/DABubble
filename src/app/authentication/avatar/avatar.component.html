@@ -26,7 +26,7 @@
 
 
     <div class="btn-container">
-        <button [disabled]="!selectedAvatar" (click)="registerUser()" class="next-btn">Weiter</button>
+        <button [ngClass]="{'btn-disabled': !selectedAvatar}" [disabled]="!selectedAvatar" (click)="registerUser()" class="btn-primary">Weiter</button>
     </div>  
 
 </div>

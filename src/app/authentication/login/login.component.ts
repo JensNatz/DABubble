@@ -81,7 +81,7 @@ export class LoginComponent {
 
   async sendPasswordResetEmail() {
     await this.userService.sendPasswordResetEmail(this.email);
-    console.log('Password reset email sent');
+    console.log('password login');
   }
 
 }
