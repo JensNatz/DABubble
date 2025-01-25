@@ -3,48 +3,43 @@
         <app-avatar [avatarId]="avatarId"></app-avatar>
     </div>
     <ng-container *ngIf="!isEditing">
-    <div class="message">
-        <div class="message-header">
-            <div class="message-header-name">{{ authorName }}</div>
-            <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
-        </div>
-        <div class="message-text">
-            {{ content }}
-        </div>
-        <div class="message-meta-info" *ngIf="numberOfReplies || edited">
-            <div class="message-edit-info" *ngIf="edited">(Bearbeitet)</div>
-            <div class="message-replies" *ngIf="numberOfReplies">
-                <span class="replies-text" (click)="handleRepliesClick()">{{ repliesText }}</span>
-                <span class="replies-time">Letzte Antwort: {{ lastReplyTimestamp | date:'HH:mm' }}</span>
+        <div class="message">
+            <div class="message-header">
+                <div class="message-header-name">{{ authorName }}</div>
+                <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
+            </div>
+            <div class="message-text">
+                {{ content }}
+            </div>
+            <div class="message-meta-info" *ngIf="numberOfReplies || edited">
+                <div class="message-edit-info" *ngIf="edited">(Bearbeitet)</div>
+                <div class="message-replies" *ngIf="numberOfReplies">
+                    <span class="replies-text" (click)="handleRepliesClick()">{{ repliesText }}</span>
+                    <span class="replies-time">Letzte Antwort: {{ lastReplyTimestamp | date:'HH:mm' }}</span>
+                </div>
+            </div>
+            <div class="message-reactions">
+                <ng-container *ngFor="let reaction of reactionWithNames">
+                    <app-reaction-indicator class="reaction-indicator" *ngIf="reaction.users.length > 0"
+                        [reaction]="reaction" (toggleReaction)="handleReactionToggle($event)">
+                    </app-reaction-indicator>
+                </ng-container>
             </div>
         </div>
-        <div class="message-reactions">
-            <ng-container *ngFor="let reaction of reactionWithNames">
-                <app-reaction-indicator class="reaction-indicator" *ngIf="reaction.users.length > 0" [reaction]="reaction"
-                    (toggleReaction)="handleReactionToggle($event)">
-                </app-reaction-indicator>
-            </ng-container>
-        </div>
-    </div>
-    <app-message-toolbar class="message-toolbar" [isOwn]="isOwn" (toggleReaction)="handleReactionToggle($event)"
-        (addReaction)="showEmojiPicker($event)"
-        (editMessage)="handleEditMessageClick()">
-    </app-message-toolbar>
-    <div class="emoji-picker-overlay" *ngIf="displayEmojiPicker" (click)="onEmojiOverlayClick($event)">
-            <app-emoji-picker [attr.style]="emojiPickerPosition" class="emoji-picker" (emojiSelected)="handleEmojiSelection($event)">
+        <app-message-toolbar class="message-toolbar" 
+            [isOwn]="isOwn" [isMessageInMainChannel]="isMessageInMainChannel"
+            (toggleReaction)="handleReactionToggle($event)" (addReaction)="showEmojiPicker($event)"
+            (editMessage)="handleEditMessageClick()">
+        </app-message-toolbar>
+        <div class="emoji-picker-overlay" *ngIf="displayEmojiPicker" (click)="onEmojiOverlayClick($event)">
+            <app-emoji-picker [attr.style]="emojiPickerPosition" class="emoji-picker"
+                (emojiSelected)="handleEmojiSelection($event)">
             </app-emoji-picker>
         </div>
     </ng-container>
     <ng-container *ngIf="isEditing">
-        <app-message-input 
-        class="message-input" 
-        [type]="'edit'" 
-        [placeholder]="'Nachricht verfassen...'" 
-        [content]="content"
-        (cancelEdit)="handleCancelEditClick()"
-        (saveEdit)="handleSaveEditClick($event)"
-        
-        >
+        <app-message-input class="message-input" [type]="'edit'" [placeholder]="'Nachricht verfassen...'"
+            [content]="content" (cancelEdit)="handleCancelEditClick()" (saveEdit)="handleSaveEditClick($event)">
         </app-message-input>
     </ng-container>
 </div>

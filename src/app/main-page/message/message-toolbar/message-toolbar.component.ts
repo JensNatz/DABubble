@@ -14,6 +14,8 @@ import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 export class MessageToolbarComponent {
 
   @Input() isOwn: boolean = false;
+  @Input() canBeRepliedTo: boolean = false;
+  @Input() isMessageInMainChannel: boolean = false;
   @Output() toggleReaction = new EventEmitter<string>();
   @Output() addReaction = new EventEmitter<MouseEvent>();
   @Output() editMessage = new EventEmitter<void>();
