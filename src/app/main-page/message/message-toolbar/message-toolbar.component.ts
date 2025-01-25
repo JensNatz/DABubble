@@ -14,9 +14,14 @@ import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 export class MessageToolbarComponent {
 
   @Input() isOwn: boolean = false;
+  @Input() canBeRepliedTo: boolean = false;
+  @Input() isMessageInMainChannel: boolean = false;
   @Output() toggleReaction = new EventEmitter<string>();
   @Output() addReaction = new EventEmitter<MouseEvent>();
+  @Output() editMessage = new EventEmitter<void>();
+  @Output() addReply = new EventEmitter<void>();
   topEmojis$ = this.emojiStatsService.topEmojis$;
+  isOptionsMenuOpen = false;
 
   constructor(private emojiStatsService: EmojiStatsService) {}
 
@@ -30,5 +35,17 @@ export class MessageToolbarComponent {
 
   handleAddReactionClick(event: MouseEvent) {
     this.addReaction.emit(event);
+  }
+
+  handleCommentClick() {
+    this.addReply.emit();
+  }
+
+  toggleOptionsMenu() {
+    this.isOptionsMenuOpen = !this.isOptionsMenuOpen;
+  }
+
+  handleEditMessageClick() {
+    this.editMessage.emit();
   }
 }

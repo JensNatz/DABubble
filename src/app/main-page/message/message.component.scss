@@ -5,8 +5,11 @@
     gap: 24px;
     padding: 16px 32px;
     background-color: $white;
-    cursor: pointer;
     position: relative;
+
+    .avatar {
+        cursor: pointer;
+    }
 
     .message {
         @include flex($direction: column, $align: start);
@@ -18,6 +21,7 @@
       
           .message-header-name {
             font-weight: 700;
+            cursor: pointer;
 
             &:hover {
                 color: $purple-1;
@@ -42,10 +46,46 @@
           }
         }
 
+        .message-meta-info {
+            @include flex($direction: column, $align: start);
+            gap: 8px;
+
+            .message-replies {
+                @include flex();
+                gap: 16px;
+
+                .replies-text {
+                    color: $purple-3;
+                    font-size: 14px;
+                    cursor: pointer;
+
+                    &:hover {
+                        color: $purple-1;
+                        font-weight: 700;
+                    }
+                }
+
+                .replies-time {
+                    color: $gray;
+                    font-size: 12px;
+                }
+            }
+
+            .message-edit-info {
+                color: $gray;
+                font-size: 12px;
+            }
+    
+        }
+
         .message-reactions {
             @include flex($justify: start);
             gap: 8px;
             flex-wrap: wrap;
+
+            .reaction-indicator {
+                cursor: pointer;
+            }
         }
       }
 
@@ -72,6 +112,8 @@
         opacity: 0;
         visibility: hidden;
         transition: all 0.2s;
+        z-index: 1000;
+
     }
 
     &.own {
@@ -88,6 +130,10 @@
                 @include rounded($top-right: 0);
                 background-color: $purple-2;
                 color: $white;
+            }
+
+            .message-meta-info {
+                @include flex($direction: column, $align: end);
             }
         }
 
@@ -114,7 +160,11 @@
     .emoji-picker {
         position: absolute;
         
-      }
+    }
+
+    .message-input {
+        width: 100%;
+    }
 }
 
 
