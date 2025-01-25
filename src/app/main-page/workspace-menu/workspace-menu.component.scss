@@ -26,7 +26,30 @@
     }
 }
 
-.edit {    
+.channel_message_content {
+    max-height: calc(100vh - 269px);
+    overflow: hidden;
+
+    &:hover {
+        overflow: auto;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        margin: 100px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: $light-purple;
+    }
+}
+
+.edit {
     img {
         width: 20px;
         height: 20px;
@@ -34,7 +57,6 @@
         cursor: pointer;
     }
 }
-
 
 .edit:hover {
     background-color: rgba(99, 61, 189, 0.2);
@@ -53,10 +75,11 @@
 }
 
 .channels_content {
+    width: 355px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 32px 0 40px;
+    padding: 0 27px 0 40px;
 }
 
 .channel_title {
@@ -111,46 +134,40 @@
     filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
 }
 
-
 .channels {
     display: flex;
-    justify-content: start;
-    margin-right: 30px;    
-    cursor: pointer;   
+    flex-direction: column;
+    margin-right: 30px;
+    padding-top: 10px;
 
-    img {
-        height: 20px;
-        width: 20px;
-    }
-}
+    .channel_name {
+        display: flex;
+        align-items: center;
+        padding-left: 50px;
 
-.chanel_name {
-    padding-left: 30px;
-    padding-top: 30px;
+        p {
+            display: inline-block;
+            white-space: nowrap;
+            border-radius: 20px;
+            padding: 4px 22px;
+            font-size: 18px;
+            margin-left: 0;
+            margin-bottom: 12px;
+            cursor: pointer;
 
-    p {
-        display: inline-block;
-        white-space: nowrap;
-        border-radius: 20px;
-        padding: 4px 22px;
-        font-size: 18px;
-        margin-left: 21px;
-        margin-bottom: 12px;
-        cursor: pointer;
+            &:hover {
+                color: $purple-3;
+                background-color: $bg-color;
+            }
+        }
 
-        &:hover {
-            color: $purple-3;
-            background-color: $bg-color;
+        b {
+            margin-right: 16px;
         }
     }
-
-    b {
-        margin-right: 10px;
-    }
-
 }
 
-.add_chanel {
+.add_channel {
     display: flex;
     align-items: center;
     padding-left: 68px;
@@ -240,11 +257,9 @@
 .user_liste {
     padding: 25px 30px 0 60px;
     font-size: 18px;
-
-    >div {
-        display: inline-block;
-        white-space: nowrap;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .name_plus_icon {
@@ -252,15 +267,21 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 10px;
-    padding: 4px 16px 4px 8px;
 
-    >img {
+    > img {
         height: 50px !important;
         width: 50px !important;
     }
 
-    &:hover {
-        @include rounded();
-        background-color: $bg-color;
+    
+    > span {
+        display: inline-block;
+        white-space: nowrap;
+        padding: 4px 16px 4px 8px;
+
+        &:hover {
+            @include rounded();
+            background-color: $bg-color;
+        }
     }
 }
