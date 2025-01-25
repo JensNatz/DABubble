@@ -65,8 +65,6 @@ export class MessageBoardComponent {
     };
 
     this.messageService.postMessageToChannel(this.channelId, message);
-  
-    console.log(message);
   }
 
   onSendReply(content: string) {
@@ -81,8 +79,6 @@ export class MessageBoardComponent {
       edited: false,
       parentMessageId: this.parentMessageId
     };
-
-    console.log(message);
 
    this.messageService.postReplyToMessage(this.channelId, this.parentMessageId, message);
   }

@@ -28,11 +28,7 @@ export class MessageComponent implements OnInit {
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
 
-  messageId: string | undefined = undefined;
-  content: string = '';
-  timestamp: number = 0;
   authorName: string = 'Unknown User';
-  edited: boolean = false;
   isOwn: boolean = false;
   isEditing: boolean = false;
   displayEmojiPicker: boolean = false;
@@ -41,9 +37,7 @@ export class MessageComponent implements OnInit {
   // TODO: get channel id from ???
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   avatarId: string = '0';
-  numberOfReplies: number | null = null;
   lastReplyTimestamp: number | null = null;
-  parentMessageId: string | null = null;
   isMessageInMainChannel: boolean = false;
   emojiPickerPosition: string = 'top: 50px; left: 50px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
@@ -51,32 +45,24 @@ export class MessageComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   async ngOnInit() {
-    this.messageId = this.message.id;
-    this.content = this.message.content;
-    this.timestamp = this.message.timestamp;
-    this.edited = this.message.edited;
+    // this.messageId = this.message.id;
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
-    this.parentMessageId = this.message.parentMessageId ?? null;
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
-    if (this.parentMessageId === null) {
+    if (this.message.parentMessageId === null) {
       this.isMessageInMainChannel = true;
-    }
-    if (this.message.numberOfReplies && this.message.numberOfReplies > 0 && this.message.lastReplyTimestamp) {
-      this.numberOfReplies = this.message.numberOfReplies;
-      this.lastReplyTimestamp = this.message.lastReplyTimestamp;
     }
   }
 
   get repliesText(): string {
-    if (this.numberOfReplies) {
-      if (this.numberOfReplies === 1) {
+    if (this.message.numberOfReplies) {
+      if (this.message.numberOfReplies === 1) {
         return '1 Antwort';
       }
-      return `${this.numberOfReplies} Antworten`;
+      return `${this.message.numberOfReplies} Antworten`;
     }
     return '';
   }
@@ -187,11 +173,11 @@ export class MessageComponent implements OnInit {
   }
 
   handleSaveEditClick(content: string) {
-    if (content.trim() !== '' && this.messageId) {
-      if (this.content !== content) {
-        this.content = content;
-        this.edited = true;
-        this.messageService.editMessage(this.messageId, content);
+    if (content.trim() !== '' && this.message.id) {
+      if (this.message.content !== content) {
+        this.message.content = content;
+        this.message.edited = true;
+        this.messageService.editMessage(this.message.id, content);
       }
       this.isEditing = false;
     }
@@ -202,10 +188,10 @@ export class MessageComponent implements OnInit {
   }
 
   handleRepliesClick() {
-    this.repliesClicked.emit(this.messageId);
+    this.repliesClicked.emit(this.message.id);
   }
 
   handleAddReplyClick() {
-    this.repliesClicked.emit(this.messageId);
+    this.repliesClicked.emit(this.message.id);
   }
 }

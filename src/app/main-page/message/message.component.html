@@ -9,13 +9,13 @@
                 <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
             </div>
             <div class="message-text">
-                {{ content }}
+                {{ message.content }}
             </div>
-            <div class="message-meta-info" *ngIf="numberOfReplies || edited">
-                <div class="message-edit-info" *ngIf="edited">(Bearbeitet)</div>
-                <div class="message-replies" *ngIf="numberOfReplies">
+            <div class="message-meta-info" *ngIf="message.numberOfReplies || message.edited">
+                <div class="message-edit-info" *ngIf="message.edited">(Bearbeitet)</div>
+                <div class="message-replies" *ngIf="message.numberOfReplies">
                     <span class="replies-text" (click)="handleRepliesClick()">{{ repliesText }}</span>
-                    <span class="replies-time">Letzte Antwort: {{ lastReplyTimestamp | date:'HH:mm' }}</span>
+                    <span class="replies-time">Letzte Antwort: {{ message.lastReplyTimestamp | date:'HH:mm' }}</span>
                 </div>
             </div>
             <div class="message-reactions">
@@ -39,7 +39,7 @@
     </ng-container>
     <ng-container *ngIf="isEditing">
         <app-message-input class="message-input" [type]="'edit'" [placeholder]="'Nachricht verfassen...'"
-            [content]="content" (cancelEdit)="handleCancelEditClick()" (saveEdit)="handleSaveEditClick($event)">
+            [content]="message.content" (cancelEdit)="handleCancelEditClick()" (saveEdit)="handleSaveEditClick($event)">
         </app-message-input>
     </ng-container>
 </div>
