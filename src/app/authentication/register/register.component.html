@@ -20,7 +20,7 @@
                 placeholder="Name und Nachname"
                 [showError]="nameInvalid || false"
                 [errorMessage]="nameErrorMessage"
-                imagePath="../../../assets/img/authentications-icons/person_filled.svg"
+                imagePath="../../../assets/img/person_filled.svg"
                 (ngModelChange)="resetNameError()"
                 (blur)="validateName()">
             </app-input-field>
@@ -33,7 +33,7 @@
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
                 [showError]="emailInvalid || false"
                 [errorMessage]="emailErrorMessage"
-                imagePath="../../../assets/img/authentications-icons/mail.svg"
+                imagePath="../../../assets/img/mail.svg"
                 (ngModelChange)="resetEmailError()"
                 (blur)="validateEmail()">
             </app-input-field>
@@ -46,7 +46,7 @@
                 placeholder="Passwort"
                 [showError]="passwordInvalid || false"
                 [errorMessage]="passwordErrorMessage"
-                imagePath="../../../assets/img/authentications-icons/lock.svg"
+                imagePath="../../../assets/img/lock.svg"
                 pattern="^(?=.*[A-Z])(?=.*[!?@#$%^&*]).+$"
                 (ngModelChange)="resetPasswordError()"
                 (blur)="validatePassword()">
