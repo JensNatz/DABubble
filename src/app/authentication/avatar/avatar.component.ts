@@ -19,6 +19,7 @@ export class AvatarComponent {
   password: string = '';
   avatar: string = '';
   avatarKey: string='';
+  isSubmitting: boolean = false;
 
   avatarImages={
     '1': '../../../assets/img/avatar1.svg',
@@ -56,6 +57,9 @@ export class AvatarComponent {
     if (!this.selectedAvatar) {
       return;
     }
+
+    this.isSubmitting = true;
+
     const newUser: User = {
       name: this.name,
       email: this.email,
