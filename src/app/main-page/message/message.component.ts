@@ -45,7 +45,6 @@ export class MessageComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   async ngOnInit() {
-    // this.messageId = this.message.id;
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
@@ -57,6 +56,20 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  get lastReplyTimeDisplay(): string {
+    if (!this.message.lastReplyTimestamp) return '';
+
+    const replyDate = new Date(this.message.lastReplyTimestamp);
+    const today = new Date();
+    
+    if (this.isSameDay(replyDate, today)) {
+      return replyDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    } else {
+      return replyDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+  }
+
+
   get repliesText(): string {
     if (this.message.numberOfReplies) {
       if (this.message.numberOfReplies === 1) {
@@ -65,6 +78,10 @@ export class MessageComponent implements OnInit {
       return `${this.message.numberOfReplies} Antworten`;
     }
     return '';
+  }
+
+  private isSameDay(date1: Date, date2: Date): boolean {
+    return date1.toDateString() === date2.toDateString();
   }
 
   private calcPickerPosition(event: MouseEvent): string {

@@ -15,7 +15,7 @@
                 <div class="message-edit-info" *ngIf="message.edited">(Bearbeitet)</div>
                 <div class="message-replies" *ngIf="message.numberOfReplies">
                     <span class="replies-text" (click)="handleRepliesClick()">{{ repliesText }}</span>
-                    <span class="replies-time">Letzte Antwort: {{ message.lastReplyTimestamp | date:'HH:mm' }}</span>
+                    <span class="replies-time">Letzte Antwort: {{ lastReplyTimeDisplay }}</span>
                 </div>
             </div>
             <div class="message-reactions">
