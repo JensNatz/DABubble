@@ -59,7 +59,7 @@ export class UserServiceService {
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.auth, email);
-      console.log('Password reset email sent');
+      console.log('email gesendet');
     } catch (err) {
       console.error('Error sending password reset email:', err);
     }
