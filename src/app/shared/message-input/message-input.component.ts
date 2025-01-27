@@ -13,10 +13,6 @@ import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
 })
 export class MessageInputComponent {
   messageService: MessageService = inject(MessageService);
-
-  channelId: string = '9kacAebjb6GEQZJC7jFL';
-  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
-
   isEmojiPickerOpen: boolean = false;
 
   @Input() placeholder: string | null = null;
@@ -25,6 +21,9 @@ export class MessageInputComponent {
   @Output() sendMessage = new EventEmitter<string>();
   @Output() cancelEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<string>();
+
+  taggedUserId: string = 'lMLhqCH6j71UrMluL6Ob';
+  taggedChannelId: string = '9kacAebjb6GEQZJC7jFL';
 
   onCancelEditClick() {
     this.cancelEdit.emit();
@@ -49,11 +48,49 @@ export class MessageInputComponent {
     this.isEmojiPickerOpen = false;
   }
 
-  onSendClick() {
-    this.sendMessage.emit(this.content);
-    console.log(this.content);
-    this.content = '';
 
+  addUserTagToInput(userId: string) {
+    const pseudoInput = document.getElementById('messageInput');
+    
+    if (pseudoInput) {
+      const span = document.createElement('span');
+      span.className = 'message-tag';
+      span.dataset['userId'] = userId;
+      span.contentEditable = 'false';
+      span.textContent = '@MaxMustermann';  
+      
+      pseudoInput.appendChild(span);
+      
+      // Move cursor to the end
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.setStartAfter(span);
+      range.collapse(true);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+
+    }
   }
+
+  addChannelTagToInput(channelId: string) {
+    const pseudoInput = document.getElementById('messageInput');
+    const span = document.createElement('span');
+    span.className = 'message-tag';
+    span.contentEditable = 'false';
+    span.dataset['channelId'] = channelId;
+    span.textContent = '#Channel';
+    pseudoInput?.appendChild(span);
+  }
+
+  onSendClick() {
+    const pseudoInput = document.getElementById('messageInput');
+    if (pseudoInput) {
+      const messageFromInput = pseudoInput.innerHTML;
+      const messageToStore = this.messageService.parseContentToStoreOnDatabase(messageFromInput);
+      this.sendMessage.emit(messageToStore);
+    }
+  }
+
+  
 }
 

@@ -39,6 +39,7 @@ export class MessageComponent implements OnInit {
   avatarId: string = '0';
   lastReplyTimestamp: number | null = null;
   isMessageInMainChannel: boolean = false;
+  messageContentParsed: string = '';
   emojiPickerPosition: string = 'top: 50px; left: 50px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
 
@@ -48,6 +49,7 @@ export class MessageComponent implements OnInit {
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
+    this.messageContentParsed = await this.messageService.parseContentToDisplayInHTML(this.message.content);
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }

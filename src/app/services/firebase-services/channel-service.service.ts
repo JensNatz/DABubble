@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collectionData, collection, doc, onSnapshot, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, doc, onSnapshot, addDoc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
 
 @Injectable({
@@ -40,6 +40,10 @@ export class ChannelServiceService {
 
   getUserRef(userId: string, docId: string) {
     return doc(collection(this.firestore, userId), docId);
+  }
+
+  getChannelNameById(channelId: string) {
+    return getDoc(doc(this.firestore, 'channels', channelId)).then(doc => doc.data()?.[`name`]);
   }
 
 }

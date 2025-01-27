@@ -8,9 +8,7 @@
                 <div class="message-header-name">{{ authorName }}</div>
                 <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
             </div>
-            <div class="message-text">
-                {{ message.content }}
-            </div>
+            <div class="message-text" [innerHTML]="messageContentParsed"></div>
             <div class="message-meta-info" *ngIf="message.numberOfReplies || message.edited">
                 <div class="message-edit-info" *ngIf="message.edited">(Bearbeitet)</div>
                 <div class="message-replies" *ngIf="message.numberOfReplies">

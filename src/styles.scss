@@ -103,3 +103,20 @@ textarea {
     pointer-events: none;
     border: none;
 }
+
+.message-tag {
+    background-color: $purple-1;
+    padding: 0 2px;
+    color: $white;
+}
+
+.message-tag-inserted {
+    background-color: $purple-3;
+    padding: 0 2px;
+    color: $white;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $purple-1;
+    }
+}

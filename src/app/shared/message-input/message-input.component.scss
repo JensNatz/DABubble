@@ -12,6 +12,14 @@
         width: 100%;
     }
 
+    .pseudo-input {
+        height: 100%;
+        width: 100%;
+        border: none;
+        outline: none;
+        background-color: rgba(255, 0, 0, 0.149);
+    }
+
     .toolbar {
         @include flex($justify: space-between);
 

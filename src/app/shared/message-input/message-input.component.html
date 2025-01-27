@@ -1,5 +1,10 @@
 <div class="message-input">
-    <textarea [(ngModel)]="content" [attr.placeholder]="placeholder"></textarea>
+    <!-- <textarea [(ngModel)]="content" [attr.placeholder]="placeholder"></textarea> -->
+    <div [innerHTML]="content" contenteditable="true" class="pseudo-input" id="messageInput">
+    </div>
+    <button (click)="addUserTagToInput(taggedUserId)">add user tag</button>
+    <button (click)="addChannelTagToInput(taggedChannelId)">add channel tag</button>
+    <button (click)="onSendClick()">send</button>
     <div class="toolbar">
         <div class="emoji-container">
             <img class="emoji-icon" src="assets/img/emoji.svg" alt="Emojis" (click)="onEmojiButtonClick()" />
