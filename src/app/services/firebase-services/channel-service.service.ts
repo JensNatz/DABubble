@@ -9,6 +9,7 @@ export class ChannelServiceService {
 
   channels;
   users;
+  channelId = "";
 
   firestore: Firestore = inject(Firestore);
 
@@ -21,6 +22,9 @@ export class ChannelServiceService {
     try {
       const docRef = await addDoc(this.getChannelsRef(), item);
       // console.log('Document ID:', docRef.id);
+      this.channelId = docRef.id;
+      console.log(this.channelId);
+      
     } catch (err) {
       console.error('Error adding document:', err);
     }
