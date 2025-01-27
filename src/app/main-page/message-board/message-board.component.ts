@@ -22,11 +22,15 @@ export class MessageBoardComponent {
 
   // TODO: get channelId from parent component
   channelId: string = '9kacAebjb6GEQZJC7jFL';
+  // TODO: get userId from auth service
+  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   messageService: MessageService = inject(MessageService);
   messages: Message[] = [];
-
+  threadMessages: Message[] = [];
+  isThreadOpen: boolean = false;
+  parentMessageId: string = '';
   constructor() {
-    this.messageService.getMessagesFromChannelOrderByTimestampASC(this.channelId).subscribe((messages) => {
+    this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channelId).subscribe((messages) => {
       this.messages = messages as Message[];
     });
   }
@@ -37,6 +41,51 @@ export class MessageBoardComponent {
     return date1.toDateString() === date2.toDateString();
   }
 
- 
+  openTheadWithMessageId(messageId: string) {
+    this.messageService.getRepliesFromMessageOrderByTimestampDESC(messageId).subscribe((messages) => {
+      this.threadMessages = messages as Message[];
+    });
+    this.isThreadOpen = true;
+  }
+
+  closeThread() {
+    this.isThreadOpen = false;
+  }
+
+  onSendMessage(content: string) {
+    if (content.trim() === '') {
+      return;
+    }
+    let message: Message = {
+      content: content,
+      timestamp: Date.now(),
+      author: this.userId,
+      channelId: this.channelId,
+      edited: false
+    };
+
+    this.messageService.postMessageToChannel(this.channelId, message);
+  }
+
+  onSendReply(content: string) {
+    if (content.trim() === '') {
+      return;
+    }
+    let message: Message = {
+      content: content,
+      timestamp: Date.now(),
+      author: this.userId,
+      channelId: this.channelId,
+      edited: false,
+      parentMessageId: this.parentMessageId
+    };
+
+   this.messageService.postReplyToMessage(this.channelId, this.parentMessageId, message);
+  }
+
+  handleRepliesClick(messageId: string) {
+    this.parentMessageId = messageId;
+    this.openTheadWithMessageId(messageId);
+  }
 
 }

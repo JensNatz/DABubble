@@ -12,7 +12,30 @@
 * {
     margin: 0;
     box-sizing: border-box;
-    scroll-behavior: smooth;   
+    scroll-behavior: smooth; 
+    
+    &::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        border-radius: 4px;
+        background-color: #DFE9EB;
+    }
+
+    &::-webkit-scrollbar-track:active {
+        background-color: #B8C0C2;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: $light-purple;
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+        background-color: $light-purple;
+    }
 }
 
 body {   
@@ -39,3 +62,44 @@ textarea {
     border-radius: 30px;
 }
 
+.btn-primary {
+    color: $white;
+    background-color: $purple-1;
+    font-size: 18px;
+    width: 136px;
+    height: 48px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 700;
+  
+    &:hover {
+      cursor: pointer;
+      background-color: $purple-2;
+      color: $white;
+    }
+  }
+  
+  .btn-secondary {
+    color: $purple-2;
+    background-color: $white;
+    font-size: 18px;
+    width: 136px;
+    height: 48px;
+    border-radius: 25px;
+    border: 1px solid $purple-2;
+    font-weight: 700;
+  
+    &:hover {
+      cursor: pointer;
+      background-color: $purple-1;
+      color: $white;
+    }
+  }
+
+  .btn-disabled {
+    color: $white;
+    background-color: $gray;
+    cursor: not-allowed;
+    pointer-events: none;
+    border: none;
+}

@@ -1,11 +1,15 @@
 <div class="input-container">   
     <input
-        required 
+        required         
         [pattern]="pattern" 
-        [type]="type" [value]="value" 
+        [(ngModel)]="value"
+        (ngModelChange)="onInputChange($event)"
+        [type]="type" 
         [placeholder]="placeholder" 
         [ngStyle]="{'background-image': imagePath ? 'url(' + imagePath + ')' : 'none'}"
-        [(ngModel)]="ngModel" />
+        (blur)="onTouched()"
+        #inputField="ngModel"           
+        />
         
-    <div *ngIf="showError" class="error-message">{{ errorMessage }}</div>
+        <div *ngIf="showError || (inputField.invalid && inputField.touched)" class="error-message">{{ errorMessage }}</div>
 </div>

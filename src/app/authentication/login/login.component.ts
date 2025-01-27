@@ -4,39 +4,85 @@ import { RegisterButtonComponent } from "./register-button/register-button.compo
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
+import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { FormsModule } from '@angular/forms';
-
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [InputFieldComponent, RegisterButtonComponent,FormsModule],
+  imports: [InputFieldComponent, RegisterButtonComponent, FormsModule],
   providers: [UserServiceService],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss','../../shared/authentication-input/input-field.component.scss',]
+  styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })
 export class LoginComponent {
-onSubmit: any;
-usernameInvalid: boolean | undefined;
-
-users: Observable<User[]>;
-email: any;
-password: any;
+  usernameInvalid: boolean | undefined;
+  users: Observable<User[]>;
+  email: string = '';
+  password: string = '';
+  emailInvalid: boolean = false;
+  passwordInvalid: boolean = false;
+  emailErrorMessage: string = ErrorMessages.emailInvalid;
+  passwordErrorMessage: string = ErrorMessages.passwordLogin;
 
   constructor(private userService: UserServiceService) {
     this.users = this.userService.getUsers();
   }
 
+  guestLogin() {
+    this.users.subscribe(users => {
+      console.log(users);
+    });
+  }
 
-guestLogin() {
-  this.users.subscribe(users => {
-    console.log(users);
-  });
-}
+  async onSubmit() {
+    this.validateEmail();
+    this.validatePassword();
+
+    if (!this.emailInvalid && !this.passwordInvalid) {
+      try {
+        const userExists = await this.userService.userExists(this.email, this.password);
+        if (userExists) {
+          console.log('Login erfolgreich');
+
+        } else {
+          this.emailInvalid = true;
+          this.passwordInvalid = true;
+          this.passwordErrorMessage = ErrorMessages.passwordLogin;
+        }
+      } catch (error) {
+        console.error('Fehler beim Login:', error);
+      }
+    } else {
+      console.log('Formular ist ungültig');
+    }
+  }
 
 
-test(){
-  console.log(this.email);
-  console.log(this.password)
-}
+
+  validateEmail() {
+    if (!this.email) {
+      this.emailInvalid = true;
+      this.emailErrorMessage = ErrorMessages.emailInvalid;
+    } else {
+      this.emailInvalid = false;
+    }
+  }
+
+  validatePassword() {
+    if (!this.password) {
+      this.passwordInvalid = true;
+      this.passwordErrorMessage = ErrorMessages.passwordLogin;
+    } else {
+      this.passwordInvalid = false;
+    }
+  }
+
+
+  async sendPasswordResetEmail() {
+    await this.userService.sendPasswordResetEmail(this.email);
+    console.log('password login');
+    console.log(this.email);
+  }
+
 }

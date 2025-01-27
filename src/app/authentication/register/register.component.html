@@ -9,39 +9,60 @@
         <span>Mit deinem Namen und deiner E-Mail_Adreese hast du dein neue DABubble-Konto</span>
     </div>
 
-    <form (ngSubmit)="onSubmit">
+    <form (ngSubmit)="onSubmit(fregisterForm)"  #fregisterForm="ngForm">
         <div class="input-field-section">
             <app-input-field
+                required
+                [minlength]="3"
+                [(ngModel)]="name"
+                name="name"           
                 type="text"
                 placeholder="Name und Nachname"
-                [showError]="passwordInvalid || true"
-                errorMessage="Bitte schreiben Sie einen Namen"
-                imagePath="../../../assets/img/authentications-icons/person_filled.svg">
+                [showError]="nameInvalid || false"
+                [errorMessage]="nameErrorMessage"
+                imagePath="../../../assets/img/person_filled.svg"
+                (ngModelChange)="resetNameError()"
+                (blur)="validateName()">
             </app-input-field>
-            <app-input-field 
+            <app-input-field
+                required
+                [(ngModel)]="email"
+                name="email"
                 type="email"
                 placeholder="beispielname@email.com"
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                [showError]="usernameInvalid || true"
-                errorMessage="Diese E-Mail-Adresse ist leider ungültig"
-                imagePath="../../../assets/img/authentications-icons/mail.svg">
+                [showError]="emailInvalid || false"
+                [errorMessage]="emailErrorMessage"
+                imagePath="../../../assets/img/mail.svg"
+                (ngModelChange)="resetEmailError()"
+                (blur)="validateEmail()">
             </app-input-field>
             <app-input-field 
+                required
+                [minlength]="5"
+                [(ngModel)]="password"
+                name="password"
                 type="password"
                 placeholder="Passwort"
-                [showError]="passwordInvalid || true"
-                errorMessage="Bitte geben Sie ein Passwort ein"
-                imagePath="../../../assets/img/authentications-icons/lock.svg">
+                [showError]="passwordInvalid || false"
+                [errorMessage]="passwordErrorMessage"
+                imagePath="../../../assets/img/lock.svg"
+                pattern="^(?=.*[A-Z])(?=.*[!?@#$%^&*]).+$"
+                (ngModelChange)="resetPasswordError()"
+                (blur)="validatePassword()">
             </app-input-field>
         </div>
 
         <div class="data-protection-container">
-            <input class="checkbox" type="checkbox">
+            <input class="checkbox" type="checkbox" [(ngModel)]="dataProtection" name="dataProtection" required>
             <span>Ich stimme der <a href="http://">Datenschutzerklärung</a> zu.</span>
         </div>
 
         <div class="btn-container">
-            <button [routerLink]="['/register/avatar']"  class="next-btn">Weiter</button>
+            <button type="submit"
+                    class="btn-primary"          
+                    [ngClass]="{'btn-disabled': fregisterForm.invalid}"  
+                    [disabled]="fregisterForm.invalid">Weiter</button>
         </div>
     </form>
 

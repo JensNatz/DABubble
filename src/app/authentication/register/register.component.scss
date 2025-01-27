@@ -88,9 +88,6 @@ form {
     @include flex(flex-end, flex-end, column);
 }
 
-.next-btn {
-    @include btn($white, $purple-1, 108px, 48px, $purple-2, $white);
-}
 
 .checkbox{
     width: 18px;
