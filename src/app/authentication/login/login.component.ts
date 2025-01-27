@@ -6,11 +6,12 @@ import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [InputFieldComponent, RegisterButtonComponent, FormsModule],
+  imports: [InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule],
   providers: [UserServiceService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']
