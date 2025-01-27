@@ -3,6 +3,9 @@ import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, upd
 import { Message } from '../../models/message';
 import { UserService } from '../user.service';
 import { ChannelServiceService } from './channel-service.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MessagePart } from '../../models/message-part';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +15,8 @@ export class MessageService {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
+  private sanitizer = inject(DomSanitizer);
+  private nameCache = new Map<string, string>();
   
   constructor() { }
 
@@ -100,21 +105,8 @@ export class MessageService {
       [`reactions.${reactionType}`]: arrayUnion(userId)
     });
   }
-
-  parseContentToStoreOnDatabase(content: string) {
-    let messageContent = content
-      // Parse user tags
-      .replace(/<span class="message-tag"[^>]*data-user-id="([^"]+)"[^>]*>@[^<]+<\/span>/g, (match, userId) => {
-        return `@{[${userId}]}`;
-      })
-      // Parse channel tags
-      .replace(/<span class="message-tag"[^>]*data-channel-id="([^"]+)"[^>]*>#[^<]+<\/span>/g, (match, channelId) => {
-        return `#{[${channelId}]}`;
-      });
-    return messageContent;
-  }
-
-  async parseContentToDisplayInHTML(content: string) {
+  
+  async parseContentToDisplayInHTML(content: string): Promise<SafeHtml> {
     // Collect all IDs that need to be fetched
     const userIds = Array.from(content.matchAll(/@{\[([^\]]+)\]}/g)).map(match => match[1]);
     const channelIds = Array.from(content.matchAll(/#{\[([^\]]+)\]}/g)).map(match => match[1]);
@@ -152,6 +144,106 @@ export class MessageService {
         const channelName = channelNameMap.get(channelId) || 'Channel';
         return `<span class="message-tag-inserted" data-channel-id="${channelId}" contenteditable="false">#${channelName}</span>`;
       });
-    return messageContent;
+    
+    return this.sanitizer.bypassSecurityTrustHtml(messageContent);
   }
+
+  // Message parsing methods
+  async parseMessageContent(content: string): Promise<MessagePart[]> {
+    const parts = this.splitMessageIntoParts(content);
+    return this.resolveNames(parts);
+  }
+
+  private splitMessageIntoParts(content: string): MessagePart[] {
+    const parts: MessagePart[] = [];
+    let lastIndex = 0;
+    const mentionPattern = /(@{\[(.*?)\]}|#{\[(.*?)\]})/g;
+    let match;
+
+    while ((match = mentionPattern.exec(content)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push({
+          type: 'text',
+          content: content.slice(lastIndex, match.index)
+        });
+      }
+
+      if (match[2]) {
+        parts.push({
+          type: 'user',
+          id: match[2]
+        });
+      } else if (match[3]) {
+        parts.push({
+          type: 'channel',
+          id: match[3]
+        });
+      }
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    if (lastIndex < content.length) {
+      parts.push({
+        type: 'text',
+        content: content.slice(lastIndex)
+      });
+    }
+
+    return parts;
+  }
+
+  private async resolveNames(parts: MessagePart[]): Promise<MessagePart[]> {
+    return Promise.all(parts.map(async part => {
+      if (part.type === 'text') return part;
+
+      const cacheKey = `${part.type}-${part.id}`;
+      let displayName = this.nameCache.get(cacheKey);
+
+      if (!displayName) {
+        if (part.type === 'user' && part.id) {
+          displayName = await this.userService.getUserName(part.id);
+        } else if (part.type === 'channel' && part.id) {
+          displayName = await this.channelService.getChannelNameById(part.id);
+        }
+        if (displayName) {
+          this.nameCache.set(cacheKey, displayName);
+        }
+      }
+
+      return {
+        ...part,
+        displayName
+      };
+    }));
+  }
+
+  // Helper method to preload names for a batch of messages
+  async preloadMessageNames(messages: Message[]) {
+    const userIds = new Set<string>();
+    const channelIds = new Set<string>();
+    
+    messages.forEach(message => {
+      const parts = this.splitMessageIntoParts(message.content);
+      parts.forEach(part => {
+        if (part.type === 'user' && part.id) userIds.add(part.id);
+        if (part.type === 'channel' && part.id) channelIds.add(part.id);
+      });
+    });
+
+    await Promise.all([
+      [...userIds].map(id => 
+        this.userService.getUserName(id).then(name => 
+          this.nameCache.set(`user-${id}`, name)
+        )
+      ),
+      [...channelIds].map(id => 
+        this.channelService.getChannelNameById(id).then(name => 
+          this.nameCache.set(`channel-${id}`, name)
+        )
+      )
+    ]);
+  }
+
+
 }

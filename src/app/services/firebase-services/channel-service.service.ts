@@ -12,6 +12,8 @@ export class ChannelServiceService {
 
   firestore: Firestore = inject(Firestore);
 
+  private channelNameCache = new Map<string, string>();
+
   constructor() { 
     this.channels = collectionData(this.getChannelsRef());
     this.users = collectionData(this.getUsersRef());
@@ -42,8 +44,20 @@ export class ChannelServiceService {
     return doc(collection(this.firestore, userId), docId);
   }
 
-  getChannelNameById(channelId: string) {
-    return getDoc(doc(this.firestore, 'channels', channelId)).then(doc => doc.data()?.[`name`]);
+  async getChannelNameById(channelId: string) {
+    if (this.channelNameCache.has(channelId)) {
+      return this.channelNameCache.get(channelId);
+    }
+    const channelName = await getDoc(doc(this.firestore, 'channels', channelId))
+      .then(doc => doc.data()?.[`name`]);
+    
+    if (channelName) {
+      this.channelNameCache.set(channelId, channelName);
+    } else {
+      return 'Unknown Channel';
+    }
+
+    return channelName;
   }
 
 }

@@ -1,0 +1,13 @@
+@import '../../../../styles.scss';
+
+.mention {
+  background-color: $purple-3;
+  padding: 0 2px;
+  color: $white;
+  cursor: pointer;
+
+    &:hover {
+      background-color: $purple-1;
+    }
+  }
+ 

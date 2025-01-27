@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, inject, ViewContainerRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { Message } from '../../models/message';
@@ -9,6 +9,8 @@ import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.com
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
+import { MentionComponent } from './mention/mention.component';
+import { MessagePart } from '../../models/message-part';
 
 @Component({
   selector: 'app-message',
@@ -19,15 +21,19 @@ import { ClickOutsideDirective } from '../../directives/click-outside.directive'
     EmojiPickerComponent,
     MessageToolbarComponent,
     ClickOutsideDirective,
-    MessageInputComponent],
+    MessageInputComponent,
+    MentionComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, AfterViewInit {
+  @ViewChild('messageContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
   messageService: MessageService = inject(MessageService);
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
 
+
+  messageContentParsed: string = '';
   authorName: string = 'Unknown User';
   isOwn: boolean = false;
   isEditing: boolean = false;
@@ -39,7 +45,6 @@ export class MessageComponent implements OnInit {
   avatarId: string = '0';
   lastReplyTimestamp: number | null = null;
   isMessageInMainChannel: boolean = false;
-  messageContentParsed: string = '';
   emojiPickerPosition: string = 'top: 50px; left: 50px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
 
@@ -49,13 +54,34 @@ export class MessageComponent implements OnInit {
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
-    this.messageContentParsed = await this.messageService.parseContentToDisplayInHTML(this.message.content);
+    this.messageContentParsed = this.message.content;
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
     if (this.message.parentMessageId === null) {
       this.isMessageInMainChannel = true;
     }
+  }
+
+  async ngAfterViewInit() {
+    const parsedParts = await this.messageService.parseMessageContent(this.message.content);
+    this.renderParts(parsedParts);
+  }
+
+  private renderParts(parts: MessagePart[]) {
+    this.container.clear();
+    
+    parts.forEach(part => {
+      if (part.type === 'text') {
+        const text = document.createTextNode(part.content || '');
+        this.container.element.nativeElement.appendChild(text);
+      } else {
+        const componentRef = this.container.createComponent(MentionComponent);
+        componentRef.setInput('type', part.type);
+        componentRef.setInput('id', part.id);
+        componentRef.setInput('displayName', part.displayName);
+      }
+    });
   }
 
   get lastReplyTimeDisplay(): string {

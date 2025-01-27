@@ -12,8 +12,11 @@ import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
   styleUrl: './message-input.component.scss'
 })
 export class MessageInputComponent {
+
+  private messageInputContentAsPlainText: string = '';
   messageService: MessageService = inject(MessageService);
   isEmojiPickerOpen: boolean = false;
+  isButtonDisabled: boolean = true;
 
   @Input() placeholder: string | null = null;
   @Input() content: string = '';
@@ -24,6 +27,35 @@ export class MessageInputComponent {
 
   taggedUserId: string = 'lMLhqCH6j71UrMluL6Ob';
   taggedChannelId: string = '9kacAebjb6GEQZJC7jFL';
+
+  onInputChange() {
+    this.updateInternalContent();
+    this.updateButtonStateBasedOnInput();
+  }
+
+  updateInternalContent() {
+    const messageInputElement = document.getElementById('messageInput');
+    if (messageInputElement) {
+      let plainText = messageInputElement.innerHTML;
+
+      plainText = plainText.replace(
+        /<span[^>]*data-user-id="([^"]+)"[^>]*>@[^<]+<\/span>/g,
+        (_, userId) => `@{[${userId}]}`
+      );
+      plainText = plainText.replace(
+        /<span[^>]*data-channel-id="([^"]+)"[^>]*>#[^<]+<\/span>/g,
+        (_, channelId) => `#{[${channelId}]}`
+        );
+        this.messageInputContentAsPlainText = plainText;
+    }
+
+    console.log(this.messageInputContentAsPlainText);
+  }
+
+
+  updateButtonStateBasedOnInput() {
+    this.isButtonDisabled = this.messageInputContentAsPlainText.trim().length === 0;
+  }
 
   onCancelEditClick() {
     this.cancelEdit.emit();
@@ -48,20 +80,26 @@ export class MessageInputComponent {
     this.isEmojiPickerOpen = false;
   }
 
-
-  addUserTagToInput(userId: string) {
+  private addTagToInput(id: string, type: 'user' | 'channel') {
     const pseudoInput = document.getElementById('messageInput');
     
     if (pseudoInput) {
       const span = document.createElement('span');
       span.className = 'message-tag';
-      span.dataset['userId'] = userId;
       span.contentEditable = 'false';
-      span.textContent = '@MaxMustermann';  
+
+      if (type === 'user') {
+        span.dataset['userId'] = id;
+        span.textContent = '@MaxMustermann';
+        this.messageInputContentAsPlainText += `@{[${id}]} `;
+      } else {
+        span.dataset['channelId'] = id;
+        span.textContent = '#Channel';
+        this.messageInputContentAsPlainText += `#{[${id}]} `;
+      }
       
       pseudoInput.appendChild(span);
-      
-      // Move cursor to the end
+
       const selection = window.getSelection();
       const range = document.createRange();
       range.setStartAfter(span);
@@ -69,28 +107,25 @@ export class MessageInputComponent {
       selection?.removeAllRanges();
       selection?.addRange(range);
 
+      this.updateInternalContent();
     }
   }
 
+  addUserTagToInput(userId: string) {
+    this.addTagToInput(userId, 'user');
+  }
+
   addChannelTagToInput(channelId: string) {
-    const pseudoInput = document.getElementById('messageInput');
-    const span = document.createElement('span');
-    span.className = 'message-tag';
-    span.contentEditable = 'false';
-    span.dataset['channelId'] = channelId;
-    span.textContent = '#Channel';
-    pseudoInput?.appendChild(span);
+    this.addTagToInput(channelId, 'channel');
   }
 
   onSendClick() {
     const pseudoInput = document.getElementById('messageInput');
     if (pseudoInput) {
-      const messageFromInput = pseudoInput.innerHTML;
-      const messageToStore = this.messageService.parseContentToStoreOnDatabase(messageFromInput);
-      this.sendMessage.emit(messageToStore);
+      this.sendMessage.emit(this.messageInputContentAsPlainText);
+      pseudoInput.innerHTML = '';
+      this.updateInternalContent();
     }
   }
-
-  
 }
 

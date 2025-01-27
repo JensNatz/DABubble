@@ -8,16 +8,12 @@
     background-color: $white;
     width: 100%;
 
-    textarea {
-        width: 100%;
-    }
-
     .pseudo-input {
-        height: 100%;
         width: 100%;
+        height: 64px;
         border: none;
         outline: none;
-        background-color: rgba(255, 0, 0, 0.149);
+        overflow-y: auto;
     }
 
     .toolbar {

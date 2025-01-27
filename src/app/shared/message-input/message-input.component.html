@@ -1,10 +1,6 @@
 <div class="message-input">
-    <!-- <textarea [(ngModel)]="content" [attr.placeholder]="placeholder"></textarea> -->
-    <div [innerHTML]="content" contenteditable="true" class="pseudo-input" id="messageInput">
+    <div [innerHTML]="content" contenteditable="true" class="pseudo-input" id="messageInput" (input)="onInputChange()">
     </div>
-    <button (click)="addUserTagToInput(taggedUserId)">add user tag</button>
-    <button (click)="addChannelTagToInput(taggedChannelId)">add channel tag</button>
-    <button (click)="onSendClick()">send</button>
     <div class="toolbar">
         <div class="emoji-container">
             <img class="emoji-icon" src="assets/img/emoji.svg" alt="Emojis" (click)="onEmojiButtonClick()" />
@@ -15,7 +11,7 @@
              </div>
         </div>
         <ng-container *ngIf="type === 'send'">
-            <button class="send-button" [disabled]="!content.trim()" (click)="onSendClick()">
+            <button class="send-button" [disabled]="isButtonDisabled" (click)="onSendClick()">
             </button>
         </ng-container>
         <ng-container *ngIf="type === 'edit'">
@@ -23,10 +19,12 @@
             <button (click)="onCancelEditClick()">
                 Abbrechen
             </button>
-            <button [disabled]="!content.trim()" (click)="onSaveEditClick()">
+            <button [disabled]="isButtonDisabled" (click)="onSaveEditClick()">
                     Speichern
                 </button>
             </div>
         </ng-container>
     </div>
 </div>
+<button (click)="addUserTagToInput(taggedUserId)">add user tag</button>
+    <button (click)="addChannelTagToInput(taggedChannelId)">add channel tag</button>
