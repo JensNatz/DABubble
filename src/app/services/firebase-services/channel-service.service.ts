@@ -13,10 +13,18 @@ export class ChannelServiceService {
   firestore: Firestore = inject(Firestore);
 
   private channelNameCache = new Map<string, string>();
+  currentChannel: Channel | null = null;
 
   constructor() { 
     this.channels = collectionData(this.getChannelsRef());
     this.users = collectionData(this.getUsersRef());
+
+    this.currentChannel = {
+      name: 'Test Channel',
+      description: 'This is a test channel',
+      id: '9kacAebjb6GEQZJC7jFL',
+      members: ['HYyPBoR4IaheDog70se4', 'YAJxDG5vwYHoCbYjwFhb', 'ZqmYwvCFAQ1xHQf1ZRKy']
+    }
   }
 
   async addNewChanel(item: Channel) {

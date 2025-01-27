@@ -70,16 +70,17 @@ export class MessageComponent implements OnInit, AfterViewInit {
 
   private renderParts(parts: MessagePart[]) {
     this.container.clear();
-    
     parts.forEach(part => {
       if (part.type === 'text') {
-        const text = document.createTextNode(part.content || '');
-        this.container.element.nativeElement.appendChild(text);
+        const span = document.createElement('span');
+        span.textContent = part.content || '';
+        this.container.element.nativeElement.appendChild(span);
       } else {
         const componentRef = this.container.createComponent(MentionComponent);
         componentRef.setInput('type', part.type);
         componentRef.setInput('id', part.id);
         componentRef.setInput('displayName', part.displayName);
+        this.container.element.nativeElement.appendChild(componentRef.location.nativeElement);
       }
     });
   }

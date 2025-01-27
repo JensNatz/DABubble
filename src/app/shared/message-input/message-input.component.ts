@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
 import { FormsModule } from '@angular/forms';
 import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
+import { UserSelectionListComponent } from '../user-selection-list/user-selection-list.component';
+import { ClickOutsideDirective } from '../../directives/click-outside.directive';
+
 
 @Component({
   selector: 'app-message-input',
   standalone: true,
-  imports: [FormsModule, CommonModule, EmojiPickerComponent],
+  imports: [FormsModule, CommonModule, EmojiPickerComponent, UserSelectionListComponent, ClickOutsideDirective],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
@@ -17,6 +20,7 @@ export class MessageInputComponent {
   messageService: MessageService = inject(MessageService);
   isEmojiPickerOpen: boolean = false;
   isButtonDisabled: boolean = true;
+  isUserSelectionListOpen: boolean = false;
 
   @Input() placeholder: string | null = null;
   @Input() content: string = '';
@@ -25,8 +29,7 @@ export class MessageInputComponent {
   @Output() cancelEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<string>();
 
-  taggedUserId: string = 'lMLhqCH6j71UrMluL6Ob';
-  taggedChannelId: string = '9kacAebjb6GEQZJC7jFL';
+
 
   onInputChange() {
     this.updateInternalContent();
@@ -45,8 +48,11 @@ export class MessageInputComponent {
       plainText = plainText.replace(
         /<span[^>]*data-channel-id="([^"]+)"[^>]*>#[^<]+<\/span>/g,
         (_, channelId) => `#{[${channelId}]}`
-        );
-        this.messageInputContentAsPlainText = plainText;
+      );
+
+      plainText = plainText.replace(/&nbsp;/g, ' ');
+
+      this.messageInputContentAsPlainText = plainText;
     }
 
     console.log(this.messageInputContentAsPlainText);
@@ -126,6 +132,21 @@ export class MessageInputComponent {
       pseudoInput.innerHTML = '';
       this.updateInternalContent();
     }
+  }
+
+  onTagIconClick() {
+    this.isUserSelectionListOpen = !this.isUserSelectionListOpen;
+  }
+
+  onUserSelected(user: { id: string; name: string; avatar: string }) {
+    let userId = user.id;
+    // this.addUserTagToInput(userId);
+    console.log('ich würde gerne ein tag zu meinem input hinzufügen, muss das aber mit einer komponente machen, die ich hier nicht habe');
+    this.isUserSelectionListOpen = false;
+  }
+
+  onUserListClickOutside() {
+    this.isUserSelectionListOpen = false;
   }
 }
 

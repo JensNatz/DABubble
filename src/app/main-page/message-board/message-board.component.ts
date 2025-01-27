@@ -5,7 +5,8 @@ import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { MessageService } from '../../services/firebase-services/message.service';
-
+import { Channel } from '../../models/channel';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -19,20 +20,23 @@ import { MessageService } from '../../services/firebase-services/message.service
   styleUrl: './message-board.component.scss'
 })
 export class MessageBoardComponent {
-
-  // TODO: get channelId from parent component
-  channelId: string = '9kacAebjb6GEQZJC7jFL';
+  
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
+  //todo: this needs to be input from parent component
+  channel: Channel | null = null;
   messageService: MessageService = inject(MessageService);
   messages: Message[] = [];
   threadMessages: Message[] = [];
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
   constructor() {
-    this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channelId).subscribe((messages) => {
-      this.messages = messages as Message[];
-    });
+    this.channel = inject(ChannelServiceService).currentChannel;
+    if (this.channel && this.channel.id) {
+      this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channel.id).subscribe((messages) => {
+        this.messages = messages as Message[];
+      });
+    }
   }
 
   isSameDay(timestamp1: number, timestamp2: number): boolean {
@@ -56,31 +60,39 @@ export class MessageBoardComponent {
     if (content.trim() === '') {
       return;
     }
-    let message: Message = {
-      content: content,
-      timestamp: Date.now(),
-      author: this.userId,
-      channelId: this.channelId,
-      edited: false
-    };
-
-    this.messageService.postMessageToChannel(this.channelId, message);
-  }
-
-  onSendReply(content: string) {
-    if (content.trim() === '') {
+    if (!this.channel || !this.channel.id) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
       author: this.userId,
-      channelId: this.channelId,
+      channelId: this.channel.id,
+      edited: false,
+      parentMessageId: null
+    };
+
+    this.messageService.postMessageToChannel(this.channel.id, message);
+  }
+
+  onSendReply(content: string) {
+    if (content.trim() === '') {
+      return;
+    }
+
+    if (!this.channel || !this.channel.id) {
+      return;
+    }
+    let message: Message = {
+      content: content,
+      timestamp: Date.now(),
+      author: this.userId,
+      channelId: this.channel.id,
       edited: false,
       parentMessageId: this.parentMessageId
     };
 
-   this.messageService.postReplyToMessage(this.channelId, this.parentMessageId, message);
+   this.messageService.postReplyToMessage(this.channel.id, this.parentMessageId, message);
   }
 
   handleRepliesClick(messageId: string) {

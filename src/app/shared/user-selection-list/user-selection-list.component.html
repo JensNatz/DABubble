@@ -1,0 +1,13 @@
+<div class="user-selection-list-container">
+    <div class="user-selection-list-header">
+        Mitglieder:
+    </div>
+    <div class="user-selection-list">
+        @for (user of users; track user) {
+            <div class="user-selection-list-item" (click)="onUserClick(user)">
+                <app-avatar [avatarId]="user.avatar" size="small"></app-avatar>
+                <span>{{ user.name }}</span>
+            </div>
+        }
+    </div>
+</div>

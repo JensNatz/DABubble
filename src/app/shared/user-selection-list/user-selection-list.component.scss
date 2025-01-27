@@ -1,0 +1,40 @@
+@import '../../../styles.scss';
+
+.user-selection-list-container {
+    @include flex($direction: column, $justify: flex-start);
+    @include rounded();
+    gap: 8px;
+    padding: 16px 8px;
+    border: 1px solid $light-purple;
+    background-color: $white;
+
+    .user-selection-list-header {
+        font-weight: 700;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .user-selection-list {
+        @include flex($direction: column, $justify: flex-start);
+        width: 100%;
+        max-height: 120px;
+        overflow-y: auto;
+
+        .user-selection-list-item {
+            @include flex($justify: flex-start);
+            gap: 8px;
+            padding: 4px;
+            width: 100%;
+            border-bottom: 1px solid $light-purple;
+            background-color: $white;
+            cursor: pointer;
+            &:hover {
+                background-color: $bg-color;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}

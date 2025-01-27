@@ -7,6 +7,18 @@
     padding: 24px 16px;
     background-color: $white;
     width: 100%;
+    position: relative;
+
+    .user-selection-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        transform: translateY(-200px);
+
+    }
 
     .pseudo-input {
         width: 100%;
@@ -17,13 +29,19 @@
     }
 
     .toolbar {
-        @include flex($justify: space-between);
+        @include flex($justify: space-between); 
+
+        .toolbar-left {
+            @include flex();
+            gap: 8px;
+        }
 
         .emoji-container {
+            @include flex();
             position: relative;
         }
 
-        .emoji-icon {
+        .toolbar-icon {
             cursor: pointer;
             @include rounded($all: 50%);
             padding: 4px;
