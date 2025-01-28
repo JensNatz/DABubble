@@ -8,6 +8,7 @@ import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { GoogleAuthenticationService } from '../../services/firebase-services/google-athentication.servive';
+import { LoginService } from '../../services/firebase-services/login-service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent {
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
   
 
-  constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService) {
+  constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService,private loginService: LoginService) {
     this.users = this.userService.getUsers();
   }
 
@@ -44,10 +45,11 @@ export class LoginComponent {
 
     if (!this.emailInvalid && !this.passwordInvalid) {
       try {
+        await this.loginService.login(this.email, this.password);
         const userExists = await this.userService.userExists(this.email, this.password);
         if (userExists) {
           console.log('Login erfolgreich');
-
+          
         } else {
           this.emailInvalid = true;
           this.passwordInvalid = true;

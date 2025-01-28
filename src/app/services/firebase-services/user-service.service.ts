@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
-import { getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
 
 
 
@@ -35,6 +35,28 @@ export class UserServiceService {
       console.log('Document ID:', docRef.id);
     } catch (err) {
       console.error('Error adding document:', err);
+    }
+  }
+
+  async registerUser(email: string, password: string, userData: Partial<User>): Promise<void> {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const firebaseUser = userCredential.user;
+
+      const newUser: User = {
+        id: firebaseUser.uid,
+        email: email,
+        name: userData.name || '',
+        avatar: userData.avatar || '',
+        password: password,
+        onlineStatusbar: userData.onlineStatusbar || 'offline'
+      };
+
+      await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);
+      console.log('User registered and added to Firestore:', firebaseUser.uid);
+    } catch (error) {
+      console.error('Error during user registration:', error);
+      throw error;
     }
   }
 

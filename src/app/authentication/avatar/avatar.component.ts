@@ -74,7 +74,8 @@ export class AvatarComponent {
     };
 
     try {
-      await this.UserServiceService.addNewUser(newUser);
+      await this.UserServiceService.registerUser(this.email, this.password, newUser);
+      //await this.UserServiceService.addNewUser(newUser);
       console.log('Benutzer erfolgreich registriert');
     } catch (err) {
       console.error('Fehler bei der Registrierung des Benutzers:', err);
