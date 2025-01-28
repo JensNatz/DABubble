@@ -37,7 +37,7 @@
         <div *ngIf="isOpenChannelListe">
             <div class="channels">
                 <div class="channel_name" *ngFor="let channel of (this.channelService.channels | async)">
-                    <p><b>#</b>{{ channel['name'] }}</p>
+                    <p (click)="viewChannel(channel['id'])"><b>#</b>{{ channel['name'] }}</p>
                 </div>
             </div>
             <div class="add_channel" (click)="openAddChannel()">

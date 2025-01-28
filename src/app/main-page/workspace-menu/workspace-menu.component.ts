@@ -37,8 +37,14 @@ export class WorkspaceMenuComponent {
     this.isOpenChannelListe = !this.isOpenChannelListe;    
   
   }
+
   toggleMenuUser() {
     this.isOpenUserListe  = !this.isOpenUserListe ; 
+  }
+
+  viewChannel(id: string) {
+    console.log(id);
+    
   }
 }
 
