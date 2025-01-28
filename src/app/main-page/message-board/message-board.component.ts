@@ -8,6 +8,8 @@ import { MessageService } from '../../services/firebase-services/message.service
 import { ActivatedRoute } from '@angular/router';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { firstValueFrom } from 'rxjs';
+import { UserServiceService } from '../../services/firebase-services/user-service.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-message-board',
@@ -25,12 +27,14 @@ export class MessageBoardComponent {
 
   channelId: string = '';
   channelName: string = '';
+  userAvatar = '';
 
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
+  userService: UserServiceService = inject(UserServiceService);
 
   messages: Message[] = [];
   threadMessages: Message[] = [];
@@ -40,12 +44,25 @@ export class MessageBoardComponent {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe(params => {
       if (params['channelId']) {
         this.channelId = params['channelId'];
         this.loadChannelDetails();
         this.loadMessages();
       }
+
+      if (params['userId']) {
+        this.channelId = params['userId'];
+        this.loadUserName();
+        this.loadMessages();
+      }
+    });
+  }
+
+  loadUserName() {
+    this.userService.getUserById(this.channelId).subscribe((user: User) => {
+      this.channelName = user.name;
+      this.userAvatar = user.avatar;
     });
   }
 
