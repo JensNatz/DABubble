@@ -5,6 +5,7 @@ import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { MessageService } from '../../services/firebase-services/message.service';
+import { ActivatedRoute } from '@angular/router'; // Für Query-Parameter
 
 @Component({
   selector: 'app-message-board',
@@ -20,8 +21,8 @@ import { MessageService } from '../../services/firebase-services/message.service
 })
 export class MessageBoardComponent {
 
-  // TODO: get channelId from parent component
-  channelId: string = '9kacAebjb6GEQZJC7jFL';
+  channelId: string = '';
+  channelName: string = ''; // Name des Channels
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   messageService: MessageService = inject(MessageService);
@@ -29,11 +30,25 @@ export class MessageBoardComponent {
   threadMessages: Message[] = [];
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
-  constructor() {
-    this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channelId).subscribe((messages) => {
-      this.messages = messages as Message[];
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {    
+    this.route.queryParams.subscribe((params) => {
+      if (params['channelId']) {
+        this.channelId = params['channelId'];
+        this.loadMessages();
+      }
     });
   }
+
+  loadMessages() {
+    if (this.channelId) {      
+      this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channelId).subscribe((messages) => {
+        this.messages = messages as Message[];
+      });
+    }
+  }  
 
   isSameDay(timestamp1: number, timestamp2: number): boolean {
     const date1 = new Date(timestamp1);
@@ -61,7 +76,7 @@ export class MessageBoardComponent {
       timestamp: Date.now(),
       author: this.userId,
       channelId: this.channelId,
-      edited: false
+      edited: false,
     };
 
     this.messageService.postMessageToChannel(this.channelId, message);
