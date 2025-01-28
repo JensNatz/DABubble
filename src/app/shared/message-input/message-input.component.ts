@@ -23,7 +23,8 @@ export class MessageInputComponent {
 
   isEmojiPickerOpen: boolean = false;
   isSubmittingDisabled: boolean = true;
-  isUserSelectionListOpen: boolean = false;
+  isTagSelectionListOpen: boolean = false;
+  taglistType: 'user' | 'channel' = 'user';
   private mentionCounter: number = 0;
   private mentionsCache: Array<{ type: 'user' | 'channel', content: string, id: string }> = [];
 
@@ -95,9 +96,9 @@ export class MessageInputComponent {
     }
   }
 
-  onUserSelected(user: { id: string; name: string; avatar: string }) {
-    this.addUserTagToInput(user.id, user.name);
-    this.isUserSelectionListOpen = false;
+  onTagSelected(tag: { id: string; name: string; avatar: string }) {
+    this.addUserTagToInput(tag.id, tag.name);
+    this.isTagSelectionListOpen = false;
   }
 
   addUserTagToInput(userId: string, name: string) {
@@ -146,12 +147,13 @@ export class MessageInputComponent {
       .join('');
   }
 
-  onTagIconClick() {
-    this.isUserSelectionListOpen = !this.isUserSelectionListOpen;
+  onTagUserIconClick() {
+    this.taglistType = 'user';
+    this.isTagSelectionListOpen = !this.isTagSelectionListOpen;
   }
 
-  onUserListClickOutside() {
-    this.isUserSelectionListOpen = false;
+  onTagListClickOutside() {
+    this.isTagSelectionListOpen = false;
   }
 
   onKeyDown(event: KeyboardEvent): void {
@@ -162,10 +164,12 @@ export class MessageInputComponent {
       }
     }
     if(event.key === '@') {
-      this.isUserSelectionListOpen = true;
+      this.taglistType = 'user';
+      this.isTagSelectionListOpen = true;
     }
     if(event.key === '#') {
-      console.log('choose channel');
+      this.taglistType = 'channel';
+      this.isTagSelectionListOpen = true;
     }
   }
 }

@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { UserService } from '../../services/user.service';
 import { AvatarComponent } from '../avatar/avatar.component';
-import { Output, EventEmitter } from '@angular/core';
+import { log } from 'node:console';
+
 @Component({
   selector: 'app-tag-selection-list',
   standalone: true,
@@ -10,26 +11,54 @@ import { Output, EventEmitter } from '@angular/core';
   templateUrl: './tag-selection-list.component.html',
   styleUrl: './tag-selection-list.component.scss'
 })
-export class TagSelectionListComponent {
-  @Output() userSelected = new EventEmitter<{ id: string; name: string; avatar: string }>();
+export class TagSelectionListComponent implements OnChanges {
+  @Input() type: 'user' | 'channel' = 'user';
+  @Output() tagSelected = new EventEmitter<{ id: string; name: string; avatar: string }>();
   
+  // TODO: get current user id from auth service
+  userId: string = 'YAJxDG5vwYHoCbYjwFhb'
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserService = inject(UserService);
-  users: { id: string; name: string; avatar: string }[] = [];
+  tags: { id: string; name: string; avatar?: string }[] = [];
 
-  constructor() {
-    this.updateUsersWithNames(this.channelService.currentChannel?.members || []);
-  }
-
-  async updateUsersWithNames(userIds: string[]) {
-    for (const userId of userIds) {
-      const user = await this.userService.getCompleteUserInfo(userId);
-      this.users.push({ id: userId, name: user.name, avatar: user.avatar });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['type']) {
+      this.tags = [];
+      this.loadTags();
     }
   }
 
-  onUserClick(user: { id: string; name: string; avatar: string }) {
-    this.userSelected.emit(user);
+  get listHeader() {
+    return this.type === 'user' ? 'Mitglieder' : 'Channel';
+  }
+
+  private async loadTags() {
+    if (this.type === 'user') {
+      const userIds = this.channelService.currentChannel?.members || [];
+      await this.updateTagsWithUserData(userIds);
+     } else {
+      const channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(this.userId);
+      console.log(channels, 'channels');
+      this.updateTagsWithChannelData(channels);
+    }
+  }
+
+
+  async updateTagsWithUserData(userIds: string[]) {
+    for (const userId of userIds) {
+      const user = await this.userService.getCompleteUserInfo(userId);
+      this.tags.push({ id: userId, name: user.name, avatar: user.avatar });
+    }
+  }
+
+  updateTagsWithChannelData(channels: any[]) {
+    for (const channel of channels) {
+      this.tags.push({ id: channel.id, name: channel.name });
+    }
+  }
+
+  onTagClick(tag: { id: string; name: string; avatar?: string }) {
+    this.tagSelected.emit({ id: tag.id, name: tag.name, avatar: tag.avatar || '' });
   }
  
 }

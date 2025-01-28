@@ -1,12 +1,14 @@
-<div class="user-selection-list-container">
-    <div class="user-selection-list-header">
-        Mitglieder:
+<div class="tag-selection-list-container">
+    <div class="tag-selection-list-header">
+        {{ listHeader }}
     </div>
-    <div class="user-selection-list">
-        @for (user of users; track user) {
-            <div class="user-selection-list-item" (click)="onUserClick(user)">
-                <app-avatar [avatarId]="user.avatar" size="small"></app-avatar>
-                <span>{{ user.name }}</span>
+    <div class="tag-selection-list">
+        @for (tag of tags; track tag) {
+            <div class="tag-selection-list-item" (click)="onTagClick(tag)">
+                @if (tag.avatar) {
+                    <app-avatar [avatarId]="tag.avatar" size="small"></app-avatar>
+                }
+                <span>{{ tag.name }}</span>
             </div>
         }
     </div>

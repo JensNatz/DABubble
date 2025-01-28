@@ -1,7 +1,8 @@
-<div class="message-input" (clickOutside)="onUserListClickOutside()">
+<div class="message-input" (clickOutside)="onTagListClickOutside()">
     <app-tag-selection-list class="tag-selection-list"
-        *ngIf="isUserSelectionListOpen"
-        (userSelected)="onUserSelected($event)"
+        *ngIf="isTagSelectionListOpen"
+        [type]="taglistType"
+        (tagSelected)="onTagSelected($event)"
     >
     </app-tag-selection-list>
     <div [innerHTML]="content" contenteditable="true" class="pseudo-input" #messageInput id="messageInput" (input)="onInputChange()" (keydown)="onKeyDown($event)" >
@@ -16,7 +17,7 @@
                     ></app-emoji-picker>
                 </div>
             </div>
-            <img class="toolbar-icon" src="assets/img/at_symbol.svg" alt="Tag" (click)="onTagIconClick()" />
+            <img class="toolbar-icon" src="assets/img/at_symbol.svg" alt="Tag" (click)="onTagUserIconClick()" />
         </div>
         <ng-container *ngIf="type === 'send'">
             <button class="send-button" [disabled]="isSubmittingDisabled" (click)="onSendClick()">

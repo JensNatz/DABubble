@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collectionData, collection, doc, onSnapshot, addDoc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, doc, onSnapshot, addDoc, updateDoc, deleteDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
 
 @Injectable({
@@ -68,4 +68,12 @@ export class ChannelServiceService {
     return channelName;
   }
 
+  async getAllGroupChannelsWhereUserIsMember(userId: string) {
+    const channels = await getDocs(query(
+      collection(this.firestore, 'channels'), 
+      where('members', 'array-contains', userId),
+      where('type', '==', 'group')
+    ));
+    return channels.docs.map(doc => doc.data());
+  }
 }
