@@ -44,7 +44,11 @@ export class WorkspaceMenuComponent {
   }
 
   switchToChannel(channelId: string) {
-    this.router.navigate(['/chat'], { queryParams: { channelId } });
+    this.router.navigate(['/main'], { queryParams: { channelId } });
+  }
+
+  switchToUser(userId: string) {
+    this.router.navigate(['/main'], { queryParams: { userId } });
   }
 }
 

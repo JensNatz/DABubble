@@ -59,7 +59,7 @@
                 <div class="name_plus_icon">
                     <div>
                         <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
-                        <span>{{user['name']}}</span>
+                        <span  (click)="switchToUser(user['id'])">{{user['name']}}</span>
                     </div>
                 </div>
             </div>

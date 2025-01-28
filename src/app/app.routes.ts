@@ -9,7 +9,6 @@ export const routes: Routes = [
   { path: '', component: AuthenticationComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'register/avatar', component: AvatarComponent },
-  { path: 'chat', component: MainPageComponent },
   { path: 'imprint', component: ImprintComponent },
   { path: 'main', component: MainPageComponent }
 ];

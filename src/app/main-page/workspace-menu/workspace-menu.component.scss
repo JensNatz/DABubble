@@ -273,6 +273,7 @@
         align-items: center;
         gap: 15px;
         padding: 4px 16px 4px 8px;
+        cursor: pointer;
 
         &:hover {
             @include rounded();
@@ -282,6 +283,6 @@
         >img {
             height: 50px !important;
             width: 50px !important;
-        }
+        }        
     }
 }
