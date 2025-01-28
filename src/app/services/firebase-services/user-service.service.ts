@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, updateDoc, query, orderBy, addDoc, serverTimestamp, doc } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
 import { getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
@@ -10,6 +10,7 @@ import { getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
 export class UserServiceService {
   firestore: Firestore = inject(Firestore);
   auth = getAuth();
+  id = "";
 
   constructor() { }
 
@@ -30,7 +31,10 @@ export class UserServiceService {
   async addNewUser(item: User) {
     try {
       const docRef = await addDoc(this.getUserRef(), item);
-      console.log('Document ID:', docRef.id);
+      // console.log('Document ID:', docRef.id);
+      this.id = docRef.id;
+      await updateDoc(docRef, { id: this.id });
+      
     } catch (err) {
       console.error('Error adding document:', err);
     }
