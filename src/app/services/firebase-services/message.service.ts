@@ -104,44 +104,6 @@ export class MessageService {
     });
   }
   
-  async parseContentToDisplayInHTML(content: string): Promise<SafeHtml> {
-    const userIds = Array.from(content.matchAll(/@{\[([^\]]+)\]}/g)).map(match => match[1]);
-    const channelIds = Array.from(content.matchAll(/#{\[([^\]]+)\]}/g)).map(match => match[1]);
-    
-    const userNameMap = new Map();
-    const channelNameMap = new Map();
-
-    if (userIds.length > 0) {
-      const userPromises = userIds.map(async userId => {
-        const userName = await this.userService.getUserName(userId);
-        userNameMap.set(userId, userName);
-      });
-      await Promise.all(userPromises);
-    }
-
-    if (channelIds.length > 0) {
-      const channelPromises = channelIds.map(async channelId => {
-        const channelName = await this.channelService.getChannelNameById(channelId);
-        channelNameMap.set(channelId, channelName);
-      });
-      await Promise.all(channelPromises);
-    }
-
-    let messageContent = content
-      // Parse user tags
-      .replace(/@{\[([^\]]+)\]}/g, (_, userId) => {
-        const userName = userNameMap.get(userId) || 'User';
-        return `<span class="message-tag-inserted" data-user-id="${userId}" contenteditable="false">@${userName}</span>`;
-      })
-      // Parse channel tags
-      .replace(/#{\[([^\]]+)\]}/g, (_, channelId) => {
-        const channelName = channelNameMap.get(channelId) || 'Channel';
-        return `<span class="message-tag-inserted" data-channel-id="${channelId}" contenteditable="false">#${channelName}</span>`;
-      });
-    console.log(messageContent, 'messageContent');
-    return this.sanitizer.bypassSecurityTrustHtml(messageContent);
-  }
-
   async parseMessageContent(content: string): Promise<MessagePart[]> {
     const parts = this.splitMessageIntoParts(content);
     return this.resolveNames(parts);
@@ -155,34 +117,18 @@ export class MessageService {
 
     while ((match = mentionPattern.exec(content)) !== null) {
       if (match.index > lastIndex) {
-        parts.push({
-          type: 'text',
-          content: content.slice(lastIndex, match.index)
-        });
+        parts.push({type: 'text',content: content.slice(lastIndex, match.index) });
       }
-
       if (match[2]) {
-        parts.push({
-          type: 'user',
-          id: match[2]
-        });
+        parts.push({ type: 'user', id: match[2] });
       } else if (match[3]) {
-        parts.push({
-          type: 'channel',
-          id: match[3]
-        });
+        parts.push({ type: 'channel', id: match[3] });
       }
-
       lastIndex = match.index + match[0].length;
     }
-
     if (lastIndex < content.length) {
-      parts.push({
-        type: 'text',
-        content: content.slice(lastIndex)
-      });
+      parts.push({ type: 'text', content: content.slice(lastIndex) });
     }
-
     return parts;
   }
 
@@ -204,38 +150,7 @@ export class MessageService {
         }
       }
 
-      return {
-        ...part,
-        displayName
-      };
+      return {...part, displayName};
     }));
-  }
-
-  async preloadMessageNames(messages: Message[]) {
-    const userIds = new Set<string>();
-    const channelIds = new Set<string>();
-    
-    messages.forEach(message => {
-      const parts = this.splitMessageIntoParts(message.content);
-      parts.forEach(part => {
-        if (part.type === 'user' && part.id) userIds.add(part.id);
-        if (part.type === 'channel' && part.id) channelIds.add(part.id);
-      });
-    });
-
-    await Promise.all([
-      [...userIds].map(id => 
-        this.userService.getUserName(id).then(name => 
-          this.nameCache.set(`user-${id}`, name)
-        )
-      ),
-      [...channelIds].map(id => 
-        this.channelService.getChannelNameById(id).then(name => 
-          this.nameCache.set(`channel-${id}`, name)
-        )
-      )
-    ]);
-  }
-
-
+  } 
 }
