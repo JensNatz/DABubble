@@ -5,7 +5,9 @@ import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { MessageService } from '../../services/firebase-services/message.service';
-import { ActivatedRoute } from '@angular/router'; // Für Query-Parameter
+import { ActivatedRoute } from '@angular/router';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-message-board',
@@ -22,10 +24,14 @@ import { ActivatedRoute } from '@angular/router'; // Für Query-Parameter
 export class MessageBoardComponent {
 
   channelId: string = '';
-  channelName: string = ''; // Name des Channels
+  channelName: string = '';
+
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
+
   messageService: MessageService = inject(MessageService);
+  channelService: ChannelServiceService = inject(ChannelServiceService);
+
   messages: Message[] = [];
   threadMessages: Message[] = [];
   isThreadOpen: boolean = false;
@@ -33,22 +39,31 @@ export class MessageBoardComponent {
 
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit() {    
+  ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       if (params['channelId']) {
         this.channelId = params['channelId'];
+        this.loadChannelDetails();
         this.loadMessages();
       }
     });
   }
 
+  loadChannelDetails() {
+    if (this.channelId) {
+      firstValueFrom(this.channelService.getChannelById(this.channelId)).then((channel) => {
+        this.channelName = channel.name;
+      });
+    }
+  }
+
   loadMessages() {
-    if (this.channelId) {      
+    if (this.channelId) {
       this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channelId).subscribe((messages) => {
         this.messages = messages as Message[];
       });
     }
-  }  
+  }
 
   isSameDay(timestamp1: number, timestamp2: number): boolean {
     const date1 = new Date(timestamp1);
