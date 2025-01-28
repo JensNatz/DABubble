@@ -27,10 +27,11 @@
 
     .message-board-header {
         @include flex($justify: space-between);
-        padding: 8px 24px;
+        padding: 0 24px;
 
         h2 {
             font-size: 24px;
+            padding: 8px 0;
         }
 
         .header-left {
@@ -54,8 +55,18 @@
                 }
             }
         }
-    }
 
+        div {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            >img {
+                height: 48px !important;
+                width: 48px !important;
+            } 
+        }
+    }
     .message-board-content {
         height: calc(100vh - 397px);
         overflow-y: auto;

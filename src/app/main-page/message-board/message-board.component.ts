@@ -28,6 +28,7 @@ export class MessageBoardComponent {
   channelId: string = '';
   channelName: string = '';
   userAvatar = '';
+  avatar = true;
 
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
@@ -49,12 +50,14 @@ export class MessageBoardComponent {
         this.channelId = params['channelId'];
         this.loadChannelDetails();
         this.loadMessages();
+        this.avatar = false;
       }
 
       if (params['userId']) {
         this.channelId = params['userId'];
         this.loadUserName();
         this.loadMessages();
+        this.avatar = true;
       }
     });
   }

@@ -1,8 +1,14 @@
 <div class="message-board">
     <div class="message-container main-channel">
         <div class="message-board-header">
-            <h2># {{ channelName }}</h2>
-        </div>
+            <div *ngIf="avatar; else noAvatar">
+              <img class="avatar" src="assets/img/avatar{{userAvatar}}.svg" alt="Avatar">
+              <h2>{{ channelName }}</h2>
+            </div>
+            <ng-template #noAvatar>
+              <h2># {{ channelName }}</h2>
+            </ng-template>
+          </div>
         <div class="message-board-content">
             @for (message of messages; track message.id; let i = $index) {
 
