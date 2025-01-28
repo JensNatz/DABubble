@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
 import { FormsModule } from '@angular/forms';
 import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
-import { UserSelectionListComponent } from '../user-selection-list/user-selection-list.component';
+import { TagSelectionListComponent } from '../tag-selection-list/tag-selection-list.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { MentionComponent } from '../mention/mention.component';
 
@@ -12,7 +12,7 @@ import { MentionComponent } from '../mention/mention.component';
 @Component({
   selector: 'app-message-input',
   standalone: true,
-  imports: [FormsModule, CommonModule, EmojiPickerComponent, UserSelectionListComponent, ClickOutsideDirective, MentionComponent],
+  imports: [FormsModule, CommonModule, EmojiPickerComponent, TagSelectionListComponent, ClickOutsideDirective, MentionComponent],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
@@ -126,30 +126,24 @@ export class MessageInputComponent {
   }
 
   private parseMessageFromContentPartsForDatabase() {
-     const messageInputElement = document.getElementById('messageInput');
-     let parsedMessage: string = '';
+    const messageInputElement = document.getElementById('messageInput');
+    if (!messageInputElement) return '';
 
-    if (messageInputElement) {
-      const contentParts = Array.from(messageInputElement.childNodes)
-
-      for (const part of contentParts) {
+    return Array.from(messageInputElement.childNodes)
+      .map(part => {
         if (part.nodeType === Node.TEXT_NODE) {
-          if (part.textContent?.trim()) {
-            parsedMessage += part.textContent;
+          return part.textContent?.trim() || '';
+        }     
+        if (part.nodeType === Node.ELEMENT_NODE && (part as HTMLElement).id.startsWith('mentionid')) {
+          const mentionIndex = parseInt((part as HTMLElement).id.replace('mentionid', ''));
+          const mention = this.mentionsCache[mentionIndex];
+          if (mention) {
+            return `${mention.type === 'user' ? '@' : '#'}{[${mention.id}]}`;
           }
-        } else if (part.nodeType === Node.ELEMENT_NODE) {
-            const element = part as HTMLElement;
-            if (element.id.startsWith('mentionid')) {
-              const mentionIndex = parseInt(element.id.replace('mentionid', ''));
-              const mention = this.mentionsCache[mentionIndex];
-              if (mention) {
-                parsedMessage += `${mention.type === 'user' ? '@' : '#'}{[${mention.id}]}`;
-              }
-            }
-          }
-        }
-      }
-      return parsedMessage;
+        }      
+        return '';
+      })
+      .join('');
   }
 
   onTagIconClick() {
@@ -169,6 +163,9 @@ export class MessageInputComponent {
     }
     if(event.key === '@') {
       this.isUserSelectionListOpen = true;
+    }
+    if(event.key === '#') {
+      console.log('choose channel');
     }
   }
 }

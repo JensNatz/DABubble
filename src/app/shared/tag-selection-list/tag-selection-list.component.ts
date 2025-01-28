@@ -4,13 +4,13 @@ import { UserService } from '../../services/user.service';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { Output, EventEmitter } from '@angular/core';
 @Component({
-  selector: 'app-user-selection-list',
+  selector: 'app-tag-selection-list',
   standalone: true,
   imports: [AvatarComponent],
-  templateUrl: './user-selection-list.component.html',
-  styleUrl: './user-selection-list.component.scss'
+  templateUrl: './tag-selection-list.component.html',
+  styleUrl: './tag-selection-list.component.scss'
 })
-export class UserSelectionListComponent {
+export class TagSelectionListComponent {
   @Output() userSelected = new EventEmitter<{ id: string; name: string; avatar: string }>();
   
   channelService: ChannelServiceService = inject(ChannelServiceService);

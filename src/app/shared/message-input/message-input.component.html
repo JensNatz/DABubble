@@ -1,9 +1,9 @@
 <div class="message-input" (clickOutside)="onUserListClickOutside()">
-    <app-user-selection-list class="user-selection-list"
+    <app-tag-selection-list class="tag-selection-list"
         *ngIf="isUserSelectionListOpen"
         (userSelected)="onUserSelected($event)"
     >
-    </app-user-selection-list>
+    </app-tag-selection-list>
     <div [innerHTML]="content" contenteditable="true" class="pseudo-input" #messageInput id="messageInput" (input)="onInputChange()" (keydown)="onKeyDown($event)" >
     </div>
     <div class="toolbar">
