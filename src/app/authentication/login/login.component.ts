@@ -7,12 +7,13 @@ import { User } from '../../models/user';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { GoogleAuthenticationService } from '../../services/firebase-services/google-athentication.servive';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule],
-  providers: [UserServiceService],
+  providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })
@@ -25,8 +26,9 @@ export class LoginComponent {
   passwordInvalid: boolean = false;
   emailErrorMessage: string = ErrorMessages.emailInvalid;
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
+  
 
-  constructor(private userService: UserServiceService) {
+  constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService) {
     this.users = this.userService.getUsers();
   }
 
@@ -84,6 +86,10 @@ export class LoginComponent {
     await this.userService.sendPasswordResetEmail(this.email);
     console.log('password login');
     console.log(this.email);
+  }
+
+  signInWithGoogle() {
+    this.googleAuthService.signInWithGoogle();
   }
 
 }

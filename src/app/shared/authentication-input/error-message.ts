@@ -4,6 +4,7 @@ export const ErrorMessages = {
     emailInvalid: 'Diese E-Mail-Adresse ist leider ungültig',
     emailMissingAt: 'Die E-Mail-Adresse muss ein @ enthalten',
     emailExists: 'Diese E-Mail-Adresse ist bereits vorhanden',
+    emailNotFound:'Diese E-Mail-Adresse wurde nicht gefunden',
     passwordInvalid: 'Bitte geben Sie ein Passwort ein',
     passwordInvalidInfo: 'Muss mindestens ein Großsbuchstabe und ein Sonderzeichen enthalten',
     passwordMinLength: 'Passwort muss mindestens 5 Zeichen lang sein',

@@ -21,16 +21,23 @@ export class RestePasswordEmailComponent {
   emailInvalid: boolean = false;
   emailErrorMessage: string = ErrorMessages.emailInvalid;
 
+
   constructor(private userService: UserServiceService) {}
 
-  validateEmail() {
+
+
+  async validateEmail() {
     if (!this.email) {
       this.emailInvalid = true;
       this.emailErrorMessage = ErrorMessages.emailInvalid;
     } else if (this.email.indexOf('@') === -1) {
       this.emailInvalid = true;
       this.emailErrorMessage = ErrorMessages.emailMissingAt;
-    } else {
+    } else if( !await this.userService.emailExists(this.email)){
+      this.emailInvalid = true
+      this.emailErrorMessage = ErrorMessages.emailNotFound;
+    } 
+    else {
       this.emailInvalid = false;
     }
   }
@@ -41,6 +48,7 @@ export class RestePasswordEmailComponent {
     if (form.valid && !this.emailInvalid) {
       try {
         await this.userService.sendPasswordResetEmail(this.email);
+        console.log(this.email)
         console.log('Password reset email sent');
       } catch (error) {
         console.error('Error sending password reset email:', error);

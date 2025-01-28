@@ -4,6 +4,8 @@ import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
 import { getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,7 +61,7 @@ export class UserServiceService {
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.auth, email);
-      console.log('email gesendet');
+      console.log(email);
     } catch (err) {
       console.error('Error sending password reset email:', err);
     }
