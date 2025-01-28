@@ -19,7 +19,7 @@
             <img class="toolbar-icon" src="assets/img/at_symbol.svg" alt="Tag" (click)="onTagIconClick()" />
         </div>
         <ng-container *ngIf="type === 'send'">
-            <button class="send-button" [disabled]="isButtonDisabled" (click)="onSendClick()">
+            <button class="send-button" [disabled]="isSubmittingDisabled" (click)="onSendClick()">
             </button>
         </ng-container>
         <ng-container *ngIf="type === 'edit'">
@@ -27,7 +27,7 @@
             <button (click)="onCancelEditClick()">
                 Abbrechen
             </button>
-            <button [disabled]="isButtonDisabled" (click)="onSaveEditClick()">
+            <button [disabled]="isSubmittingDisabled" (click)="onSaveEditClick()">
                 Speichern
             </button>
             </div>

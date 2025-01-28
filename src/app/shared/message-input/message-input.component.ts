@@ -22,7 +22,7 @@ export class MessageInputComponent {
   @ViewChild('messageInput', { read: ViewContainerRef }) messageInput!: ViewContainerRef;
 
   isEmojiPickerOpen: boolean = false;
-  isButtonDisabled: boolean = true;
+  isSubmittingDisabled: boolean = true;
   isUserSelectionListOpen: boolean = false;
   private mentionCounter: number = 0;
   private mentionsCache: Array<{ type: 'user' | 'channel', content: string, id: string }> = [];
@@ -44,7 +44,7 @@ export class MessageInputComponent {
      if (messageInputElement) {
        const hasText = !!messageInputElement.textContent?.trim();
        const hasMentions = messageInputElement.getElementsByTagName('app-mention').length > 0;
-       this.isButtonDisabled = !hasText && !hasMentions;
+       this.isSubmittingDisabled = !hasText && !hasMentions;
      }
   }
 
@@ -149,7 +149,6 @@ export class MessageInputComponent {
           }
         }
       }
-      console.log(parsedMessage, 'parsedMessage');
       return parsedMessage;
   }
 
@@ -164,9 +163,12 @@ export class MessageInputComponent {
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if(!this.isButtonDisabled) {
+      if(!this.isSubmittingDisabled) {
         this.emitMessageToParent();
       }
+    }
+    if(event.key === '@') {
+      this.isUserSelectionListOpen = true;
     }
   }
 }

@@ -61,8 +61,6 @@ export class MessageService {
       throw "Parent message document does not exist!";
     }
 
-    console.log(replyTimestamp, 'replyTimestamp');
-
     await updateDoc(parentMessageRef, {
       numberOfReplies: (parentDoc.data()['numberOfReplies'] || 0) + 1,
       lastReplyTimestamp: replyTimestamp
@@ -107,15 +105,12 @@ export class MessageService {
   }
   
   async parseContentToDisplayInHTML(content: string): Promise<SafeHtml> {
-    // Collect all IDs that need to be fetched
     const userIds = Array.from(content.matchAll(/@{\[([^\]]+)\]}/g)).map(match => match[1]);
     const channelIds = Array.from(content.matchAll(/#{\[([^\]]+)\]}/g)).map(match => match[1]);
     
-    // Create maps for names
     const userNameMap = new Map();
     const channelNameMap = new Map();
 
-    // Fetch user names
     if (userIds.length > 0) {
       const userPromises = userIds.map(async userId => {
         const userName = await this.userService.getUserName(userId);
@@ -124,7 +119,6 @@ export class MessageService {
       await Promise.all(userPromises);
     }
 
-    // Fetch channel names
     if (channelIds.length > 0) {
       const channelPromises = channelIds.map(async channelId => {
         const channelName = await this.channelService.getChannelNameById(channelId);
@@ -144,11 +138,10 @@ export class MessageService {
         const channelName = channelNameMap.get(channelId) || 'Channel';
         return `<span class="message-tag-inserted" data-channel-id="${channelId}" contenteditable="false">#${channelName}</span>`;
       });
-    
+    console.log(messageContent, 'messageContent');
     return this.sanitizer.bypassSecurityTrustHtml(messageContent);
   }
 
-  // Message parsing methods
   async parseMessageContent(content: string): Promise<MessagePart[]> {
     const parts = this.splitMessageIntoParts(content);
     return this.resolveNames(parts);
@@ -218,7 +211,6 @@ export class MessageService {
     }));
   }
 
-  // Helper method to preload names for a batch of messages
   async preloadMessageNames(messages: Message[]) {
     const userIds = new Set<string>();
     const channelIds = new Set<string>();
