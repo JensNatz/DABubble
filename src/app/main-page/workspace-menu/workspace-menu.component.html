@@ -57,8 +57,10 @@
             @for (user of (this.channelService.users | async); track user) {
             <div>
                 <div class="name_plus_icon">
-                    <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
-                    <span>{{user['name']}}</span>
+                    <div>
+                        <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
+                        <span>{{user['name']}}</span>
+                    </div>
                 </div>
             </div>
             }
