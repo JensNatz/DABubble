@@ -9,9 +9,8 @@ import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.com
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
-import { MentionComponent } from './mention/mention.component';
 import { MessagePart } from '../../models/message-part';
-
+import { MentionComponent } from '../../shared/mention/mention.component';
 @Component({
   selector: 'app-message',
   standalone: true,

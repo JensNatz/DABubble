@@ -4,7 +4,7 @@
         (userSelected)="onUserSelected($event)"
     >
     </app-user-selection-list>
-    <div [innerHTML]="content" contenteditable="true" class="pseudo-input" id="messageInput" (input)="onInputChange()">
+    <div [innerHTML]="content" contenteditable="true" class="pseudo-input" #messageInput id="messageInput" (input)="onInputChange()" (keydown)="onKeyDown($event)" >
     </div>
     <div class="toolbar">
         <div class="toolbar-left">
@@ -28,8 +28,8 @@
                 Abbrechen
             </button>
             <button [disabled]="isButtonDisabled" (click)="onSaveEditClick()">
-                    Speichern
-                </button>
+                Speichern
+            </button>
             </div>
         </ng-container>
     </div>

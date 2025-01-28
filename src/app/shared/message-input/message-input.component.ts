@@ -1,26 +1,31 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
 import { FormsModule } from '@angular/forms';
 import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
 import { UserSelectionListComponent } from '../user-selection-list/user-selection-list.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
+import { MentionComponent } from '../mention/mention.component';
+
 
 
 @Component({
   selector: 'app-message-input',
   standalone: true,
-  imports: [FormsModule, CommonModule, EmojiPickerComponent, UserSelectionListComponent, ClickOutsideDirective],
+  imports: [FormsModule, CommonModule, EmojiPickerComponent, UserSelectionListComponent, ClickOutsideDirective, MentionComponent],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
 export class MessageInputComponent {
-
-  private messageInputContentAsPlainText: string = '';
   messageService: MessageService = inject(MessageService);
+
+  @ViewChild('messageInput', { read: ViewContainerRef }) messageInput!: ViewContainerRef;
+
   isEmojiPickerOpen: boolean = false;
   isButtonDisabled: boolean = true;
   isUserSelectionListOpen: boolean = false;
+  private mentionCounter: number = 0;
+  private mentionsCache: Array<{ type: 'user' | 'channel', content: string, id: string }> = [];
 
   @Input() placeholder: string | null = null;
   @Input() content: string = '';
@@ -30,37 +35,17 @@ export class MessageInputComponent {
   @Output() saveEdit = new EventEmitter<string>();
 
 
-
   onInputChange() {
-    this.updateInternalContent();
-    this.updateButtonStateBasedOnInput();
+    this.updateButtonStateBasedOnInput(); 
   }
-
-  updateInternalContent() {
-    const messageInputElement = document.getElementById('messageInput');
-    if (messageInputElement) {
-      let plainText = messageInputElement.innerHTML;
-
-      plainText = plainText.replace(
-        /<span[^>]*data-user-id="([^"]+)"[^>]*>@[^<]+<\/span>/g,
-        (_, userId) => `@{[${userId}]}`
-      );
-      plainText = plainText.replace(
-        /<span[^>]*data-channel-id="([^"]+)"[^>]*>#[^<]+<\/span>/g,
-        (_, channelId) => `#{[${channelId}]}`
-      );
-
-      plainText = plainText.replace(/&nbsp;/g, ' ');
-
-      this.messageInputContentAsPlainText = plainText;
-    }
-
-    console.log(this.messageInputContentAsPlainText);
-  }
-
 
   updateButtonStateBasedOnInput() {
-    this.isButtonDisabled = this.messageInputContentAsPlainText.trim().length === 0;
+    const messageInputElement = document.getElementById('messageInput');
+     if (messageInputElement) {
+       const hasText = !!messageInputElement.textContent?.trim();
+       const hasMentions = messageInputElement.getElementsByTagName('app-mention').length > 0;
+       this.isButtonDisabled = !hasText && !hasMentions;
+     }
   }
 
   onCancelEditClick() {
@@ -86,67 +71,103 @@ export class MessageInputComponent {
     this.isEmojiPickerOpen = false;
   }
 
-  private addTagToInput(id: string, type: 'user' | 'channel') {
-    const pseudoInput = document.getElementById('messageInput');
-    
-    if (pseudoInput) {
-      const span = document.createElement('span');
-      span.className = 'message-tag';
-      span.contentEditable = 'false';
+  private addTagToInput(id: string, name: string, type: 'user' | 'channel') {
+    //TODO diese funcution in zwei methoden aufteilen: 1. kompoente hinzufügen, 2.cursor ans ende
+    if (this.messageInput) {
+      const componentRef = this.messageInput.createComponent(MentionComponent);
+      componentRef.setInput('type', type);
+      componentRef.setInput('id', id);
+      componentRef.setInput('displayName', name);
+      componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;  // Set the element ID directly
+      this.mentionCounter++;
+      componentRef.location.nativeElement.contentEditable = false;
+      this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
 
-      if (type === 'user') {
-        span.dataset['userId'] = id;
-        span.textContent = '@MaxMustermann';
-        this.messageInputContentAsPlainText += `@{[${id}]} `;
-      } else {
-        span.dataset['channelId'] = id;
-        span.textContent = '#Channel';
-        this.messageInputContentAsPlainText += `#{[${id}]} `;
-      }
-      
-      pseudoInput.appendChild(span);
-
+      this.mentionsCache.push({ type, content: name, id });
+      const element = componentRef.location.nativeElement;
       const selection = window.getSelection();
       const range = document.createRange();
-      range.setStartAfter(span);
+      range.setStartAfter(element);
       range.collapse(true);
       selection?.removeAllRanges();
       selection?.addRange(range);
-
-      this.updateInternalContent();
+      this.updateButtonStateBasedOnInput();
     }
   }
 
-  addUserTagToInput(userId: string) {
-    this.addTagToInput(userId, 'user');
+  onUserSelected(user: { id: string; name: string; avatar: string }) {
+    this.addUserTagToInput(user.id, user.name);
+    this.isUserSelectionListOpen = false;
   }
 
-  addChannelTagToInput(channelId: string) {
-    this.addTagToInput(channelId, 'channel');
+  addUserTagToInput(userId: string, name: string) {
+    this.addTagToInput(userId, name, 'user');
+  }
+
+  addChannelTagToInput(channelId: string, name: string) {
+    this.addTagToInput(channelId, name, 'channel');
   }
 
   onSendClick() {
+    this.emitMessageToParent();
+  }
+
+  private emitMessageToParent() {
     const pseudoInput = document.getElementById('messageInput');
     if (pseudoInput) {
-      this.sendMessage.emit(this.messageInputContentAsPlainText);
-      pseudoInput.innerHTML = '';
-      this.updateInternalContent();
+      const parsedMessage = this.parseMessageFromContentPartsForDatabase();
+      if (parsedMessage !== '') {
+        this.sendMessage.emit(parsedMessage);
+        pseudoInput.innerHTML = '';
+        this.mentionsCache = [];
+        this.mentionCounter = 0;
+      }
     }
+  }
+
+  private parseMessageFromContentPartsForDatabase() {
+     const messageInputElement = document.getElementById('messageInput');
+     let parsedMessage: string = '';
+
+    if (messageInputElement) {
+      const contentParts = Array.from(messageInputElement.childNodes)
+
+      for (const part of contentParts) {
+        if (part.nodeType === Node.TEXT_NODE) {
+          if (part.textContent?.trim()) {
+            parsedMessage += part.textContent;
+          }
+        } else if (part.nodeType === Node.ELEMENT_NODE) {
+            const element = part as HTMLElement;
+            if (element.id.startsWith('mentionid')) {
+              const mentionIndex = parseInt(element.id.replace('mentionid', ''));
+              const mention = this.mentionsCache[mentionIndex];
+              if (mention) {
+                parsedMessage += `${mention.type === 'user' ? '@' : '#'}{[${mention.id}]}`;
+              }
+            }
+          }
+        }
+      }
+      console.log(parsedMessage, 'parsedMessage');
+      return parsedMessage;
   }
 
   onTagIconClick() {
     this.isUserSelectionListOpen = !this.isUserSelectionListOpen;
   }
 
-  onUserSelected(user: { id: string; name: string; avatar: string }) {
-    let userId = user.id;
-    // this.addUserTagToInput(userId);
-    console.log('ich würde gerne ein tag zu meinem input hinzufügen, muss das aber mit einer komponente machen, die ich hier nicht habe');
+  onUserListClickOutside() {
     this.isUserSelectionListOpen = false;
   }
 
-  onUserListClickOutside() {
-    this.isUserSelectionListOpen = false;
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if(!this.isButtonDisabled) {
+        this.emitMessageToParent();
+      }
+    }
   }
 }
 
