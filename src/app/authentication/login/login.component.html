@@ -32,13 +32,13 @@
                 ></app-input-field>            
         </div>
 
-        <p class="pw-forget-btn br-30" (click)="sendPasswordResetEmail()">Passwort vergessen?</p>
+        <p [routerLink]="['/resetpw']" class="pw-forget-btn br-30" (click)="sendPasswordResetEmail()">Passwort vergessen?</p>
 
         <div class="or-container">
             ODER
         </div>
 
-        <div class="google-btn">
+        <div class="google-btn" (click)="signInWithGoogle()">
            Anmelden mit Google
         </div>
 

@@ -22,7 +22,7 @@
                 [errorMessage]="nameErrorMessage"
                 imagePath="../../../assets/img/person_filled.svg"
                 (ngModelChange)="resetNameError()"
-                (blur)="validateName()">
+                (blur)="resetNameError()">
             </app-input-field>
             <app-input-field
                 required
@@ -35,7 +35,7 @@
                 [errorMessage]="emailErrorMessage"
                 imagePath="../../../assets/img/mail.svg"
                 (ngModelChange)="resetEmailError()"
-                (blur)="validateEmail()">
+                (blur)="resetEmailError()">
             </app-input-field>
             <app-input-field 
                 required

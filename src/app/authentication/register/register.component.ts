@@ -102,6 +102,7 @@ export class RegisterComponent {
   resetNameError() {
     this.nameInvalid = false;
     this.nameErrorMessage = ErrorMessages.nameRequired;
+    this.validateName()
   }
 
   resetEmailError() {
@@ -112,5 +113,6 @@ export class RegisterComponent {
   resetPasswordError() {
     this.passwordInvalid = false;
     this.passwordErrorMessage = ErrorMessages.passwordInvalid;
+    this.validatePassword();
   }
 }
