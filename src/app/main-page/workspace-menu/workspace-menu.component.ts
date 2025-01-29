@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { AddChannelComponent } from './add-channel/add-channel.component';
 import { Router } from '@angular/router'; // Für Navigation
-
+import { Channel } from '../../models/channel';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -21,10 +21,18 @@ export class WorkspaceMenuComponent {
   
   isOpenChannelListe = true;
   isOpenUserListe = true;
+  channels: Channel[] = [];
+  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
   public showModal: boolean = false;
 
-  constructor(public channelService: ChannelServiceService, private router: Router) { }
+  constructor(public channelService: ChannelServiceService, private router: Router) { 
+      this.loadChannels();
+  }
+
+  async loadChannels() {
+    this.channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(this.userId) as Channel[];
+  }
 
   openAddChannel() {
     this.showModal = true;
@@ -36,19 +44,17 @@ export class WorkspaceMenuComponent {
 
   toggleMenuChannel() {
     this.isOpenChannelListe = !this.isOpenChannelListe;    
-  
   }
 
   toggleMenuUser() {
     this.isOpenUserListe  = !this.isOpenUserListe ; 
   }
 
-  switchToChannel(channelId: string) {
-    this.router.navigate(['/main'], { queryParams: { channelId } });
+  switchToGroupChannel(channel: Channel) {
+    this.channelService.currentChannel = channel;
   }
-
-  switchToUser(userId: string) {
-    this.router.navigate(['/main'], { queryParams: { userId } });
+  switchToDirectMessageChannel(userId: string) {
+    this.channelService.setDirectMessageChannel(userId);
   }
 }
 

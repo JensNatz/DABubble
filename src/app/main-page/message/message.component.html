@@ -39,7 +39,7 @@
     </ng-container>
     <ng-container *ngIf="isEditing">
         <app-message-input class="message-input" [type]="'edit'" [placeholder]="'Nachricht verfassen...'"
-            [content]="message.content" (cancelEdit)="handleCancelEditClick()" (saveEdit)="handleSaveEditClick($event)">
+            [content]="message.content" (cancelEdit)="handleCancelEditClick()" (sendMessage)="handleSaveEditClick($event)">
         </app-message-input>
     </ng-container>
 </div>

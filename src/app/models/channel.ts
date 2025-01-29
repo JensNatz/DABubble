@@ -4,4 +4,5 @@ export interface Channel {
     description: string;
     creator?: string;
     members?: string[];
+    type: string;
 }
