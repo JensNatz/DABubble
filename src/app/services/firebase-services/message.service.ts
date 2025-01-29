@@ -3,8 +3,9 @@ import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, upd
 import { Message } from '../../models/message';
 import { UserService } from '../user.service';
 import { ChannelServiceService } from './channel-service.service';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MessagePart } from '../../models/message-part';
+import { ViewContainerRef } from '@angular/core';
+import { MentionComponent } from '../../shared/mention/mention.component';
 
 
 @Injectable({
@@ -15,7 +16,6 @@ export class MessageService {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
-  private sanitizer = inject(DomSanitizer);
   private nameCache = new Map<string, string>();
   
   constructor() { }
@@ -152,5 +152,29 @@ export class MessageService {
 
       return {...part, displayName};
     }));
-  } 
+  }
+
+  renderMessagePartsInContainer(parts: MessagePart[], container: ViewContainerRef) {
+    container.clear();
+    const renderedComponents: Array<{component: any, part: MessagePart}> = [];
+    let mentionCounter = 0;
+    
+    parts.forEach(part => {
+      if (part.type === 'text') {
+        const textNode = document.createTextNode(part.content || '');
+        container.element.nativeElement.appendChild(textNode);
+      } else {
+        const componentRef = container.createComponent(MentionComponent);
+        componentRef.setInput('type', part.type);
+        componentRef.setInput('id', part.id);
+        componentRef.setInput('displayName', part.displayName);
+        componentRef.location.nativeElement.contentEditable = false;
+        componentRef.location.nativeElement.id = `mentionid${mentionCounter++}`;
+        container.element.nativeElement.appendChild(componentRef.location.nativeElement);
+        renderedComponents.push({ component: componentRef, part });
+      }
+    });
+    
+    return renderedComponents;
+  }
 }

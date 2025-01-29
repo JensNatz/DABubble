@@ -9,8 +9,7 @@ import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.com
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
-import { MessagePart } from '../../models/message-part';
-import { MentionComponent } from '../../shared/mention/mention.component';
+
 @Component({
   selector: 'app-message',
   standalone: true,
@@ -21,7 +20,7 @@ import { MentionComponent } from '../../shared/mention/mention.component';
     MessageToolbarComponent,
     ClickOutsideDirective,
     MessageInputComponent,
-    MentionComponent],
+    ],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
@@ -63,30 +62,11 @@ export class MessageComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    const parsedParts = await this.messageService.parseMessageContent(this.message.content);
-    this.renderParts(parsedParts);
-  }
-
-  private renderParts(parts: MessagePart[]) {
-    this.container.clear();
-    parts.forEach(part => {
-      if (part.type === 'text') {
-        const span = document.createElement('span');
-        span.textContent = part.content || '';
-        this.container.element.nativeElement.appendChild(span);
-      } else {
-        const componentRef = this.container.createComponent(MentionComponent);
-        componentRef.setInput('type', part.type);
-        componentRef.setInput('id', part.id);
-        componentRef.setInput('displayName', part.displayName);
-        this.container.element.nativeElement.appendChild(componentRef.location.nativeElement);
-      }
-    });
+    await this.renderMessageContent(this.message.content);
   }
 
   get lastReplyTimeDisplay(): string {
     if (!this.message.lastReplyTimestamp) return '';
-
     const replyDate = new Date(this.message.lastReplyTimestamp);
     const today = new Date();
     
@@ -97,7 +77,6 @@ export class MessageComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   get repliesText(): string {
     if (this.message.numberOfReplies) {
       if (this.message.numberOfReplies === 1) {
@@ -106,6 +85,11 @@ export class MessageComponent implements OnInit, AfterViewInit {
       return `${this.message.numberOfReplies} Antworten`;
     }
     return '';
+  }
+
+  private async renderMessageContent(content: string) {
+    const parsedParts = await this.messageService.parseMessageContent(content);
+    this.messageService.renderMessagePartsInContainer(parsedParts, this.container);
   }
 
   private isSameDay(date1: Date, date2: Date): boolean {
@@ -223,6 +207,11 @@ export class MessageComponent implements OnInit, AfterViewInit {
         this.message.content = content;
         this.message.edited = true;
         this.messageService.editMessage(this.message.id, content);
+
+        setTimeout(() => {
+           this.renderMessageContent(content);
+        });
+        
       }
       this.isEditing = false;
     }

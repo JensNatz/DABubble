@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
 import { FormsModule } from '@angular/forms';
@@ -6,7 +6,7 @@ import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
 import { TagSelectionListComponent } from '../tag-selection-list/tag-selection-list.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { MentionComponent } from '../mention/mention.component';
-
+import { MessagePart } from '../../models/message-part';
 
 @Component({
   selector: 'app-message-input',
@@ -15,7 +15,7 @@ import { MentionComponent } from '../mention/mention.component';
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
-export class MessageInputComponent {
+export class MessageInputComponent implements AfterViewInit {
   messageService: MessageService = inject(MessageService);
 
   @ViewChild('messageInput', { read: ViewContainerRef }) messageInput!: ViewContainerRef;
@@ -34,13 +34,30 @@ export class MessageInputComponent {
   @Output() cancelEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<string>();
 
-  ngOnInit() {
-    if(this.content !== '') {
-      console.log('this.content', this.content);
+
+  async ngAfterViewInit() {
+    if (this.content !== '') {
+      this.mentionsCache = [];
+      this.mentionCounter = 0;
+      const parsedParts = await this.messageService.parseMessageContent(this.content);
+      const renderedComponents = this.messageService.renderMessagePartsInContainer(parsedParts, this.messageInput);
+      this.fillMentionsCacheBasedOnMessageInput(renderedComponents);
+      this.updateButtonStateBasedOnInput();
     }
-    
   }
 
+  fillMentionsCacheBasedOnMessageInput(renderedComponents: Array<{component: any, part: MessagePart}>) {
+    renderedComponents.forEach(({part}) => {
+      if (part.type === 'user' || part.type === 'channel') {
+        this.mentionsCache.push({
+          type: part.type,
+          content: part.displayName || '',
+          id: part.id || ''
+        });
+        this.mentionCounter++;
+      }
+    });
+  }
 
   onInputChange() {
     this.updateButtonStateBasedOnInput(); 
@@ -60,7 +77,7 @@ export class MessageInputComponent {
   }
 
   onSaveEditClick() {
-    this.saveEdit.emit(this.content);
+    this.emitMessageToParent();
   }
 
   onEmojiButtonClick() {
@@ -129,17 +146,24 @@ export class MessageInputComponent {
       const parsedMessage = this.parseMessageFromContentPartsForDatabase();
       if (parsedMessage !== '') {
         this.sendMessage.emit(parsedMessage);
-        pseudoInput.innerHTML = '';
-        this.mentionsCache = [];
-        this.mentionCounter = 0;
+        this.resetInputField();
       }
+    }
+  }
+
+  private resetInputField() {
+    const pseudoInput = document.getElementById('messageInput');
+    if (pseudoInput) {
+      pseudoInput.innerHTML = '';
+      this.mentionsCache = [];
+      this.mentionCounter = 0;
+      this.updateButtonStateBasedOnInput();
     }
   }
 
   private parseMessageFromContentPartsForDatabase() {
     const messageInputElement = document.getElementById('messageInput');
     if (!messageInputElement) return '';
-
     return Array.from(messageInputElement.childNodes)
       .map(part => {
         if (part.nodeType === Node.TEXT_NODE) {
