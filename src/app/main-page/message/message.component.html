@@ -9,7 +9,7 @@
                 <div class="message-header-time">{{ message.timestamp | date:'HH:mm' }} Uhr</div>
             </div>
             <div class="message-text">
-                {{ message.content }}
+                <div #messageContainer></div>
             </div>
             <div class="message-meta-info" *ngIf="message.numberOfReplies || message.edited">
                 <div class="message-edit-info" *ngIf="message.edited">(Bearbeitet)</div>

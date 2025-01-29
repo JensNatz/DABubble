@@ -6,7 +6,7 @@
   }
   <img src="assets/img/add_reaction.svg" alt="add reaction" class="toolbar-icon"
     (click)="handleAddReactionClick($event)">
-  <img src="assets/img/comment.svg" alt="comment" class="toolbar-icon"
+  <img *ngIf="isMessageInMainChannel" src="assets/img/comment.svg" alt="comment" class="toolbar-icon"
   (click)="handleCommentClick()">
   <div *ngIf="isOwn" class="more-container">
     <img src="assets/img/more_vert.svg" alt="more" class="toolbar-icon" (click)="toggleOptionsMenu()">

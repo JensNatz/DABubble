@@ -7,6 +7,6 @@ export interface Message {
     edited: boolean;
     numberOfReplies?: number;
     lastReplyTimestamp?: number;
-    parentMessageId?: string;
+    parentMessageId: string | null;
     reactions?: [];
 }

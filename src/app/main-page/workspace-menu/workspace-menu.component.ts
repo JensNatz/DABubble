@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { AddChannelComponent } from './add-channel/add-channel.component';
+import { Router } from '@angular/router'; // Für Navigation
 
 
 @Component({
@@ -23,7 +24,7 @@ export class WorkspaceMenuComponent {
 
   public showModal: boolean = false;
 
-  constructor(public channelService: ChannelServiceService) { }
+  constructor(public channelService: ChannelServiceService, private router: Router) { }
 
   openAddChannel() {
     this.showModal = true;
@@ -37,8 +38,17 @@ export class WorkspaceMenuComponent {
     this.isOpenChannelListe = !this.isOpenChannelListe;    
   
   }
+
   toggleMenuUser() {
     this.isOpenUserListe  = !this.isOpenUserListe ; 
+  }
+
+  switchToChannel(channelId: string) {
+    this.router.navigate(['/main'], { queryParams: { channelId } });
+  }
+
+  switchToUser(userId: string) {
+    this.router.navigate(['/main'], { queryParams: { userId } });
   }
 }
 

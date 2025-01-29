@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc, updateDoc, docData, } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
@@ -12,6 +12,7 @@ import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail } from 
 export class UserServiceService {
   firestore: Firestore = inject(Firestore);
   auth = getAuth();
+  id = "";
 
   constructor() { }
 
@@ -29,10 +30,17 @@ export class UserServiceService {
     return collectionData(q, { idField: 'id' }) as Observable<User[]>;
   }
 
+  // Diese Methode gibt ein Observable für den einzelnen Benutzer zurück
+  getUserById(userId: string): Observable<User> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    return docData(userDocRef) as Observable<User>;
+  }
+
   async addNewUser(item: User) {
     try {
       const docRef = await addDoc(this.getUserRef(), item);
-      console.log('Document ID:', docRef.id);
+      this.id = docRef.id;
+      await updateDoc(docRef, { id: this.id });
     } catch (err) {
       console.error('Error adding document:', err);
     }

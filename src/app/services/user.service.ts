@@ -7,7 +7,7 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 export class UserService {
   private userCache: Map<string, any> = new Map();
 
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore) { }
 
   private async fetchUserData(userId: string): Promise<any> {
     const userDoc = await getDoc(doc(this.firestore, 'users', userId));
@@ -34,5 +34,13 @@ export class UserService {
 
     const userData = await this.fetchUserData(userId);
     return userData?.avatar || '0';
+  }
+
+  async getCompleteUserInfo(userId: string) {
+    if (this.userCache.has(userId)) {
+      return this.userCache.get(userId);
+    }
+    const userData = await this.fetchUserData(userId);
+    return userData;
   }
 }
