@@ -199,6 +199,9 @@ export class MessageComponent implements OnInit, AfterViewInit {
 
   handleCancelEditClick() {
     this.isEditing = false;
+    setTimeout(() => {
+      this.renderMessageContent(this.message.content);
+    });
   }
 
   handleSaveEditClick(content: string) {
