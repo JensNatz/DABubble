@@ -106,31 +106,39 @@ export class MessageBoardComponent {
     if (content.trim() === '') {
       return;
     }
-    let message: Message = {
-      content: content,
-      timestamp: Date.now(),
-      author: this.userId,
-      channelId: this.channelId,
-      edited: false,
-    };
-
-    this.messageService.postMessageToChannel(this.channelId, message);
-  }
-
-  onSendReply(content: string) {
-    if (content.trim() === '') {
+    if (!this.channel || !this.channel.id) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
       author: this.userId,
-      channelId: this.channelId,
+      channelId: this.channel.id,
+      edited: false,
+      parentMessageId: null
+    };
+
+    this.messageService.postMessageToChannel(this.channel.id, message);
+  }
+
+  onSendReply(content: string) {
+    if (content.trim() === '') {
+      return;
+    }
+
+    if (!this.channel || !this.channel.id) {
+      return;
+    }
+    let message: Message = {
+      content: content,
+      timestamp: Date.now(),
+      author: this.userId,
+      channelId: this.channel.id,
       edited: false,
       parentMessageId: this.parentMessageId
     };
 
-   this.messageService.postReplyToMessage(this.channelId, this.parentMessageId, message);
+   this.messageService.postReplyToMessage(this.channel.id, this.parentMessageId, message);
   }
 
   handleRepliesClick(messageId: string) {

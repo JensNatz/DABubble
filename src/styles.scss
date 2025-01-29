@@ -103,3 +103,9 @@ textarea {
     pointer-events: none;
     border: none;
 }
+
+.message-tag {
+    background-color: $purple-3;
+    padding: 0 2px;
+    color: $white;
+}
