@@ -4,6 +4,7 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { UserServiceService } from './user-service.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class LoginService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
-  constructor(private firestore: Firestore, private userService: UserServiceService) {
+  constructor(private firestore: Firestore, private userService: UserServiceService, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
     this.currentUser = this.currentUserSubject.asObservable();
 
@@ -47,6 +48,8 @@ export class LoginService {
         const userData = userSnapshot.data() as User;
         this.currentUserSubject.next(userData);
         console.log('User logged in:', userData);
+        this.router.navigate(['/chat']);
+        
       }
     } catch (error) {
       console.error('Error during login:', error);
