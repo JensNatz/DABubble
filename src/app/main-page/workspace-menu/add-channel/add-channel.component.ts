@@ -3,7 +3,6 @@ import { ChannelServiceService } from '../../../services/firebase-services/chann
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Channel } from '../../../models/channel';
-import { WorkspaceMenuComponent } from '../workspace-menu.component';
 
 @Component({
   selector: 'app-add-channel',
@@ -11,7 +10,6 @@ import { WorkspaceMenuComponent } from '../workspace-menu.component';
   imports: [
     CommonModule,
     FormsModule,
-    WorkspaceMenuComponent
   ],
   templateUrl: './add-channel.component.html',
   styleUrl: './add-channel.component.scss'
@@ -24,7 +22,8 @@ export class AddChannelComponent {
     name: "",
     description: "",
     creator: "",
-    members: []
+    members: [],
+    type: 'group'
   }  
 
   constructor(public channelService: ChannelServiceService) {
