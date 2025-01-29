@@ -22,13 +22,16 @@ export class WorkspaceMenuComponent {
   isOpenChannelListe = true;
   isOpenUserListe = true;
   channels: Channel[] = [];
+  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
   public showModal: boolean = false;
 
   constructor(public channelService: ChannelServiceService, private router: Router) { 
-      this.channelService.getAllChannelsFromDatabase().subscribe((channels) => {
-        this.channels = channels as Channel[];
-      });
+      this.loadChannels();
+  }
+
+  async loadChannels() {
+    this.channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(this.userId) as Channel[];
   }
 
   openAddChannel() {

@@ -5,7 +5,6 @@ import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { MessageService } from '../../services/firebase-services/message.service';
-import { ActivatedRoute } from '@angular/router';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
