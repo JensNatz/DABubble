@@ -18,8 +18,8 @@
             <span>Log out</span>
         </div>
 
-        <div class="modal-overlay modal-overlay-profil" *ngIf="!showProfil" (click)="closeProfil()"></div>
-        <div class="modal modal_profil" *ngIf="!showProfil">
+        <div class="modal-overlay modal-overlay-profil" *ngIf="showProfil" (click)="closeProfil()"></div>
+        <div class="modal modal_profil" *ngIf="showProfil">
             <div>
                 <span>Profil</span>
                 <img class="close_profil" src="assets/img/close.svg" (click)="closeProfil()">
