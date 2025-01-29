@@ -1,4 +1,6 @@
 @import './../../styles/variables';
+@import './../../styles/mixins';
+@import './../../shared/avatar/avatar.component.scss';
 
 .header {
     height: 120px;
@@ -7,7 +9,7 @@
     display: flex;
     justify-content: center;
 
-   
+
 }
 
 .content {
@@ -37,7 +39,7 @@
     }
 
     h2 {
-        font-size: 32px;        
+        font-size: 32px;
     }
 }
 
@@ -48,7 +50,7 @@
 
 .arrow_down {
     height: 8px;
-    width: 14px;    
+    width: 14px;
     filter: invert(0%);
     transition: filter 0.3s ease;
 }
@@ -67,7 +69,7 @@
 
 .input_search {
     width: 50%;
-    position: relative;       
+    position: relative;
 
     input {
         color: #686868;
@@ -77,5 +79,124 @@
         border: 0;
         padding: 0 30px;
         font-size: 24px;
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 80;
+}
+
+.modal {
+    position: fixed;
+    top: 113px;
+    right: 20px;
+    width: 282px;
+    height: 181px;
+    background: #fff;
+    filter: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    @include rounded();
+    border-top-right-radius: 0%;
+    padding: 40px;    
+    -webkit-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
+    -moz-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
+    box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
+    display: flex;
+    flex-direction: column;    
+    gap: 25px;
+
+    span {
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: 700;
+    }
+}
+
+
+.modal_profil_menu {
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+}
+
+.modal-overlay-profil {
+    z-index: 100;
+}
+
+.modal_profil {
+    z-index: 120;
+    width: 500px;
+    height: 600px;
+}
+
+.close_profil {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    cursor: pointer;
+    padding: 10px;
+
+    &:hover {
+        background-color: rgba(99, 61, 189, 0.2);
+        @include rounded();
+        filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
+    }
+}
+
+
+.profil_avatar {   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+
+    img {
+        width: 165px;
+        height: 165px;    
+    }
+}
+
+.user_name_status {
+    
+}
+
+.user_name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    
+    h1 {
+        font-size: 32px;
+        margin-block-start: 0;
+        margin-block-end: 0;
+    }
+
+    span {
+        font-size: 18px;
+    }
+}
+
+.email_addresse {
+    margin-top: 40px;
+    height: 30px;
+    display: flex;
+    // align-items: start;
+    font-size: 20px;
+
+
+    img {
+        margin-right: 20px;
+        width: 25px;
+        height: 20px;
     }
 }

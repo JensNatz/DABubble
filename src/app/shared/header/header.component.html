@@ -5,10 +5,41 @@
             <input type="text" placeholder="Devspace durchsuchen">
             <img class="search" src="assets/img/search.png">
         </div>
+
         <div class="user_name">
             <h2>Frederick Beck</h2>
             <img class="user_foto" src="assets/img/Property 1=Default.png">
-            <img class="arrow_down" src="assets/img/keyboard_arrow_down.png">
+            <img class="arrow_down" src="assets/img/keyboard_arrow_down.png" (click)="openProfilMenu()">
+        </div>
+
+        <div class="modal-overlay" *ngIf="showProfilMenu" (click)="closeProfilMenu()"></div>
+        <div class="modal modal_profil_menu" *ngIf="showProfilMenu">
+            <span (click)="openProfil()">Profil</span>
+            <span>Log out</span>
+        </div>
+
+        <div class="modal-overlay modal-overlay-profil" *ngIf="!showProfil" (click)="closeProfil()"></div>
+        <div class="modal modal_profil" *ngIf="!showProfil">
+            <div>
+                <span>Profil</span>
+                <img class="close_profil" src="assets/img/close.svg" (click)="closeProfil()">
+            </div>
+            <div class="profil_avatar">
+                <img src="assets/img/Property 1=Default.png">
+            </div>
+            <div class="user_name_status">
+                <div class="user_name">
+                    <h1>Frederick Beck</h1>
+                    <span>bearbeiten</span>
+                </div>
+                <p>Status</p>
+            </div>
+            <div class="email_addresse">
+                <div>
+                    <img src="assets/img/mail666.svg">
+                    <span>E-mail-Adresse</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
