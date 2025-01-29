@@ -1,16 +1,26 @@
-<div class="message-input">
-    <textarea [(ngModel)]="content" [attr.placeholder]="placeholder"></textarea>
+<div class="message-input" (clickOutside)="onTagListClickOutside()">
+    <app-tag-selection-list class="tag-selection-list"
+        *ngIf="isTagSelectionListOpen"
+        [type]="taglistType"
+        (tagSelected)="onTagSelected($event)"
+    >
+    </app-tag-selection-list>
+    <div contenteditable="true" class="pseudo-input" #messageInput id="messageInput" (input)="onInputChange()" (keydown)="onKeyDown($event)" >
+    </div>
     <div class="toolbar">
-        <div class="emoji-container">
-            <img class="emoji-icon" src="assets/img/emoji.svg" alt="Emojis" (click)="onEmojiButtonClick()" />
-            <div class="emoji-picker-overlay" *ngIf="isEmojiPickerOpen" (click)="onEmojiOverlayClick($event)">
-                <app-emoji-picker class="emoji-picker"
-                    (emojiSelected)="onEmojiSelected($event)"
-                ></app-emoji-picker>
-             </div>
+        <div class="toolbar-left">
+            <div class="emoji-container">
+                <img class="toolbar-icon" src="assets/img/emoji.svg" alt="Emojis" (click)="onEmojiButtonClick()" />
+                <div class="emoji-picker-overlay" *ngIf="isEmojiPickerOpen" (click)="onEmojiOverlayClick($event)">
+                    <app-emoji-picker class="emoji-picker"
+                        (emojiSelected)="onEmojiSelected($event)"
+                    ></app-emoji-picker>
+                </div>
+            </div>
+            <img class="toolbar-icon" src="assets/img/at_symbol.svg" alt="Tag" (click)="onTagUserIconClick()" />
         </div>
         <ng-container *ngIf="type === 'send'">
-            <button class="send-button" [disabled]="!content.trim()" (click)="onSendClick()">
+            <button class="send-button" [disabled]="isSubmittingDisabled" (click)="onSendClick()">
             </button>
         </ng-container>
         <ng-container *ngIf="type === 'edit'">
@@ -18,9 +28,9 @@
             <button (click)="onCancelEditClick()">
                 Abbrechen
             </button>
-            <button [disabled]="!content.trim()" (click)="onSaveEditClick()">
-                    Speichern
-                </button>
+            <button [disabled]="isSubmittingDisabled" (click)="onSaveEditClick()">
+                Speichern
+            </button>
             </div>
         </ng-container>
     </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, inject, ViewContainerRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { Message } from '../../models/message';
@@ -9,7 +9,8 @@ import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.com
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
-
+import { MessagePart } from '../../models/message-part';
+import { MentionComponent } from '../../shared/mention/mention.component';
 @Component({
   selector: 'app-message',
   standalone: true,
@@ -19,15 +20,19 @@ import { ClickOutsideDirective } from '../../directives/click-outside.directive'
     EmojiPickerComponent,
     MessageToolbarComponent,
     ClickOutsideDirective,
-    MessageInputComponent],
+    MessageInputComponent,
+    MentionComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, AfterViewInit {
+  @ViewChild('messageContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
   messageService: MessageService = inject(MessageService);
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
 
+
+  messageContentParsed: string = '';
   authorName: string = 'Unknown User';
   isOwn: boolean = false;
   isEditing: boolean = false;
@@ -48,12 +53,35 @@ export class MessageComponent implements OnInit {
     this.authorName = await this.userService.getUserName(this.message.author);
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
+    this.messageContentParsed = this.message.content;
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
     if (this.message.parentMessageId === null) {
       this.isMessageInMainChannel = true;
     }
+  }
+
+  async ngAfterViewInit() {
+    const parsedParts = await this.messageService.parseMessageContent(this.message.content);
+    this.renderParts(parsedParts);
+  }
+
+  private renderParts(parts: MessagePart[]) {
+    this.container.clear();
+    parts.forEach(part => {
+      if (part.type === 'text') {
+        const span = document.createElement('span');
+        span.textContent = part.content || '';
+        this.container.element.nativeElement.appendChild(span);
+      } else {
+        const componentRef = this.container.createComponent(MentionComponent);
+        componentRef.setInput('type', part.type);
+        componentRef.setInput('id', part.id);
+        componentRef.setInput('displayName', part.displayName);
+        this.container.element.nativeElement.appendChild(componentRef.location.nativeElement);
+      }
+    });
   }
 
   get lastReplyTimeDisplay(): string {

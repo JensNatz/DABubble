@@ -1,7 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, updateDoc, arrayRemove, arrayUnion, where, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, updateDoc, arrayRemove, arrayUnion, where, getDoc } from '@angular/fire/firestore';
 import { Message } from '../../models/message';
-import { Timestamp } from '@angular/fire/firestore';
+import { UserService } from '../user.service';
+import { ChannelServiceService } from './channel-service.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MessagePart } from '../../models/message-part';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +13,10 @@ import { Timestamp } from '@angular/fire/firestore';
 export class MessageService {
 
   firestore: Firestore = inject(Firestore);
+  userService: UserService = inject(UserService);
+  channelService: ChannelServiceService = inject(ChannelServiceService);
+  private sanitizer = inject(DomSanitizer);
+  private nameCache = new Map<string, string>();
   
   constructor() { }
 
@@ -53,8 +61,6 @@ export class MessageService {
       throw "Parent message document does not exist!";
     }
 
-    console.log(replyTimestamp, 'replyTimestamp');
-
     await updateDoc(parentMessageRef, {
       numberOfReplies: (parentDoc.data()['numberOfReplies'] || 0) + 1,
       lastReplyTimestamp: replyTimestamp
@@ -97,4 +103,54 @@ export class MessageService {
       [`reactions.${reactionType}`]: arrayUnion(userId)
     });
   }
+  
+  async parseMessageContent(content: string): Promise<MessagePart[]> {
+    const parts = this.splitMessageIntoParts(content);
+    return this.resolveNames(parts);
+  }
+
+  private splitMessageIntoParts(content: string): MessagePart[] {
+    const parts: MessagePart[] = [];
+    let lastIndex = 0;
+    const mentionPattern = /(@{\[(.*?)\]}|#{\[(.*?)\]})/g;
+    let match;
+
+    while ((match = mentionPattern.exec(content)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push({type: 'text',content: content.slice(lastIndex, match.index) });
+      }
+      if (match[2]) {
+        parts.push({ type: 'user', id: match[2] });
+      } else if (match[3]) {
+        parts.push({ type: 'channel', id: match[3] });
+      }
+      lastIndex = match.index + match[0].length;
+    }
+    if (lastIndex < content.length) {
+      parts.push({ type: 'text', content: content.slice(lastIndex) });
+    }
+    return parts;
+  }
+
+  private async resolveNames(parts: MessagePart[]): Promise<MessagePart[]> {
+    return Promise.all(parts.map(async part => {
+      if (part.type === 'text') return part;
+
+      const cacheKey = `${part.type}-${part.id}`;
+      let displayName = this.nameCache.get(cacheKey);
+
+      if (!displayName) {
+        if (part.type === 'user' && part.id) {
+          displayName = await this.userService.getUserName(part.id);
+        } else if (part.type === 'channel' && part.id) {
+          displayName = await this.channelService.getChannelNameById(part.id);
+        }
+        if (displayName) {
+          this.nameCache.set(cacheKey, displayName);
+        }
+      }
+
+      return {...part, displayName};
+    }));
+  } 
 }

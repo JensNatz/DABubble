@@ -7,19 +7,38 @@
     padding: 24px 16px;
     background-color: $white;
     width: 100%;
+    position: relative;
 
-    textarea {
+    .tag-selection-list {
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 0;
         width: 100%;
+        z-index: 1000;
+    }
+
+    .pseudo-input {
+        width: 100%;
+        height: 64px;
+        border: none;
+        outline: none;
+        overflow-y: auto;
     }
 
     .toolbar {
-        @include flex($justify: space-between);
+        @include flex($justify: space-between); 
+
+        .toolbar-left {
+            @include flex();
+            gap: 8px;
+        }
 
         .emoji-container {
+            @include flex();
             position: relative;
         }
 
-        .emoji-icon {
+        .toolbar-icon {
             cursor: pointer;
             @include rounded($all: 50%);
             padding: 4px;
