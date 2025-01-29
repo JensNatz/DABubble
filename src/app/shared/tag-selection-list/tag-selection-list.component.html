@@ -3,8 +3,8 @@
         {{ listHeader }}
     </div>
     <div class="tag-selection-list">
-        @for (tag of tags; track tag) {
-            <div class="tag-selection-list-item" (click)="onTagClick(tag)">
+        @for (tag of tags; track tag; let i = $index) {
+            <div class="tag-selection-list-item" (click)="onTagClick(i)">
                 @if (tag.avatar) {
                     <app-avatar [avatarId]="tag.avatar" size="small"></app-avatar>
                 }

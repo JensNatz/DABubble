@@ -13,7 +13,7 @@ import { log } from 'node:console';
 })
 export class TagSelectionListComponent implements OnChanges {
   @Input() type: 'user' | 'channel' = 'user';
-  @Output() tagSelected = new EventEmitter<{ id: string; name: string; avatar: string }>();
+  @Output() tagSelected = new EventEmitter<{ id: string; name: string; type: 'user' | 'channel' }>();
   
   // TODO: get current user id from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb'
@@ -38,11 +38,9 @@ export class TagSelectionListComponent implements OnChanges {
       await this.updateTagsWithUserData(userIds);
      } else {
       const channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(this.userId);
-      console.log(channels, 'channels');
       this.updateTagsWithChannelData(channels);
     }
   }
-
 
   async updateTagsWithUserData(userIds: string[]) {
     for (const userId of userIds) {
@@ -57,8 +55,8 @@ export class TagSelectionListComponent implements OnChanges {
     }
   }
 
-  onTagClick(tag: { id: string; name: string; avatar?: string }) {
-    this.tagSelected.emit({ id: tag.id, name: tag.name, avatar: tag.avatar || '' });
+  onTagClick(index: number) {
+    this.tagSelected.emit({ id: this.tags[index].id, name: this.tags[index].name, type: this.type });
   }
  
 }

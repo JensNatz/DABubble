@@ -8,7 +8,6 @@ import { ClickOutsideDirective } from '../../directives/click-outside.directive'
 import { MentionComponent } from '../mention/mention.component';
 
 
-
 @Component({
   selector: 'app-message-input',
   standalone: true,
@@ -34,6 +33,13 @@ export class MessageInputComponent {
   @Output() sendMessage = new EventEmitter<string>();
   @Output() cancelEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<string>();
+
+  ngOnInit() {
+    if(this.content !== '') {
+      console.log('this.content', this.content);
+    }
+    
+  }
 
 
   onInputChange() {
@@ -96,8 +102,12 @@ export class MessageInputComponent {
     }
   }
 
-  onTagSelected(tag: { id: string; name: string; avatar: string }) {
-    this.addUserTagToInput(tag.id, tag.name);
+  onTagSelected(tag: { id: string; name: string; type: 'user' | 'channel' }) {
+    if(tag.type === 'user') {
+      this.addUserTagToInput(tag.id, tag.name);
+    } else {
+      this.addChannelTagToInput(tag.id, tag.name);
+    }
     this.isTagSelectionListOpen = false;
   }
 
@@ -164,10 +174,12 @@ export class MessageInputComponent {
       }
     }
     if(event.key === '@') {
+      event.preventDefault();
       this.taglistType = 'user';
       this.isTagSelectionListOpen = true;
     }
     if(event.key === '#') {
+      event.preventDefault();
       this.taglistType = 'channel';
       this.isTagSelectionListOpen = true;
     }
