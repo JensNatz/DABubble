@@ -7,6 +7,7 @@ import { TagSelectionListComponent } from '../tag-selection-list/tag-selection-l
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { MentionComponent } from '../mention/mention.component';
 import { MessagePart } from '../../models/message-part';
+import { log } from 'console';
 
 @Component({
   selector: 'app-message-input',
@@ -26,6 +27,7 @@ export class MessageInputComponent implements AfterViewInit {
   taglistType: 'user' | 'channel' = 'user';
   private mentionCounter: number = 0;
   private mentionsCache: Array<{ type: 'user' | 'channel', content: string, id: string }> = [];
+  private lastRange: Range | null = null;
 
   @Input() placeholder: string | null = null;
   @Input() content: string = '';
@@ -64,12 +66,12 @@ export class MessageInputComponent implements AfterViewInit {
   }
 
   updateButtonStateBasedOnInput() {
-    const messageInputElement = document.getElementById('messageInput');
-     if (messageInputElement) {
-       const hasText = !!messageInputElement.textContent?.trim();
-       const hasMentions = messageInputElement.getElementsByTagName('app-mention').length > 0;
-       this.isSubmittingDisabled = !hasText && !hasMentions;
-     }
+    const inputElement = this.messageInput?.element.nativeElement;
+    if (inputElement) {
+      const hasText = !!inputElement.textContent?.trim();
+      const hasMentions = inputElement.getElementsByTagName('app-mention').length > 0;
+      this.isSubmittingDisabled = !hasText && !hasMentions;
+    }
   }
 
   onCancelEditClick() {
@@ -81,6 +83,10 @@ export class MessageInputComponent implements AfterViewInit {
   }
 
   onEmojiButtonClick() {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      this.lastRange = selection.getRangeAt(0);
+    }
     this.isEmojiPickerOpen = !this.isEmojiPickerOpen;
   }
 
@@ -91,30 +97,46 @@ export class MessageInputComponent implements AfterViewInit {
   }
 
   onEmojiSelected(event: { emoji: { native: string } }) {
-    this.content += ' ' + event.emoji.native + ' ';
+    if (this.messageInput) {
+      const inputElement = this.messageInput.element.nativeElement;
+      const emojiText = document.createTextNode(` ${event.emoji.native} `);
+      
+      if (this.lastRange && inputElement.contains(this.lastRange.commonAncestorContainer)) {
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(this.lastRange);
+        this.lastRange.insertNode(emojiText);
+        this.lastRange.setStartAfter(emojiText);
+        this.lastRange.collapse(true);
+      } else {
+        inputElement.appendChild(emojiText);
+      }
+      
+      this.updateButtonStateBasedOnInput();
+    }
     this.isEmojiPickerOpen = false;
+    this.lastRange = null;
   }
 
   private addTagToInput(id: string, name: string, type: 'user' | 'channel') {
-    //TODO diese funcution in zwei methoden aufteilen: 1. kompoente hinzufügen, 2.cursor ans ende
     if (this.messageInput) {
       const componentRef = this.messageInput.createComponent(MentionComponent);
       componentRef.setInput('type', type);
       componentRef.setInput('id', id);
       componentRef.setInput('displayName', name);
-      componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;  // Set the element ID directly
+      componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;
       this.mentionCounter++;
       componentRef.location.nativeElement.contentEditable = false;
-      this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
+
+      if (this.lastRange && this.messageInput.element.nativeElement.contains(this.lastRange.commonAncestorContainer)) {
+        this.lastRange.insertNode(componentRef.location.nativeElement);
+        this.lastRange.setStartAfter(componentRef.location.nativeElement);
+        this.lastRange.collapse(true);
+      } else {
+        this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
+      }
 
       this.mentionsCache.push({ type, content: name, id });
-      const element = componentRef.location.nativeElement;
-      const selection = window.getSelection();
-      const range = document.createRange();
-      range.setStartAfter(element);
-      range.collapse(true);
-      selection?.removeAllRanges();
-      selection?.addRange(range);
       this.updateButtonStateBasedOnInput();
     }
   }
@@ -182,6 +204,10 @@ export class MessageInputComponent implements AfterViewInit {
   }
 
   onTagUserIconClick() {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      this.lastRange = selection.getRangeAt(0);
+    }
     this.taglistType = 'user';
     this.isTagSelectionListOpen = !this.isTagSelectionListOpen;
   }
