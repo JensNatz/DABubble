@@ -24,7 +24,8 @@ export class AddChannelComponent {
     name: "",
     description: "",
     creator: "",
-    members: []
+    members: [],
+    type: 'group'
   }  
 
   constructor(public channelService: ChannelServiceService) {

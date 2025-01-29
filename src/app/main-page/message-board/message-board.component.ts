@@ -7,9 +7,9 @@ import { MessageInputComponent } from '../../shared/message-input/message-input.
 import { MessageService } from '../../services/firebase-services/message.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
-import { firstValueFrom } from 'rxjs';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
+import { AvatarComponent } from '../../shared/avatar/avatar.component';
 
 @Component({
   selector: 'app-message-board',
@@ -19,6 +19,7 @@ import { User } from '../../models/user';
     MessageComponent,
     TimeSeperatorComponent,
     MessageInputComponent,
+    AvatarComponent
   ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
@@ -28,8 +29,8 @@ export class MessageBoardComponent {
   channelId: string = '';
   channelName: string = '';
   userAvatar = '';
-  avatar = true;
-
+  channelType: string = '';
+  directMessagePartnerName: string = '';
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
@@ -42,24 +43,40 @@ export class MessageBoardComponent {
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
 
-  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      if (params['channelId']) {
-        this.channelId = params['channelId'];
-        this.loadChannelDetails();
+    this.channelService.currentChannel$.subscribe(channel => {
+      if (channel?.id) {
+        this.channelId = channel.id;
+        this.channelName = channel.name;
+        this.channelType = channel.type;
         this.loadMessages();
-        this.avatar = false;
-      }
 
-      if (params['userId']) {
-        this.channelId = params['userId'];
-        this.loadUserName();
-        this.loadMessages();
-        this.avatar = true;
+        if (this.channelType === 'direct' && channel.members) {
+          this.setDirectMessagePartnerData(channel.members);
+        }
       }
     });
+  }
+
+  get channelTitle() {
+    if (this.channelType === 'direct') {
+      return 'Direktnachricht an ' + this.directMessagePartnerName;
+    } else {
+      return '#' + this.channelName;
+    }
+  }
+
+  setDirectMessagePartnerData(members: string[]) {
+    const otherUserId = members.find(member => member !== this.userId);
+    if (otherUserId) {
+      this.userService.getUserById(otherUserId).subscribe((user: User) => {
+        this.userAvatar = user.avatar;
+        this.directMessagePartnerName = user.name;
+      });
+    } else {
+      alert('Das ist eine Nachricht aan den eigenloggenten Account');
+    }
   }
 
   loadUserName() {
@@ -67,14 +84,6 @@ export class MessageBoardComponent {
       this.channelName = user.name;
       this.userAvatar = user.avatar;
     });
-  }
-
-  loadChannelDetails() {
-    if (this.channelId) {
-      firstValueFrom(this.channelService.getChannelById(this.channelId)).then((channel) => {
-        this.channelName = channel.name;
-      });
-    }
   }
 
   loadMessages() {
@@ -106,19 +115,19 @@ export class MessageBoardComponent {
     if (content.trim() === '') {
       return;
     }
-    if (!this.channel || !this.channel.id) {
+    if (!this.channelId) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
       author: this.userId,
-      channelId: this.channel.id,
+      channelId: this.channelId,
       edited: false,
       parentMessageId: null
     };
 
-    this.messageService.postMessageToChannel(this.channel.id, message);
+    this.messageService.postMessageToChannel(this.channelId, message);
   }
 
   onSendReply(content: string) {
@@ -126,19 +135,19 @@ export class MessageBoardComponent {
       return;
     }
 
-    if (!this.channel || !this.channel.id) {
+    if (!this.channelId) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
       author: this.userId,
-      channelId: this.channel.id,
+      channelId: this.channelId,
       edited: false,
       parentMessageId: this.parentMessageId
     };
 
-   this.messageService.postReplyToMessage(this.channel.id, this.parentMessageId, message);
+    this.messageService.postReplyToMessage(this.channelId, this.parentMessageId, message);
   }
 
   handleRepliesClick(messageId: string) {
