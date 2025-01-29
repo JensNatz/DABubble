@@ -264,25 +264,25 @@
 }
 
 .name_plus_icon {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    display: inline-block;
+    white-space: nowrap;
     margin-bottom: 10px;
 
-    > img {
-        height: 50px !important;
-        width: 50px !important;
-    }
-
-    
-    > span {
-        display: inline-block;
-        white-space: nowrap;
+    div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
         padding: 4px 16px 4px 8px;
+        cursor: pointer;
 
         &:hover {
             @include rounded();
             background-color: $bg-color;
         }
+
+        >img {
+            height: 50px !important;
+            width: 50px !important;
+        }        
     }
 }
