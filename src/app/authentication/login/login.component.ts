@@ -6,12 +6,15 @@ import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { GoogleAuthenticationService } from '../../services/firebase-services/google-athentication.servive';
+import { LoginService } from '../../services/firebase-services/login-service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [InputFieldComponent, RegisterButtonComponent, FormsModule],
-  providers: [UserServiceService],
+  imports: [InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule],
+  providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })
@@ -24,8 +27,9 @@ export class LoginComponent {
   passwordInvalid: boolean = false;
   emailErrorMessage: string = ErrorMessages.emailInvalid;
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
+  
 
-  constructor(private userService: UserServiceService) {
+  constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService,private loginService: LoginService) {
     this.users = this.userService.getUsers();
   }
 
@@ -41,10 +45,11 @@ export class LoginComponent {
 
     if (!this.emailInvalid && !this.passwordInvalid) {
       try {
+        await this.loginService.login(this.email, this.password);
         const userExists = await this.userService.userExists(this.email, this.password);
         if (userExists) {
           console.log('Login erfolgreich');
-
+          
         } else {
           this.emailInvalid = true;
           this.passwordInvalid = true;
@@ -83,6 +88,10 @@ export class LoginComponent {
     await this.userService.sendPasswordResetEmail(this.email);
     console.log('password login');
     console.log(this.email);
+  }
+
+  signInWithGoogle() {
+    this.googleAuthService.signInWithGoogle();
   }
 
 }

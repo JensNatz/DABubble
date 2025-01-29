@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, updateDoc, docData, query, orderBy, addDoc, serverTimestamp, doc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc, updateDoc, docData, } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
-import { getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +46,28 @@ export class UserServiceService {
     }
   }
 
+  async registerUser(email: string, password: string, userData: Partial<User>): Promise<void> {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const firebaseUser = userCredential.user;
+
+      const newUser: User = {
+        id: firebaseUser.uid,
+        email: email,
+        name: userData.name || '',
+        avatar: userData.avatar || '',
+        password: password,
+        onlineStatusbar: userData.onlineStatusbar || 'offline'
+      };
+
+      await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);
+      console.log('User registered and added to Firestore:', firebaseUser.uid);
+    } catch (error) {
+      console.error('Error during user registration:', error);
+      throw error;
+    }
+  }
+
   async userExists(email: string, password: string): Promise<boolean> {
     try {
       const users = await firstValueFrom(this.getUsers());
@@ -67,7 +91,7 @@ export class UserServiceService {
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.auth, email);
-      console.log('Email gesendet');
+      console.log(email);
     } catch (err) {
       console.error('Error sending password reset email:', err);
     }

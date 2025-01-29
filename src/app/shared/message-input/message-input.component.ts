@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
 import { FormsModule } from '@angular/forms';
@@ -6,7 +6,8 @@ import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
 import { TagSelectionListComponent } from '../tag-selection-list/tag-selection-list.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { MentionComponent } from '../mention/mention.component';
-
+import { MessagePart } from '../../models/message-part';
+import { log } from 'console';
 
 @Component({
   selector: 'app-message-input',
@@ -15,7 +16,7 @@ import { MentionComponent } from '../mention/mention.component';
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
-export class MessageInputComponent {
+export class MessageInputComponent implements AfterViewInit {
   messageService: MessageService = inject(MessageService);
 
   @ViewChild('messageInput', { read: ViewContainerRef }) messageInput!: ViewContainerRef;
@@ -26,6 +27,7 @@ export class MessageInputComponent {
   taglistType: 'user' | 'channel' = 'user';
   private mentionCounter: number = 0;
   private mentionsCache: Array<{ type: 'user' | 'channel', content: string, id: string }> = [];
+  private lastRange: Range | null = null;
 
   @Input() placeholder: string | null = null;
   @Input() content: string = '';
@@ -34,25 +36,42 @@ export class MessageInputComponent {
   @Output() cancelEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<string>();
 
-  ngOnInit() {
-    if(this.content !== '') {
-      console.log('this.content', this.content);
+
+  async ngAfterViewInit() {
+    if (this.content !== '') {
+      this.mentionsCache = [];
+      this.mentionCounter = 0;
+      const parsedParts = await this.messageService.parseMessageContent(this.content);
+      const renderedComponents = this.messageService.renderMessagePartsInContainer(parsedParts, this.messageInput);
+      this.fillMentionsCacheBasedOnMessageInput(renderedComponents);
+      this.updateButtonStateBasedOnInput();
     }
-    
   }
 
+  fillMentionsCacheBasedOnMessageInput(renderedComponents: Array<{component: any, part: MessagePart}>) {
+    renderedComponents.forEach(({part}) => {
+      if (part.type === 'user' || part.type === 'channel') {
+        this.mentionsCache.push({
+          type: part.type,
+          content: part.displayName || '',
+          id: part.id || ''
+        });
+        this.mentionCounter++;
+      }
+    });
+  }
 
   onInputChange() {
     this.updateButtonStateBasedOnInput(); 
   }
 
   updateButtonStateBasedOnInput() {
-    const messageInputElement = document.getElementById('messageInput');
-     if (messageInputElement) {
-       const hasText = !!messageInputElement.textContent?.trim();
-       const hasMentions = messageInputElement.getElementsByTagName('app-mention').length > 0;
-       this.isSubmittingDisabled = !hasText && !hasMentions;
-     }
+    const inputElement = this.messageInput?.element.nativeElement;
+    if (inputElement) {
+      const hasText = !!inputElement.textContent?.trim();
+      const hasMentions = inputElement.getElementsByTagName('app-mention').length > 0;
+      this.isSubmittingDisabled = !hasText && !hasMentions;
+    }
   }
 
   onCancelEditClick() {
@@ -60,10 +79,14 @@ export class MessageInputComponent {
   }
 
   onSaveEditClick() {
-    this.saveEdit.emit(this.content);
+    this.emitMessageToParent();
   }
 
   onEmojiButtonClick() {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      this.lastRange = selection.getRangeAt(0);
+    }
     this.isEmojiPickerOpen = !this.isEmojiPickerOpen;
   }
 
@@ -74,30 +97,46 @@ export class MessageInputComponent {
   }
 
   onEmojiSelected(event: { emoji: { native: string } }) {
-    this.content += ' ' + event.emoji.native + ' ';
+    if (this.messageInput) {
+      const inputElement = this.messageInput.element.nativeElement;
+      const emojiText = document.createTextNode(` ${event.emoji.native} `);
+      
+      if (this.lastRange && inputElement.contains(this.lastRange.commonAncestorContainer)) {
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(this.lastRange);
+        this.lastRange.insertNode(emojiText);
+        this.lastRange.setStartAfter(emojiText);
+        this.lastRange.collapse(true);
+      } else {
+        inputElement.appendChild(emojiText);
+      }
+      
+      this.updateButtonStateBasedOnInput();
+    }
     this.isEmojiPickerOpen = false;
+    this.lastRange = null;
   }
 
   private addTagToInput(id: string, name: string, type: 'user' | 'channel') {
-    //TODO diese funcution in zwei methoden aufteilen: 1. kompoente hinzufügen, 2.cursor ans ende
     if (this.messageInput) {
       const componentRef = this.messageInput.createComponent(MentionComponent);
       componentRef.setInput('type', type);
       componentRef.setInput('id', id);
       componentRef.setInput('displayName', name);
-      componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;  // Set the element ID directly
+      componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;
       this.mentionCounter++;
       componentRef.location.nativeElement.contentEditable = false;
-      this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
+
+      if (this.lastRange && this.messageInput.element.nativeElement.contains(this.lastRange.commonAncestorContainer)) {
+        this.lastRange.insertNode(componentRef.location.nativeElement);
+        this.lastRange.setStartAfter(componentRef.location.nativeElement);
+        this.lastRange.collapse(true);
+      } else {
+        this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
+      }
 
       this.mentionsCache.push({ type, content: name, id });
-      const element = componentRef.location.nativeElement;
-      const selection = window.getSelection();
-      const range = document.createRange();
-      range.setStartAfter(element);
-      range.collapse(true);
-      selection?.removeAllRanges();
-      selection?.addRange(range);
       this.updateButtonStateBasedOnInput();
     }
   }
@@ -129,17 +168,24 @@ export class MessageInputComponent {
       const parsedMessage = this.parseMessageFromContentPartsForDatabase();
       if (parsedMessage !== '') {
         this.sendMessage.emit(parsedMessage);
-        pseudoInput.innerHTML = '';
-        this.mentionsCache = [];
-        this.mentionCounter = 0;
+        this.resetInputField();
       }
+    }
+  }
+
+  private resetInputField() {
+    const pseudoInput = document.getElementById('messageInput');
+    if (pseudoInput) {
+      pseudoInput.innerHTML = '';
+      this.mentionsCache = [];
+      this.mentionCounter = 0;
+      this.updateButtonStateBasedOnInput();
     }
   }
 
   private parseMessageFromContentPartsForDatabase() {
     const messageInputElement = document.getElementById('messageInput');
     if (!messageInputElement) return '';
-
     return Array.from(messageInputElement.childNodes)
       .map(part => {
         if (part.nodeType === Node.TEXT_NODE) {
@@ -158,6 +204,10 @@ export class MessageInputComponent {
   }
 
   onTagUserIconClick() {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      this.lastRange = selection.getRangeAt(0);
+    }
     this.taglistType = 'user';
     this.isTagSelectionListOpen = !this.isTagSelectionListOpen;
   }

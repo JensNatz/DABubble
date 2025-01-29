@@ -4,11 +4,19 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 import { ImprintComponent } from './imprint/imprint.component';
 import { RegisterComponent } from './authentication/register/register.component';
 import { AvatarComponent } from './authentication/avatar/avatar.component';
+import { RestePasswordEmailComponent } from './authentication/reset-password/reste-password-email/reste-password-email.component';
 
 export const routes: Routes = [
   { path: '', component: AuthenticationComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'register/avatar', component: AvatarComponent },
-  { path: 'imprint', component: ImprintComponent },
-  { path: 'main', component: MainPageComponent }
+  { path: 'resetpw', component: RestePasswordEmailComponent },
+  {
+    path: 'chat',
+    component: MainPageComponent
+  },
+  {
+    path: 'imprint',
+    component: ImprintComponent
+  }
 ];
