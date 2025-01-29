@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collectionData, collection, doc, onSnapshot, addDoc, updateDoc, deleteDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, doc, docData, onSnapshot, addDoc, updateDoc, deleteDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ export class ChannelServiceService {
 
   channels;
   users;
+  id = "";
 
   firestore: Firestore = inject(Firestore);
 
@@ -27,10 +29,17 @@ export class ChannelServiceService {
     }
   }
 
+  getChannelById(channelId: string): Observable<Channel> {
+    const channelDocRef = doc(this.firestore, `channels/${channelId}`);
+    return docData(channelDocRef) as Observable<Channel>;
+  }
+
   async addNewChanel(item: Channel) {
     try {
       const docRef = await addDoc(this.getChannelsRef(), item);
-      // console.log('Document ID:', docRef.id);
+      this.id = docRef.id;
+      await updateDoc(docRef, { id: this.id });
+      
     } catch (err) {
       console.error('Error adding document:', err);
     }

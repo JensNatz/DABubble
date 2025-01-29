@@ -5,8 +5,12 @@ import { MessageComponent } from '../message/message.component';
 import { Message } from '../../models/message';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { MessageService } from '../../services/firebase-services/message.service';
-import { Channel } from '../../models/channel';
+import { ActivatedRoute } from '@angular/router';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
+import { firstValueFrom } from 'rxjs';
+import { UserServiceService } from '../../services/firebase-services/user-service.service';
+import { User } from '../../models/user';
+
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -20,20 +24,62 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
   styleUrl: './message-board.component.scss'
 })
 export class MessageBoardComponent {
-  
+
+  channelId: string = '';
+  channelName: string = '';
+  userAvatar = '';
+  avatar = true;
+
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
-  //todo: this needs to be input from parent component
-  channel: Channel | null = null;
+
   messageService: MessageService = inject(MessageService);
+  channelService: ChannelServiceService = inject(ChannelServiceService);
+  userService: UserServiceService = inject(UserServiceService);
+
   messages: Message[] = [];
   threadMessages: Message[] = [];
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
-  constructor() {
-    this.channel = inject(ChannelServiceService).currentChannel;
-    if (this.channel && this.channel.id) {
-      this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channel.id).subscribe((messages) => {
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['channelId']) {
+        this.channelId = params['channelId'];
+        this.loadChannelDetails();
+        this.loadMessages();
+        this.avatar = false;
+      }
+
+      if (params['userId']) {
+        this.channelId = params['userId'];
+        this.loadUserName();
+        this.loadMessages();
+        this.avatar = true;
+      }
+    });
+  }
+
+  loadUserName() {
+    this.userService.getUserById(this.channelId).subscribe((user: User) => {
+      this.channelName = user.name;
+      this.userAvatar = user.avatar;
+    });
+  }
+
+  loadChannelDetails() {
+    if (this.channelId) {
+      firstValueFrom(this.channelService.getChannelById(this.channelId)).then((channel) => {
+        this.channelName = channel.name;
+      });
+    }
+  }
+
+  loadMessages() {
+    if (this.channelId) {
+      this.messageService.getMessagesFromChannelOrderByTimestampDESC(this.channelId).subscribe((messages) => {
         this.messages = messages as Message[];
       });
     }

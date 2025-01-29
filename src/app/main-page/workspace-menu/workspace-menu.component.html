@@ -37,7 +37,7 @@
         <div *ngIf="isOpenChannelListe">
             <div class="channels">
                 <div class="channel_name" *ngFor="let channel of (this.channelService.channels | async)">
-                    <p><b>#</b>{{ channel['name'] }}</p>
+                    <p (click)="switchToChannel(channel['id'])"><b>#</b>{{ channel['name'] }}</p>
                 </div>
             </div>
             <div class="add_channel" (click)="openAddChannel()">
@@ -57,8 +57,10 @@
             @for (user of (this.channelService.users | async); track user) {
             <div>
                 <div class="name_plus_icon">
-                    <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
-                    <span>{{user['name']}}</span>
+                    <div>
+                        <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
+                        <span  (click)="switchToUser(user['id'])">{{user['name']}}</span>
+                    </div>
                 </div>
             </div>
             }
