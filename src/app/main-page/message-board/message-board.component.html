@@ -25,8 +25,8 @@
         <div class="message-board-header">
             <div class="header-left">
                 <h2>Thread</h2>
-                <span>
-                    # Entwicklerteam
+                <span *ngIf="channelType === 'group'">
+                    #{{ channelName }}
                 </span>
             </div>
             <div class="header-right">
