@@ -52,6 +52,7 @@ export class MessageBoardComponent {
         this.channelName = channel.name;
         this.channelType = channel.type;
         this.loadMessages();
+        this.isThreadOpen = false;
 
         if (this.channelType === 'direct' && channel.members) {
           this.setDirectMessagePartnerData(channel.members);

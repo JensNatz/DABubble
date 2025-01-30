@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,8 @@ import { TagSelectionListComponent } from '../tag-selection-list/tag-selection-l
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { MentionComponent } from '../mention/mention.component';
 import { MessagePart } from '../../models/message-part';
+import { Subscription } from 'rxjs';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 
 @Component({
   selector: 'app-message-input',
@@ -15,8 +17,10 @@ import { MessagePart } from '../../models/message-part';
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
-export class MessageInputComponent implements AfterViewInit {
+export class MessageInputComponent implements AfterViewInit, OnDestroy {
   messageService: MessageService = inject(MessageService);
+  channelService: ChannelServiceService = inject(ChannelServiceService);
+  private channelSubscription: Subscription;
 
   @ViewChild('messageInput', { read: ViewContainerRef }) messageInput!: ViewContainerRef;
 
@@ -35,8 +39,26 @@ export class MessageInputComponent implements AfterViewInit {
   @Output() cancelEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<string>();
 
+  constructor() {
+    this.channelSubscription = this.channelService.currentChannel$.subscribe(() => {
+      if (this.messageInput) {
+        const inputElement = this.messageInput.element.nativeElement;
+        inputElement.innerHTML='';
+        inputElement.focus();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.channelSubscription) {
+      this.channelSubscription.unsubscribe();
+    }
+  }
 
   async ngAfterViewInit() {
+    const inputElement = this.messageInput.element.nativeElement;
+    inputElement.focus();
+    console.log(inputElement, 'inputElement');
     if (this.content !== '') {
       this.mentionsCache = [];
       this.mentionCounter = 0;
