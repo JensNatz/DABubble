@@ -9,6 +9,7 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
+import { LoginService } from '../../services/firebase-services/login-service';
 
 @Component({
   selector: 'app-message-board',
@@ -36,6 +37,7 @@ export class MessageBoardComponent {
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
+  loginService: LoginService = inject(LoginService);
 
   messages: Message[] = [];
   threadMessages: Message[] = [];
