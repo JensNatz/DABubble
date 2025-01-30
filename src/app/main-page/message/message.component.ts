@@ -30,15 +30,13 @@ export class MessageComponent implements OnInit, AfterViewInit {
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
 
-
-  messageContentParsed: string = '';
   authorName: string = 'Unknown User';
   isOwn: boolean = false;
   isEditing: boolean = false;
   displayEmojiPicker: boolean = false;
   // TODO: get user id from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
-  // TODO: get channel id from ???
+  // TODO: get channel id from channel service
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   avatarId: string = '0';
   lastReplyTimestamp: number | null = null;
@@ -49,10 +47,9 @@ export class MessageComponent implements OnInit, AfterViewInit {
   constructor(private userService: UserService) { }
 
   async ngOnInit() {
-    this.authorName = await this.userService.getUserName(this.message.author);
+    this.authorName = (await this.userService.getUserName(this.message.author)) || 'Unknown User';
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
-    this.messageContentParsed = this.message.content;
     if (this.message.author === this.userId) {
       this.isOwn = true;
     }
@@ -186,7 +183,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
         users: await Promise.all(
           (reaction[1] as string[]).map(async (userId: string) => ({
             id: userId,
-            name: userId === this.userId ? 'Du' : await this.userService.getUserName(userId)
+            name: userId === this.userId ? 'Du' : (await this.userService.getUserName(userId)) || 'Unknown User'
           }))
         )
       }))

@@ -32,7 +32,7 @@ export class AddChannelComponent {
 
   onSubmit(ngForm: NgForm) {
     if(ngForm.valid && ngForm.submitted) {
-      this.channelService.addNewChanel(this.channel);
+      this.channelService.addNewChannel(this.channel);
       this.closeFunction();
     }   
   }

@@ -141,9 +141,15 @@ export class MessageService {
 
       if (!displayName) {
         if (part.type === 'user' && part.id) {
-          displayName = await this.userService.getUserName(part.id);
+          const userName = await this.userService.getUserName(part.id);
+          displayName = userName || 'Unknown User';
+          part.available = !!userName;
         } else if (part.type === 'channel' && part.id) {
-          displayName = await this.channelService.getChannelNameById(part.id);
+          const channelName = await this.channelService.getChannelNameById(part.id);
+          displayName = channelName || 'Unknown Channel';
+          // TODO: get userId from auth service
+          const isMember = await this.channelService.isUserMemberOfChannel('YAJxDG5vwYHoCbYjwFhb', part.id);
+          part.available = !!channelName && isMember;
         }
         if (displayName) {
           this.nameCache.set(cacheKey, displayName);
@@ -168,6 +174,7 @@ export class MessageService {
         componentRef.setInput('type', part.type);
         componentRef.setInput('id', part.id);
         componentRef.setInput('displayName', part.displayName);
+        componentRef.setInput('available', part.available);
         componentRef.location.nativeElement.contentEditable = false;
         componentRef.location.nativeElement.id = `mentionid${mentionCounter++}`;
         container.element.nativeElement.appendChild(componentRef.location.nativeElement);

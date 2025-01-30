@@ -10,7 +10,6 @@ export class ChannelServiceService {
 
   channels;
   users;
-  id = "";
 
   firestore: Firestore = inject(Firestore);
 
@@ -48,11 +47,10 @@ export class ChannelServiceService {
     return docData(channelDocRef) as Observable<Channel>;
   }
 
-  async addNewChanel(item: Channel) {
+  async addNewChannel(item: Channel) {
     try {
       const docRef = await addDoc(this.getChannelsRef(), item);
-      this.id = docRef.id;
-      await updateDoc(docRef, { id: this.id });
+      await updateDoc(docRef, { id: docRef.id });
       
     } catch (err) {
       console.error('Error adding document:', err);
@@ -75,20 +73,20 @@ export class ChannelServiceService {
     return doc(collection(this.firestore, userId), docId);
   }
 
-  async getChannelNameById(channelId: string) {
+  async getChannelNameById(channelId: string): Promise<string | null> {
     if (this.channelNameCache.has(channelId)) {
-      return this.channelNameCache.get(channelId);
+      return this.channelNameCache.get(channelId)!;
     }
-    const channelName = await getDoc(doc(this.firestore, 'channels', channelId))
-      .then(doc => doc.data()?.[`name`]);
+    
+    const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
+    const channelName = channelDoc.data()?.[`name`];
     
     if (channelName) {
       this.channelNameCache.set(channelId, channelName);
-    } else {
-      return 'Unknown Channel';
+      return channelName;
     }
-
-    return channelName;
+    
+    return null; 
   }
 
   async getAllGroupChannelsWhereUserIsMember(userId: string) {
@@ -101,8 +99,9 @@ export class ChannelServiceService {
   }
 
   async setDirectMessageChannel(userId: string) {
+    //TODO: get logged in user id from auth service
     const loggedInUserId = 'lMLhqCH6j71UrMluL6Ob'; // Hardcoded for now
-    const members = [userId, loggedInUserId].sort(); // Sort to ensure consistent order
+    const members = [userId, loggedInUserId].sort(); 
     const channels = await getDocs(query(
       collection(this.firestore, 'channels'),
       where('type', '==', 'direct'),
@@ -118,7 +117,6 @@ export class ChannelServiceService {
         members: channelData[`members`],
         type: channelData[`type`]
       };
-     // console.log(channelData);
       this.currentChannel = channel;
     } else {
      const newChannel = await this.createNewDirectMessageChannel(members);
@@ -142,5 +140,14 @@ export class ChannelServiceService {
     const channelSnap = await getDoc(channelRef);
     return { id: channelRef.id, ...channelSnap.data() } as Channel;
   }
+
+  async isUserMemberOfChannel(userId: string, channelId: string): Promise<boolean> {
+    const channel = await getDoc(doc(this.firestore, 'channels', channelId));
+    const channelData = channel.data();
+    if (!channelData) return false;
+    return channelData['members'].includes(userId);
+  }
+  
 }
+
 

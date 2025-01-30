@@ -58,7 +58,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   async ngAfterViewInit() {
     const inputElement = this.messageInput.element.nativeElement;
     inputElement.focus();
-    console.log(inputElement, 'inputElement');
     if (this.content !== '') {
       this.mentionsCache = [];
       this.mentionCounter = 0;

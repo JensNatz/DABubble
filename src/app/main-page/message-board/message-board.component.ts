@@ -10,6 +10,7 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { LoginService } from '../../services/firebase-services/login-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-message-board',
@@ -44,9 +45,12 @@ export class MessageBoardComponent {
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
 
+  private channelSubscription: Subscription = new Subscription();
+  private userSubscription: Subscription = new Subscription();
+  private loadUserSubscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.channelService.currentChannel$.subscribe(channel => {
+    this.channelSubscription = this.channelService.currentChannel$.subscribe(channel => {
       if (channel?.id) {
         this.channelId = channel.id;
         this.channelName = channel.name;
@@ -61,6 +65,12 @@ export class MessageBoardComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.channelSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
+    this.loadUserSubscription.unsubscribe();
+  }
+
   get channelTitle() {
     if (this.channelType === 'direct') {
       return 'Direktnachricht an ' + this.directMessagePartnerName;
@@ -72,17 +82,19 @@ export class MessageBoardComponent {
   setDirectMessagePartnerData(members: string[]) {
     const otherUserId = members.find(member => member !== this.userId);
     if (otherUserId) {
-      this.userService.getUserById(otherUserId).subscribe((user: User) => {
+      this.userSubscription.unsubscribe();
+      this.userSubscription = this.userService.getUserById(otherUserId).subscribe((user: User) => {
         this.userAvatar = user.avatar;
         this.directMessagePartnerName = user.name;
       });
     } else {
-      alert('Das ist eine Nachricht aan den eigenloggenten Account');
+      alert('Das ist eine Nachricht an den eingeloggten Account');
     }
   }
 
   loadUserName() {
-    this.userService.getUserById(this.channelId).subscribe((user: User) => {
+    this.loadUserSubscription.unsubscribe();
+    this.loadUserSubscription = this.userService.getUserById(this.channelId).subscribe((user: User) => {
       this.channelName = user.name;
       this.userAvatar = user.avatar;
     });
