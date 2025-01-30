@@ -17,6 +17,14 @@
         z-index: 1000;
     }
 
+    .placeholder {
+        position: absolute;
+        top: 24px;
+        left: 16px;
+        color: $gray;
+        pointer-events: none;
+    }
+
     .pseudo-input {
         width: 100%;
         height: 64px;

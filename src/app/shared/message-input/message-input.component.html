@@ -5,7 +5,11 @@
         (tagSelected)="onTagSelected($event)"
     >
     </app-tag-selection-list>
-    <div contenteditable="true" class="pseudo-input" #messageInput id="messageInput" (input)="onInputChange()" (keydown)="onKeyDown($event)" >
+    <span *ngIf="isSubmittingDisabled" class="placeholder" contenteditable="false">
+        {{placeholder}}
+    </span>
+    <div contenteditable="true" class="pseudo-input" #messageInput (input)="onInputChange()" (keydown)="onKeyDown($event)" >
+       
     </div>
     <div class="toolbar">
         <div class="toolbar-left">
