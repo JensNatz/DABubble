@@ -11,7 +11,6 @@ import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
-
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -31,9 +30,8 @@ export class MessageBoardComponent {
   channelName: string = '';
   userAvatar = '';
   channelType: string = '';
+  channelDescription: string = '';
   directMessagePartnerName: string = '';
-  // TODO: get userId from auth service
-  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -55,6 +53,7 @@ export class MessageBoardComponent {
         this.channelId = channel.id;
         this.channelName = channel.name;
         this.channelType = channel.type;
+        this.channelDescription = channel.description;
         this.loadMessages();
         this.isThreadOpen = false;
 
@@ -80,7 +79,7 @@ export class MessageBoardComponent {
   }
 
   setDirectMessagePartnerData(members: string[]) {
-    const otherUserId = members.find(member => member !== this.userId);
+    const otherUserId = members.find(member => member !== this.loginService.currentUserValue?.id);
     if (otherUserId) {
       this.userSubscription.unsubscribe();
       this.userSubscription = this.userService.getUserById(otherUserId).subscribe((user: User) => {
@@ -129,18 +128,17 @@ export class MessageBoardComponent {
     if (content.trim() === '') {
       return;
     }
-    if (!this.channelId) {
+    if (!this.channelId || !this.loginService.currentUserValue?.id) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
-      author: this.userId,
+      author: this.loginService.currentUserValue.id,
       channelId: this.channelId,
       edited: false,
       parentMessageId: null
     };
-
     this.messageService.postMessageToChannel(this.channelId, message);
   }
 
@@ -149,13 +147,13 @@ export class MessageBoardComponent {
       return;
     }
 
-    if (!this.channelId) {
+    if (!this.channelId || !this.loginService.currentUserValue?.id) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
-      author: this.userId,
+      author: this.loginService.currentUserValue?.id,
       channelId: this.channelId,
       edited: false,
       parentMessageId: this.parentMessageId

@@ -6,6 +6,7 @@ import { ChannelServiceService } from './channel-service.service';
 import { MessagePart } from '../../models/message-part';
 import { ViewContainerRef } from '@angular/core';
 import { MentionComponent } from '../../shared/mention/mention.component';
+import { LoginService } from './login-service';
 
 
 @Injectable({
@@ -16,6 +17,7 @@ export class MessageService {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
+  loginService: LoginService = inject(LoginService);
   private nameCache = new Map<string, string>();
   
   constructor() { }
@@ -147,9 +149,13 @@ export class MessageService {
         } else if (part.type === 'channel' && part.id) {
           const channelName = await this.channelService.getChannelNameById(part.id);
           displayName = channelName || 'Unknown Channel';
-          // TODO: get userId from auth service
-          const isMember = await this.channelService.isUserMemberOfChannel('YAJxDG5vwYHoCbYjwFhb', part.id);
-          part.available = !!channelName && isMember;
+          const currentUserId = this.loginService.currentUserValue?.id;
+          if (currentUserId) {
+            const isMember = await this.channelService.isUserMemberOfChannel(currentUserId, part.id);
+            part.available = !!channelName && isMember;
+          } else {
+            part.available = false;
+          }
         }
         if (displayName) {
           this.nameCache.set(cacheKey, displayName);

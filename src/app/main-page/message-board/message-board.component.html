@@ -7,12 +7,28 @@
             </div>
           </div>
         <div class="message-board-content">
-            @for (message of messages; track message.id; let i = $index) {
+            @if (messages.length === 0) {
+                <div class="no-messages-container">
+                    @if (channelType === 'group') {
+                        <h2>{{channelTitle}}</h2>
+                        <p *ngIf="channelDescription !== ''" class="channel-description">Thema: {{channelDescription}}</p>
+                        <p>Es gibt noch keine Nachrichten in diesem Channel. Schreibe eine erste Nachricht!</p>
+                    } @else if (channelType === 'direct') {
+                        <div class="no-messages-container-direct">
+                            <app-avatar [avatarId]="userAvatar" [size]="'small'"></app-avatar>
+                            <h2>{{directMessagePartnerName}}</h2>
+                        </div>
+                        <p>Diese Unterhaltung findet nur zwischen dir und <span class="partner-name">&#64;{{directMessagePartnerName}}</span> statt.</p>
+                    }
+                </div>
+            } @else {
+                @for (message of messages; track message.id; let i = $index) {
 
-            <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"></app-message>
-            @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
-            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-            }
+                    <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"></app-message>
+                    @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
+                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                    }
+                }
             }
         </div>
         <div class="message-input-container">

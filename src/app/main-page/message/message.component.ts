@@ -9,6 +9,7 @@ import { EmojiPickerComponent } from '../../shared/emoji-picker/emoji-picker.com
 import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.component";
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
+import { LoginService } from '../../services/firebase-services/login-service';
 
 @Component({
   selector: 'app-message',
@@ -27,6 +28,7 @@ import { ClickOutsideDirective } from '../../directives/click-outside.directive'
 export class MessageComponent implements OnInit, AfterViewInit {
   @ViewChild('messageContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
   messageService: MessageService = inject(MessageService);
+  loginService: LoginService = inject(LoginService);
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
 
@@ -34,8 +36,6 @@ export class MessageComponent implements OnInit, AfterViewInit {
   isOwn: boolean = false;
   isEditing: boolean = false;
   displayEmojiPicker: boolean = false;
-  // TODO: get user id from auth service
-  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   // TODO: get channel id from channel service
   channelId: string = '9kacAebjb6GEQZJC7jFL';
   avatarId: string = '0';
@@ -50,7 +50,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
     this.authorName = (await this.userService.getUserName(this.message.author)) || 'Unknown User';
     this.avatarId = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
-    if (this.message.author === this.userId) {
+    if (this.message.author === this.loginService.currentUserValue?.id) {
       this.isOwn = true;
     }
     if (this.message.parentMessageId === null) {
@@ -146,9 +146,11 @@ export class MessageComponent implements OnInit, AfterViewInit {
       this.reactionWithNames.push(reaction);
     }
 
-    if (!reaction.users.some(user => user.id === this.userId)) {
-      reaction.users.push({ id: this.userId, name: 'Du' });
-      this.messageService.addReactionToMessage(this.message.id, reactionType, this.userId);
+    if (!reaction.users.some(user => user.id === this.loginService.currentUserValue?.id)) {
+      if (this.loginService.currentUserValue?.id) {
+        reaction.users.push({ id: this.loginService.currentUserValue?.id, name: 'Du' });
+        this.messageService.addReactionToMessage(this.message.id, reactionType, this.loginService.currentUserValue?.id);
+      }
     }
   }
 
@@ -156,16 +158,18 @@ export class MessageComponent implements OnInit, AfterViewInit {
     if (!this.message.id) return;
     let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
 
-    if (reaction?.users.some(user => user.id === this.userId)) {
-      reaction.users = reaction.users.filter(user => user.id !== this.userId);
-      this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.userId);
+    if (reaction?.users.some(user => user.id === this.loginService.currentUserValue?.id)) {
+      if (this.loginService.currentUserValue?.id) {
+        reaction.users = reaction.users.filter(user => user.id !== this.loginService.currentUserValue?.id);
+        this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.loginService.currentUserValue?.id);
+      }
     }
   }
 
   handleReactionToggle(reactionType: string) {
     if (!this.message.id) return;
     let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
-    const hasReaction = reaction?.users.some(user => user.id === this.userId) ?? false;
+    const hasReaction = reaction?.users.some(user => user.id === this.loginService.currentUserValue?.id) ?? false;
 
     if (hasReaction) {
       this.removeReaction(reactionType);
@@ -183,7 +187,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
         users: await Promise.all(
           (reaction[1] as string[]).map(async (userId: string) => ({
             id: userId,
-            name: userId === this.userId ? 'Du' : (await this.userService.getUserName(userId)) || 'Unknown User'
+            name: userId === this.loginService.currentUserValue?.id ? 'Du' : (await this.userService.getUserName(userId)) || 'Unknown User'
           }))
         )
       }))
