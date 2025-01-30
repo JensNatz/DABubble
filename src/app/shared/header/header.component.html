@@ -7,8 +7,8 @@
         </div>
 
         <div class="user_name">
-            <h2>Frederick Beck</h2>
-            <img class="user_foto" src="assets/img/Property 1=Default.png">
+            <h2>{{ userName }}</h2>
+            <img class="user_foto avatar" src="assets/img/avatar{{ userAvatar }}.svg">
             <img class="arrow_down" src="assets/img/keyboard_arrow_down.png" (click)="openProfilMenu()">
         </div>
 
@@ -25,20 +25,22 @@
                 <img class="close_profil" src="assets/img/close.svg" (click)="closeProfil()">
             </div>
             <div class="profil_avatar">
-                <img src="assets/img/Property 1=Default.png">
+                <img class="avatar" src="assets/img/avatar{{ userAvatar }}.svg">
             </div>
             <div class="user_name_status">
-                <div class="user_name">
-                    <h1>Frederick Beck</h1>
+                <div class="user_name_profil">
+                    <h1>{{ userName }}</h1>
                     <span>bearbeiten</span>
                 </div>
-                <p>Status</p>
+                <p>{{ userStatus }}</p>
             </div>
+            
             <div class="email_addresse">
                 <div>
                     <img src="assets/img/mail666.svg">
                     <span>E-mail-Adresse</span>
                 </div>
+                <p>{{ userEmail }}</p>
             </div>
         </div>
     </div>

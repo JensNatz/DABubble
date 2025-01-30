@@ -4,7 +4,6 @@
 
 .header {
     height: 120px;
-    // max-width: 1440px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -13,7 +12,6 @@
 }
 
 .content {
-    // max-width: 1440px;
     width: 100%;
     height: 120px;
     display: flex;
@@ -163,12 +161,13 @@
     }
 }
 
-.user_name {
+.user_name_profil {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
     margin-bottom: 15px;
+    width: 100%;
     
     h1 {
         font-size: 32px;
@@ -178,14 +177,28 @@
 
     span {
         font-size: 18px;
+        color: $purple-2;
+        font-weight: 400;
+
+        &:hover {
+            font-weight: 700;
+        }
     }
 }
 
 .email_addresse {
     margin-top: 40px;
-    height: 30px;
     display: flex;
     font-size: 20px;
+    display: flex;
+    flex-direction: column;
+
+    p {
+        color: $purple-1;
+        font-size: 18px;
+        margin-top: 20px;
+        margin-left: 50px;
+    }
 
     img {
         margin-right: 20px;
