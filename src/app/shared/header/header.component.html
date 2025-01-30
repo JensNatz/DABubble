@@ -30,11 +30,33 @@
             <div class="user_name_status">
                 <div class="user_name_profil">
                     <h1>{{ userName }}</h1>
-                    <span>bearbeiten</span>
+                    <span (click)="openEditProfil()">bearbeiten</span>
                 </div>
                 <p>{{ userStatus }}</p>
             </div>
-            
+
+
+
+            <div class="modal-overlay no-background" *ngIf="showEditProfil" (click)="closeEditProfil()"></div>
+            <div class="modal modal_profil modal_profil_edit" *ngIf="showEditProfil">
+                <h1> Dein Profil bearbeiten</h1>
+                <img class="close_profil" src="assets/img/close.svg" (click)="closeEditProfil()">
+                <div class="profil_avatar">
+                    <img class="avatar" src="assets/img/avatar{{ userAvatar }}.svg">
+                </div>
+                <div>
+                    <img src="assets/img/account_circle.svg">
+                    <h2>Vollständiger Name</h2>
+                </div>
+                <input type="text">
+                <div>
+                    <button>Abbrechen</button>
+                    <button>Speichern</button>
+                </div>
+            </div>
+
+
+
             <div class="email_addresse">
                 <div>
                     <img src="assets/img/mail666.svg">

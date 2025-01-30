@@ -15,6 +15,7 @@ export class HeaderComponent {
 
   public showProfilMenu: boolean = false;
   public showProfil: boolean = false;
+  public showEditProfil: boolean = false;
 
   userName: string = '';
   userAvatar: string = '';
@@ -47,14 +48,23 @@ export class HeaderComponent {
     this.showProfilMenu = false;
   }
 
-
+  
   openProfil() {
     this.showProfil = true;
   }
-
-
+  
+  
   closeProfil() {
     this.showProfil = false;
   }
+  
+  openEditProfil() {
+    this.showEditProfil = true;
+  }
 
+
+  closeEditProfil() {
+    this.showEditProfil = false;
+    this.closeProfil();
+  }
 }
