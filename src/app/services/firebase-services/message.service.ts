@@ -7,6 +7,7 @@ import { MessagePart } from '../../models/message-part';
 import { ViewContainerRef } from '@angular/core';
 import { MentionComponent } from '../../shared/mention/mention.component';
 import { LoginService } from './login-service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Injectable({
@@ -18,9 +19,7 @@ export class MessageService {
   userService: UserService = inject(UserService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   loginService: LoginService = inject(LoginService);
-  private nameCache = new Map<string, string>();
-  
-  constructor() { }
+  private tagNameCache = new Map<string, string>();
 
   getMessagesFromChannelOrderByTimestampDESC(channelId: string) {
     const messagesRef = collection(this.firestore, 'messages');
@@ -58,7 +57,7 @@ export class MessageService {
   private async updateParentMessageMetadata(parentMessageId: string, replyTimestamp: number) {
     const parentMessageRef = doc(this.firestore, 'messages', parentMessageId);
     const parentDoc = await getDoc(parentMessageRef);
-    
+
     if (!parentDoc.exists()) {
       throw "Parent message document does not exist!";
     }
@@ -71,7 +70,7 @@ export class MessageService {
 
   async postReplyToMessage(channelId: string, parentMessageId: string, message: Message) {
     const messagesRef = collection(this.firestore, 'messages');
-    
+
     await addDoc(messagesRef, {
       content: message.content,
       timestamp: message.timestamp,
@@ -105,10 +104,11 @@ export class MessageService {
       [`reactions.${reactionType}`]: arrayUnion(userId)
     });
   }
-  
+
   async parseMessageContent(content: string): Promise<MessagePart[]> {
     const parts = this.splitMessageIntoParts(content);
-    return this.resolveNames(parts);
+    const resolvedParts = await this.resolveMessageParts(parts);
+    return resolvedParts;
   }
 
   private splitMessageIntoParts(content: string): MessagePart[] {
@@ -119,7 +119,7 @@ export class MessageService {
 
     while ((match = mentionPattern.exec(content)) !== null) {
       if (match.index > lastIndex) {
-        parts.push({type: 'text',content: content.slice(lastIndex, match.index) });
+        parts.push({ type: 'text', content: content.slice(lastIndex, match.index) });
       }
       if (match[2]) {
         parts.push({ type: 'user', id: match[2] });
@@ -134,43 +134,60 @@ export class MessageService {
     return parts;
   }
 
-  private async resolveNames(parts: MessagePart[]): Promise<MessagePart[]> {
+  private async resolveMessageParts(parts: MessagePart[]): Promise<MessagePart[]> {
     return Promise.all(parts.map(async part => {
-      if (part.type === 'text') return part;
-
-      const cacheKey = `${part.type}-${part.id}`;
-      let displayName = this.nameCache.get(cacheKey);
-
-      if (!displayName) {
-        if (part.type === 'user' && part.id) {
-          const userName = await this.userService.getUserName(part.id);
-          displayName = userName || 'Unknown User';
-          part.available = !!userName;
-        } else if (part.type === 'channel' && part.id) {
-          const channelName = await this.channelService.getChannelNameById(part.id);
-          displayName = channelName || 'Unknown Channel';
-          const currentUserId = this.loginService.currentUserValue?.id;
-          if (currentUserId) {
-            const isMember = await this.channelService.isUserMemberOfChannel(currentUserId, part.id);
-            part.available = !!channelName && isMember;
-          } else {
-            part.available = false;
-          }
-        }
-        if (displayName) {
-          this.nameCache.set(cacheKey, displayName);
-        }
-      }
-
-      return {...part, displayName};
+      if (part.type === 'text' && part.id) return part;
+      return await this.resolveTag(part);
     }));
   }
 
+  async resolveTag(part: MessagePart) {
+    if (!part.id) {
+      part.available = false;
+      return { ...part, displayName: `Unknown ${part.type.charAt(0).toUpperCase() + part.type.slice(1)}` };
+    }
+
+    const cacheKey = `${part.type}-${part.id}`;
+    const cachedTagName = this.tagNameCache.get(cacheKey);
+
+    if (cachedTagName) {
+      part.displayName = cachedTagName;
+      part.available = true;
+    } else {
+      const name = part.type === 'user'
+        ? await this.userService.getUserName(part.id)
+        : await this.channelService.getChannelNameById(part.id);
+
+      part.displayName = name || `Unknown ${part.type.charAt(0).toUpperCase() + part.type.slice(1)}`;
+      part.available = !!name;
+
+      if (name) {
+        this.tagNameCache.set(cacheKey, part.displayName);
+      }
+    }
+
+    if (part.type === 'channel') {
+      part.available = await this.checkChannelMembership(part.id);
+    }
+
+    return { ...part };
+  }
+
+  private async checkChannelMembership(channelId: string): Promise<boolean> {
+    const currentUser = await firstValueFrom(this.loginService.currentUser);
+    if (!currentUser?.id) {
+      return false;
+    }
+    return this.channelService.isUserMemberOfChannel(currentUser.id, channelId);
+  }
+
+
+
   renderMessagePartsInContainer(parts: MessagePart[], container: ViewContainerRef) {
     container.clear();
-    const renderedComponents: Array<{component: any, part: MessagePart}> = [];
+    const renderedComponents: Array<{ component: any, part: MessagePart }> = [];
     let mentionCounter = 0;
-    
+
     parts.forEach(part => {
       if (part.type === 'text') {
         const textNode = document.createTextNode(part.content || '');
@@ -187,7 +204,7 @@ export class MessageService {
         renderedComponents.push({ component: componentRef, part });
       }
     });
-    
+
     return renderedComponents;
   }
 }
