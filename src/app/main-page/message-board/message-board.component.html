@@ -32,7 +32,7 @@
             }
         </div>
         <div class="message-input-container">
-            <app-message-input [type]="'send'" [placeholder]="'Nachricht an #Entwicklerteam'"
+            <app-message-input [type]="'send'" placeholder="Nachricht an {{channelTitle}}"
                 (sendMessage)="onSendMessage($event)"></app-message-input>
         </div>
     </div>
