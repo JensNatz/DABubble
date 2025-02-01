@@ -30,6 +30,7 @@ export class MessageBoardComponent {
   userAvatar = '';
   channelType: string = '';
   directMessagePartnerName: string = '';
+  channelsData: any[] = [];
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
@@ -49,7 +50,8 @@ export class MessageBoardComponent {
         this.channelId = channel.id;
         this.channelName = channel.name;
         this.channelType = channel.type;
-        this.loadMessages();
+        this.loadMessages();        
+        this.getUserFromChannel();
 
         if (this.channelType === 'direct' && channel.members) {
           this.setDirectMessagePartnerData(channel.members);
@@ -65,6 +67,21 @@ export class MessageBoardComponent {
       return '#' + this.channelName;
     }
   }
+
+
+  async getUserFromChannel() {
+    // this.channelsData = await this.channelService.getMembersOfChannel(this.channelId);
+    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId);
+    console.log(this.channelsData);
+    
+  }
+
+
+  getUserFromMembers() {
+
+  }
+
+
 
   setDirectMessagePartnerData(members: string[]) {
     const otherUserId = members.find(member => member !== this.userId);

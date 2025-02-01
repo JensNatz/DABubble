@@ -2,10 +2,15 @@
     <div class="message-container main-channel">
         <div class="message-board-header">
             <div>
-              <app-avatar *ngIf="channelType === 'direct'" [avatarId]="userAvatar"></app-avatar>
-              <h2>{{ channelTitle }}</h2>
+                <img class="avatar" *ngIf="channelType === 'direct'"  src="assets/img/avatar{{userAvatar}}.svg" alt="Avatar">
+                <h2>{{ channelTitle }}</h2>
             </div>
-          </div>
+            <div>
+                @for (channelData of channelsData ; track $index) {                    
+                    <img class="avatar" *ngIf="channelType !== 'direct'"  src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
+                }
+            </div>
+        </div>
         <div class="message-board-content">
             @for (message of messages; track message.id; let i = $index) {
 
@@ -35,17 +40,17 @@
 
         </div>
         <div class="message-board-content">
-            @if (threadMessages.length === 0) {  
-                <div class="no-messages-container">
-                    Verfasse eine Antwort...
-                </div>
+            @if (threadMessages.length === 0) {
+            <div class="no-messages-container">
+                Verfasse eine Antwort...
+            </div>
             } @else {
-                @for (message of threadMessages; track message.id; let i = $index) {
-                    <app-message [message]="message"></app-message>
-                    @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
-                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-                    }
-                }
+            @for (message of threadMessages; track message.id; let i = $index) {
+            <app-message [message]="message"></app-message>
+            @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
+            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+            }
+            }
             }
         </div>
         <div class="message-input-container">
