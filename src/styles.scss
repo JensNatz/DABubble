@@ -46,6 +46,10 @@ body {
     background-color: $bg-color;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 textarea {
     font-family: inherit;
     font-size: inherit;
@@ -77,6 +81,12 @@ textarea {
       background-color: $purple-2;
       color: $white;
     }
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $gray;
+      color: $white;
+    }
   }
   
   .btn-secondary {
@@ -92,6 +102,12 @@ textarea {
     &:hover {
       cursor: pointer;
       background-color: $purple-1;
+      color: $white;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $gray;
       color: $white;
     }
   }

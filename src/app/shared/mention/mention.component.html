@@ -1,5 +1,7 @@
 <span 
   class="mention" 
-  (click)="handleMentionClick()">
+  (click)="handleMentionClick()"
+  [ngClass]="{'unavailable': !available}">
   {{ type === 'user' ? '@' : '#' }}{{ displayName }}
+  <span class="tooltip" *ngIf="!available">{{ tooltipText }}</span>
 </span>

@@ -1,10 +1,8 @@
 @import '../../../styles.scss';
-@import './../../shared/avatar/avatar.component.scss';
 
 .message-board {
     @include flex($align: start);
     gap: 16px;
-    // margin-left: 20px; //TODO: get distancy by dispay flex & gap in parent element
 
     .message-container {
         @include rounded();
@@ -48,6 +46,8 @@
         .header-right {
             .close-icon {
                 @include rounded($all: 50%);
+                width: 32px;
+                height: 32px;
                 padding: 8px;
                 cursor: pointer;
 
@@ -55,11 +55,6 @@
                     background-color: $bg-color;
                 }
             }
-        }
-
-        div {
-            display: flex;
-            align-items: center;
         }
     }
 
@@ -70,9 +65,37 @@
         display: flex;
         flex-direction: column-reverse;
 
+        .messages-container {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
         .no-messages-container {
+           color: $gray;
+           padding: 16px 32px;
+           @include flex($align: start, $direction: column);
+           gap: 8px;
+
+           h2 {
+            color: $black;
+            font-size: 20px;
+           }
+
+           .channel-description {
             color: $gray;
-            padding: 16px 32px;
+            font-style: italic;
+            font-size: 14px;
+           }
+
+           .no-messages-container-direct {
+            @include flex($justify: start);
+            gap: 8px;
+
+           }
+
+           .partner-name {
+            color: $purple-2;
+          }
         }
     }
 

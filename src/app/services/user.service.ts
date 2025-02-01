@@ -19,12 +19,12 @@ export class UserService {
     return null;
   }
 
-  async getUserName(userId: string): Promise<string> {
+  async getUserName(userId: string): Promise<string | null> {
     if (this.userCache.has(userId)) {
       return this.userCache.get(userId).name;
     }
     const userData = await this.fetchUserData(userId);
-    return userData?.name || 'Unknown User';
+    return userData?.name || null;
   }
 
   async getUserAvatar(userId: string): Promise<string> {

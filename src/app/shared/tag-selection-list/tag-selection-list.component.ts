@@ -2,8 +2,7 @@ import { Component, inject, Input, Output, EventEmitter, OnChanges, SimpleChange
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { UserService } from '../../services/user.service';
 import { AvatarComponent } from '../avatar/avatar.component';
-import { log } from 'node:console';
-
+import { LoginService } from '../../services/firebase-services/login-service';
 @Component({
   selector: 'app-tag-selection-list',
   standalone: true,
@@ -15,8 +14,7 @@ export class TagSelectionListComponent implements OnChanges {
   @Input() type: 'user' | 'channel' = 'user';
   @Output() tagSelected = new EventEmitter<{ id: string; name: string; type: 'user' | 'channel' }>();
   
-  // TODO: get current user id from auth service
-  userId: string = 'YAJxDG5vwYHoCbYjwFhb'
+  loginService: LoginService = inject(LoginService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserService = inject(UserService);
   tags: { id: string; name: string; avatar?: string }[] = [];
@@ -37,8 +35,10 @@ export class TagSelectionListComponent implements OnChanges {
       const userIds = this.channelService.currentChannel?.members || [];
       await this.updateTagsWithUserData(userIds);
      } else {
-      const channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(this.userId);
-      this.updateTagsWithChannelData(channels);
+      if (this.loginService.currentUserValue?.id) {
+        const channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(this.loginService.currentUserValue?.id);
+        this.updateTagsWithChannelData(channels);
+      }
     }
   }
 
