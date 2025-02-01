@@ -1,0 +1,8 @@
+@import '../../../styles/mixins';
+
+
+
+.message-container{
+    @include flex(center, center, row);
+    gap: 20px;
+}
