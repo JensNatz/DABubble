@@ -1,15 +1,29 @@
 <div class="message-board">
     <div class="message-container main-channel">
         <div class="message-board-header">
-            <div>
-                <img class="avatar" *ngIf="channelType === 'direct'"  src="assets/img/avatar{{userAvatar}}.svg" alt="Avatar">
+            <div class="channel_title" *ngIf="channelType === 'direct'; else otherTitle">
+                <img class="avatar userAvatar" src="assets/img/avatar{{userAvatar}}.svg">
                 <h2>{{ channelTitle }}</h2>
             </div>
-            <div>
-                @for (channelData of channelsData ; track $index) {                    
-                    <img class="avatar" *ngIf="channelType !== 'direct'"  src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
-                }
+            <ng-template #otherTitle>
+                <div class="channel_title" *ngIf="channelTitle">
+                    <b>#</b>
+                    <h2>{{ channelTitle }}</h2>
+                    <img src="assets/img/keyboard_arrow_down.svg">
+                </div>
+            </ng-template>
+
+            <div *ngIf="channelType !== 'direct' && channelTitle" class="user_from_channels">
+                <div class="user_from_channels_avatar">
+                    @for (channelData of channelsData.slice(0, 2); track $index) {
+                    <img class="avatar" *ngIf="channelType !== 'direct'"
+                        src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
+                    }
+                </div>
+                <p>{{ channelsDataLength }}</p>
+                <img class="members_button" src="assets/img/44. Add members button.svg">
             </div>
+
         </div>
         <div class="message-board-content">
             @for (message of messages; track message.id; let i = $index) {

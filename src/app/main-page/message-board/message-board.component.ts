@@ -31,6 +31,7 @@ export class MessageBoardComponent {
   channelType: string = '';
   directMessagePartnerName: string = '';
   channelsData: any[] = [];
+  channelsDataLength: number = 0;
   // TODO: get userId from auth service
   userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
@@ -64,13 +65,14 @@ export class MessageBoardComponent {
     if (this.channelType === 'direct') {
       return 'Direktnachricht an ' + this.directMessagePartnerName;
     } else {
-      return '#' + this.channelName;
+      return this.channelName;
     }
   }
 
 
   async getUserFromChannel() {
-    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId);    
+    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
+    this.channelsDataLength = this.channelsData.length;   
   }
 
   
