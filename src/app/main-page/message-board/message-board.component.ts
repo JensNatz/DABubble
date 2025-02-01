@@ -34,6 +34,7 @@ export class MessageBoardComponent {
   channelType: string = '';
   channelDescription: string = '';
   directMessagePartnerName: string = '';
+  channelMembers: string[] = [];
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -59,7 +60,8 @@ export class MessageBoardComponent {
         this.channelName = channel.name;
         this.channelType = channel.type;
         this.channelDescription = channel.description;
-        await this.loadMessages();
+        this.channelMembers = channel.members || [];
+        this.loadMessages();
         this.isThreadOpen = false;
         if (this.channelType === 'direct' && channel.members) {
           this.setDirectMessagePartnerData(channel.members);
@@ -76,22 +78,25 @@ export class MessageBoardComponent {
 
   get channelTitle() {
     if (this.channelType === 'direct') {
-      return 'Direktnachricht an ' + this.directMessagePartnerName;
+      return this.directMessagePartnerName;
     } else {
       return '#' + this.channelName;
     }
   }
 
   setDirectMessagePartnerData(members: string[]) {
-    const otherUserId = members.find(member => member !== this.loginService.currentUserValue?.id);
+    const currentUser = this.loginService.currentUserValue;
+    const otherUserId = members.find(member => member !== currentUser?.id);
+  
     if (otherUserId) {
       this.userSubscription.unsubscribe();
       this.userSubscription = this.userService.getUserById(otherUserId).subscribe((user: User) => {
         this.userAvatar = user.avatar;
         this.directMessagePartnerName = user.name;
       });
-    } else {
-      alert('Das ist eine Nachricht an den eingeloggten Account');
+    } else if (currentUser) {
+      this.userAvatar = currentUser.avatar;
+      this.directMessagePartnerName = currentUser.name + ' (Du)';
     }
   }
 

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { LoginService } from './login-service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class ChannelServiceService {
   users;
 
   firestore: Firestore = inject(Firestore);
+
+  loginService: LoginService = inject(LoginService);
 
   private channelNameCache = new Map<string, string>();
   private currentChannelSubject = new BehaviorSubject<Channel | null>(null);
@@ -35,6 +38,12 @@ export class ChannelServiceService {
 
   set currentChannel(channel: Channel | null) {
     this.currentChannelSubject.next(channel);
+  }
+
+  setCurrentChannelById(channelId: string) {
+    this.getChannelById(channelId).subscribe(channel => {
+      this.currentChannelSubject.next(channel);
+    });
   }
 
   getAllChannelsFromDatabase() {
@@ -99,9 +108,12 @@ export class ChannelServiceService {
   }
 
   async setDirectMessageChannel(userId: string) {
-    //TODO: get logged in user id from auth service
-    const loggedInUserId = 'lMLhqCH6j71UrMluL6Ob'; // Hardcoded for now
-    const members = [userId, loggedInUserId].sort(); 
+    const loggedInUserId = this.loginService.currentUserValue?.id;
+    if (!loggedInUserId) return;
+
+    const members = userId === loggedInUserId 
+        ? [userId] 
+        : [userId, loggedInUserId].sort(); 
     const channels = await getDocs(query(
       collection(this.firestore, 'channels'),
       where('type', '==', 'direct'),
@@ -119,13 +131,12 @@ export class ChannelServiceService {
       };
       this.currentChannel = channel;
     } else {
-     const newChannel = await this.createNewDirectMessageChannel(members);
-     this.currentChannel = newChannel;
+    const newChannel = await this.createNewDirectMessageChannel(members);
+    this.currentChannel = newChannel;
     }
   }
 
   async createNewDirectMessageChannel(members: string[]) {
-    console.log('creating new direct message channel');
     const newChannel: Channel = {
       members: members,
       type: 'direct',
@@ -133,7 +144,6 @@ export class ChannelServiceService {
       description: '',
       id: ''
     };
-    
     const channelRef = await addDoc(collection(this.firestore, 'channels'), newChannel);
     await updateDoc(channelRef, { id: channelRef.id });
     

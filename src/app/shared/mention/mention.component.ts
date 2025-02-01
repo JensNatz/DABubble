@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MessageService } from '../../services/firebase-services/message.service';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 
 @Component({
   selector: 'app-mention',
@@ -14,6 +16,9 @@ export class MentionComponent {
   @Input() displayName: string = '';
   @Input() available: boolean = true;
 
+  messageService: MessageService = inject(MessageService);
+  channelService: ChannelServiceService = inject(ChannelServiceService);
+
 
   get tooltipText() {
     if (!this.available) {
@@ -24,7 +29,11 @@ export class MentionComponent {
 
   handleMentionClick() {
     if (this.available) {
-      console.log('Mention clicked with type:', this.type, 'and id:', this.id);
+      if (this.type === 'user') {
+        this.channelService.setDirectMessageChannel(this.id);
+      } else if (this.type === 'channel') {
+        this.channelService.setCurrentChannelById(this.id);
+      }
     }
   }
 }

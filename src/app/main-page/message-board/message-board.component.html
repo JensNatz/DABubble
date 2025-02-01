@@ -1,8 +1,8 @@
 <div class="message-board">
     <div class="message-container main-channel">
         <div class="message-board-header">
-            <div>
-                <app-avatar *ngIf="channelType === 'direct'" [avatarId]="userAvatar"></app-avatar>
+            <div class="header-left">
+                <app-avatar *ngIf="channelType === 'direct'" [avatarId]="userAvatar" [size]="'small'"></app-avatar>
                 <h2>{{ channelTitle }}</h2>
             </div>
         </div>
@@ -15,11 +15,15 @@
                 <p>Es gibt noch keine Nachrichten in diesem Channel. Schreibe eine erste Nachricht!</p>
                 } @else if (channelType === 'direct') {
                 <div class="no-messages-container-direct">
-                    <app-avatar [avatarId]="userAvatar" [size]="'small'"></app-avatar>
-                    <h2>{{directMessagePartnerName}}</h2>
+                    <app-avatar [avatarId]="userAvatar"></app-avatar>
+                    <h2>{{directMessagePartnerName}} </h2>
                 </div>
+                @if (channelMembers.length > 1) {
                 <p>Diese Unterhaltung findet nur zwischen dir und <span
                         class="partner-name">&#64;{{directMessagePartnerName}}</span> statt.</p>
+                } @else {
+                <p><strong>Dieser Raum ist nur für dich da.</strong> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</p>
+                }
                 }
             </div>
             } @else {
@@ -82,5 +86,4 @@
         </div>
     </div>
     }
-
 </div>
