@@ -38,6 +38,7 @@ export class MessageBoardComponent {
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
 
+  loading: boolean = false;
   messages: Message[] = [];
   threadMessages: Message[] = [];
   isThreadOpen: boolean = false;
@@ -48,15 +49,14 @@ export class MessageBoardComponent {
   private loadUserSubscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.channelSubscription = this.channelService.currentChannel$.subscribe(channel => {
+    this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
       if (channel?.id) {
         this.channelId = channel.id;
         this.channelName = channel.name;
         this.channelType = channel.type;
         this.channelDescription = channel.description;
-        this.loadMessages();
+        await this.loadMessages();
         this.isThreadOpen = false;
-
         if (this.channelType === 'direct' && channel.members) {
           this.setDirectMessagePartnerData(channel.members);
         }

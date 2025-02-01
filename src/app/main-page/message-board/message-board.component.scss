@@ -45,6 +45,8 @@
         .header-right {
             .close-icon {
                 @include rounded($all: 50%);
+                width: 32px;
+                height: 32px;
                 padding: 8px;
                 cursor: pointer;
 
@@ -52,17 +54,6 @@
                     background-color: $bg-color;
                 }
             }
-        }
-
-        div {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-
-            >img {
-                height: 48px !important;
-                width: 48px !important;
-            } 
         }
     }
     .message-board-content {

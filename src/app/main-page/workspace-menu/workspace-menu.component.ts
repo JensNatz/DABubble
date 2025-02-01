@@ -5,6 +5,7 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 import { AddChannelComponent } from './add-channel/add-channel.component';
 import { Channel } from '../../models/channel';
 import { LoginService } from '../../services/firebase-services/login-service';
+import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -13,6 +14,7 @@ import { LoginService } from '../../services/firebase-services/login-service';
     CommonModule,
     FormsModule,
     AddChannelComponent,
+    LoadingIndicatorComponent
   ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss'
@@ -23,15 +25,18 @@ export class WorkspaceMenuComponent {
   isOpenUserListe = true;
   channels: Channel[] = [];
   loginService: LoginService = inject(LoginService);
+  loading: boolean = false;
 
   public showModal: boolean = false;
 
   constructor(public channelService: ChannelServiceService) { }
 
   ngOnInit() {
-    this.loginService.currentUser.subscribe(user => {
+    this.loading = true;
+    this.loginService.currentUser.subscribe(async user => {
       if (user) {
-        this.loadChannels();
+         await this.loadChannels();
+        this.loading = false;
       } 
     });
   }

@@ -36,10 +36,14 @@
 
         <div *ngIf="isOpenChannelListe">
             <div class="channels">
-                @for (channel of channels; track channel) {
-                <div class="channel_name">
-                    <p (click)="switchToGroupChannel(channel)"><b>#</b>{{ channel.name }}</p>
-                </div>
+                @if (loading) {
+                    <app-loading-indicator></app-loading-indicator>
+                } @else {
+                    @for (channel of channels; track channel) {
+                    <div class="channel_name">
+                        <p (click)="switchToGroupChannel(channel)"><b>#</b>{{ channel.name }}</p>
+                    </div>
+                    }
                 }
             </div>
             <div class="add_channel" (click)="openAddChannel()">
