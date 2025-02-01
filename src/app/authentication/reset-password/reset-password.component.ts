@@ -10,7 +10,7 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [RestePasswordEmailComponent, RouterModule, InputFieldComponent, FormsModule, NgClass],
+  imports: [RouterModule, InputFieldComponent, FormsModule, NgClass],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'
 })
@@ -33,7 +33,7 @@ export class ResetPasswordComponent {
   }
 
   ngOnInit(): void {
-    this.resetCode = this.route.snapshot.queryParams['oobCode'];
+    //this.resetCode = this.route.snapshot.queryParams['oobCode'];
     this.verifyResetCode();
   }
 
