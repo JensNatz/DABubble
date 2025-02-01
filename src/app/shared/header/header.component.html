@@ -45,13 +45,15 @@
                     <img class="avatar" src="assets/img/avatar{{ userAvatar }}.svg">
                 </div>
                 <div>
-                    <img src="assets/img/account_circle.svg">
-                    <h2>Vollständiger Name</h2>
+                    <div class="user_name_edit">
+                        <img src="assets/img/account_circle.svg">
+                        <h2>Vollständiger Name</h2>
+                    </div>
+                    <input type="text" placeholder="{{ userName }}">
                 </div>
-                <input type="text">
-                <div>
-                    <button>Abbrechen</button>
-                    <button>Speichern</button>
+                <div class="btn_group">
+                    <button class="btn-secondary">Abbrechen</button>
+                    <button class="btn-primary">Speichern</button>
                 </div>
             </div>
 
