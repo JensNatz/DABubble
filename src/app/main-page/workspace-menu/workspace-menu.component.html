@@ -19,19 +19,12 @@
             </div>
             <div class="add">
                 <img src="assets/img/add.png" (click)="openAddChannel()">
-            </div>
-
-            <!-- <div class="modal-overlay"></div>
-            <div class="modal">
-                <img src="assets/img/close.svg">            
-                <app-add-channel></app-add-channel>
-            </div> -->
+            </div>           
             <div class="modal-overlay" *ngIf="showModal" (click)="closeAddChannel()"></div>
             <div class="modal" *ngIf="showModal">
                 <img src="assets/img/close.svg" (click)="closeAddChannel()">
                 <app-add-channel [closeFunction]="closeAddChannel.bind(this)"></app-add-channel>
             </div>
-
         </div>
 
         <div *ngIf="isOpenChannelListe">

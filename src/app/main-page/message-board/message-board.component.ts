@@ -35,6 +35,8 @@ export class MessageBoardComponent {
   channelDescription: string = '';
   directMessagePartnerName: string = '';
   channelMembers: string[] = [];
+  channelsData: any[] = [];
+  channelsDataLength: number = 0;
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -63,6 +65,8 @@ export class MessageBoardComponent {
         this.channelMembers = channel.members || [];
         this.loadMessages();
         this.isThreadOpen = false;
+        this.getUserFromChannel();
+
         if (this.channelType === 'direct' && channel.members) {
           this.setDirectMessagePartnerData(channel.members);
         }
@@ -80,10 +84,17 @@ export class MessageBoardComponent {
     if (this.channelType === 'direct') {
       return this.directMessagePartnerName;
     } else {
-      return '#' + this.channelName;
+      return this.channelName;
     }
   }
 
+
+  async getUserFromChannel() {
+    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
+    this.channelsDataLength = this.channelsData.length;   
+  }
+
+  
   setDirectMessagePartnerData(members: string[]) {
     const currentUser = this.loginService.currentUserValue;
     const otherUserId = members.find(member => member !== currentUser?.id);

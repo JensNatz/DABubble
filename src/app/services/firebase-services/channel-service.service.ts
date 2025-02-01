@@ -20,7 +20,7 @@ export class ChannelServiceService {
   private currentChannelSubject = new BehaviorSubject<Channel | null>(null);
   currentChannel$ = this.currentChannelSubject.asObservable();
 
-  constructor() { 
+  constructor() {
     this.channels = collectionData(this.getChannelsRef());
     this.users = collectionData(this.getUsersRef());
     //TODO: einen Start Channel setzen
@@ -50,7 +50,7 @@ export class ChannelServiceService {
     const channelsRef = collection(this.firestore, 'channels');
     return collectionData(channelsRef, { idField: 'id' });
   }
-  
+
   getChannelById(channelId: string): Observable<Channel> {
     const channelDocRef = doc(this.firestore, `channels/${channelId}`);
     return docData(channelDocRef) as Observable<Channel>;
@@ -59,8 +59,9 @@ export class ChannelServiceService {
   async addNewChannel(item: Channel) {
     try {
       const docRef = await addDoc(this.getChannelsRef(), item);
-      await updateDoc(docRef, { id: docRef.id });
-      
+      this.id = docRef.id;
+      await updateDoc(docRef, { id: this.id });
+
     } catch (err) {
       console.error('Error adding document:', err);
     }
@@ -100,7 +101,7 @@ export class ChannelServiceService {
 
   async getAllGroupChannelsWhereUserIsMember(userId: string) {
     const channels = await getDocs(query(
-      collection(this.firestore, 'channels'), 
+      collection(this.firestore, 'channels'),
       where('members', 'array-contains', userId),
       where('type', '==', 'group')
     ));
@@ -144,9 +145,10 @@ export class ChannelServiceService {
       description: '',
       id: ''
     };
+
     const channelRef = await addDoc(collection(this.firestore, 'channels'), newChannel);
     await updateDoc(channelRef, { id: channelRef.id });
-    
+
     const channelSnap = await getDoc(channelRef);
     return { id: channelRef.id, ...channelSnap.data() } as Channel;
   }
@@ -158,6 +160,28 @@ export class ChannelServiceService {
     return channelData['members'].includes(userId);
   }
   
+
+  async getMembersOfChannel(channelId: string) {
+    const channelMembers = await getDoc(doc(this.firestore, 'channels', channelId))
+      .then(doc => doc.data()?.[`members`]);
+
+    return channelMembers;
+  }
+
+
+  async getMembersOfChannelWithDetails(channelId: string) {
+    const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
+    const memberIds: string[] = channelDoc.data()?.['members'] || [];   
+  
+    if (memberIds.length === 0) return [];
+    const userDocs = await Promise.all(
+      memberIds.map(userId => getDoc(doc(this.firestore, 'users', userId)))
+    );      
+    const membersData = userDocs
+      .map(userDoc => userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null)
+      .filter(user => user !== null);
+    return membersData;
+  }
 }
 
 

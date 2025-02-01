@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { UserServiceService } from './user-service.service';
@@ -13,6 +13,7 @@ export class LoginService {
   private auth = getAuth();
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
+  userFound: boolean | undefined = false;
 
   constructor(private firestore: Firestore, private userService: UserServiceService, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -46,24 +47,37 @@ export class LoginService {
 
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data() as User;
+        this.userFound = true;
         this.currentUserSubject.next(userData);
         console.log('User logged in:', userData);
-        this.router.navigate(['/chat']);
+        setTimeout(() => {
+          this.userFound = false;
+          this.router.navigate(['/chat'])
+        }, 2000);
+       
         
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      throw error;
+      
     }
   }
 
   async logout(): Promise<void> {
     try {
+      const currentUser = this.currentUserSubject.value;
       await signOut(this.auth);
       this.currentUserSubject.next(null);
+      console.log(`User ${currentUser?.email} hat sich ausgelogt`);
     } catch (error) {
       console.error('Error during logout:', error);
       throw error;
     }
   }
+
+  editUserName(userId: string, name: string) {
+      const userRef = doc(this.firestore, 'users', userId);
+      updateDoc(userRef, {
+        name: name
+      });
+    }
 }

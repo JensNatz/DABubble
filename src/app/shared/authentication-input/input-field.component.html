@@ -11,5 +11,5 @@
         #inputField="ngModel"           
         />
         
-        <div *ngIf="showError || (inputField.invalid && inputField.touched)" class="error-message">{{ errorMessage }}</div>
+        <div *ngIf="showError || (inputField.invalid && inputField.dirty)" class="error-message">{{ errorMessage }}</div>
 </div>

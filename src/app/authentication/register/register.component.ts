@@ -26,6 +26,7 @@ export class RegisterComponent {
   emailErrorMessage: string = ErrorMessages.emailInvalid;
   passwordErrorMessage: string = ErrorMessages.passwordInvalid;
 
+
   constructor(private router: Router, private userService: UserServiceService) { }
 
   async onSubmit(registerForm: NgForm) {
