@@ -31,6 +31,8 @@ export class MessageComponent implements OnInit, AfterViewInit {
   loginService: LoginService = inject(LoginService);
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
+  @Output() messageParseComplete = new EventEmitter<string>();
+
 
   authorName: string = 'Unknown User';
   isOwn: boolean = false;
@@ -56,10 +58,13 @@ export class MessageComponent implements OnInit, AfterViewInit {
     if (this.message.parentMessageId === null) {
       this.isMessageInMainChannel = true;
     }
+
   }
 
   async ngAfterViewInit() {
     await this.renderMessageContent(this.message.content);
+    this.messageParseComplete.emit(this.message.id);
+      
   }
 
   get lastReplyTimeDisplay(): string {

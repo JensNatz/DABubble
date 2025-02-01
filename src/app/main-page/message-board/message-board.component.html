@@ -23,15 +23,19 @@
                 }
             </div>
             } @else {
-            @for (message of messages; track message.id; let i = $index) {
-
-            <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"></app-message>
-            @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
-            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+            @if (!areAllMessagesParsed()) {
+                <app-loading-indicator></app-loading-indicator>
             }
+            <div [class.hidden]="!areAllMessagesParsed()" class="messages-container">
+                @for (message of messages; track message.id; let i = $index) {
+                    <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"
+                        (messageParseComplete)="handleMessageParsed($event)"></app-message>
+                    @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
+                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                    }
+                }
+            </div>
             }
-            }
-
         </div>
         <div class="message-input-container">
             <app-message-input [type]="'send'" placeholder="Nachricht an {{channelTitle}}"

@@ -46,6 +46,10 @@ body {
     background-color: $bg-color;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 textarea {
     font-family: inherit;
     font-size: inherit;

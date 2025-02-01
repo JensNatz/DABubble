@@ -11,6 +11,7 @@ import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
+import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -19,7 +20,8 @@ import { Subscription } from 'rxjs';
     MessageComponent,
     TimeSeperatorComponent,
     MessageInputComponent,
-    AvatarComponent
+    AvatarComponent,
+    LoadingIndicatorComponent
   ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
@@ -38,11 +40,12 @@ export class MessageBoardComponent {
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
 
-  loading: boolean = false;
   messages: Message[] = [];
   threadMessages: Message[] = [];
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
+  allMessagesLoaded: boolean = false;
+  private parsedMessagesId =new Set<string>();
 
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
@@ -106,6 +109,15 @@ export class MessageBoardComponent {
       });
     }
   }
+
+  handleMessageParsed(messageId: string) {
+    this.parsedMessagesId.add(messageId);
+  }
+  
+  areAllMessagesParsed(): boolean {
+    return this.messages.every(message => message.id && this.parsedMessagesId.has(message.id));
+  }
+
 
   isSameDay(timestamp1: number, timestamp2: number): boolean {
     const date1 = new Date(timestamp1);
