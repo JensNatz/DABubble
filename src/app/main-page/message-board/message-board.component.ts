@@ -45,7 +45,8 @@ export class MessageBoardComponent {
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
   allMessagesLoaded: boolean = false;
-  private parsedMessagesId =new Set<string>();
+  private parsedMainMessagesId =new Set<string>();
+  private parsedThreadMessagesId = new Set<string>();
 
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
@@ -110,12 +111,20 @@ export class MessageBoardComponent {
     }
   }
 
-  handleMessageParsed(messageId: string) {
-    this.parsedMessagesId.add(messageId);
+  handleMainMessageParsed(messageId: string) {
+    this.parsedMainMessagesId.add(messageId);
   }
   
-  areAllMessagesParsed(): boolean {
-    return this.messages.every(message => message.id && this.parsedMessagesId.has(message.id));
+  handleThreadMessageParsed(messageId: string) {
+    this.parsedThreadMessagesId.add(messageId);
+  }
+  
+  areAllMainMessagesParsed(): boolean {
+    return this.messages.every(message => message.id && this.parsedMainMessagesId.has(message.id));
+  }
+
+  areAllThreadMessagesParsed(): boolean {
+    return this.threadMessages.every(message => message.id && this.parsedThreadMessagesId.has(message.id));
   }
 
 

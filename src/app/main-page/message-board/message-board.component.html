@@ -23,13 +23,13 @@
                 }
             </div>
             } @else {
-            @if (!areAllMessagesParsed()) {
+            @if (!areAllMainMessagesParsed()) {
                 <app-loading-indicator></app-loading-indicator>
             }
-            <div [class.hidden]="!areAllMessagesParsed()" class="messages-container">
+            <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container">
                 @for (message of messages; track message.id; let i = $index) {
                     <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"
-                        (messageParseComplete)="handleMessageParsed($event)"></app-message>
+                        (messageParseComplete)="handleMainMessageParsed($event)"></app-message>
                     @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
                         <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
                     }
@@ -62,12 +62,18 @@
                 Verfasse eine Antwort...
             </div>
             } @else {
-            @for (message of threadMessages; track message.id; let i = $index) {
-            <app-message [message]="message"></app-message>
-            @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
-            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-            }
-            }
+                @if (!areAllThreadMessagesParsed()) {
+                    <app-loading-indicator></app-loading-indicator>
+                }
+                <div [class.hidden]="!areAllThreadMessagesParsed()" class="messages-container">
+                    @for (message of threadMessages; track message.id; let i = $index) {
+                        <app-message [message]="message"
+                        (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
+                        @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
+                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                        }
+                    }
+                </div>
             }
         </div>
         <div class="message-input-container">
