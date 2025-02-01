@@ -5,7 +5,11 @@
         (tagSelected)="onTagSelected($event)"
     >
     </app-tag-selection-list>
-    <div contenteditable="true" class="pseudo-input" #messageInput id="messageInput" (input)="onInputChange()" (keydown)="onKeyDown($event)" >
+    <span *ngIf="isSubmittingDisabled" class="placeholder" contenteditable="false">
+        {{placeholder}}
+    </span>
+    <div contenteditable="true" class="pseudo-input" #messageInput (input)="onInputChange()" (keydown)="onKeyDown($event)" >
+       
     </div>
     <div class="toolbar">
         <div class="toolbar-left">
@@ -25,10 +29,10 @@
         </ng-container>
         <ng-container *ngIf="type === 'edit'">
             <div class="edit-buttons">
-            <button (click)="onCancelEditClick()">
+            <button class="btn-secondary" (click)="onCancelEditClick()">
                 Abbrechen
             </button>
-            <button [disabled]="isSubmittingDisabled" (click)="onSaveEditClick()">
+            <button class="btn-primary" [disabled]="isSubmittingDisabled" (click)="onSaveEditClick()">
                 Speichern
             </button>
             </div>

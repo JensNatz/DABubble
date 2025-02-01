@@ -23,19 +23,44 @@
                 <p>{{ channelsDataLength }}</p>
                 <img class="members_button" src="assets/img/44. Add members button.svg">
             </div>
-
         </div>
         <div class="message-board-content">
-            @for (message of messages; track message.id; let i = $index) {
-
-            <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"></app-message>
-            @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
-            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+            @if (messages.length === 0) {
+            <div class="no-messages-container">
+                @if (channelType === 'group') {
+                <h2>{{channelTitle}}</h2>
+                <p *ngIf="channelDescription !== ''" class="channel-description">Thema: {{channelDescription}}</p>
+                <p>Es gibt noch keine Nachrichten in diesem Channel. Schreibe eine erste Nachricht!</p>
+                } @else if (channelType === 'direct') {
+                <div class="no-messages-container-direct">
+                    <app-avatar [avatarId]="userAvatar"></app-avatar>
+                    <h2>{{directMessagePartnerName}} </h2>
+                </div>
+                @if (channelMembers.length > 1) {
+                <p>Diese Unterhaltung findet nur zwischen dir und <span
+                        class="partner-name">&#64;{{directMessagePartnerName}}</span> statt.</p>
+                } @else {
+                <p><strong>Dieser Raum ist nur für dich da.</strong> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</p>
+                }
+                }
+            </div>
+            } @else {
+            @if (!areAllMainMessagesParsed()) {
+                <app-loading-indicator></app-loading-indicator>
             }
+            <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container">
+                @for (message of messages; track message.id; let i = $index) {
+                    <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"
+                        (messageParseComplete)="handleMainMessageParsed($event)"></app-message>
+                    @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
+                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                    }
+                }
+            </div>
             }
         </div>
         <div class="message-input-container">
-            <app-message-input [type]="'send'" [placeholder]="'Nachricht an #Entwicklerteam'"
+            <app-message-input [type]="'send'" placeholder="Nachricht an {{channelTitle}}"
                 (sendMessage)="onSendMessage($event)"></app-message-input>
         </div>
     </div>
@@ -59,12 +84,18 @@
                 Verfasse eine Antwort...
             </div>
             } @else {
-            @for (message of threadMessages; track message.id; let i = $index) {
-            <app-message [message]="message"></app-message>
-            @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
-            <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-            }
-            }
+                @if (!areAllThreadMessagesParsed()) {
+                    <app-loading-indicator></app-loading-indicator>
+                }
+                <div [class.hidden]="!areAllThreadMessagesParsed()" class="messages-container">
+                    @for (message of threadMessages; track message.id; let i = $index) {
+                        <app-message [message]="message"
+                        (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
+                        @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
+                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                        }
+                    }
+                </div>
             }
         </div>
         <div class="message-input-container">
@@ -73,5 +104,4 @@
         </div>
     </div>
     }
-
 </div>

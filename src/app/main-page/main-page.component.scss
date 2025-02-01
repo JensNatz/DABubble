@@ -1,19 +1,15 @@
-@import "./../styles/variables";
-
-body {
-    background-color: $purple-2;
-}
+@import '../../styles.scss';
 
 .main_content {
-    display: flex;
+    @include flex();
+    gap: 20px;
+    padding: 0 20px;
     width: 100%;
     padding-left: 20px;
 }
 
 .workspace-open {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex();
     position: absolute;
     background-color: white;
     cursor: pointer;
@@ -54,5 +50,5 @@ body {
 
 .message_board_content {
     width: 100%;
-    margin-right: 20px;
+    
 }

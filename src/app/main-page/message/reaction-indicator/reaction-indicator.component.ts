@@ -1,6 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { LoginService } from '../../../services/firebase-services/login-service';
+
 @Component({
   selector: 'app-reaction-indicator',
   standalone: true,
@@ -10,11 +12,11 @@ import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 })
 export class ReactionIndicatorComponent  {
 
+  loginService: LoginService = inject(LoginService);
+
   @Input() reaction: any = [];
   @Output() toggleReaction = new EventEmitter<string>();
 
-  // TODO: get userId from auth service
-  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
   reactionType: string = '';
   reactedUsers: Array<string> = [];
 
@@ -24,7 +26,7 @@ export class ReactionIndicatorComponent  {
   }
 
   get reactionText(): string {
-    const hasCurrentUser = this.reaction.users.some((user: {id: string, name: string}) => user.id === this.userId);
+    const hasCurrentUser = this.reaction.users.some((user: {id: string, name: string}) => user.id === this.loginService.currentUserValue?.id);
     if (hasCurrentUser && this.reaction.users.length === 1) {
       return 'hast reagiert';
     } else if (this.reaction.users.length > 1) {
@@ -39,16 +41,16 @@ export class ReactionIndicatorComponent  {
     if (users.length === 1) {
       return users[0].name;
     } else if (users.length === 2) {
-      const otherUser = users.find((user: { id: string, name: string }) => user.id !== this.userId)!;
-      const currentUser = users.find((user: { id: string, name: string }) => user.id === this.userId)!;
+      const otherUser = users.find((user: { id: string, name: string }) => user.id !== this.loginService.currentUserValue?.id)!;
+      const currentUser = users.find((user: { id: string, name: string }) => user.id === this.loginService.currentUserValue?.id)!;
       return currentUser 
         ? `${otherUser.name} und ${currentUser.name}`
         : `${users[0].name} und ${users[1].name}`;
     } else {
       const othersCount = users.length - 2;
-      if (users.some((user: { id: string, name: string }) => user.id === this.userId)) {
-        const otherUser = users.find((user: { id: string, name: string }) => user.id !== this.userId)!;
-        const currentUser = users.find((user: { id: string, name: string }) => user.id === this.userId)!;
+      if (users.some((user: { id: string, name: string }) => user.id === this.loginService.currentUserValue?.id)) {
+        const otherUser = users.find((user: { id: string, name: string }) => user.id !== this.loginService.currentUserValue?.id)!;
+        const currentUser = users.find((user: { id: string, name: string }) => user.id === this.loginService.currentUserValue?.id)!;
         return `${otherUser.name}, ${currentUser.name} und ${othersCount} weitere`;
       }
       return `${users[0].name}, ${users[1].name} und ${othersCount} weitere`;

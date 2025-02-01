@@ -5,12 +5,13 @@ import { CommonModule } from '@angular/common';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
 import { Route } from '@angular/router';
+import { AccountCreatedSuccessfullyComponent } from "../user-feedback/account-created-successfully/account-created-successfully.component";
 
 
 @Component({
   selector: 'app-avatar',
   standalone: true,
-  imports: [RouterModule, FormsModule, CommonModule],
+  imports: [RouterModule, FormsModule, CommonModule, AccountCreatedSuccessfullyComponent],
   templateUrl: './avatar.component.html',
   styleUrl: './avatar.component.scss'
 })
@@ -22,6 +23,7 @@ export class AvatarComponent {
   avatar: string = '';
   avatarKey: string = '';
   isSubmitting: boolean = false;
+  registrationSuccessful: boolean = false;
 
   avatarImages = {
     '1': '../../../assets/img/avatar1.svg',
@@ -31,6 +33,7 @@ export class AvatarComponent {
     '5': '../../../assets/img/avatar5.svg',
     '6': '../../../assets/img/avatar6.svg'
   }
+
 
 
   constructor(private route: ActivatedRoute, private router: Router, private UserServiceService: UserServiceService) { }
@@ -77,6 +80,11 @@ export class AvatarComponent {
       await this.UserServiceService.registerUser(this.email, this.password, newUser);
       //await this.UserServiceService.addNewUser(newUser);
       console.log('Benutzer erfolgreich registriert');
+      this.registrationSuccessful = true;
+      setTimeout(() => {
+        this.registrationSuccessful = false;
+        this.router.navigate([''])
+      }, 2000);
     } catch (err) {
       console.error('Fehler bei der Registrierung des Benutzers:', err);
     }

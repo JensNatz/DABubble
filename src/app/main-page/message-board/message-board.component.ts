@@ -9,7 +9,9 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
-
+import { LoginService } from '../../services/firebase-services/login-service';
+import { Subscription } from 'rxjs';
+import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -18,7 +20,8 @@ import { AvatarComponent } from '../../shared/avatar/avatar.component';
     MessageComponent,
     TimeSeperatorComponent,
     MessageInputComponent,
-    AvatarComponent
+    AvatarComponent,
+    LoadingIndicatorComponent
   ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
@@ -29,29 +32,39 @@ export class MessageBoardComponent {
   channelName: string = '';
   userAvatar = '';
   channelType: string = '';
+  channelDescription: string = '';
   directMessagePartnerName: string = '';
+  channelMembers: string[] = [];
   channelsData: any[] = [];
   channelsDataLength: number = 0;
-  // TODO: get userId from auth service
-  userId: string = 'YAJxDG5vwYHoCbYjwFhb';
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
+  loginService: LoginService = inject(LoginService);
 
   messages: Message[] = [];
   threadMessages: Message[] = [];
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
+  allMessagesLoaded: boolean = false;
+  private parsedMainMessagesId =new Set<string>();
+  private parsedThreadMessagesId = new Set<string>();
 
+  private channelSubscription: Subscription = new Subscription();
+  private userSubscription: Subscription = new Subscription();
+  private loadUserSubscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.channelService.currentChannel$.subscribe(channel => {
+    this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
       if (channel?.id) {
         this.channelId = channel.id;
         this.channelName = channel.name;
         this.channelType = channel.type;
-        this.loadMessages();        
+        this.channelDescription = channel.description;
+        this.channelMembers = channel.members || [];
+        this.loadMessages();
+        this.isThreadOpen = false;
         this.getUserFromChannel();
 
         if (this.channelType === 'direct' && channel.members) {
@@ -61,9 +74,15 @@ export class MessageBoardComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.channelSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
+    this.loadUserSubscription.unsubscribe();
+  }
+
   get channelTitle() {
     if (this.channelType === 'direct') {
-      return 'Direktnachricht an ' + this.directMessagePartnerName;
+      return this.directMessagePartnerName;
     } else {
       return this.channelName;
     }
@@ -77,19 +96,24 @@ export class MessageBoardComponent {
 
   
   setDirectMessagePartnerData(members: string[]) {
-    const otherUserId = members.find(member => member !== this.userId);
+    const currentUser = this.loginService.currentUserValue;
+    const otherUserId = members.find(member => member !== currentUser?.id);
+  
     if (otherUserId) {
-      this.userService.getUserById(otherUserId).subscribe((user: User) => {
+      this.userSubscription.unsubscribe();
+      this.userSubscription = this.userService.getUserById(otherUserId).subscribe((user: User) => {
         this.userAvatar = user.avatar;
         this.directMessagePartnerName = user.name;
       });
-    } else {
-      alert('Das ist eine Nachricht aan den eigenloggenten Account');
+    } else if (currentUser) {
+      this.userAvatar = currentUser.avatar;
+      this.directMessagePartnerName = currentUser.name + ' (Du)';
     }
   }
 
   loadUserName() {
-    this.userService.getUserById(this.channelId).subscribe((user: User) => {
+    this.loadUserSubscription.unsubscribe();
+    this.loadUserSubscription = this.userService.getUserById(this.channelId).subscribe((user: User) => {
       this.channelName = user.name;
       this.userAvatar = user.avatar;
     });
@@ -102,6 +126,23 @@ export class MessageBoardComponent {
       });
     }
   }
+
+  handleMainMessageParsed(messageId: string) {
+    this.parsedMainMessagesId.add(messageId);
+  }
+  
+  handleThreadMessageParsed(messageId: string) {
+    this.parsedThreadMessagesId.add(messageId);
+  }
+  
+  areAllMainMessagesParsed(): boolean {
+    return this.messages.every(message => message.id && this.parsedMainMessagesId.has(message.id));
+  }
+
+  areAllThreadMessagesParsed(): boolean {
+    return this.threadMessages.every(message => message.id && this.parsedThreadMessagesId.has(message.id));
+  }
+
 
   isSameDay(timestamp1: number, timestamp2: number): boolean {
     const date1 = new Date(timestamp1);
@@ -124,18 +165,17 @@ export class MessageBoardComponent {
     if (content.trim() === '') {
       return;
     }
-    if (!this.channelId) {
+    if (!this.channelId || !this.loginService.currentUserValue?.id) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
-      author: this.userId,
+      author: this.loginService.currentUserValue.id,
       channelId: this.channelId,
       edited: false,
       parentMessageId: null
     };
-
     this.messageService.postMessageToChannel(this.channelId, message);
   }
 
@@ -144,13 +184,13 @@ export class MessageBoardComponent {
       return;
     }
 
-    if (!this.channelId) {
+    if (!this.channelId || !this.loginService.currentUserValue?.id) {
       return;
     }
     let message: Message = {
       content: content,
       timestamp: Date.now(),
-      author: this.userId,
+      author: this.loginService.currentUserValue?.id,
       channelId: this.channelId,
       edited: false,
       parentMessageId: this.parentMessageId
