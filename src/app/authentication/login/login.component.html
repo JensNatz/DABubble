@@ -13,9 +13,7 @@
             <app-input-field                                                                                                  
                  type="email"
                  placeholder="beispielname@email.com"
-                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                 [showError]="emailInvalid ||false"
-                 [errorMessage]="emailErrorMessage"
+                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"                
                  imagePath="../../../assets/img/mail.svg"
                  [(ngModel)]="email"
                  name="email"
@@ -32,7 +30,7 @@
                 ></app-input-field>            
         </div>
 
-        <p [routerLink]="['/resetpw']" class="pw-forget-btn br-30" (click)="sendPasswordResetEmail()">Passwort vergessen?</p>
+        <p [routerLink]="['/resetpw']" class="pw-forget-btn br-30">Passwort vergessen?</p>
 
         <div class="or-container">
             ODER
@@ -52,4 +50,8 @@
 
 
 </div>
+
+<div *ngIf="userFound">
+    <app-login-user-accepted></app-login-user-accepted>
+  </div>
 

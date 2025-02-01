@@ -9,11 +9,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { GoogleAuthenticationService } from '../../services/firebase-services/google-athentication.servive';
 import { LoginService } from '../../services/firebase-services/login-service';
+import { LoginUserAcceptedComponent } from "../user-feedback/login-user-accepted/login-user-accepted.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule],
+  imports: [CommonModule,InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent],
   providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']
@@ -27,11 +29,19 @@ export class LoginComponent {
   passwordInvalid: boolean = false;
   emailErrorMessage: string = ErrorMessages.emailInvalid;
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
+  userFound: boolean | undefined = false;
   
 
   constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService,private loginService: LoginService) {
     this.users = this.userService.getUsers();
   }
+
+  ngOnInit(): void {
+    this.loginService.currentUser.subscribe(user => {
+      this.userFound = this.loginService.userFound;
+    });
+  }
+
 
   guestLogin() {
     this.users.subscribe(users => {
@@ -56,7 +66,9 @@ export class LoginComponent {
           this.passwordErrorMessage = ErrorMessages.passwordLogin;
         }
       } catch (error) {
-        console.error('Fehler beim Login:', error);
+        this.emailInvalid = true;
+        this.passwordInvalid = true;
+        this.passwordErrorMessage = ErrorMessages.passwordLogin;
       }
     } else {
       console.log('Formular ist ungültig');
@@ -81,13 +93,6 @@ export class LoginComponent {
     } else {
       this.passwordInvalid = false;
     }
-  }
-
-
-  async sendPasswordResetEmail() {
-    await this.userService.sendPasswordResetEmail(this.email);
-    console.log('password login');
-    console.log(this.email);
   }
 
   signInWithGoogle() {

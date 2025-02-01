@@ -1,0 +1,38 @@
+@import '../../styles/variables';
+@import '../../styles/_mixins';
+
+
+.bg{
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(255 255 255 / 59%);
+}
+
+.info-container{
+    position: absolute;
+    bottom: 50px;
+    right: 200px;
+    display: inline-block;
+    padding: 50px;
+    background-color: $purple-1;
+    color: $white;
+    font-weight: 700;
+    font-size: 36px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(200%); 
+    }
+    to {
+        transform: translateX(0); 
+    }
+}

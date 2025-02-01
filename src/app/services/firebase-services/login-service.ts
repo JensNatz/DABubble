@@ -13,6 +13,7 @@ export class LoginService {
   private auth = getAuth();
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
+  userFound: boolean | undefined = false;
 
   constructor(private firestore: Firestore, private userService: UserServiceService, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -46,14 +47,18 @@ export class LoginService {
 
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data() as User;
+        this.userFound = true;
         this.currentUserSubject.next(userData);
         console.log('User logged in:', userData);
-        this.router.navigate(['/chat']);
+        setTimeout(() => {
+          this.userFound = false;
+          this.router.navigate(['/chat'])
+        }, 2000);
+       
         
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      throw error;
+      
     }
   }
 
