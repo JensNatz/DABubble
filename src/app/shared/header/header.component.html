@@ -8,8 +8,10 @@
 
         <div class="user_name">
             <h2>{{ userName }}</h2>
-            <img class="user_foto avatar" src="assets/img/avatar{{ userAvatar }}.svg">
-            <img class="arrow_down" src="assets/img/keyboard_arrow_down.png" (click)="openProfilMenu()">
+            <div class="user_avatar_arrow">
+                <img class="user_foto avatar" src="assets/img/avatar{{ userAvatar }}.svg">
+                <img class="arrow_down" src="assets/img/keyboard_arrow_down.png" (click)="openProfilMenu()">
+            </div>
         </div>
 
         <div class="modal-overlay" *ngIf="showProfilMenu" (click)="closeProfilMenu()"></div>
@@ -35,8 +37,6 @@
                 <p>{{ userStatus }}</p>
             </div>
 
-
-
             <div class="modal-overlay no-background" *ngIf="showEditProfil" (click)="closeEditProfil()"></div>
             <div class="modal modal_profil modal_profil_edit" *ngIf="showEditProfil">
                 <h1> Dein Profil bearbeiten</h1>
@@ -49,15 +49,14 @@
                         <img src="assets/img/account_circle.svg">
                         <h2>Vollständiger Name</h2>
                     </div>
-                    <input type="text" placeholder="{{ userName }}">
+                    <input type="text" [(ngModel)]="userName">
                 </div>
+            
                 <div class="btn_group">
-                    <button class="btn-secondary">Abbrechen</button>
-                    <button class="btn-primary">Speichern</button>
+                    <button class="btn-secondary" (click)="closeEditProfil()">Abbrechen</button>
+                    <button class="btn-primary" (click)="updateUserName(userName)">Speichern</button>
                 </div>
             </div>
-
-
 
             <div class="email_addresse">
                 <div>

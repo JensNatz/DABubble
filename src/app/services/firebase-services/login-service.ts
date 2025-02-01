@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { UserServiceService } from './user-service.service';
@@ -66,4 +66,11 @@ export class LoginService {
       throw error;
     }
   }
+
+  editUserName(userId: string, name: string) {
+      const userRef = doc(this.firestore, 'users', userId);
+      updateDoc(userRef, {
+        name: name
+      });
+    }
 }
