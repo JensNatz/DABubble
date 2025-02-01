@@ -15,7 +15,7 @@
 
             <div *ngIf="channelType !== 'direct' && channelTitle" class="user_from_channels">
                 <div class="user_from_channels_avatar">
-                    @for (channelData of channelsData.slice(0, 2); track $index) {
+                    @for (channelData of channelsData.slice(0, 3); track $index) {
                     <img class="avatar" *ngIf="channelType !== 'direct'"
                         src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
                     }

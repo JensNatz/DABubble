@@ -82,17 +82,6 @@
     }
 }
 
-.user_from_channels {
-    img {
-        width: 40px;
-        height: 40px;
-    }
-    p {
-        font-weight: 700;
-        font-size: 20px;
-    }
-}
-
 .userAvatar {
     width: 48px !important;
     height: 48px !important;
@@ -101,6 +90,8 @@
 .members_button {
     width: 40px;
     height: 40px;
+    cursor: pointer;
+    margin-right: 15px;
 }
 
 .channel_title {
@@ -128,5 +119,23 @@
 
     &:hover img {
         filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
+    }
+}
+
+.user_from_channels_avatar {
+    img {
+        width: 40px;
+        height: 40px;
+        margin-right: -10px;
+        border: 2px solid white;
+    }
+}
+
+.user_from_channels {    
+    p {
+        font-weight: 700;
+        font-size: 20px;
+        margin-left: 25px;
+        margin-right: 20px;
     }
 }
