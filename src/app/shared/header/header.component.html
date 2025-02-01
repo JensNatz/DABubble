@@ -7,15 +7,17 @@
         </div>
 
         <div class="user_name">
-            <h2>Frederick Beck</h2>
-            <img class="user_foto" src="assets/img/Property 1=Default.png">
-            <img class="arrow_down" src="assets/img/keyboard_arrow_down.png" (click)="openProfilMenu()">
+            <h2>{{ userName }}</h2>
+            <div class="user_avatar_arrow">
+                <img class="user_foto avatar" src="assets/img/avatar{{ userAvatar }}.svg">
+                <img class="arrow_down" src="assets/img/keyboard_arrow_down.png" (click)="openProfilMenu()">
+            </div>
         </div>
 
         <div class="modal-overlay" *ngIf="showProfilMenu" (click)="closeProfilMenu()"></div>
         <div class="modal modal_profil_menu" *ngIf="showProfilMenu">
             <span (click)="openProfil()">Profil</span>
-            <span>Log out</span>
+            <span (click)="logOut()">Log out</span>
         </div>
 
         <div class="modal-overlay modal-overlay-profil" *ngIf="showProfil" (click)="closeProfil()"></div>
@@ -25,20 +27,43 @@
                 <img class="close_profil" src="assets/img/close.svg" (click)="closeProfil()">
             </div>
             <div class="profil_avatar">
-                <img src="assets/img/Property 1=Default.png">
+                <img class="avatar" src="assets/img/avatar{{ userAvatar }}.svg">
             </div>
             <div class="user_name_status">
-                <div class="user_name">
-                    <h1>Frederick Beck</h1>
-                    <span>bearbeiten</span>
+                <div class="user_name_profil">
+                    <h1>{{ userName }}</h1>
+                    <span (click)="openEditProfil()">bearbeiten</span>
                 </div>
-                <p>Status</p>
+                <p>{{ userStatus }}</p>
             </div>
+
+            <div class="modal-overlay no-background" *ngIf="showEditProfil" (click)="closeEditProfil()"></div>
+            <div class="modal modal_profil modal_profil_edit" *ngIf="showEditProfil">
+                <h1> Dein Profil bearbeiten</h1>
+                <img class="close_profil" src="assets/img/close.svg" (click)="closeEditProfil()">
+                <div class="profil_avatar">
+                    <img class="avatar" src="assets/img/avatar{{ userAvatar }}.svg">
+                </div>
+                <div>
+                    <div class="user_name_edit">
+                        <img src="assets/img/account_circle.svg">
+                        <h2>Vollständiger Name</h2>
+                    </div>
+                    <input type="text" [(ngModel)]="userName">
+                </div>
+            
+                <div class="btn_group">
+                    <button class="btn-secondary" (click)="closeEditProfil()">Abbrechen</button>
+                    <button class="btn-primary" (click)="updateUserName(userName)">Speichern</button>
+                </div>
+            </div>
+
             <div class="email_addresse">
                 <div>
                     <img src="assets/img/mail666.svg">
                     <span>E-mail-Adresse</span>
                 </div>
+                <p>{{ userEmail }}</p>
             </div>
         </div>
     </div>
