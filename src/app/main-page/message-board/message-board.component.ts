@@ -70,19 +70,10 @@ export class MessageBoardComponent {
 
 
   async getUserFromChannel() {
-    // this.channelsData = await this.channelService.getMembersOfChannel(this.channelId);
-    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId);
-    console.log(this.channelsData);
-    
+    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId);    
   }
 
-
-  getUserFromMembers() {
-
-  }
-
-
-
+  
   setDirectMessagePartnerData(members: string[]) {
     const otherUserId = members.find(member => member !== this.userId);
     if (otherUserId) {
