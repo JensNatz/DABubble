@@ -6,55 +6,61 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { InputFieldComponent } from '../../../shared/authentication-input/input-field.component';
-import { RouterModule } from '@angular/router';
+import { RouterModule,Router } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { EmailSendComponent } from "../../user-feedback/email-send/email-send.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
   selector: 'app-reste-password-email',
-  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass],
+  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, EmailSendComponent, CommonModule, RouterModule],
   templateUrl: './reste-password-email.component.html',
   styleUrls: ['./reste-password-email.component.scss']
 })
 export class RestePasswordEmailComponent {
   email: string = '';
   emailInvalid: boolean = false;
-  emailErrorMessage: string = ErrorMessages.emailInvalid;
+  emailErrorMessage: string = '';
+  isSubmitting:boolean = false;
+  emailSend:boolean = false;
+  showError: boolean = false;
 
 
-  constructor(private userService: UserServiceService) {}
+  constructor(private userService: UserServiceService, private router:Router) { }
 
 
 
   async validateEmail() {
     if (!this.email) {
-      this.emailInvalid = true;
-      this.emailErrorMessage = ErrorMessages.emailInvalid;
-    } else if (this.email.indexOf('@') === -1) {
-      this.emailInvalid = true;
-      this.emailErrorMessage = ErrorMessages.emailMissingAt;
-    } else if( !await this.userService.emailExists(this.email)){
-      this.emailInvalid = true
-      this.emailErrorMessage = ErrorMessages.emailNotFound;
-    } 
-    else {
+      this.emailInvalid = true;      
+    } else if (!await this.userService.emailExists(this.email)) {
+      this.emailInvalid = true;    
+    } else {
       this.emailInvalid = false;
     }
   }
 
+  async onBlur() {
+    await this.validateEmail();
+    this.showError = this.emailInvalid;
+  }
+
   async onSubmit(form: NgForm) {
-    this.validateEmail();
+    await this.validateEmail();
 
     if (form.valid && !this.emailInvalid) {
+      this.isSubmitting = true;
       try {
         await this.userService.sendPasswordResetEmail(this.email);
-        console.log(this.email)
-        console.log('Password reset email sent');
+        this.emailSend = true
+        setTimeout(() => {
+          this.emailSend = false;
+          this.router.navigate([''])
+        }, 2000);
       } catch (error) {
-        console.error('Error sending password reset email:', error);
-      }
-    } else {
-      console.log('Form is invalid');
+       
+      } 
     }
   }
 }

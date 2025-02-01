@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc, updateDoc, docData, } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
-import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail } from '@angular/fire/auth';
+import { confirmPasswordReset, createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, verifyPasswordResetCode } from '@angular/fire/auth';
 
 
 
@@ -94,6 +94,26 @@ export class UserServiceService {
       console.log(email);
     } catch (err) {
       console.error('Error sending password reset email:', err);
+    }
+  }
+
+  async verifyPasswordResetCode(code: string): Promise<string> {
+    try {
+      const email = await verifyPasswordResetCode(this.auth, code);
+      console.log(` ${email}`);
+      return email;
+    } catch (err) {
+      console.error('Error verifying password reset code:', err);
+      throw err;
+    }
+  }
+
+  async confirmPasswordReset(code: string, newPassword: string): Promise<void> {
+    try {
+      await confirmPasswordReset(this.auth, code, newPassword);
+    } catch (err) {
+      console.error('Error confirming password reset:', err);
+      throw err;
     }
   }
 }
