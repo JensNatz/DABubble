@@ -21,9 +21,10 @@ import { CommonModule } from '@angular/common';
 export class RestePasswordEmailComponent {
   email: string = '';
   emailInvalid: boolean = false;
-  emailErrorMessage: string = ErrorMessages.emailInvalid;
+  emailErrorMessage: string = '';
   isSubmitting:boolean = false;
   emailSend:boolean = false;
+  showError: boolean = false;
 
 
   constructor(private userService: UserServiceService, private router:Router) { }
@@ -32,15 +33,17 @@ export class RestePasswordEmailComponent {
 
   async validateEmail() {
     if (!this.email) {
-      this.emailInvalid = true;
-      this.emailErrorMessage = ErrorMessages.emailInvalid;
+      this.emailInvalid = true;      
     } else if (!await this.userService.emailExists(this.email)) {
-      this.emailInvalid = true
-      this.emailErrorMessage = ErrorMessages.emailNotFound;
-    }
-    else {
+      this.emailInvalid = true;    
+    } else {
       this.emailInvalid = false;
     }
+  }
+
+  async onBlur() {
+    await this.validateEmail();
+    this.showError = this.emailInvalid;
   }
 
   async onSubmit(form: NgForm) {

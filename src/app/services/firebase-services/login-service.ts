@@ -64,8 +64,10 @@ export class LoginService {
 
   async logout(): Promise<void> {
     try {
+      const currentUser = this.currentUserSubject.value;
       await signOut(this.auth);
       this.currentUserSubject.next(null);
+      console.log(`User ${currentUser?.email} hat sich ausgelogt`);
     } catch (error) {
       console.error('Error during logout:', error);
       throw error;

@@ -99,4 +99,8 @@ export class LoginComponent {
     this.googleAuthService.signInWithGoogle();
   }
 
+
+  logout(){
+    this.loginService.logout();
+  }
 }
