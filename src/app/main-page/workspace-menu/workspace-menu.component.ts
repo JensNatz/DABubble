@@ -87,5 +87,13 @@ export class WorkspaceMenuComponent {
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
   }
+
+  onNewMessageClick() {
+    console.log('new message clicked');
+    console.log(this.channelService.currentChannel);
+
+    this.channelService.currentChannel = null;
+    console.log(this.channelService.currentChannel);
+  }
 }
 

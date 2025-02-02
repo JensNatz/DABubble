@@ -70,6 +70,8 @@ export class MessageBoardComponent {
         if (this.channelType === 'direct' && channel.members) {
           this.setDirectMessagePartnerData(channel.members);
         }
+      } else {
+        this.clearMessageBoardData();
       }
     });
   }
@@ -88,12 +90,10 @@ export class MessageBoardComponent {
     }
   }
 
-
   async getUserFromChannel() {
     this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
     this.channelsDataLength = this.channelsData.length;   
   }
-
   
   setDirectMessagePartnerData(members: string[]) {
     const currentUser = this.loginService.currentUserValue;
@@ -109,6 +109,18 @@ export class MessageBoardComponent {
       this.userAvatar = currentUser.avatar;
       this.directMessagePartnerName = currentUser.name + ' (Du)';
     }
+  }
+
+  clearMessageBoardData() {
+    this.channelId = '';
+    this.channelName = '';
+    this.channelType = '';
+    this.channelDescription = '';
+    this.channelMembers = [];
+    this.messages = [];
+    this.isThreadOpen = false;
+    this.directMessagePartnerName = '';
+    this.userAvatar = '';
   }
 
   loadUserName() {
