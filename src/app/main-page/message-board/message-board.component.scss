@@ -1,4 +1,5 @@
 @import '../../../styles.scss';
+@import './../../shared/avatar/avatar.component.scss';
 
 .message-board {
     @include flex($align: start);
@@ -118,7 +119,9 @@
 }
 
 .channel_title {
-    margin-left: 12px;   
+    display: flex;
+    align-items: center;
+    margin-left: 10px;   
     padding: 0 16px; 
     cursor: pointer;
     @include rounded();
@@ -154,7 +157,10 @@
     }
 }
 
-.user_from_channels {    
+.user_from_channels {   
+    display: flex;
+    align-items: center;
+    
     p {
         font-weight: 700;
         font-size: 20px;
