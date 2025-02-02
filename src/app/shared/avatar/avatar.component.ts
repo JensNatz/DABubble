@@ -10,5 +10,13 @@ import { CommonModule } from '@angular/common';
 })
 export class AvatarComponent {
   @Input() size: 'small' | 'standard' | 'large' = 'standard';
-  @Input() avatarId: string = '1';
+  
+  private _avatarId: string = '1';
+  @Input()
+  set avatarId(value: string) {
+    this._avatarId = /^[1-6]$/.test(value) ? value : '0';
+  }
+  get avatarId(): string {
+    return this._avatarId;
+  }
 }

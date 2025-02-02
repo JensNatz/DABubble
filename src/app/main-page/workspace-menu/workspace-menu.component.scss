@@ -258,13 +258,15 @@
     font-size: 18px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    width: 100%;
+
 }
 
 .name_plus_icon {
     display: inline-block;
     white-space: nowrap;
     margin-bottom: 10px;
+    width: 100%;
 
     div {
         display: flex;
@@ -276,11 +278,6 @@
         &:hover {
             @include rounded();
             background-color: $bg-color;
-        }
-
-        >img {
-            height: 50px !important;
-            width: 50px !important;
-        }        
+        }       
     }
 }
