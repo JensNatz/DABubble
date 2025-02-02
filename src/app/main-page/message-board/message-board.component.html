@@ -14,13 +14,15 @@
             </ng-template>
 
             <div *ngIf="channelType !== 'direct' && channelTitle" class="user_from_channels">
-                <div class="user_from_channels_avatar">
-                    @for (channelData of channelsData.slice(0, 3); track $index) {
-                    <img class="avatar" *ngIf="channelType !== 'direct'"
-                        src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
-                    }
+                <div>
+                    <div class="user_from_channels_avatar">
+                        @for (channelData of channelsData.slice(0, 3); track $index) {
+                        <img class="avatar" *ngIf="channelType !== 'direct'"
+                            src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
+                        }
+                    </div>
+                    <p>{{ channelsDataLength }}</p>
                 </div>
-                <p>{{ channelsDataLength }}</p>
                 <img class="members_button" src="assets/img/44. Add members button.svg">
             </div>
         </div>
