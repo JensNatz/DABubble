@@ -12,6 +12,7 @@ import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
+import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.component';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -21,7 +22,8 @@ import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loadin
     TimeSeperatorComponent,
     MessageInputComponent,
     AvatarComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    ChannelEditComponent
   ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
@@ -37,6 +39,7 @@ export class MessageBoardComponent {
   channelMembers: string[] = [];
   channelsData: any[] = [];
   channelsDataLength: number = 0;
+  showModal = false;
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -202,6 +205,15 @@ export class MessageBoardComponent {
   handleRepliesClick(messageId: string) {
     this.parentMessageId = messageId;
     this.openTheadWithMessageId(messageId);
+  }
+
+
+  openEditChannel() {
+    this.showModal = true;
+  }
+
+  closeEditChannel() {
+    this.showModal = false;
   }
 
 }

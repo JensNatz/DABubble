@@ -6,12 +6,19 @@
                 <h2>{{ channelTitle }}</h2>
             </div>
             <ng-template #otherTitle>
-                <div class="channel_title" *ngIf="channelTitle">
+                <div class="channel_title" (click)="openEditChannel()" *ngIf="channelTitle">
                     <b>#</b>
                     <h2>{{ channelTitle }}</h2>
                     <img src="assets/img/keyboard_arrow_down.svg">
                 </div>
             </ng-template>
+
+            <div class="modal-overlay" *ngIf="showModal" (click)="closeEditChannel()"></div>
+            <div class="modal" *ngIf="showModal">
+                <img src="assets/img/close.svg" (click)="closeEditChannel()">
+                <!-- <app-add-channel [closeFunction]="closeAddChannel.bind(this)"></app-add-channel> -->
+                 <app-channel-edit></app-channel-edit>
+            </div>
 
             <div *ngIf="channelType !== 'direct' && channelTitle" class="user_from_channels">
                 <div>
