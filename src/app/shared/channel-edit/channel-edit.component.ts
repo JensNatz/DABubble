@@ -14,12 +14,24 @@ import { Component } from '@angular/core';
 
 export class ChannelEditComponent {
   nameEdit = false;
+  channelEdit = false;
 
   openNameEdit() {
     this.nameEdit = true;
   }
 
+
   closeNameEdit() {
     this.nameEdit = false;
+  }
+
+
+  openChannelEdit() {
+    this.channelEdit = true;
+  }
+
+
+  closeChannelEdit() {
+    this.channelEdit = false;
   }
 }

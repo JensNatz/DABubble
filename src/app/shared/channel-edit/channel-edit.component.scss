@@ -53,14 +53,22 @@ p {
     margin: 20px 0;
     border: 1px solid $light-purple;
     border-radius: 20px;
-    
+    height: 114px;
 }
 
 .channel_description_content {
+    box-sizing: border-box;
     padding: 20px;
     margin-bottom: 20px;
     border: 1px solid $light-purple;
     border-radius: 20px;
+    height: 273px;
+}
+
+.channel_description_content_edit {
+    margin-bottom: 20px;
+    margin-right: 20px;
+    height: 273px;
 }
 
 .channel_create_von {
@@ -94,7 +102,11 @@ p {
 
 .channel_name_content_edit {
     margin: 20px 0;
-    padding: 2px 5px;
+    height: 114px;
+    
+    p {
+        margin-right: 20px;
+    }
 }
 
 input {
