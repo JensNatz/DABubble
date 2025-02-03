@@ -1,7 +1,7 @@
 <div class="channel_edit_content">
     <h1># Channel Name</h1>
 
-    <div class="channel_name_content">
+    <div class="channel_name_content"  *ngIf="!nameEdit" (click)="openNameEdit()">
         <div class="channel_name_edit">
             <h2>Channel-name</h2>
             <p>Bearbeiten</p>
@@ -10,6 +10,14 @@
             <b>#</b>
             <span>Channel name from firebase</span>
         </div>
+    </div>
+
+    <div class="channel_name_content_edit" *ngIf="nameEdit" (click)="closeNameEdit()">
+        <div class="channel_name_edit">
+            <h2>Channel-name</h2>
+            <p>Speichern</p>
+        </div>
+        <input type="text">
     </div>
 
     <div class="channel_description_content">
