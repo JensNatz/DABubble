@@ -41,9 +41,9 @@
         <div class="channel_description_edit">
             <div>
                 <h2>Beschreibung</h2>
-                <p (click)="closeChannelEdit()">Speichern</p>
+                <p (click)="saveNewChannelDescription(channelDescription)">Speichern</p>
             </div>
-            <input type="text" placeholder="{{ channelDescription }}">
+            <input type="text" [(ngModel)]="channelDescription">
         </div>
 
         <div class="line"></div>

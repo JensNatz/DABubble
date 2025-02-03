@@ -26,6 +26,7 @@ export class ChannelEditComponent {
   nameEdit = false;
   channelEdit = false;
   tempChannelName: string = this.channelName;
+  tempChannelDescription: string = this.channelDescription;
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   messageBoard: MessageBoardComponent = inject(MessageBoardComponent);
@@ -37,11 +38,6 @@ export class ChannelEditComponent {
 
   openChannelEdit() {
     this.channelEdit = true;
-  }
-
-
-  closeChannelEdit() {
-    this.channelEdit = false;
   }
 
   saveNewChannelName(newName: string) {
@@ -57,8 +53,16 @@ export class ChannelEditComponent {
   }
 
 
-  saveNewChannelDescription() {
-    
+  saveNewChannelDescription(newDescription: string) {
+    if (!newDescription.trim()) return; 
+    try {
+      this.channelName = newDescription;
+      this.tempChannelDescription = newDescription;
+      this.channelEdit = false;
+      this.channelService.editChannelDescription(this.channelId, newDescription);
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren des Namens:', error);
+    }     
   }
 
   channelLeave() {

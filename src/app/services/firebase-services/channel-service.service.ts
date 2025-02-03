@@ -170,10 +170,18 @@ export class ChannelServiceService {
   }
 
 
-  editChannelName(chanellId: string, name: string) {
-    const channelsRef = doc(this.firestore, 'channels', chanellId);
+  editChannelName(channelId: string, name: string) {
+    const channelsRef = doc(this.firestore, 'channels', channelId);
     updateDoc(channelsRef, {
       name: name
+    });
+  }
+
+
+  editChannelDescription(channelId: string, description: string) {
+    const channelsRef = doc(this.firestore, 'channels', channelId);
+    updateDoc(channelsRef, {
+      description: description
     });
   }
 
