@@ -170,6 +170,14 @@ export class ChannelServiceService {
   }
 
 
+  editChannelName(chanellId: string, name: string) {
+    const channelsRef = doc(this.firestore, 'channels', chanellId);
+    updateDoc(channelsRef, {
+      name: name
+    });
+  }
+
+
   async getMembersOfChannelWithDetails(channelId: string) {
     const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
     const memberIds: string[] = channelDoc.data()?.['members'] || [];   

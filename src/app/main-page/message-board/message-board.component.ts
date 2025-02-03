@@ -32,6 +32,7 @@ export class MessageBoardComponent {
 
   channelId: string = '';
   channelName: string = '';
+  channelCreator: any = '';
   userAvatar = '';
   channelType: string = '';
   channelDescription: string = '';
@@ -65,6 +66,7 @@ export class MessageBoardComponent {
         this.channelName = channel.name;
         this.channelType = channel.type;
         this.channelDescription = channel.description;
+        this.channelCreator = channel.creator;
         this.channelMembers = channel.members || [];
         this.loadMessages();
         this.isThreadOpen = false;

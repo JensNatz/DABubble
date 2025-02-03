@@ -54,11 +54,11 @@ export class LoginService {
           this.userFound = false;
           this.router.navigate(['/chat'])
         }, 2000);
-       
-        
+
+
       }
     } catch (error) {
-      
+
     }
   }
 
@@ -75,9 +75,9 @@ export class LoginService {
   }
 
   editUserName(userId: string, name: string) {
-      const userRef = doc(this.firestore, 'users', userId);
-      updateDoc(userRef, {
-        name: name
-      });
-    }
+    const userRef = doc(this.firestore, 'users', userId);
+    updateDoc(userRef, {
+      name: name
+    });
+  }
 }

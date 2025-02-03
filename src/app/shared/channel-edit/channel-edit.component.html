@@ -1,49 +1,49 @@
 <div class="channel_edit_content">
     <h1># Channel Name</h1>
 
-    <div class="channel_name_content"  *ngIf="!nameEdit" (click)="openNameEdit()">
+    <div class="channel_name_content"  *ngIf="!nameEdit">
         <div class="channel_name_edit">
             <h2>Channel-name</h2>
-            <p>Bearbeiten</p>
+            <p (click)="openNameEdit()">Bearbeiten</p>
         </div>
         <div class="channel_name">
             <b>#</b>
-            <span>Channel name from firebase</span>
+            <span>{{ channelName }}</span>
         </div>
     </div>
 
-    <div class="channel_name_content_edit" *ngIf="nameEdit" (click)="closeNameEdit()">
+    <div class="channel_name_content_edit" *ngIf="nameEdit">
         <div class="channel_name_edit">
             <h2>Channel-name</h2>
-            <p>Speichern</p>
+            <p (click)="saveNewChannelName(channelName)">Speichern</p>
         </div>
-        <input type="text">
+        <input type="text" [(ngModel)]="channelName">
     </div>
 
-    <div class="channel_description_content" *ngIf="!channelEdit" (click)="openChannelEdit()">
+    <div class="channel_description_content" *ngIf="!channelEdit">
         <div class="channel_description_edit">
             <div>
                 <h2>Beschreibung</h2>
-                <p>Bearbeiten</p>
+                <p (click)="openChannelEdit()">Bearbeiten</p>
             </div>
-            <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit, qui quibusdam. Accusantium natus nissimos.</span>
+            <span>{{ channelDescription }}</span>
         </div>
 
         <div class="line"></div>
         
         <div class="channel_create_von">
             <h2>Erstellt von</h2>
-            <span>Name from firebase</span>
+            <span>{{ channelCreator }}</span>
         </div>
     </div>
 
-    <div class="channel_description_content_edit" *ngIf="channelEdit" (click)="closeChannelEdit()">
+    <div class="channel_description_content_edit" *ngIf="channelEdit">
         <div class="channel_description_edit">
             <div>
                 <h2>Beschreibung</h2>
-                <p>Bearbeiten</p>
+                <p (click)="closeChannelEdit()">Speichern</p>
             </div>
-            <input type="text">
+            <input type="text" placeholder="{{ channelDescription }}">
         </div>
 
         <div class="line"></div>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="button">
-        <button class="btn-primary">Channel verlassen</button>
+        <button class="btn-primary" (click)="channelLeave()">Channel verlassen</button>
     </div>
 
 </div>
