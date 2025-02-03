@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Channel } from '../../../models/channel';
 import { LoginService } from '../../../services/firebase-services/login-service';
+import { WorkspaceMenuComponent } from '../workspace-menu.component';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class AddChannelComponent {
 
 
   loginService: LoginService = inject(LoginService);
+  workSpace: WorkspaceMenuComponent = inject(WorkspaceMenuComponent);
 
   constructor(public channelService: ChannelServiceService) {
     this.getCurrentUserData();
@@ -57,7 +59,9 @@ export class AddChannelComponent {
         members: [this.userId],
         type: 'group'
       }
+      
       this.channelService.addNewChannel(this.channel);
+      this.workSpace.loadChannels();
       this.closeFunction();
     }
   }
