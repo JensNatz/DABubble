@@ -1,0 +1,13 @@
+<div class="recipient-container">
+    <input type="text"  
+    class="recipient-input" 
+    [(ngModel)]="inputValue"
+    (ngModelChange)="onInputChange($event)"
+    placeholder="An: #channel, oder @jemand oder E-Mail Adresse">
+    @if(listShown) {
+        <app-selection-list 
+        class="selection-list" 
+        [elements]="filteredResults"
+        (elementSelected)="onRecipientSelected($event)"></app-selection-list>
+    }
+</div>

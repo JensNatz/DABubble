@@ -5,11 +5,14 @@
         (tagSelected)="onTagSelected($event)"
     >
     </app-tag-selection-list>
-    <span *ngIf="isSubmittingDisabled" class="placeholder" contenteditable="false">
+    <span *ngIf="isPlaceholderVisible" class="placeholder" contenteditable="false">
         {{placeholder}}
     </span>
-    <div contenteditable="true" class="pseudo-input" #messageInput (input)="onInputChange()" (keydown)="onKeyDown($event)" >
-       
+    <div  #messageInput 
+        contenteditable="true"
+        class="pseudo-input" 
+        (input)="onInputChange()"
+        (keydown)="onKeyDown($event)" >
     </div>
     <div class="toolbar">
         <div class="toolbar-left">
@@ -21,7 +24,7 @@
                     ></app-emoji-picker>
                 </div>
             </div>
-            <img class="toolbar-icon" src="assets/img/at_symbol.svg" alt="Tag" (click)="onTagUserIconClick()" />
+            <img *ngIf="!isTaggingDisabled" class="toolbar-icon" src="assets/img/at_symbol.svg" alt="Tag" (click)="onTagUserIconClick()" />
         </div>
         <ng-container *ngIf="type === 'send'">
             <button class="send-button" [disabled]="isSubmittingDisabled" (click)="onSendClick()">

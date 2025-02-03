@@ -1,29 +1,41 @@
 <div class="message-board">
     <div class="message-container main-channel">
         <div class="message-board-header">
-            <div class="channel_title" *ngIf="channelType === 'direct'; else otherTitle">
-                <img class="avatar userAvatar" src="assets/img/avatar{{userAvatar}}.svg">
-                <h2>{{ channelTitle }}</h2>
-            </div>
-            <ng-template #otherTitle>
-                <div class="channel_title" *ngIf="channelTitle">
-                    <b>#</b>
-                    <h2>{{ channelTitle }}</h2>
-                    <img src="assets/img/keyboard_arrow_down.svg">
+            <div class="header-row">
+                <div class="header-left">
+                    <div class="channel-title" [class.hover-effect]="channelType === 'group'">
+                        @if (channelType === 'direct') {
+                        <img class="avatar userAvatar" src="assets/img/avatar{{userAvatar}}.svg">
+                        } @else if (channelType === 'group') {
+                        <b>#</b>
+                        }
+                        <h2>{{ channelTitle }}</h2>
+                        @if (channelType === 'group') {
+                        <img src="assets/img/keyboard_arrow_down.svg">
+                        }
+                    </div>
                 </div>
-            </ng-template>
-
-            <div *ngIf="channelType !== 'direct' && channelTitle" class="user_from_channels">
-                <div class="user_from_channels_avatar">
-                    @for (channelData of channelsData.slice(0, 3); track $index) {
-                    <img class="avatar" *ngIf="channelType !== 'direct'"
-                        src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
-                    }
-                </div>
-                <p>{{ channelsDataLength }}</p>
-                <img class="members_button" src="assets/img/44. Add members button.svg">
+                    <div class="header-right">
+                        @if (channelType === 'group' && channelTitle) {
+                        <div class="user_from_channels">
+                            <div class="user_from_channels_avatar">
+                                @for (channelData of channelsData.slice(0, 3); track $index) {
+                                <img class="avatar" src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
+                                }
+                            </div>
+                            <p>{{ channelsDataLength }}</p>
+                            <img class="members_button" src="assets/img/44. Add members button.svg">
+                        </div>
+                        }
+                    </div>
             </div>
+            @if (channelId === '') {
+            <div class="header-row">
+                <app-recipient-selector class="recipient-selector"></app-recipient-selector>
+            </div>
+            }
         </div>
+
         <div class="message-board-content">
             @if (messages.length === 0) {
             <div class="no-messages-container">
@@ -40,43 +52,48 @@
                 <p>Diese Unterhaltung findet nur zwischen dir und <span
                         class="partner-name">&#64;{{directMessagePartnerName}}</span> statt.</p>
                 } @else {
-                <p><strong>Dieser Raum ist nur für dich da.</strong> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</p>
+                <p><strong>Dieser Raum ist nur für dich da.</strong> Mache dir Notizen, liste deine To-dos auf oder
+                    bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst
+                    besprechen.</p>
                 }
                 }
             </div>
             } @else {
             @if (!areAllMainMessagesParsed()) {
-                <app-loading-indicator></app-loading-indicator>
+            <app-loading-indicator></app-loading-indicator>
             }
             <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container">
                 @for (message of messages; track message.id; let i = $index) {
-                    <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"
-                        (messageParseComplete)="handleMainMessageParsed($event)"></app-message>
-                    @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
-                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-                    }
+                <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"
+                    (messageParseComplete)="handleMainMessageParsed($event)"></app-message>
+                @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
+                <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                }
                 }
             </div>
             }
         </div>
         <div class="message-input-container">
-            <app-message-input [type]="'send'" placeholder="Nachricht an {{channelTitle}}"
+            <app-message-input [type]="'send'" [placeholder]="placeholder"
                 (sendMessage)="onSendMessage($event)"></app-message-input>
         </div>
     </div>
     @if (isThreadOpen) {
     <div class="message-container thread-channel">
         <div class="message-board-header">
-            <div class="header-left">
-                <h2>Thread</h2>
-                <span *ngIf="channelType === 'group'">
-                    #{{ channelName }}
-                </span>
+            <div class="header-row">
+                <div class="header-left">
+                    <div class="channel-title">
+                        <h2>Thread</h2>
+                        <span *ngIf="channelType === 'group'" class="thread-channel-title">
+                            #{{ channelName }}
+                        </span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <img src="assets/img/close.svg" class="close-icon" (click)="closeThread()">
+                </div>
             </div>
-            <div class="header-right">
-                <img src="assets/img/close.svg" class="close-icon" (click)="closeThread()">
-            </div>
-
         </div>
         <div class="message-board-content">
             @if (threadMessages.length === 0) {
@@ -84,18 +101,18 @@
                 Verfasse eine Antwort...
             </div>
             } @else {
-                @if (!areAllThreadMessagesParsed()) {
-                    <app-loading-indicator></app-loading-indicator>
+            @if (!areAllThreadMessagesParsed()) {
+            <app-loading-indicator></app-loading-indicator>
+            }
+            <div [class.hidden]="!areAllThreadMessagesParsed()" class="messages-container">
+                @for (message of threadMessages; track message.id; let i = $index) {
+                <app-message [message]="message"
+                    (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
+                @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
+                <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
                 }
-                <div [class.hidden]="!areAllThreadMessagesParsed()" class="messages-container">
-                    @for (message of threadMessages; track message.id; let i = $index) {
-                        <app-message [message]="message"
-                        (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
-                        @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
-                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-                        }
-                    }
-                </div>
+                }
+            </div>
             }
         </div>
         <div class="message-input-container">

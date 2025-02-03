@@ -89,11 +89,7 @@ export class WorkspaceMenuComponent {
   }
 
   onNewMessageClick() {
-    console.log('new message clicked');
-    console.log(this.channelService.currentChannel);
-
     this.channelService.currentChannel = null;
-    console.log(this.channelService.currentChannel);
   }
 }
 

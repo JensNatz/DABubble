@@ -31,6 +31,10 @@
         border: none;
         outline: none;
         overflow-y: auto;
+
+        &.disabled {
+            cursor: not-allowed;
+        }
     }
 
     .toolbar {
