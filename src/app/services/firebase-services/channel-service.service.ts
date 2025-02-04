@@ -9,6 +9,7 @@ import { LoginService } from './login-service';
 })
 export class ChannelServiceService {
 
+  id: string ='';
   channels;
   users;
 

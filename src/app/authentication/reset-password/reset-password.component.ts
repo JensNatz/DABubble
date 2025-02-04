@@ -33,7 +33,7 @@ export class ResetPasswordComponent {
   }
 
   ngOnInit(): void {
-    //this.resetCode = this.route.snapshot.queryParams['oobCode'];
+    this.resetCode = this.route.snapshot.queryParams['oobCode'];
     this.verifyResetCode();
   }
 

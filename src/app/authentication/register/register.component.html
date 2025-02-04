@@ -9,61 +9,55 @@
         <span>Mit deinem Namen und deiner E-Mail_Adreese hast du dein neue DABubble-Konto</span>
     </div>
 
-    <form (ngSubmit)="onSubmit(fregisterForm)"  #fregisterForm="ngForm">
+    <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
         <div class="input-field-section">
-            <app-input-field
-                required
-                [minlength]="3"
-                [(ngModel)]="name"
-                name="name"           
-                type="text"
-                placeholder="Name und Nachname"
-                [showError]="nameInvalid || false"
-                [errorMessage]="nameErrorMessage"
-                imagePath="../../../assets/img/person_filled.svg"
-                (ngModelChange)="resetNameError()"
-                (blur)="resetNameError()">
-            </app-input-field>
-            <app-input-field
-                required
-                [(ngModel)]="email"
-                name="email"
-                type="email"
-                placeholder="beispielname@email.com"
-                pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                [showError]="emailInvalid || false"
-                [errorMessage]="emailErrorMessage"
-                imagePath="../../../assets/img/mail.svg"
-                (ngModelChange)="resetEmailError()"
-                (blur)="resetEmailError()">
-            </app-input-field>
-            <app-input-field 
-                required
-                [minlength]="5"
-                [(ngModel)]="password"
-                name="password"
-                type="password"
-                placeholder="Passwort"
-                [showError]="passwordInvalid || false"
-                [errorMessage]="passwordErrorMessage"
-                imagePath="../../../assets/img/lock.svg"
-                pattern="^(?=.*[A-Z])(?=.*[!?@#$%^&*]).+$"
-                (ngModelChange)="resetPasswordError()"
-                (blur)="validatePassword()">
-            </app-input-field>
+          <app-input-field
+            required            
+            formControlName="name"
+            name="name"
+            type="text"
+            placeholder="Name und Nachname"
+            [showError]="registerForm.controls['name'].invalid && registerForm.controls['name'].touched"
+            [errorMessage]="nameErrorMessage"
+            (blur)="onBlur('name')"
+            imagePath="../../../assets/img/person_filled.svg">
+          </app-input-field>
+          <app-input-field
+            required
+            formControlName="email"
+            name="email"
+            type="email"
+            placeholder="beispielname@email.com"            
+            (blur)="onBlur('email')"
+            [showError]="registerForm.controls['email'].invalid && registerForm.controls['email'].touched" 
+            [errorMessage]="emailErrorMessage"
+            imagePath="../../../assets/img/mail.svg">
+          </app-input-field>
+          <app-input-field
+            required            
+            formControlName="password"
+            name="password"
+            type="password"
+            placeholder="Passwort"
+            (blur)="onBlur('password')"
+            [showError]="registerForm.controls['password'].invalid && registerForm.controls['password'].touched"
+            [errorMessage]="passwordErrorMessage"
+            imagePath="../../../assets/img/lock.svg"
+            >
+          </app-input-field>
         </div>
-
+      
         <div class="data-protection-container">
-            <input class="checkbox" type="checkbox" [(ngModel)]="dataProtection" name="dataProtection" required>
-            <span>Ich stimme der <a href="http://">Datenschutzerklärung</a> zu.</span>
+          <input class="checkbox" type="checkbox" formControlName="dataProtection" required>
+          <span>Ich stimme der <a href="http://">Datenschutzerklärung</a> zu.</span>
         </div>
-
+      
         <div class="btn-container">
-            <button type="submit"
-                    class="btn-primary"          
-                    [ngClass]="{'btn-disabled': fregisterForm.invalid}"  
-                    [disabled]="fregisterForm.invalid">Weiter</button>
+          <button type="submit"
+                  class="btn-primary"
+                  [ngClass]="{'btn-disabled': registerForm.invalid}"
+                  [disabled]="registerForm.invalid">Weiter</button>
         </div>
-    </form>
+      </form>
 
 </div>

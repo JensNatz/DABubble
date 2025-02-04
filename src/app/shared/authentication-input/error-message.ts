@@ -1,7 +1,7 @@
 export const ErrorMessages = {
-    nameRequired: 'Bitte schreiben Sie einen Namen',
+    nameRequired: 'Bitte geben Sie Vor- und Nachname ein',
     nameMinLength: 'Der Name muss mindestens 3 Zeichen lang sein',
-    emailInvalid: 'Diese E-Mail-Adresse ist leider ungültig',
+    emailInvalid: 'Bitte geben Sie eine gültige E-Mail-Adresse ein (z.B. name@domain.com)',
     emailMissingAt: 'Die E-Mail-Adresse muss ein @ enthalten',
     emailExists: 'Diese E-Mail-Adresse ist bereits vorhanden',
     emailNotFound:'Diese E-Mail-Adresse wurde nicht gefunden',
