@@ -52,13 +52,12 @@ export class TagSelectionListComponent implements OnChanges {
 
   updateTagsWithChannelData(channels: any[]) {
     for (const channel of channels) {
-      this.tags.push({ id: channel.id, name: '#'+channel.name });
+      this.tags.push({ id: channel.id, name: channel.name });
     }
   }
 
-  onTagClick(index: number) {
-    console.log('tag clicked', this.tags[index]);
-    // this.tagSelected.emit({ id: this.tags[index].id, name: this.tags[index].name, type: this.type });
+  onTagClick($event: { id: string, name: string, type: 'user' | 'channel' }) {
+    this.tagSelected.emit({ id: $event.id, name: $event.name, type: this.type });
   }
  
 }

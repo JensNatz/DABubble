@@ -15,5 +15,4 @@ export class SelectionListComponent {
   onElementClick(index: number) {
     this.elementSelected.emit(this.elements[index]);
   }
-
 }

@@ -91,12 +91,12 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onInputChange() {
-    this.tooglePlaceholder();
+    this.togglePlaceholder();
   }
 
-  tooglePlaceholder() {
+  togglePlaceholder() {
     const inputElement = this.messageInput?.element.nativeElement;
-    if (inputElement.textContent?.trim() === '') {
+    if (inputElement.innerHTML === '') {
       this.isPlaceholderVisible = true;
     } else {
       this.isPlaceholderVisible = false;
@@ -166,7 +166,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       } else {
         inputElement.appendChild(emojiText);
       }
-      this.onInputChange();
     }
     this.isEmojiPickerOpen = false;
     this.lastRange = null;
@@ -191,6 +190,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       }
 
       this.mentionsCache.push({ type, content: name, id });
+      this.togglePlaceholder();
     }
   }
 

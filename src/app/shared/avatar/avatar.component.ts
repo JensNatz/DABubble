@@ -19,4 +19,8 @@ export class AvatarComponent {
     }
     return this.avatar;
   }
+
+  onImageError() {
+    this.avatar = '0';
+  }
 }
