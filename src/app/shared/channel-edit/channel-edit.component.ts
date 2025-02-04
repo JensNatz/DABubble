@@ -23,6 +23,11 @@ export class ChannelEditComponent {
   @Input() channelCreator: any = '';
   @Input() channelDescription: string = '';
 
+  constructor() {
+    console.log(this.channelId);
+    
+  }
+
   nameEdit = false;
   channelEdit = false;
   tempChannelName: string = this.channelName;

@@ -1,6 +1,15 @@
 <div class="add_user_to_channel_content">
     <h1>Mitglieder</h1>
-    <span>User</span>
+    <div class="all_users_from_channel">
+        @for (userData of channelsData; track $index) {
+        <div>
+            <div>
+                <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg" alt="Avatar">
+                <span>{{ userData.name }}</span>
+            </div>
+        </div>
+        }
+    </div>
     <div class="mitglieder_hinzufügen">
         <img src="assets/img/44. Add members button.svg">
         <span>Mitglieder hinzufügen</span>

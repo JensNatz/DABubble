@@ -36,19 +36,14 @@
                 </div>
                 <img class="members_button" src="assets/img/44. Add members button.svg">
             </div>
-
-
-
-
             <div class="modal-overlay" *ngIf="showModalUserEdit" (click)="closeUserToChannel()"></div>
             <div class="modal modal-users" *ngIf="showModalUserEdit">
                 <img src="assets/img/close.svg" (click)="closeUserToChannel()">
-                <app-add-user-to-channel>
-
-                </app-add-user-to-channel>
+                <app-add-user-to-channel
+                    [channelId]="channelId"
+                    [channelMembers]="channelMembers"
+                ></app-add-user-to-channel>
             </div>
-
-
         </div>
         <div class="message-board-content">
             @if (messages.length === 0) {
