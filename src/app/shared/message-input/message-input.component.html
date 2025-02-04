@@ -5,7 +5,7 @@
         (tagSelected)="onTagSelected($event)"
     >
     </app-tag-selection-list>
-    <span *ngIf="isPlaceholderVisible" class="placeholder" contenteditable="false">
+    <span  class="placeholder" [class.hidden]="!isPlaceholderVisible" contenteditable="false">
         {{placeholder}}
     </span>
     <div  #messageInput 
@@ -27,7 +27,7 @@
             <img *ngIf="!isTaggingDisabled" class="toolbar-icon" src="assets/img/at_symbol.svg" alt="Tag" (click)="onTagUserIconClick()" />
         </div>
         <ng-container *ngIf="type === 'send'">
-            <button class="send-button" [disabled]="isSubmittingDisabled" (click)="onSendClick()">
+            <button class="send-button" [disabled]="sendButtonStatus" (click)="onSendClick()">
             </button>
         </ng-container>
         <ng-container *ngIf="type === 'edit'">

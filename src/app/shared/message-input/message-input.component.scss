@@ -23,6 +23,10 @@
         left: 16px;
         color: $gray;
         pointer-events: none;
+
+        &.hidden {
+            display: none;
+        }
     }
 
     .pseudo-input {

@@ -48,11 +48,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       const inputElement = this.messageInput.element.nativeElement;
       inputElement.focus();
     }
-    this.channelSubscription = this.channelService.currentChannel$.subscribe(channel => {
-      if (channel) {
-        this.currentChannelId = channel.id;
-      }
-    });
+    this.channelSubscription = this.channelService.currentChannel$.subscribe({ });
   }
 
   ngOnDestroy() {
@@ -62,7 +58,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnChanges() {
-    if (this.currentChannelId === undefined) {
+    if (this.channelService.currentChannel === null) {
       this.isTaggingDisabled = true;
     } else {
       this.isTaggingDisabled = false;
@@ -78,7 +74,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       const parsedParts = await this.messageService.parseMessageContent(this.content);
       const renderedComponents = this.messageService.renderMessagePartsInContainer(parsedParts, this.messageInput);
       this.fillMentionsCacheBasedOnMessageInput(renderedComponents);
-      this.updateSendButtonState();
     }
   }
 
@@ -96,7 +91,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onInputChange() {
-    this.updateSendButtonState(); 
     this.tooglePlaceholder();
   }
 
@@ -109,18 +103,17 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  updateSendButtonState() {
-    console.log('updateSendButtonState');
+  get sendButtonStatus(): boolean {
     if (this.channelService.currentChannel === null) {
-      this.isSubmittingDisabled = true;
-      return;
+      return true;
     }
     const inputElement = this.messageInput?.element.nativeElement;
     if (inputElement) {
       const hasText = !!inputElement.textContent?.trim();
       const hasMentions = inputElement.getElementsByTagName('app-mention').length > 0;
-      this.isSubmittingDisabled = !hasText && !hasMentions;
+      return hasText || hasMentions ? false : true;
     }
+    return true;
   }
 
   onCancelEditClick() {
@@ -160,8 +153,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       } else {
         inputElement.appendChild(emojiText);
       }
-      
-      this.updateSendButtonState();
+      this.onInputChange();
     }
     this.isEmojiPickerOpen = false;
     this.lastRange = null;
@@ -186,7 +178,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       }
 
       this.mentionsCache.push({ type, content: name, id });
-      this.updateSendButtonState();
     }
   }
 
@@ -228,7 +219,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       inputElement.innerHTML = '';
       this.mentionsCache = [];
       this.mentionCounter = 0;
-      this.updateSendButtonState();
     }
   }
 
@@ -266,6 +256,9 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onKeyDown(event: KeyboardEvent): void {
+    if(this.channelService.currentChannel === null) {
+      return;
+    }
     if (event.key === 'Enter') {
       event.preventDefault();
       if(!this.isSubmittingDisabled) {
