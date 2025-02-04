@@ -14,9 +14,8 @@
             </ng-template>
 
             <div class="modal-overlay" *ngIf="showModal" (click)="closeEditChannel()"></div>
-            <div class="modal" *ngIf="showModal">
+            <div class="modal modal-channel" *ngIf="showModal">
                 <img src="assets/img/close.svg" (click)="closeEditChannel()">
-                <!-- <app-add-channel [closeFunction]="closeAddChannel.bind(this)"></app-add-channel> -->
                 <app-channel-edit 
                     [channelId]="channelId" 
                     [channelName]="channelName" 
@@ -26,7 +25,7 @@
             </div>
 
             <div *ngIf="channelType !== 'direct' && channelTitle" class="user_from_channels">
-                <div>
+                <div (click)="openUserToChannel()">
                     <div class="user_from_channels_avatar">
                         @for (channelData of channelsData.slice(0, 3); track $index) {
                         <img class="avatar" *ngIf="channelType !== 'direct'"
@@ -37,6 +36,19 @@
                 </div>
                 <img class="members_button" src="assets/img/44. Add members button.svg">
             </div>
+
+
+
+
+            <div class="modal-overlay" *ngIf="showModalUserEdit" (click)="closeUserToChannel()"></div>
+            <div class="modal modal-users" *ngIf="showModalUserEdit">
+                <img src="assets/img/close.svg" (click)="closeUserToChannel()">
+                <app-add-user-to-channel>
+
+                </app-add-user-to-channel>
+            </div>
+
+
         </div>
         <div class="message-board-content">
             @if (messages.length === 0) {

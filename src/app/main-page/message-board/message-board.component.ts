@@ -13,6 +13,7 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
 import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.component';
+import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -23,8 +24,10 @@ import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.com
     MessageInputComponent,
     AvatarComponent,
     LoadingIndicatorComponent,
-    ChannelEditComponent
-  ],
+    ChannelEditComponent,
+    AddUserToChannelComponent,
+    AddUserToChannelComponent
+],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
 })
@@ -41,6 +44,7 @@ export class MessageBoardComponent {
   channelsData: any[] = [];
   channelsDataLength: number = 0;
   showModal = false;
+  showModalUserEdit = false;
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -217,5 +221,15 @@ export class MessageBoardComponent {
   closeEditChannel() {
     this.showModal = false;
   }
+
+  openUserToChannel() {
+    this.showModalUserEdit= true;
+  }
+
+  closeUserToChannel() {
+    this.showModalUserEdit = false;
+  }
+
+
 
 }
