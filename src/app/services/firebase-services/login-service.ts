@@ -49,35 +49,54 @@ export class LoginService {
         const userData = userSnapshot.data() as User;
         this.userFound = true;
         this.currentUserSubject.next(userData);
+        await updateDoc(userDoc, { onlineStatusbar: 'online' });
         console.log('User logged in:', userData);
         setTimeout(() => {
           this.userFound = false;
-          this.router.navigate(['/chat'])
+          this.router.navigate(['/chat']);
         }, 2000);
-       
-        
       }
     } catch (error) {
-      
+      console.error('Error during login:', error);
     }
   }
 
   async logout(): Promise<void> {
     try {
       const currentUser = this.currentUserSubject.value;
+      if (currentUser) {
+        const userDoc = await this.userService.getSingleUser('users', currentUser.id!);
+        await updateDoc(userDoc, { onlineStatusbar: 'offline' });
+      }
       await signOut(this.auth);
       this.currentUserSubject.next(null);
       console.log(`User ${currentUser?.email} hat sich ausgelogt`);
+    } catch (error) {     
+    }
+  }
+  editUserName(userId: string, name: string) {
+    const userRef = doc(this.firestore, 'users', userId);
+    updateDoc(userRef, {
+      name: name
+    });
+  }
+
+
+  async guestLogin(): Promise<void> {
+    const guestEmail = 'guest@guest.de';
+    const guestPassword = 'Guest!';
+    try {
+      await signInWithEmailAndPassword(this.auth, guestEmail, guestPassword);
+      console.log('Guest user logged in');
+      this.userFound = true;
+      setTimeout(() => {
+        this.userFound = false;
+        this.router.navigate(['/chat'])
+      }, 2000);
+
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error('Error during guest login:', error);
       throw error;
     }
   }
-
-  editUserName(userId: string, name: string) {
-      const userRef = doc(this.firestore, 'users', userId);
-      updateDoc(userRef, {
-        name: name
-      });
-    }
 }

@@ -4,13 +4,13 @@ import { FormsModule, NgForm, FormBuilder, FormGroup, Validators, ReactiveFormsM
 import { RouterModule, Router } from '@angular/router';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, ReactiveFormsModule],
+  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, ReactiveFormsModule,CommonModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })
@@ -26,6 +26,7 @@ export class RegisterComponent {
   emailErrorMessage: string = ErrorMessages.emailInvalid;
   passwordErrorMessage: string = ErrorMessages.passwordInvalid;
   registerForm: any;
+  dataProtectionErrorMessage: string = ErrorMessages.dataProtectionRequired;
 
   constructor(private fb: FormBuilder, private router: Router, private userService: UserServiceService) { }
 

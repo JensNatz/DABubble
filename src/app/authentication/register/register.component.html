@@ -50,6 +50,10 @@
         <div class="data-protection-container">
           <input class="checkbox" type="checkbox" formControlName="dataProtection" required>
           <span>Ich stimme der <a href="http://">Datenschutzerklärung</a> zu.</span>
+
+          <div *ngIf="registerForm.get('dataProtection').invalid && registerForm.get('dataProtection').touched" class="error-message">
+            {{ dataProtectionErrorMessage }}
+          </div>
         </div>
       
         <div class="btn-container">

@@ -87,6 +87,8 @@ form {
 }
 
 .google-btn {
+    @include flex(center, center, row);
+    gap: 20px;
     margin-top: 42px;
     color: $purple-1;
     max-width: 500px;
@@ -107,7 +109,10 @@ form {
 
     font-size: 18px;
 
-
+    img{
+        width: 38px;
+        height: 38px;
+    }
 
     &:hover {
         cursor: pointer;

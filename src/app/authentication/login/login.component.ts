@@ -43,10 +43,13 @@ export class LoginComponent {
   }
 
 
-  guestLogin() {
-    this.users.subscribe(users => {
-      console.log(users);
-    });
+  async guestLogin() {
+    try {
+      await this.loginService.guestLogin();
+      
+    } catch (error) {
+      console.error('Error during guest login:', error);
+    }
   }
 
   async onSubmit() {
