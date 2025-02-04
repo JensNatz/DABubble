@@ -55,14 +55,14 @@
         <div class="user_liste" *ngIf="isOpenUserListe">
             <div class="name_plus_icon" *ngIf="loggedInUser && loggedInUser.id">
                 <div>
-                    <app-avatar [avatarId]="loggedInUser.avatar" size="small"></app-avatar>
+                    <app-avatar [avatar]="loggedInUser.avatar" size="small"></app-avatar>
                     <span  (click)="switchToDirectMessageChannel(loggedInUser.id)">{{loggedInUser.name}} (Du)</span>
                 </div>
             </div>
             @for (user of otherUsers; track user) {
                 <div class="name_plus_icon" *ngIf="user.id">
                     <div>
-                        <app-avatar [avatarId]="user.avatar" size="small"></app-avatar>
+                        <app-avatar [avatar]="user.avatar" size="small"></app-avatar>
                         <span  (click)="switchToDirectMessageChannel(user.id)">{{user.name}}</span>
                     </div>
                 </div>

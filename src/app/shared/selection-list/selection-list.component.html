@@ -8,7 +8,7 @@
             @for (element of elements; track element; let i = $index) {
                 <div class="selection-list-item" (click)="onElementClick(i)">
                     @if (element.avatar) {
-                    <app-avatar [avatarId]="element.avatar" size="small"></app-avatar>
+                    <app-avatar [avatar]="element.avatar" size="small"></app-avatar>
                 }
                 <span>{{ element.name }}</span>
                 @if (element.email) {

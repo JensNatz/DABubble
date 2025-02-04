@@ -45,7 +45,7 @@
                 <p>Es gibt noch keine Nachrichten in diesem Channel. Schreibe eine erste Nachricht!</p>
                 } @else if (channelType === 'direct') {
                 <div class="no-messages-container-direct">
-                    <app-avatar [avatarId]="userAvatar"></app-avatar>
+                    <app-avatar [avatar]="userAvatar"></app-avatar>
                     <h2>{{directMessagePartnerName}} </h2>
                 </div>
                 @if (channelMembers.length > 1) {

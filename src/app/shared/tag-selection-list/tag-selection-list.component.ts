@@ -52,7 +52,7 @@ export class TagSelectionListComponent implements OnChanges {
 
   updateTagsWithChannelData(channels: any[]) {
     for (const channel of channels) {
-      this.tags.push({ id: channel.id, name: channel.name });
+      this.tags.push({ id: channel.id, name: '#'+channel.name });
     }
   }
 

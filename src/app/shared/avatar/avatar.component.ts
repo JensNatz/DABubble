@@ -10,13 +10,13 @@ import { CommonModule } from '@angular/common';
 })
 export class AvatarComponent {
   @Input() size: 'small' | 'standard' | 'large' = 'standard';
+  @Input() avatar: string = '0';
   
-  private _avatarId: string = '1';
-  @Input()
-  set avatarId(value: string) {
-    this._avatarId = /^[1-6]$/.test(value) ? value : '0';
-  }
-  get avatarId(): string {
-    return this._avatarId;
+  
+  get avatarImage(): string {
+    if (this.avatar >= '0' && this.avatar <= '6') {
+      return `assets/img/avatar${this.avatar}.svg`;
+    }
+    return this.avatar;
   }
 }
