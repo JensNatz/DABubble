@@ -9,11 +9,12 @@ import { MentionComponent } from '../mention/mention.component';
 import { MessagePart } from '../../models/message-part';
 import { Subscription } from 'rxjs';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
+import { SelectionListComponent } from '../selection-list/selection-list.component';
 
 @Component({
   selector: 'app-message-input',
   standalone: true,
-  imports: [FormsModule, CommonModule, EmojiPickerComponent, TagSelectionListComponent, ClickOutsideDirective, MentionComponent],
+  imports: [FormsModule, CommonModule, EmojiPickerComponent, TagSelectionListComponent, ClickOutsideDirective, MentionComponent, SelectionListComponent],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })

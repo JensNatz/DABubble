@@ -1,12 +1,13 @@
 import { Component, inject, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { UserService } from '../../services/user.service';
-import { AvatarComponent } from '../avatar/avatar.component';
 import { LoginService } from '../../services/firebase-services/login-service';
+import { SelectionListComponent } from '../selection-list/selection-list.component';
+
 @Component({
   selector: 'app-tag-selection-list',
   standalone: true,
-  imports: [AvatarComponent],
+  imports: [SelectionListComponent],
   templateUrl: './tag-selection-list.component.html',
   styleUrl: './tag-selection-list.component.scss'
 })
@@ -26,10 +27,6 @@ export class TagSelectionListComponent implements OnChanges {
     }
   }
 
-  get listHeader() {
-    return this.type === 'user' ? 'Mitglieder' : 'Channel';
-  }
-
   private async loadTags() {
     if (this.type === 'user') {
       const userIds = this.channelService.currentChannel?.members || [];
@@ -44,8 +41,12 @@ export class TagSelectionListComponent implements OnChanges {
 
   async updateTagsWithUserData(userIds: string[]) {
     for (const userId of userIds) {
-      const user = await this.userService.getCompleteUserInfo(userId);
-      this.tags.push({ id: userId, name: user.name, avatar: user.avatar });
+      if (userId) {
+        const user = await this.userService.getCompleteUserInfo(userId);
+        if (user) {
+          this.tags.push({ id: userId, name: user.name, avatar: user.avatar });
+        }
+      }
     }
   }
 
@@ -56,7 +57,8 @@ export class TagSelectionListComponent implements OnChanges {
   }
 
   onTagClick(index: number) {
-    this.tagSelected.emit({ id: this.tags[index].id, name: this.tags[index].name, type: this.type });
+    console.log('tag clicked', this.tags[index]);
+    // this.tagSelected.emit({ id: this.tags[index].id, name: this.tags[index].name, type: this.type });
   }
  
 }
