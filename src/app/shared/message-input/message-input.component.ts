@@ -9,12 +9,11 @@ import { MentionComponent } from '../mention/mention.component';
 import { MessagePart } from '../../models/message-part';
 import { Subscription } from 'rxjs';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
-import { SelectionListComponent } from '../selection-list/selection-list.component';
 
 @Component({
   selector: 'app-message-input',
   standalone: true,
-  imports: [FormsModule, CommonModule, EmojiPickerComponent, TagSelectionListComponent, ClickOutsideDirective, MentionComponent, SelectionListComponent],
+  imports: [FormsModule, CommonModule, EmojiPickerComponent, TagSelectionListComponent, ClickOutsideDirective, MentionComponent],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
@@ -46,8 +45,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
 
   constructor() {
     if (this.messageInput) {
-      const inputElement = this.messageInput.element.nativeElement;
-      inputElement.focus();
+      this.focusOnInput();
     }
     this.channelSubscription = this.channelService.currentChannel$.subscribe({ });
   }
@@ -63,12 +61,13 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       this.isTaggingDisabled = true;
     } else {
       this.isTaggingDisabled = false;
+      this.focusOnInput();
     }
   }
 
   async ngAfterViewInit() {
-    const inputElement = this.messageInput.element.nativeElement;
-    inputElement.focus();
+    this.focusOnInput();
+    
     if (this.content !== '') {
       this.mentionsCache = [];
       this.mentionCounter = 0;
@@ -101,6 +100,19 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       this.isPlaceholderVisible = true;
     } else {
       this.isPlaceholderVisible = false;
+    }
+  }
+
+  focusOnInput() {
+    const inputElement = this.messageInput?.element.nativeElement;
+    if (inputElement) {
+      inputElement.focus();
+      const range = document.createRange();
+      range.selectNodeContents(inputElement);
+      range.collapse(false);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
     }
   }
 
