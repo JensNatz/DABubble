@@ -2,11 +2,17 @@
     <h1>Mitglieder</h1>
     <div class="all_users_from_channel">
         @for (userData of channelsData; track $index) {
-        <div>
-            <div>
-                <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg" alt="Avatar">
+        <div class="user_name_and_avatar">
+            <div (click)="openUserInfos()">
+                <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
                 <span>{{ userData.name }}</span>
             </div>
+        </div>
+
+        <div class="modal-overlay" *ngIf="showUserInfo" (click)="closeUserInfos()"></div>
+        <div class="modal" *ngIf="showUserInfo">
+            <img src="assets/img/close.svg" (click)="closeUserInfos()">
+            <app-user-info></app-user-info>
         </div>
         }
     </div>

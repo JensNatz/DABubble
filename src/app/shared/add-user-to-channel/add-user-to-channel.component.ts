@@ -5,13 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
+import { UserInfoComponent } from '../user-info/user-info.component';
 
 @Component({
   selector: 'app-add-user-to-channel',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    UserInfoComponent
   ],
   templateUrl: './add-user-to-channel.component.html',
   styleUrls: ['./add-user-to-channel.component.scss']
@@ -20,6 +22,8 @@ export class AddUserToChannelComponent {
 
   @Input() channelId: string = '';
   @Input() channelMembers: any[] = [];
+
+  showUserInfo: boolean = false;
 
   usersNames: any[] = [];
   channelName: string = '';
@@ -48,12 +52,28 @@ export class AddUserToChannelComponent {
 
   async getUserFromChannel() {
     this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
-    this.channelsDataLength = this.channelsData.length;   
+    // this.channelsDataLength = this.channelsData.length;   
   }
 
 
   ngOnDestroy() {
     this.channelSubscription.unsubscribe();
   }
+
+
+  getUserId(id: string) {
+    console.log(id);
+    
+  }
+
+
+  openUserInfos() {
+    this.showUserInfo = true;
+  }
+
+  closeUserInfos() {
+    this.showUserInfo = false;
+  }
+
 
 }
