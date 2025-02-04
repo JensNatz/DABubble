@@ -24,7 +24,6 @@ export class ChannelEditComponent {
   @Input() channelDescription: string = '';
 
   constructor() {
-    console.log(this.channelId);
     
   }
 
@@ -61,7 +60,7 @@ export class ChannelEditComponent {
   saveNewChannelDescription(newDescription: string) {
     if (!newDescription.trim()) return; 
     try {
-      this.channelName = newDescription;
+      this.channelDescription = newDescription;
       this.tempChannelDescription = newDescription;
       this.channelEdit = false;
       this.channelService.editChannelDescription(this.channelId, newDescription);
