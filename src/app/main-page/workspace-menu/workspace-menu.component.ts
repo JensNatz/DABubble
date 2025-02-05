@@ -43,7 +43,11 @@ export class WorkspaceMenuComponent {
   ngOnInit() {
     this.loading = true;
     this.loginService.currentUser.subscribe(async user => {
-      if (user) {
+      if (user?.id) {
+        this.userService.getUserById(user.id).subscribe(updatedUser => {
+          this.loggedInUser = updatedUser;
+        });
+        
         await this.loadChannels();
         await this.loadUsers();
         this.loading = false;
@@ -60,7 +64,6 @@ export class WorkspaceMenuComponent {
   }
 
   async loadUsers() {
-    this.loggedInUser = this.loginService.currentUserValue;
     const users = await firstValueFrom(this.userService.getUsers());
     this.otherUsers = users.filter(user => user.id !== this.loggedInUser?.id);
   }
