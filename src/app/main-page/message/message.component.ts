@@ -87,6 +87,62 @@ export class MessageComponent implements OnInit, AfterViewInit {
     return '';
   }
 
+
+  showEmojiPicker(event: MouseEvent) {
+    this.displayEmojiPicker = true;
+    this.emojiPickerPosition = this.calcPickerPosition(event);
+  }
+
+  hideEmojiPicker() {
+    this.displayEmojiPicker = false;
+  }
+
+ 
+  addReaction(reactionType: string) {
+    if (!this.message.id) return;
+    let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
+
+    if (!reaction) {
+      reaction = { type: reactionType, users: [] };
+      this.reactionWithNames.push(reaction);
+    }
+
+    if (!reaction.users.some(user => user.id === this.loginService.currentUserValue?.id)) {
+      if (this.loginService.currentUserValue?.id) {
+        reaction.users.push({ id: this.loginService.currentUserValue?.id, name: 'Du' });
+        this.messageService.addReactionToMessage(this.message.id, reactionType, this.loginService.currentUserValue?.id);
+      }
+    }
+  }
+
+  removeReaction(reactionType: string) {
+    if (!this.message.id) return;
+    let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
+
+    if (reaction?.users.some(user => user.id === this.loginService.currentUserValue?.id)) {
+      if (this.loginService.currentUserValue?.id) {
+        reaction.users = reaction.users.filter(user => user.id !== this.loginService.currentUserValue?.id);
+        this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.loginService.currentUserValue?.id);
+      }
+    }
+  }
+
+  async createReactionDisplayArray(reactions: [] | undefined) {
+    if (!reactions) return [];
+    const entries = Object.entries(reactions);
+    return Promise.all(
+      entries.map(async reaction => ({
+        type: reaction[0],
+        users: await Promise.all(
+          (reaction[1] as string[]).map(async (userId: string) => ({
+            id: userId,
+            name: userId === this.loginService.currentUserValue?.id ? 'Du' : (await this.userService.getUserName(userId)) || 'Unknown User'
+          }))
+        )
+      }))
+    );
+  }
+
   private async renderMessageContent(content: string) {
     const parsedParts = await this.messageService.parseMessageContent(content);
     this.messageService.renderMessagePartsInContainer(parsedParts, this.container);
@@ -119,56 +175,6 @@ export class MessageComponent implements OnInit, AfterViewInit {
     return position;
   }
 
-  showEmojiPicker(event: MouseEvent) {
-    this.displayEmojiPicker = true;
-    this.emojiPickerPosition = this.calcPickerPosition(event);
-  }
-
-  hideEmojiPicker() {
-    this.displayEmojiPicker = false;
-  }
-
-  handleEmojiSelection(event: any) {
-    let emoji = event.emoji.id;
-    this.addReaction(emoji);
-    this.hideEmojiPicker();
-  }
-
-  onEmojiOverlayClick(event: MouseEvent) {
-    if (event.target === event.currentTarget) {
-      this.hideEmojiPicker();
-    }
-  }
-
-  addReaction(reactionType: string) {
-    if (!this.message.id) return;
-    let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
-
-    if (!reaction) {
-      reaction = { type: reactionType, users: [] };
-      this.reactionWithNames.push(reaction);
-    }
-
-    if (!reaction.users.some(user => user.id === this.loginService.currentUserValue?.id)) {
-      if (this.loginService.currentUserValue?.id) {
-        reaction.users.push({ id: this.loginService.currentUserValue?.id, name: 'Du' });
-        this.messageService.addReactionToMessage(this.message.id, reactionType, this.loginService.currentUserValue?.id);
-      }
-    }
-  }
-
-  removeReaction(reactionType: string) {
-    if (!this.message.id) return;
-    let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
-
-    if (reaction?.users.some(user => user.id === this.loginService.currentUserValue?.id)) {
-      if (this.loginService.currentUserValue?.id) {
-        reaction.users = reaction.users.filter(user => user.id !== this.loginService.currentUserValue?.id);
-        this.messageService.removeReactionFromMessage(this.message.id, reactionType, this.loginService.currentUserValue?.id);
-      }
-    }
-  }
-
   handleReactionToggle(reactionType: string) {
     if (!this.message.id) return;
     let reaction = this.reactionWithNames.find((reaction) => reaction.type === reactionType);
@@ -179,22 +185,6 @@ export class MessageComponent implements OnInit, AfterViewInit {
     } else {
       this.addReaction(reactionType);
     }
-  }
-
-  async createReactionDisplayArray(reactions: [] | undefined) {
-    if (!reactions) return [];
-    const entries = Object.entries(reactions);
-    return Promise.all(
-      entries.map(async reaction => ({
-        type: reaction[0],
-        users: await Promise.all(
-          (reaction[1] as string[]).map(async (userId: string) => ({
-            id: userId,
-            name: userId === this.loginService.currentUserValue?.id ? 'Du' : (await this.userService.getUserName(userId)) || 'Unknown User'
-          }))
-        )
-      }))
-    );
   }
 
   handleEditMessageClick() {
@@ -234,5 +224,17 @@ export class MessageComponent implements OnInit, AfterViewInit {
 
   handleAddReplyClick() {
     this.repliesClicked.emit(this.message.id);
+  }
+
+  onEmojiOverlayClick(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.hideEmojiPicker();
+    }
+  }
+
+  handleEmojiSelection(event: any) {
+    let emoji = event.emoji.id;
+    this.addReaction(emoji);
+    this.hideEmojiPicker();
   }
 }

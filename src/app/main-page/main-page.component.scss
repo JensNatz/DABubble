@@ -15,10 +15,15 @@
     overflow: hidden;
 
     .workspace-menu {
-        width: 360px;
+        width: 320px;
+        flex-shrink: 0;
         transition: width 0.125s ease;
         &.closed {
             width: 0;
+        }
+
+        @media (max-width: $breakpoint-lg) {
+            width: 280px;
         }
     }
     
@@ -33,11 +38,11 @@
     background-color: $white;
     cursor: pointer;
     top: 70%;
-    left: -140px;
+    left: -155px;
     transform: translate(-50%, -50%);
     transform: rotate(270deg);
-    height: 60px;
-    width: 340px;
+    height: 48px;
+    width: 360px;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
     -webkit-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
