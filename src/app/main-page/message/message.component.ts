@@ -38,8 +38,6 @@ export class MessageComponent implements OnInit, AfterViewInit {
   isOwn: boolean = false;
   isEditing: boolean = false;
   displayEmojiPicker: boolean = false;
-  // TODO: get channel id from channel service
-  channelId: string = '9kacAebjb6GEQZJC7jFL';
   avatar: string = '0';
   lastReplyTimestamp: number | null = null;
   isMessageInMainChannel: boolean = false;

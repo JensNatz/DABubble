@@ -2,11 +2,13 @@
 @import './../../styles/mixins';
 @import './../../shared/avatar/avatar.component.scss';
 
+
 .workspace-content {
-    height: calc(100vh - 145px);
+    @include rounded();
     width: 360px;
     background-color: white;
-    border-radius: 30px;
+    height: 100%;
+    overflow: hidden;
 }
 
 .workspace-title {
@@ -26,7 +28,7 @@
 }
 
 .channel_message_content {
-    max-height: calc(100vh - 269px);
+    // max-height: calc(100vh - 269px);
     overflow: hidden;
 
     &:hover {

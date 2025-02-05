@@ -1,17 +1,31 @@
 @import '../../styles.scss';
 
+.wrapper {
+    @include flex($direction: column);
+    background-color: red;
+    height: 100vh;
+    width: 100vw;
+}
 
 .main_content {
-    @include flex();
+    @include flex($align: stretch);
     gap: 20px;
-    padding: 0 20px;
+    padding: 20px;
+    background-color: blue;
     width: 100%;
+    flex: 1;
+    overflow: hidden;
+
+    
+    .message_board_content {
+        width: 100%;
+    }
 }
 
 .workspace-open {
     @include flex();
     position: absolute;
-    background-color: white;
+    background-color: $white;
     cursor: pointer;
     top: 70%;
     left: -140px;
@@ -46,9 +60,4 @@
 .workspace-open:hover img {
     filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
     transition: filter 0.3s ease;
-}
-
-.message_board_content {
-    width: 100%;
-    
 }

@@ -1,13 +1,15 @@
-<app-header></app-header>
-<div class="main_content">
-    <div *ngIf="isOpen">
-        <app-workspace-menu></app-workspace-menu>
+<div class="wrapper">
+    <app-header></app-header>
+    <div class="main_content">
+        @if (isOpen) {
+            <app-workspace-menu class="workspace-menu"></app-workspace-menu>
+        }
+        <div class="message_board_content">
+            <app-message-board></app-message-board>
+        </div>
     </div>
-    <div class="message_board_content">
-        <app-message-board></app-message-board>
+    <div class="workspace-open">
+        <h2 (click)="toggleMenu()">Workspace-Menü {{ isOpen ? closed : open }}</h2>
+        <img src="assets/img/Group 2.png">
     </div>
-</div>
-<div class="workspace-open">
-    <h2 (click)="toggleMenu()">Workspace-Menü {{ isOpen ? closed : open }}</h2>
-    <img src="assets/img/Group 2.png">
 </div>

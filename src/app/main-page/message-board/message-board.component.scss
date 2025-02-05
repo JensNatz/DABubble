@@ -4,13 +4,15 @@
 .message-board {
     @include flex($align: start);
     gap: 16px;
-    flex: 1;
+    height: 100%;
 
     .message-container {
         @include rounded();
+        @include flex($justify: space-between, $align: stretch, $direction: column);
         background-color: $white;
-        flex-shrink: 0;
-
+        height: 100%;
+        padding-bottom: 20px;
+       
         &.main-channel {
             width: 65%;
 
@@ -28,7 +30,9 @@
         @include flex($direction: column);
         gap: 8px;
         padding:16px;
+        z-index: 2;
         box-shadow: 0px 4px 4px 0px rgba($black, 0.08);
+
 
         .header-row {
             @include flex($justify: space-between);
@@ -123,7 +127,6 @@
     }
 
     .message-board-content {
-        height: calc(100vh - 425px);
         overflow-y: auto;
         margin-right: 5px;
         display: flex;
