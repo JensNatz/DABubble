@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { Firestore } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 import { UserServiceService } from './user-service.service';
 import { User } from '../../models/user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,11 @@ import { User } from '../../models/user';
 export class GoogleAuthenticationService {
   private auth = getAuth();
   private provider = new GoogleAuthProvider();
+  private defaultAvatarPath = '../../../assets/img/avatar1.svg';
+  userFound:boolean = false;
+  
 
-  constructor(private firestore: Firestore, private userService: UserServiceService) { }
+  constructor(private firestore: Firestore, private userService: UserServiceService,private router: Router) { }
 
   async signInWithGoogle(): Promise<void> {
     try {
@@ -23,18 +27,27 @@ export class GoogleAuthenticationService {
       const user = result.user;
       console.log('User signed in:', user);
 
+      const userDocRef = doc(this.firestore, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
 
-      const newUser: User = {
-        id: user.uid,
-        email: user.email || '',
-        name: user.displayName || '',
-        avatar: user.photoURL || '',
-        password: '',
-        onlineStatusbar: 'online'
-      };
-      await this.userService.addNewUser(newUser);
+      if (userDoc.exists()) {       
+        await setDoc(userDocRef, { onlineStatusbar: 'online' }, { merge: true });
+        
+        
+      } else {       
+        const newUser: User = {
+          id: user.uid,
+          email: user.email || '',
+          name: user.displayName || '',
+          avatar: '3',
+          password: '',
+          onlineStatusbar: 'online'
+        };
+        await setDoc(userDocRef, newUser);
+        console.log('New user created and added to Firestore');
+      }
     } catch (error) {
-
+      console.error('Error signing in with Google:', error);
     }
   }
 }

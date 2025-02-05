@@ -26,11 +26,15 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
 
   isEmojiPickerOpen: boolean = false;
   isSubmittingDisabled: boolean = true;
+  isInputEnabled: boolean = true;
+  isPlaceholderVisible: boolean = true;
+  isTaggingDisabled: boolean = false;
   isTagSelectionListOpen: boolean = false;
   taglistType: 'user' | 'channel' = 'user';
   private mentionCounter: number = 0;
   private mentionsCache: Array<{ type: 'user' | 'channel', content: string, id: string }> = [];
   private lastRange: Range | null = null;
+  private currentChannelId: string | undefined = undefined;
 
   @Input() placeholder: string | null = null;
   @Input() content: string = '';
@@ -40,13 +44,10 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   @Output() saveEdit = new EventEmitter<string>();
 
   constructor() {
-    this.channelSubscription = this.channelService.currentChannel$.subscribe(() => {
-      if (this.messageInput) {
-        const inputElement = this.messageInput.element.nativeElement;
-        inputElement.innerHTML='';
-        inputElement.focus();
-      }
-    });
+    if (this.messageInput) {
+      this.focusOnInput();
+    }
+    this.channelSubscription = this.channelService.currentChannel$.subscribe({ });
   }
 
   ngOnDestroy() {
@@ -55,16 +56,24 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  ngOnChanges() {
+    if (this.channelService.currentChannel === null) {
+      this.isTaggingDisabled = true;
+    } else {
+      this.isTaggingDisabled = false;
+      this.focusOnInput();
+    }
+  }
+
   async ngAfterViewInit() {
-    const inputElement = this.messageInput.element.nativeElement;
-    inputElement.focus();
+    this.focusOnInput();
+    
     if (this.content !== '') {
       this.mentionsCache = [];
       this.mentionCounter = 0;
       const parsedParts = await this.messageService.parseMessageContent(this.content);
       const renderedComponents = this.messageService.renderMessagePartsInContainer(parsedParts, this.messageInput);
       this.fillMentionsCacheBasedOnMessageInput(renderedComponents);
-      this.updateButtonStateBasedOnInput();
     }
   }
 
@@ -82,16 +91,42 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onInputChange() {
-    this.updateButtonStateBasedOnInput(); 
+    this.togglePlaceholder();
   }
 
-  updateButtonStateBasedOnInput() {
+  togglePlaceholder() {
+    const inputElement = this.messageInput?.element.nativeElement;
+    if (inputElement.innerHTML === '') {
+      this.isPlaceholderVisible = true;
+    } else {
+      this.isPlaceholderVisible = false;
+    }
+  }
+
+  focusOnInput() {
+    const inputElement = this.messageInput?.element.nativeElement;
+    if (inputElement && document) {
+      inputElement.focus();
+      const range = document.createRange();
+      range.selectNodeContents(inputElement);
+      range.collapse(false);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+  }
+
+  get sendButtonStatus(): boolean {
+    if (this.channelService.currentChannel === null) {
+      return true;
+    }
     const inputElement = this.messageInput?.element.nativeElement;
     if (inputElement) {
       const hasText = !!inputElement.textContent?.trim();
       const hasMentions = inputElement.getElementsByTagName('app-mention').length > 0;
-      this.isSubmittingDisabled = !hasText && !hasMentions;
+      return hasText || hasMentions ? false : true;
     }
+    return true;
   }
 
   onCancelEditClick() {
@@ -131,8 +166,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       } else {
         inputElement.appendChild(emojiText);
       }
-      
-      this.updateButtonStateBasedOnInput();
     }
     this.isEmojiPickerOpen = false;
     this.lastRange = null;
@@ -157,7 +190,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       }
 
       this.mentionsCache.push({ type, content: name, id });
-      this.updateButtonStateBasedOnInput();
+      this.togglePlaceholder();
     }
   }
 
@@ -199,7 +232,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       inputElement.innerHTML = '';
       this.mentionsCache = [];
       this.mentionCounter = 0;
-      this.updateButtonStateBasedOnInput();
     }
   }
 
@@ -237,6 +269,9 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onKeyDown(event: KeyboardEvent): void {
+    if(this.channelService.currentChannel === null) {
+      return;
+    }
     if (event.key === 'Enter') {
       event.preventDefault();
       if(!this.isSubmittingDisabled) {

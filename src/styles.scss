@@ -50,18 +50,6 @@ body {
     visibility: hidden;
 }
 
-textarea {
-    font-family: inherit;
-    font-size: inherit;
-    outline: none;
-    border: none;
-    resize: none;
-
-    &::placeholder {
-        color: $gray;
-    }
-}
-
 .br-30{
     border-radius: 30px;
 }

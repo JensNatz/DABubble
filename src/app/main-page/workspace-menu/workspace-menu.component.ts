@@ -6,6 +6,10 @@ import { AddChannelComponent } from './add-channel/add-channel.component';
 import { Channel } from '../../models/channel';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
+import { UserServiceService } from '../../services/firebase-services/user-service.service';
+import { User } from '../../models/user';
+import { AvatarComponent } from '../../shared/avatar/avatar.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -14,7 +18,8 @@ import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loadin
     CommonModule,
     FormsModule,
     AddChannelComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    AvatarComponent
   ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss'
@@ -24,7 +29,11 @@ export class WorkspaceMenuComponent {
   isOpenChannelListe = true;
   isOpenUserListe = true;
   channels: Channel[] = [];
+  users: User[] = [];
+  otherUsers: User[] = [];
+  loggedInUser: User | null = null;
   loginService: LoginService = inject(LoginService);
+  userService: UserServiceService = inject(UserServiceService);
   loading: boolean = false;
 
   public showModal: boolean = false;
@@ -34,8 +43,13 @@ export class WorkspaceMenuComponent {
   ngOnInit() {
     this.loading = true;
     this.loginService.currentUser.subscribe(async user => {
-      if (user) {
-         await this.loadChannels();
+      if (user?.id) {
+        this.userService.getUserById(user.id).subscribe(updatedUser => {
+          this.loggedInUser = updatedUser;
+        });
+        
+        await this.loadChannels();
+        await this.loadUsers();
         this.loading = false;
       } 
     });
@@ -44,10 +58,14 @@ export class WorkspaceMenuComponent {
   async loadChannels() {
     const userId = this.loginService.currentUserValue?.id;
     if (!userId) {
-      console.log('No user ID available');
       return;
     }
     this.channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(userId) as Channel[];
+  }
+
+  async loadUsers() {
+    const users = await firstValueFrom(this.userService.getUsers());
+    this.otherUsers = users.filter(user => user.id !== this.loggedInUser?.id);
   }
 
   openAddChannel() {
@@ -77,6 +95,10 @@ export class WorkspaceMenuComponent {
 
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
+  }
+
+  onNewMessageClick() {
+    this.channelService.currentChannel = null;
   }
 }
 

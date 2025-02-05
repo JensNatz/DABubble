@@ -1,15 +1,5 @@
-<div class="tag-selection-list-container">
-    <div class="tag-selection-list-header">
-        {{ listHeader }}
-    </div>
-    <div class="tag-selection-list">
-        @for (tag of tags; track tag; let i = $index) {
-            <div class="tag-selection-list-item" (click)="onTagClick(i)">
-                @if (tag.avatar) {
-                    <app-avatar [avatarId]="tag.avatar" size="small"></app-avatar>
-                }
-                <span>{{ tag.name }}</span>
-            </div>
-        }
-    </div>
-</div>
+<app-selection-list 
+        class="selection-list" 
+        [elements]="tags"
+        (elementSelected)="onTagClick($event)">
+</app-selection-list>
