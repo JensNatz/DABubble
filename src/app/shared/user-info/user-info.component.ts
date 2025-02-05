@@ -6,11 +6,14 @@ import { Subscription } from 'rxjs';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
+import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
-  imports: [],
+  imports: [
+    MessageBoardComponent
+  ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss'
 })
@@ -31,6 +34,10 @@ export class UserInfoComponent {
 
   private userSubscription: Subscription = new Subscription();
 
+  constructor( private messageBoard: MessageBoardComponent ) {
+
+  }
+
   
   ngOnInit() {    
     if (this.userId) {
@@ -47,5 +54,11 @@ export class UserInfoComponent {
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
+  }
+  
+
+  switchToDirectMessageChannel(userId: string) {
+    this.channelService.setDirectMessageChannel(userId);
+    this.messageBoard.closeUserToChannel();
   }
 }
