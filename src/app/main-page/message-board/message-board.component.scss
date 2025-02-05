@@ -16,7 +16,7 @@
         transition: width 0.125s ease;
        
         &.main-channel {
-            width: 65%;
+            width: 55%;
 
             &:only-child {
                 width: 100%;
@@ -24,7 +24,7 @@
         }
 
         &.thread-channel {
-            width: 35%;
+            width: 45%;
 
             @media (max-width: $breakpoint-xl) {
                 position: absolute;

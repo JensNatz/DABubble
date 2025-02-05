@@ -216,6 +216,9 @@ export class MessageComponent implements OnInit, AfterViewInit {
 
   handleOutsideOfMessageClick() {
      this.isEditing = false;
+     setTimeout(() => {
+      this.renderMessageContent(this.message.content);
+   });
   }
 
   handleRepliesClick() {
