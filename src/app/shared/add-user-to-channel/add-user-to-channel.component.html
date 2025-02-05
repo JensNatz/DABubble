@@ -3,12 +3,12 @@
     <div class="all_users_from_channel">
         @for (userData of channelsData; track $index) {
             <div class="user_name_and_avatar">
-                <div *ngIf="userData.id !== currentUserId; else noClick" (click)="openUserInfos(userData)">
+                <div class="user_name_and_avatar" *ngIf="userData.id !== currentUserId; else noClick" (click)="openUserInfos(userData)">
                     <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
                     <span>{{ userData.name }}</span>
                 </div>
                 <ng-template #noClick>
-                    <div class="no-click">
+                    <div class="user_name_and_avatar" class="no-click">
                         <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
                         <span>{{ userData.name }}</span>
                     </div>
