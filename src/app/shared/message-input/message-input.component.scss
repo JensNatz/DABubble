@@ -23,6 +23,10 @@
         left: 16px;
         color: $gray;
         pointer-events: none;
+
+        &.hidden {
+            display: none;
+        }
     }
 
     .pseudo-input {
@@ -31,6 +35,10 @@
         border: none;
         outline: none;
         overflow-y: auto;
+
+        &.disabled {
+            cursor: not-allowed;
+        }
     }
 
     .toolbar {

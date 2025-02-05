@@ -4,12 +4,12 @@
             <img class="logo" src="assets/img/Workspace logo.png">
             <h2>Devspace</h2>
         </div>
-        <div class="edit">
+        <div class="new-message" (click)="onNewMessageClick()">
             <img src="assets/img/edit_square.svg">
         </div>
     </div>
 
-    <div class="channel_message_content">
+  <div class="channel_message_content"> 
         <div class="channels_content">
             <div class="channel_title" (click)="toggleMenuChannel()">
                 <img class="arrow"
@@ -53,17 +53,20 @@
         </div>
 
         <div class="user_liste" *ngIf="isOpenUserListe">
-            @for (user of (this.channelService.users | async); track user) {
-            <div>
-                <div class="name_plus_icon">
-                    <div>
-                        <img class="avatar" src="assets/img/avatar{{user['avatar']}}.svg" alt="Avatar">
-                        <span  (click)="switchToDirectMessageChannel(user['id'])">{{user['name']}}</span>
-                    </div>
+            <div class="name_plus_icon" *ngIf="loggedInUser && loggedInUser.id">
+                <div>
+                    <app-avatar [avatar]="loggedInUser.avatar" size="small"></app-avatar>
+                    <span  (click)="switchToDirectMessageChannel(loggedInUser.id)">{{loggedInUser.name}} (Du)</span>
                 </div>
             </div>
+            @for (user of otherUsers; track user) {
+                <div class="name_plus_icon" *ngIf="user.id">
+                    <div>
+                        <app-avatar [avatar]="user.avatar" size="small"></app-avatar>
+                        <span  (click)="switchToDirectMessageChannel(user.id)">{{user.name}}</span>
+                    </div>
+                </div>
             }
         </div>
-    </div>
-
+    </div> 
 </div>

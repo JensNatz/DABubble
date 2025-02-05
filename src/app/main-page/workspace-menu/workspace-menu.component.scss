@@ -48,21 +48,21 @@
     }
 }
 
-.edit {
+.new-message {
     img {
         width: 20px;
         height: 20px;
         margin: 10px;
         cursor: pointer;
-    }
+    }           
 }
 
-.edit:hover {
+.new-message:hover {
     background-color: rgba(99, 61, 189, 0.2);
     @include rounded();
 }
 
-.edit:hover img {
+.new-message:hover img {
     filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
 
 }
@@ -258,13 +258,15 @@
     font-size: 18px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    width: 100%;
+
 }
 
 .name_plus_icon {
     display: inline-block;
     white-space: nowrap;
     margin-bottom: 10px;
+    width: 100%;
 
     div {
         display: flex;
@@ -276,11 +278,6 @@
         &:hover {
             @include rounded();
             background-color: $bg-color;
-        }
-
-        >img {
-            height: 50px !important;
-            width: 50px !important;
-        }        
+        }       
     }
 }

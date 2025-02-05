@@ -12,6 +12,7 @@ import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
+import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -21,7 +22,8 @@ import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loadin
     TimeSeperatorComponent,
     MessageInputComponent,
     AvatarComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    RecipientSelectorComponent
   ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
@@ -70,6 +72,8 @@ export class MessageBoardComponent {
         if (this.channelType === 'direct' && channel.members) {
           this.setDirectMessagePartnerData(channel.members);
         }
+      } else {
+        this.clearMessageBoardData();
       }
     });
   }
@@ -83,17 +87,27 @@ export class MessageBoardComponent {
   get channelTitle() {
     if (this.channelType === 'direct') {
       return this.directMessagePartnerName;
-    } else {
+    } else if (this.channelType === 'group') {
       return this.channelName;
+    } else {
+      return 'Neue Nachricht';
     }
   }
 
+  get placeholder() {
+    if (this.channelType === 'direct') {
+      return 'Nachricht an ' + this.directMessagePartnerName;
+    } else if (this.channelType === 'group') {
+      return 'Nachricht an ' + this.channelName;
+    } else {
+      return 'Wähle einen Empfänger und starte eine neue Nachricht...';
+    }
+  }
 
   async getUserFromChannel() {
     this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
     this.channelsDataLength = this.channelsData.length;   
   }
-
   
   setDirectMessagePartnerData(members: string[]) {
     const currentUser = this.loginService.currentUserValue;
@@ -109,6 +123,18 @@ export class MessageBoardComponent {
       this.userAvatar = currentUser.avatar;
       this.directMessagePartnerName = currentUser.name + ' (Du)';
     }
+  }
+
+  clearMessageBoardData() {
+    this.channelId = '';
+    this.channelName = '';
+    this.channelType = '';
+    this.channelDescription = '';
+    this.channelMembers = [];
+    this.messages = [];
+    this.isThreadOpen = false;
+    this.directMessagePartnerName = '';
+    this.userAvatar = '';
   }
 
   loadUserName() {

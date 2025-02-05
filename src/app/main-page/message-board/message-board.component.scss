@@ -1,13 +1,14 @@
 @import '../../../styles.scss';
+@import './../../shared/avatar/avatar.component.scss';
 
 .message-board {
     @include flex($align: start);
     gap: 16px;
+    flex: 1;
 
     .message-container {
         @include rounded();
         background-color: $white;
-        padding: 24px 0 16px;
         flex-shrink: 0;
 
         &.main-channel {
@@ -24,23 +25,65 @@
     }
 
     .message-board-header {
-        @include flex($justify: space-between);
-        padding: 0 24px;
-        height: 76px;
+        @include flex($direction: column);
+        gap: 8px;
+        padding:16px;
+        box-shadow: 0px 4px 4px 0px rgba($black, 0.08);
 
-        h2 {
-            font-size: 24px;
-            padding: 8px 0;
+        .header-row {
+            @include flex($justify: space-between);
+            width: 100%;
+        }
+
+        .recipient-selector {
+            width: 100%;
         }
 
         .header-left {
-            @include flex($justify: start);
-            gap: 8px;
-
-            span {
+            .thread-channel-title {
                 font-size: 14px;
                 color: $purple-2;
             }
+
+            .channel-title {
+                @include flex();
+
+                b {
+                    font-size: 24px;
+                }
+            
+                h2 {
+                    margin: 0 10px;
+                    font-size: 24px;
+                    padding: 8px 0;
+                }
+                
+                img {
+                    transition: filter 0.1s ease;
+                }
+                 
+                &.hover-effect:hover {
+                    @include rounded();
+                    cursor: pointer;
+                    padding: 0 8px; 
+                    color: $purple-3;
+                    background-color: $bg-color;
+
+                    img {
+                        filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
+                    }
+                }
+            }
+
+            .recipient-input {
+                @include rounded();
+                width: 100%;
+                border: 1px solid $light-purple;
+                outline: none;
+                padding: 8px;
+            }
+
+
         }
 
         .header-right {
@@ -53,6 +96,27 @@
 
                 &:hover {
                     background-color: $bg-color;
+                }
+            }
+
+            .user_from_channels {   
+                display: flex;
+                align-items: center;
+                
+                p {
+                    font-weight: 700;
+                    font-size: 20px;
+                    margin-left: 25px;
+                    margin-right: 20px;
+                }
+            }
+
+            .user_from_channels_avatar {
+                img {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: -10px;
+                    border: 2px solid white;
                 }
             }
         }
@@ -117,48 +181,4 @@
     margin-right: 15px;
 }
 
-.channel_title {
-    margin-left: 12px;   
-    padding: 0 16px; 
-    cursor: pointer;
-    @include rounded();
 
-    b {
-        font-size: 24px;
-    }
-
-    h2 {
-        margin: 0 10px;
-    }
-
-    &:hover {
-        color: $purple-3;
-        background-color: $bg-color;
-    }
-
-    img {
-        transition: filter 0.1s ease;
-    }
-
-    &:hover img {
-        filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
-    }
-}
-
-.user_from_channels_avatar {
-    img {
-        width: 40px;
-        height: 40px;
-        margin-right: -10px;
-        border: 2px solid white;
-    }
-}
-
-.user_from_channels {    
-    p {
-        font-weight: 700;
-        font-size: 20px;
-        margin-left: 25px;
-        margin-right: 20px;
-    }
-}
