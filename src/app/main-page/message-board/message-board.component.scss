@@ -2,17 +2,21 @@
 @import './../../shared/avatar/avatar.component.scss';
 
 .message-board {
-    @include flex($align: start);
+    @include flex($align: start, $justify: start);
     gap: 16px;
-    flex: 1;
+    height: 100%;
+    position: relative;
 
     .message-container {
         @include rounded();
+        @include flex($justify: space-between, $align: stretch, $direction: column);
         background-color: $white;
-        flex-shrink: 0;
-
+        height: 100%;
+        padding-bottom: 20px;
+        transition: width 0.125s ease;
+       
         &.main-channel {
-            width: 65%;
+            width: 55%;
 
             &:only-child {
                 width: 100%;
@@ -20,7 +24,22 @@
         }
 
         &.thread-channel {
-            width: 35%;
+            width: 45%;
+
+            @media (max-width: $breakpoint-xl) {
+                position: absolute;
+                z-index: 2;
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 75%;
+                box-shadow: 0px 4px 4px 3px rgba($black, 0.08);
+            }
+
+            @media (max-width: $breakpoint-lg) {
+                width: 100%;
+                box-shadow: none;
+            }
         }
     }
 
@@ -28,7 +47,9 @@
         @include flex($direction: column);
         gap: 8px;
         padding:16px;
-        box-shadow: 0px 4px 4px 0px rgba($black, 0.08);
+        z-index: 2;
+        box-shadow: 0px 4px 4px -2px rgba($black, 0.08);
+
 
         .header-row {
             @include flex($justify: space-between);
@@ -82,8 +103,6 @@
                 outline: none;
                 padding: 8px;
             }
-
-
         }
 
         .header-right {
@@ -123,11 +142,11 @@
     }
 
     .message-board-content {
-        height: calc(100vh - 425px);
         overflow-y: auto;
         margin-right: 5px;
         display: flex;
         flex-direction: column-reverse;
+        flex: 1;
 
         .messages-container {
             display: flex;

@@ -34,7 +34,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   private mentionCounter: number = 0;
   private mentionsCache: Array<{ type: 'user' | 'channel', content: string, id: string }> = [];
   private lastRange: Range | null = null;
-  private currentChannelId: string | undefined = undefined;
 
   @Input() placeholder: string | null = null;
   @Input() content: string = '';
@@ -74,6 +73,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       const parsedParts = await this.messageService.parseMessageContent(this.content);
       const renderedComponents = this.messageService.renderMessagePartsInContainer(parsedParts, this.messageInput);
       this.fillMentionsCacheBasedOnMessageInput(renderedComponents);
+      this.togglePlaceholder();
     }
   }
 
@@ -105,7 +105,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
 
   focusOnInput() {
     const inputElement = this.messageInput?.element.nativeElement;
-    if (inputElement && document) {
+    if (inputElement) {
       inputElement.focus();
       const range = document.createRange();
       range.selectNodeContents(inputElement);
