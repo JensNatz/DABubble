@@ -10,5 +10,17 @@ import { CommonModule } from '@angular/common';
 })
 export class AvatarComponent {
   @Input() size: 'small' | 'standard' | 'large' = 'standard';
-  @Input() avatarId: string = '1';
+  @Input() avatar: string = '0';
+  
+  
+  get avatarImage(): string {
+    if (this.avatar >= '0' && this.avatar <= '6') {
+      return `assets/img/avatar${this.avatar}.svg`;
+    }
+    return this.avatar;
+  }
+
+  onImageError() {
+    this.avatar = '0';
+  }
 }

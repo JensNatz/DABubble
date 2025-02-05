@@ -1,6 +1,6 @@
 <div class="message-container" [ngClass]="{'own': isOwn} " (clickOutside)="handleOutsideOfMessageClick()">
     <div class="avatar">
-        <app-avatar [avatarId]="avatarId"></app-avatar>
+        <app-avatar [avatar]="avatar"></app-avatar>
     </div>
     <ng-container *ngIf="!isEditing">
         <div class="message">

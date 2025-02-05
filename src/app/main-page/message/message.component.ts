@@ -40,7 +40,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
   displayEmojiPicker: boolean = false;
   // TODO: get channel id from channel service
   channelId: string = '9kacAebjb6GEQZJC7jFL';
-  avatarId: string = '0';
+  avatar: string = '0';
   lastReplyTimestamp: number | null = null;
   isMessageInMainChannel: boolean = false;
   emojiPickerPosition: string = 'top: 50px; left: 50px;';
@@ -50,7 +50,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.authorName = (await this.userService.getUserName(this.message.author)) || 'Unknown User';
-    this.avatarId = await this.userService.getUserAvatar(this.message.author);
+    this.avatar = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
     if (this.message.author === this.loginService.currentUserValue?.id) {
       this.isOwn = true;

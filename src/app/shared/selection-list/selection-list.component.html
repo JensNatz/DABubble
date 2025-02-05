@@ -1,0 +1,21 @@
+<div class="selection-list-container">
+    <div class="selection-list">
+        @if (elements.length === 0) {
+            <div class="selection-list-item">
+                <span>Keine Ergebnisse</span>
+            </div>
+        } @else {
+            @for (element of elements; track element; let i = $index) {
+                <div class="selection-list-item" (click)="onElementClick(i)">
+                    @if (element.avatar) {
+                    <app-avatar [avatar]="element.avatar" size="small"></app-avatar>
+                }
+                <span>{{ element.name }}</span>
+                @if (element.email) {
+                        <span class="item-email">{{ element.email }}</span>
+                }
+                </div>
+            }
+        }
+    </div>
+</div>

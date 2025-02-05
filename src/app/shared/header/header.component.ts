@@ -45,6 +45,8 @@ export class HeaderComponent {
         this.userAvatar = user.avatar;
         this.userEmail = user.email;
         this.userStatus = user.onlineStatusbar;
+      } else {
+        this.userAvatar = '0';
       }
     })
   }
