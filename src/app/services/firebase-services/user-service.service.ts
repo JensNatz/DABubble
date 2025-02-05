@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc, updateDoc, docData, } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc, updateDoc, docData, where, getDocs, } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
 import { confirmPasswordReset, createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, verifyPasswordResetCode } from '@angular/fire/auth';
@@ -100,10 +100,10 @@ export class UserServiceService {
   async verifyPasswordResetCode(code: string): Promise<string> {
     try {
       const email = await verifyPasswordResetCode(this.auth, code);
-      console.log(` ${email}`);
+      console.log(`Reset code verified for email: ${email}`);
       return email;
     } catch (err) {
-      console.error('Error verifying password reset code:', err);
+      console.error('Error verifying reset code:', err);
       throw err;
     }
   }
@@ -111,6 +111,13 @@ export class UserServiceService {
   async confirmPasswordReset(code: string, newPassword: string): Promise<void> {
     try {
       await confirmPasswordReset(this.auth, code, newPassword);
+      const email = await verifyPasswordResetCode(this.auth, code);
+      const userDocRef = query(collection(this.firestore, 'users'), where('email', '==', email));
+      const querySnapshot = await getDocs(userDocRef);
+      querySnapshot.forEach(async (doc) => {
+        await updateDoc(doc.ref, { password: newPassword });
+      });
+      console.log('Password reset and updated in Firestore successfully');
     } catch (err) {
       console.error('Error confirming password reset:', err);
       throw err;

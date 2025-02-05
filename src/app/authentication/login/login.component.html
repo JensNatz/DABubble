@@ -37,12 +37,13 @@
         </div>
 
         <div class="google-btn" (click)="signInWithGoogle()">
+            <img src="../../../assets/img/Google.svg" alt="">
            Anmelden mit Google
         </div>
 
         <div class="btn-container">
             <button type="submit" class="btn-primary">Anmelden</button>
-            <button class="btn-secondary">Gäste-Login</button>
+            <button type="button" class="btn-secondary" (click)="guestLogin()">Gäste-Login</button>
         </div>
 
     </form>
@@ -55,5 +56,5 @@
     <app-login-user-accepted></app-login-user-accepted>
   </div>
 
-<button (click)="logout()">logout</button>
+
 

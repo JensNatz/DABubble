@@ -62,6 +62,7 @@ form {
     @include flex(normal,center, normal);
    margin-top: 32px;
    width: 100%;
+   position: relative;
    
 }
 
@@ -73,11 +74,24 @@ form {
     left: 32px;
     top: 45px;
 
+    background-image: url('../../../assets/img/arrow_back.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+   
+
+
     &:hover{
         cursor: pointer;
         background-color: $bg-color;
         border-radius: 30px;
+        background-image: url('../../../assets/img/arrow_back_hover\ .svg');
+        background-repeat: no-repeat;
+        background-position: center;
     }
+}
+
+.mgtop{
+    top: 16px;
 }
 
 .btn-container{

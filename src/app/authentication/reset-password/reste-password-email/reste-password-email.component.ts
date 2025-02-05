@@ -53,6 +53,7 @@ export class RestePasswordEmailComponent {
       this.isSubmitting = true;
       try {
         await this.userService.sendPasswordResetEmail(this.email);
+        console.log('email gesendet', this.email)
         this.emailSend = true
         setTimeout(() => {
           this.emailSend = false;
