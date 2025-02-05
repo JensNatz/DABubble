@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { InputFieldComponent } from "../../shared/authentication-input/input-field.component";
-import { FormsModule, NgForm, FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormsModule, NgForm, FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { CommonModule, NgClass } from '@angular/common';
+import { Observable, of } from 'rxjs';
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, ReactiveFormsModule,CommonModule],
+  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })
@@ -48,12 +49,28 @@ export class RegisterComponent {
 
     const { name, email, password } = this.registerForm.value;
 
+    const emailExists = await this.checkEmailExists(email);
+    if (emailExists) {
+      this.emailErrorMessage = ErrorMessages.emailExists;
+      this.registerForm.controls['email'].setErrors({ emailExists: true });
+      return;
+    }
+
     console.log('Formular erfolgreich übermittelt');
     this.router.navigate(['/register/avatar'], {
       queryParams: { name, email, password }
     });
   }
 
+  async checkEmailExists(email: string): Promise<boolean> {
+    try {
+      const exists = await this.userService.emailExists(email);
+      return exists;
+    } catch (err) {
+      console.error('Error checking if email exists:', err);
+      return false;
+    }
+  }
 
 
   onBlur(field: string) {

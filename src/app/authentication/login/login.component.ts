@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { GoogleAuthenticationService } from '../../services/firebase-services/google-athentication.servive';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { LoginUserAcceptedComponent } from "../user-feedback/login-user-accepted/login-user-accepted.component";
@@ -32,7 +32,7 @@ export class LoginComponent {
   userFound: boolean | undefined = false;
   
 
-  constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService,private loginService: LoginService) {
+  constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService,private loginService: LoginService,private router: Router) {
     this.users = this.userService.getUsers();
   }
 
@@ -100,6 +100,11 @@ export class LoginComponent {
 
   signInWithGoogle() {
     this.googleAuthService.signInWithGoogle();
+    this.userFound = true;
+        setTimeout(() => {
+          this.userFound = false;
+          this.router.navigate(['/chat']);
+        }, 2000);
   }
 
 
