@@ -105,7 +105,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
 
   focusOnInput() {
     const inputElement = this.messageInput?.element.nativeElement;
-    if (inputElement && document) {
+    if (inputElement) {
       inputElement.focus();
       const range = document.createRange();
       range.selectNodeContents(inputElement);
