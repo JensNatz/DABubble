@@ -38,6 +38,7 @@ export class AddUserToChannelComponent {
 
   constructor() {}
 
+
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
       if (channel?.id) {
@@ -52,7 +53,6 @@ export class AddUserToChannelComponent {
 
   async getUserFromChannel() {
     this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
-    // this.channelsDataLength = this.channelsData.length;   
   }
 
 
@@ -70,6 +70,7 @@ export class AddUserToChannelComponent {
   openUserInfos() {
     this.showUserInfo = true;
   }
+  
 
   closeUserInfos() {
     this.showUserInfo = false;

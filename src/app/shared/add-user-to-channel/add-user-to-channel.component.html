@@ -12,7 +12,9 @@
         <div class="modal-overlay" *ngIf="showUserInfo" (click)="closeUserInfos()"></div>
         <div class="modal" *ngIf="showUserInfo">
             <img src="assets/img/close.svg" (click)="closeUserInfos()">
-            <app-user-info></app-user-info>
+            <app-user-info
+                [userId]="userData.id"
+            ></app-user-info>
         </div>
         }
     </div>
