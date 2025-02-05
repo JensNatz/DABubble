@@ -3,34 +3,26 @@
 @import './../../shared/avatar/avatar.component.scss';
 
 .header {
-    height: 120px;
+    @include flex($justify: space-between, $align: center);
     width: 100%;
-    display: flex;
-    justify-content: center;
-
-
+    padding: 0 20px;
 }
 
 .content {
     width: 100%;
     height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 45px 0;
+    @include flex($justify: space-between, $align: center);
+    gap: 24px;
 }
 
 .logo {
     height: 70px;
-    width: 242px;
+    width: auto;
 }
 
 .user_name {
-    right: 0;
-    width: 342px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex($justify: space-between, $align: center);
+    gap: 16px;
     cursor: pointer;
 
     &:hover {
@@ -77,13 +69,16 @@
     position: relative;
 
     input {
-        color: #686868;
+        @include rounded();
         width: 100%;
         height: 70px;
-        border-radius: 42px;
         border: 0;
         padding: 0 30px;
         font-size: 24px;
+
+        &::placeholder {
+            color: $gray;
+        }
     }
 }
 
@@ -103,7 +98,7 @@
     right: 20px;
     width: 282px;
     height: 181px;
-    background: #fff;
+    background-color: $white;
     filter: none;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     @include rounded();
@@ -114,7 +109,7 @@
     box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
     display: flex;
     flex-direction: column;    
-    gap: 25px;
+    gap: 24px;
 
     span {
         cursor: pointer;

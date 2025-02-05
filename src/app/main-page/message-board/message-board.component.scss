@@ -2,7 +2,7 @@
 @import './../../shared/avatar/avatar.component.scss';
 
 .message-board {
-    @include flex($align: start);
+    @include flex($align: start, $justify: start);
     gap: 16px;
     height: 100%;
 
@@ -12,6 +12,7 @@
         background-color: $white;
         height: 100%;
         padding-bottom: 20px;
+        transition: width 0.125s ease;
        
         &.main-channel {
             width: 65%;
@@ -86,8 +87,6 @@
                 outline: none;
                 padding: 8px;
             }
-
-
         }
 
         .header-right {
@@ -131,6 +130,7 @@
         margin-right: 5px;
         display: flex;
         flex-direction: column-reverse;
+        flex: 1;
 
         .messages-container {
             display: flex;

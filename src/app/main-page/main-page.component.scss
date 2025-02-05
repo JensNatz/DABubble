@@ -1,8 +1,7 @@
 @import '../../styles.scss';
 
 .wrapper {
-    @include flex($direction: column);
-    background-color: red;
+    @include flex($direction: column, $align: stretch);
     height: 100vh;
     width: 100vw;
 }
@@ -11,18 +10,24 @@
     @include flex($align: stretch);
     gap: 20px;
     padding: 20px;
-    background-color: blue;
     width: 100%;
     flex: 1;
     overflow: hidden;
 
+    .workspace-menu {
+        width: 360px;
+        transition: width 0.125s ease;
+        &.closed {
+            width: 0;
+        }
+    }
     
     .message_board_content {
         width: 100%;
     }
 }
 
-.workspace-open {
+.workspace-menu-button {
     @include flex();
     position: absolute;
     background-color: $white;
@@ -39,6 +44,7 @@
     -moz-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
     box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);  
 
+
     h2 {
         font-size: 20px;
         display: inline-block;
@@ -52,12 +58,12 @@
     }
 }
 
-.workspace-open:hover h2 {
+.workspace-menu-button:hover h2 {
     color: rgb(83, 90, 241);
     transition: color 0.3s ease;
 }
 
-.workspace-open:hover img {
+.workspace-menu-button:hover img {
     filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
     transition: filter 0.3s ease;
 }
