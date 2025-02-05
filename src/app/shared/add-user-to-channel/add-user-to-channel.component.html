@@ -1,0 +1,29 @@
+<div class="add_user_to_channel_content">
+    <h1>Mitglieder</h1>
+    <div class="all_users_from_channel">
+        @for (userData of channelsData; track $index) {
+            <div class="user_name_and_avatar">
+                <div class="user_name_and_avatar" *ngIf="userData.id !== currentUserId; else noClick" (click)="openUserInfos(userData)">
+                    <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
+                    <span>{{ userData.name }}</span>
+                </div>
+                <ng-template #noClick>
+                    <div class="user_name_and_avatar" class="no-click">
+                        <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
+                        <span>{{ userData.name }}</span>
+                    </div>
+                </ng-template>
+            </div>
+        }
+    </div>
+
+    <div class="modal-overlay" *ngIf="showUserInfo" (click)="closeUserInfos()"></div>
+    <div class="modal" *ngIf="showUserInfo">
+        <img src="assets/img/close.svg" (click)="closeUserInfos()">
+        <app-user-info *ngIf="selectedUser" [userId]="selectedUser.id"></app-user-info>
+    </div>
+    <div class="mitglieder_hinzufügen">
+        <img src="assets/img/44. Add members button.svg">
+        <span>Mitglieder hinzufügen</span>
+    </div>
+</div>

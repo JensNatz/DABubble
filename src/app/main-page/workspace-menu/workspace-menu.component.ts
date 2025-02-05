@@ -71,22 +71,28 @@ export class WorkspaceMenuComponent {
   openAddChannel() {
     this.showModal = true;
   }
+  
 
   closeAddChannel() {
     this.showModal = false;
   }
 
+
   toggleMenuChannel() {
     this.isOpenChannelListe = !this.isOpenChannelListe;    
   }
+
 
   toggleMenuUser() {
     this.isOpenUserListe  = !this.isOpenUserListe ; 
   }
 
+
   switchToGroupChannel(channel: Channel) {
     this.channelService.currentChannel = channel;
   }
+
+
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
   }

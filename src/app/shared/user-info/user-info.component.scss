@@ -1,0 +1,103 @@
+@import './../../styles/variables';
+@import './../../styles/mixins';
+@import './../../shared/avatar/avatar.component.scss';
+
+
+h1 {
+    font-size: 24px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.profil_avatar {   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+    margin-top: 45px;
+    margin-bottom: 45px;
+
+    img {
+        width: 165px;
+        height: 165px;    
+    }
+}
+
+.user_name_status {
+    h2 {
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    p {
+        font-size: 20px;
+    }
+}
+
+.email_addresse {
+    margin-top: 40px;
+    display: flex;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+
+    div {
+        display: flex;
+        align-items: center;
+    }
+
+    p {
+        color: $purple-1;
+        font-size: 18px;
+        margin-top: 20px;
+        margin-left: 50px;
+    }
+
+    img {
+        margin-right: 20px;
+        width: 25px;
+        height: 20px;
+    }
+}
+
+.user_name_profil {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+
+    span {
+        font-size: 18px;
+        color: $purple-2;
+        font-weight: 400;
+
+        &:hover {
+            font-weight: 700;
+        }
+    }
+}
+
+.button_section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 45px;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 18px;
+        width: 180px;
+        
+
+        img {
+            width: 24px;
+            height: 24px;
+        }
+    }
+}

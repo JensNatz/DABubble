@@ -12,6 +12,8 @@ import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
+import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.component';
+import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
 @Component({
   selector: 'app-message-board',
@@ -23,8 +25,12 @@ import { RecipientSelectorComponent } from '../../shared/recipient-selector/reci
     MessageInputComponent,
     AvatarComponent,
     LoadingIndicatorComponent,
+    ChannelEditComponent,
+    AddUserToChannelComponent,
+    AddUserToChannelComponent,
     RecipientSelectorComponent
-  ],
+],
+
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
 })
@@ -32,6 +38,7 @@ export class MessageBoardComponent {
 
   channelId: string = '';
   channelName: string = '';
+  channelCreator: any = '';
   userAvatar = '';
   channelType: string = '';
   channelDescription: string = '';
@@ -39,6 +46,8 @@ export class MessageBoardComponent {
   channelMembers: string[] = [];
   channelsData: any[] = [];
   channelsDataLength: number = 0;
+  showModal = false;
+  showModalUserEdit = false;
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -64,6 +73,7 @@ export class MessageBoardComponent {
         this.channelName = channel.name;
         this.channelType = channel.type;
         this.channelDescription = channel.description;
+        this.channelCreator = channel.creator;
         this.channelMembers = channel.members || [];
         this.loadMessages();
         this.isThreadOpen = false;
@@ -229,5 +239,24 @@ export class MessageBoardComponent {
     this.parentMessageId = messageId;
     this.openTheadWithMessageId(messageId);
   }
+
+
+  openEditChannel() {
+    this.showModal = true;
+  }
+
+  closeEditChannel() {
+    this.showModal = false;
+  }
+
+  openUserToChannel() {
+    this.showModalUserEdit= true;
+  }
+
+  closeUserToChannel() {
+    this.showModalUserEdit = false;
+  }
+
+
 
 }

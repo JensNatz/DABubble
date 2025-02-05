@@ -28,7 +28,7 @@ export class HeaderComponent {
   userEmail: string = '';
   userStatus: string = '';
 
-  constructor(private firestore: Firestore , private router: Router) {
+  constructor(private router: Router) {
     this.getCurrentUserData();
   }
 
