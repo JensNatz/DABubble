@@ -23,6 +23,7 @@ export class UserInfoComponent {
   userName: string = '';
   userEmail: string = '';
   userStatus: string = '';
+  
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -30,7 +31,8 @@ export class UserInfoComponent {
 
   private userSubscription: Subscription = new Subscription();
 
-  ngOnInit() {
+  
+  ngOnInit() {    
     if (this.userId) {
       this.userSubscription.unsubscribe();
       this.userSubscription = this.userService.getUserById(this.userId).subscribe((user: User) => {
@@ -41,6 +43,7 @@ export class UserInfoComponent {
       });
     }    
   }
+
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();

@@ -24,26 +24,32 @@ export class AddUserToChannelComponent {
   @Input() channelMembers: any[] = [];
 
   showUserInfo: boolean = false;
+  selectedUser: any = null;
 
   usersNames: any[] = [];
   channelName: string = '';
   channelsData: any[] = [];
   channelsDataLength: number = 0;
+  currentUserId: any = '';
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
 
+
+
   private channelSubscription: Subscription = new Subscription();
 
-  constructor() {}
+  constructor() {
+    this.getCurrentUserData()
+  }
 
 
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
       if (channel?.id) {
         this.channelId = channel.id;
-        this.channelName = channel.name;        
+        this.channelName = channel.name;
         this.channelMembers = channel.members || [];
         this.getUserFromChannel();
       }
@@ -51,8 +57,23 @@ export class AddUserToChannelComponent {
   }
 
 
+  getCurrentUserData() {
+    this.loginService.currentUser.subscribe(user => {
+      if (user) {
+        this.currentUserId = user.id;
+      }
+    })
+  }
+
+
   async getUserFromChannel() {
-    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
+    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId);
+    const currentUserIndex = this.channelsData.findIndex(user => user.id === this.currentUserId);
+    if (currentUserIndex !== -1) {
+      const [currentUser] = this.channelsData.splice(currentUserIndex, 1);
+      currentUser.name += " (Du)";
+      this.channelsData.unshift(currentUser);
+    }
   }
 
 
@@ -63,14 +84,15 @@ export class AddUserToChannelComponent {
 
   getUserId(id: string) {
     console.log(id);
-    
+
   }
 
 
-  openUserInfos() {
+  openUserInfos(user: any) {
+    this.selectedUser = user;
     this.showUserInfo = true;
   }
-  
+
 
   closeUserInfos() {
     this.showUserInfo = false;
