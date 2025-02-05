@@ -54,7 +54,7 @@ export class AddChannelComponent {
     if (ngForm.valid && ngForm.submitted) {
       this.channel = {
         name: this.channel.name,
-        description: "",
+        description: this.channel.description,
         creator: this.userName,
         members: [this.userId],
         type: 'group'
