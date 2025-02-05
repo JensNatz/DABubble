@@ -199,6 +199,26 @@ export class ChannelServiceService {
       .filter(user => user !== null);
     return membersData;
   }
+
+
+  async removeUserFromChannel(channelId: string, userId: string) {
+    const channelRef = doc(this.firestore, 'channels', channelId);
+    const channelDoc = await getDoc(channelRef);
+    
+    if (!channelDoc.exists()) {
+      console.error('Channel not found');
+      return;
+    }
+    
+    const channelData = channelDoc.data();
+    if (!channelData || !channelData['members']) {
+      console.error('Invalid channel data');
+      return;
+    }
+    
+    const updatedMembers = channelData['members'].filter((id: string) => id !== userId);
+    await updateDoc(channelRef, { members: updatedMembers });
+  }
 }
 
 

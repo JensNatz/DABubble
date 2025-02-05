@@ -3,6 +3,7 @@ import { Component, inject, Input } from '@angular/core';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 import { FormsModule } from '@angular/forms';
+import { LoginService } from '../../services/firebase-services/login-service';
 
 @Component({
   selector: 'app-channel-edit',
@@ -22,18 +23,21 @@ export class ChannelEditComponent {
   @Input() channelName: string = '';
   @Input() channelCreator: any = '';
   @Input() channelDescription: string = '';
+  @Input() closeFunction!: () => void;
 
   constructor() {
-    
+    this.getCurrentUserData();
   }
 
   nameEdit = false;
   channelEdit = false;
   tempChannelName: string = this.channelName;
   tempChannelDescription: string = this.channelDescription;
+  currentUserId: any = '';
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   messageBoard: MessageBoardComponent = inject(MessageBoardComponent);
+  loginService: LoginService = inject(LoginService);
 
 
   openNameEdit() {
@@ -42,6 +46,15 @@ export class ChannelEditComponent {
 
   openChannelEdit() {
     this.channelEdit = true;
+  }
+
+
+  getCurrentUserData() {
+    this.loginService.currentUser.subscribe(user => {
+      if (user) {
+        this.currentUserId = user.id;        
+      }
+    })
   }
 
   saveNewChannelName(newName: string) {
@@ -69,7 +82,8 @@ export class ChannelEditComponent {
     }     
   }
 
-  channelLeave() {
-    
+  channelLeave() {    
+    this.channelService.removeUserFromChannel(this.channelId, this.currentUserId); 
+    this.closeFunction();
   }
 }
