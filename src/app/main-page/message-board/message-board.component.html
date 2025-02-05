@@ -1,6 +1,51 @@
 <div class="message-board">
     <div class="message-container main-channel">
         <div class="message-board-header">
+            <div class="channel_title" *ngIf="channelType === 'direct'; else otherTitle">
+                <img class="avatar userAvatar" src="assets/img/avatar{{userAvatar}}.svg">
+                <h2>{{ channelTitle }}</h2>
+            </div>
+            <ng-template #otherTitle>
+                <div class="channel_title" (click)="openEditChannel()" *ngIf="channelTitle">
+                    <b>#</b>
+                    <h2>{{ channelTitle }}</h2>
+                    <img src="assets/img/keyboard_arrow_down.svg">
+                </div>
+            </ng-template>
+
+            <div class="modal-overlay" *ngIf="showModal" (click)="closeEditChannel()"></div>
+            <div class="modal modal-channel" *ngIf="showModal">
+                <img src="assets/img/close.svg" (click)="closeEditChannel()">
+                <app-channel-edit 
+                    [channelId]="channelId" 
+                    [channelName]="channelName" 
+                    [channelCreator]="channelCreator" 
+                    [channelDescription]="channelDescription"
+                    [closeFunction]="closeEditChannel.bind(this)"
+                ></app-channel-edit>
+            </div>
+
+            <div *ngIf="channelType !== 'direct' && channelTitle" class="user_from_channels">
+                <div (click)="openUserToChannel()">
+                    <div class="user_from_channels_avatar">
+                        @for (channelData of channelsData.slice(0, 3); track $index) {
+                        <img class="avatar" *ngIf="channelType !== 'direct'"
+                            src="assets/img/avatar{{ channelData.avatar }}.svg" alt="Avatar">
+                        }
+                    </div>
+                    <p>{{ channelsDataLength }}</p>
+                </div>
+                <img class="members_button" src="assets/img/44. Add members button.svg">
+            </div>
+            <div class="modal-overlay" *ngIf="showModalUserEdit" (click)="closeUserToChannel()"></div>
+            <div class="modal modal-users" *ngIf="showModalUserEdit">
+                <img src="assets/img/close.svg" (click)="closeUserToChannel()">
+                <app-add-user-to-channel
+                    [channelId]="channelId"
+                    [channelMembers]="channelMembers"
+                ></app-add-user-to-channel>
+            </div>
+
             <div class="header-row">
                 <div class="header-left">
                     <div class="channel-title" [class.hover-effect]="channelType === 'group'">

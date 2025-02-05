@@ -81,7 +81,6 @@ export class LoginService {
     });
   }
 
-
   async guestLogin(): Promise<void> {
     const guestEmail = 'guest@guest.de';
     const guestPassword = 'Guest!';

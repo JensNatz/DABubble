@@ -54,7 +54,7 @@
             
                 <div class="btn_group">
                     <button class="btn-secondary" (click)="closeEditProfil()">Abbrechen</button>
-                    <button class="btn-primary" (click)="updateUserName(userName)">Speichern</button>
+                    <button class="btn-primary" (click)="updateUserName(userName)" [disabled]="!userName || userName.trim() === ''">Speichern</button>
                 </div>
             </div>
 
