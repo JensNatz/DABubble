@@ -1,0 +1,22 @@
+@import '../styles/_variables';
+@import '../styles/mixins';
+
+
+
+:host{
+    position: absolute;
+    bottom: 48px;
+}
+
+.legal-infomation-link{
+    display: flex;
+    font-size: 18px;
+    font-weight: 400;
+    gap: 16px;
+    
+
+    a{
+        color: $purple-2;
+        text-decoration: none;
+    }
+}

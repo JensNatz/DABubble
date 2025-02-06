@@ -7,12 +7,13 @@ import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { CommonModule, NgClass } from '@angular/common';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { FormsModule, NgForm, FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [RouterModule, InputFieldComponent, FormsModule, NgClass, ReactiveFormsModule, CommonModule],
+  imports: [RouterModule, InputFieldComponent, FormsModule, NgClass, ReactiveFormsModule, CommonModule, LegalInformationComponent],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'
 })

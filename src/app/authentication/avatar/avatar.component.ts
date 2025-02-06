@@ -6,12 +6,13 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { User } from '../../models/user';
 import { Route } from '@angular/router';
 import { AccountCreatedSuccessfullyComponent } from "../user-feedback/account-created-successfully/account-created-successfully.component";
+import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 
 
 @Component({
   selector: 'app-avatar',
   standalone: true,
-  imports: [RouterModule, FormsModule, CommonModule, AccountCreatedSuccessfullyComponent],
+  imports: [RouterModule, FormsModule, CommonModule, AccountCreatedSuccessfullyComponent, LegalInformationComponent],
   templateUrl: './avatar.component.html',
   styleUrl: './avatar.component.scss'
 })
