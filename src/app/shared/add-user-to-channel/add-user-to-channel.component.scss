@@ -102,11 +102,7 @@ h1 {
 
 .modal {
     position: fixed;
-    top: 50%;
-    left: 58%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    height: 700px;
+    
     background: #fff;
     filter: none;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -133,4 +129,20 @@ h1 {
             filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
         }
     }
+}
+
+.user_info {
+    top: 50%;
+    left: 58%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 700px;
+}
+
+.user_add_to_channel {
+    top: 203px;
+    width: 514px;
+    height: 294px;
+    right: 30px;
+    border-top-right-radius: 0;
 }
