@@ -56,9 +56,7 @@ export class AvatarComponent {
 
   selectAvatar(avatar: string, avatarKey: string) {
     this.selectedAvatar = avatar;
-    this.avatarKey = avatarKey;
-    console.log(avatar)
-    console.log(avatarKey)
+    this.avatarKey = avatarKey;   
   }
 
 
@@ -80,14 +78,14 @@ export class AvatarComponent {
     try {
       await this.UserServiceService.registerUser(this.email, this.password, newUser);
       //await this.UserServiceService.addNewUser(newUser);
-      console.log('Benutzer erfolgreich registriert');
+      
       this.registrationSuccessful = true;
       setTimeout(() => {
         this.registrationSuccessful = false;
         this.router.navigate([''])
       }, 2000);
     } catch (err) {
-      console.error('Fehler bei der Registrierung des Benutzers:', err);
+     
     }
   }
 }
