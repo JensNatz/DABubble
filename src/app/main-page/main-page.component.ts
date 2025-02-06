@@ -18,10 +18,12 @@ import { CommonModule } from '@angular/common';
 })
 export class MainPageComponent {
   isOpen = true;
-  open = "öffnen";
-  closed = "schließen";
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
+  }
+
+  get menuText() {
+    return this.isOpen ? 'schließen' : 'öffnen';
   }
 }

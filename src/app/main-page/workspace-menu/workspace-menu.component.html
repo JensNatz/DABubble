@@ -1,4 +1,4 @@
-<div class="workspace-content">
+<div class="workspace-menu">
     <div class="workspace-title">
         <div>
             <img class="logo" src="assets/img/Workspace logo.png">
@@ -8,7 +8,6 @@
             <img src="assets/img/edit_square.svg">
         </div>
     </div>
-
   <div class="channel_message_content"> 
         <div class="channels_content">
             <div class="channel_title" (click)="toggleMenuChannel()">
@@ -52,7 +51,7 @@
             <p>Direktnachrichten</p>
         </div>
 
-        <div class="user_liste" *ngIf="isOpenUserListe">
+        <div class="user_list" *ngIf="isOpenUserListe">
             <div class="name_plus_icon" *ngIf="loggedInUser && loggedInUser.id">
                 <div>
                     <app-avatar [avatar]="loggedInUser.avatar" size="small"></app-avatar>
