@@ -32,6 +32,15 @@ export class MessageService {
     return collectionData(queryRef, { idField: 'id' });
   }
 
+  getAllMessagesOfUser(userId: string) {
+    const messagesRef = collection(this.firestore, 'messages');
+    const queryRef = query(
+      messagesRef,
+      where('author', '==', userId),
+    );
+    return collectionData(queryRef, { idField: 'id' });
+  }
+
   getRepliesFromMessageOrderByTimestampDESC(messageId: string) {
     const messagesRef = collection(this.firestore, 'messages');
     const queryRef = query(
@@ -180,8 +189,6 @@ export class MessageService {
     }
     return this.channelService.isUserMemberOfChannel(currentUser.id, channelId);
   }
-
-
 
   renderMessagePartsInContainer(parts: MessagePart[], container: ViewContainerRef) {
     container.clear();

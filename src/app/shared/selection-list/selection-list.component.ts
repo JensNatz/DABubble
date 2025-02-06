@@ -9,7 +9,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './selection-list.component.scss'
 })
 export class SelectionListComponent {
-  @Input() elements: any[] = [];
+  @Input() elements: Record<string, any> = {};
+  @Input() size: string = 'normal';
   @Output() elementSelected = new EventEmitter<any>();
 
   onElementClick(index: number) {

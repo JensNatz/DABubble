@@ -1,5 +1,4 @@
 @import '../../../styles.scss';
-@import './../../shared/avatar/avatar.component.scss';
 
 .message-board {
     @include flex($align: start, $justify: start);
