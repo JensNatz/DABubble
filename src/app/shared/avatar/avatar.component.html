@@ -1,2 +1,2 @@
-<img class="avatar" [ngClass]="size" [src]="avatarImage" (error)="onImageError()" alt="Avatar">
+<img class="avatar" [ngClass]="[size, border ? 'border' : '']" [src]="avatarImage" (error)="onImageError()" alt="Avatar">
 

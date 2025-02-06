@@ -14,7 +14,7 @@
         height: 100%;
         padding-bottom: 20px;
         transition: width 0.125s ease;
-       
+
         &.main-channel {
             width: 55%;
 
@@ -46,7 +46,7 @@
     .message-board-header {
         @include flex($direction: column);
         gap: 8px;
-        padding:16px;
+        padding: 16px;
         z-index: 2;
         box-shadow: 0px 4px 4px -2px rgba($black, 0.08);
 
@@ -72,21 +72,20 @@
                 b {
                     font-size: 24px;
                 }
-            
+
                 h2 {
                     margin: 0 10px;
                     font-size: 24px;
                     padding: 8px 0;
                 }
-                
+
                 img {
                     transition: filter 0.1s ease;
                 }
-                 
+
                 &.hover-effect:hover {
                     @include rounded();
                     cursor: pointer;
-                    padding: 0 8px; 
                     color: $purple-3;
                     background-color: $bg-color;
 
@@ -106,6 +105,9 @@
         }
 
         .header-right {
+            @include flex();
+            gap: 16px;
+
             .close-icon {
                 @include rounded($all: 50%);
                 width: 32px;
@@ -118,24 +120,20 @@
                 }
             }
 
-            .user_from_channels {   
-                display: flex;
-                align-items: center;
-                
-                p {
+            .channel-members {
+                @include flex();
+                gap: 12px;
+                cursor: pointer;
+
+                .user_from_channels_avatar {
+                    .avatar {
+                        margin-right: -10px;
+                    }
+                }
+
+                .channel-members-count {
                     font-weight: 700;
                     font-size: 20px;
-                    margin-left: 25px;
-                    margin-right: 20px;
-                }
-            }
-
-            .user_from_channels_avatar {
-                img {
-                    width: 40px;
-                    height: 40px;
-                    margin-right: -10px;
-                    border: 2px solid white;
                 }
             }
         }
@@ -231,40 +229,7 @@
     }
 }
 
-.user_from_channels_avatar {
-    img {
-        width: 40px;
-        height: 40px;
-        margin-right: -10px;
-        border: 2px solid white;
-    }
-}
 
-.user_from_channels {
-    display: flex;
-    align-items: center;
-
-    div {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        margin-right: 5px;
-        padding: 2px 0 2px 5px;        
-
-        &:hover {
-            @include rounded();
-            color: $purple-3;
-            background-color: $bg-color;
-        }
-    }
-
-    p {
-        font-weight: 700;
-        font-size: 20px;
-        margin-left: 25px;
-        margin-right: 20px;
-    }
-}
 
 .modal-overlay {
     position: fixed;
@@ -319,4 +284,3 @@
     width: 415px;
     border-top-right-radius: 0%;
 }
-

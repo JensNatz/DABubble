@@ -69,18 +69,20 @@ export class MessageBoardComponent {
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
       if (channel?.id) {
-        this.channelId = channel.id;
-        this.channelName = channel.name;
-        this.channelType = channel.type;
-        this.channelDescription = channel.description;
-        this.channelCreator = channel.creator;
-        this.channelMembers = channel.members || [];
-        this.loadMessages();
-        this.isThreadOpen = false;
-        this.getUserFromChannel();
+        if (this.channelId !== channel.id) {
+          this.channelId = channel.id;
+          this.channelName = channel.name;
+          this.channelType = channel.type;
+          this.channelDescription = channel.description;
+          this.channelCreator = channel.creator;
+          this.channelMembers = channel.members || [];
+          this.loadMessages();
+          this.isThreadOpen = false;
+          this.getUserFromChannel();
 
-        if (this.channelType === 'direct' && channel.members) {
-          this.setDirectMessagePartnerData(channel.members);
+          if (this.channelType === 'direct' && channel.members) {
+            this.setDirectMessagePartnerData(channel.members);
+          }
         }
       } else {
         this.clearMessageBoardData();
