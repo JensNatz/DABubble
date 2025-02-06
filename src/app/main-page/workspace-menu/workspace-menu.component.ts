@@ -89,7 +89,9 @@ export class WorkspaceMenuComponent {
 
 
   switchToGroupChannel(channel: Channel) {
-    this.channelService.currentChannel = channel;
+    if (this.channelService.currentChannel?.id !== channel.id) {
+      this.channelService.currentChannel = channel;
+    }
   }
 
 

@@ -29,4 +29,8 @@
             height: 128px;
         }
     }
+
+    &.border {
+        border: 2px solid $white;
+    }
 }

@@ -208,17 +208,18 @@ export class MessageComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
            this.renderMessageContent(content);
         });
-        
       }
       this.isEditing = false;
     }
   }
 
   handleOutsideOfMessageClick() {
-     this.isEditing = false;
-     setTimeout(() => {
-      this.renderMessageContent(this.message.content);
-   });
+    if (this.isEditing) {
+      this.isEditing = false;
+      setTimeout(() => {
+        this.renderMessageContent(this.message.content);
+      });
+    }
   }
 
   handleRepliesClick() {

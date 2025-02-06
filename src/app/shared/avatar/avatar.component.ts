@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 export class AvatarComponent {
   @Input() size: 'small' | 'standard' | 'large' = 'standard';
   @Input() avatar: string = '0';
+  @Input() border: boolean = false;
   
   
   get avatarImage(): string {

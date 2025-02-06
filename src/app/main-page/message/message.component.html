@@ -2,7 +2,7 @@
     <div class="avatar">
         <app-avatar [avatar]="avatar"></app-avatar>
     </div>
-    <ng-container *ngIf="!isEditing">
+    @if (!isEditing) {
         <div class="message">
             <div class="message-header">
                 <div class="message-header-name">{{ authorName }}</div>
@@ -36,10 +36,10 @@
                 (emojiSelected)="handleEmojiSelection($event)">
             </app-emoji-picker>
         </div>
-    </ng-container>
-    <ng-container *ngIf="isEditing">
+    }
+    @else {
         <app-message-input class="message-input" [type]="'edit'" [placeholder]="'Nachricht verfassen...'"
             [content]="message.content" (cancelEdit)="handleCancelEditClick()" (sendMessage)="handleSaveEditClick($event)">
         </app-message-input>
-    </ng-container>
+    }
 </div>
