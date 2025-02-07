@@ -2,6 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectionListComponent } from '../../shared/selection-list/selection-list.component';
 import { SearchService } from '../../services/search.service';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 
 @Component({
   selector: 'app-search',
@@ -19,7 +20,8 @@ export class SearchComponent {
   filteredResults: Record<string, any> = {};
 
   searchService = inject(SearchService);
-  
+  channelService = inject(ChannelServiceService);
+
 
   onInputChange(value: string): void {
     this.inputValue = value;
@@ -28,15 +30,16 @@ export class SearchComponent {
       return;
     }
 
-
-
     if (value.startsWith('#')) {
       const serachterm = value.replace('#', '');
       this.filteredResults = {
         categories: [{
           type: 'channel',
           title: 'Channels',
-          items: this.searchService.filterChannelsByName(serachterm),
+          items: this.searchService.filterChannelsByName(serachterm).map(channel => ({
+            ...channel,
+            name: this.highlightSearchTerm(channel.name, serachterm)
+          })),
         }]
       };
     } else if (value.startsWith('@')) {
@@ -45,7 +48,10 @@ export class SearchComponent {
         categories: [{
           type: 'user',
           title: 'Users',
-          items: this.searchService.filterUsersByName(serachterm),
+          items: this.searchService.filterUsersByName(serachterm).map(user => ({
+            ...user,
+            name: this.highlightSearchTerm(user.name, serachterm)
+          })),
         }]
       };
     } else {
@@ -56,27 +62,49 @@ export class SearchComponent {
           {
             type: 'channel',
             title: 'Channels',
-            items: this.searchService.filterChannelsByName(searchterm)
+            items: this.searchService.filterChannelsByName(searchterm).map(channel => ({
+              ...channel,
+              name: this.highlightSearchTerm(channel.name, searchterm)
+            }))
           },
           {
             type: 'user',
             title: 'Mitglieder',
-            items: this.searchService.filterUsersByName(searchterm)
+            items: this.searchService.filterUsersByName(searchterm).map(user => ({
+              ...user,
+              name: this.highlightSearchTerm(user.name, searchterm)
+            }))
           },
           {
             type: 'message',
             title: 'Nachrichten',
-            items: this.searchService.filterMessagesByContent(searchterm)
+            items: this.searchService.filterMessagesByContent(searchterm).map(message => ({
+              ...message,
+              content: this.highlightSearchTerm(message.content, searchterm)
+            }))
           }
         ]
       };
     }
     this.listShown = true;
-    console.log(this.filteredResults);
   }
 
-  onElementSelected(element: any): void {
-    console.log(element);
+  private highlightSearchTerm(text: string, searchTerm: string): string {
+    return text.replace(new RegExp(`(${searchTerm})`, 'gi'), '<span class="highlight">$1</span>');
+  }
+
+  onElementSelected(entry: any): void {
+    console.log(entry, 'selected');
+    if(entry.categoryType === 'channel') {
+      const channelId = entry.element.id;
+      this.channelService.setCurrentChannelById(channelId);
+    } else if(entry.categoryType === 'user') {
+      const userId = entry.element.id;
+      this.channelService.setDirectMessageChannel(userId);
+    } else if(entry.categoryType === 'message') {
+      this.channelService.jumpToMessage(entry.element);
+    }
+    this.listShown = false;
   }
 
 

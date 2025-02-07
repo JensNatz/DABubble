@@ -13,7 +13,7 @@ export class SelectionListComponent {
   @Input() size: string = 'normal';
   @Output() elementSelected = new EventEmitter<any>();
 
-  onElementClick(index: number) {
-    this.elementSelected.emit(this.elements[index]);
+  onElementClick(element: any, categoryType: string) {
+    this.elementSelected.emit({element, categoryType});
   }
 }

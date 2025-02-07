@@ -27,7 +27,6 @@ export class SearchService {
     this.subscription.add(
       this.loginService.currentUser.subscribe(user => {
         if (user?.id) {
-          console.log('search service init');
           this.userId = user.id;
           this.setupChannelSubscription();
           this.setupUserSubscription();
@@ -38,37 +37,35 @@ export class SearchService {
   }
 
 
-  filterChannelsByName(input: string) {
-    return this.channels.filter(channel => channel.name.toLowerCase().includes(input.toLowerCase()));
+  filterChannelsByName(searchTerm: string) {
+    console.log(this.channels, 'channels');
+    return this.channels.filter(channel => channel.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }
 
-  filterUsersByName(input: string) {
-    return this.users.filter(user => user.name.toLowerCase().includes(input.toLowerCase()));
+  filterUsersByName(searchTerm: string) {
+    return this.users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }
 
-  filterUsersByEmail(input: string) {
-    return this.users.filter(user => user.email.toLowerCase().includes(input.toLowerCase()));
+  filterUsersByEmail(searchTerm: string) {
+    return this.users.filter(user => user.email.toLowerCase().includes(searchTerm.toLowerCase()));
   }
 
-  filterMessagesByContent(input: string) {
+  filterMessagesByContent(searchTerm: string) {
     return this.messages.filter(message => {
       message.content = this.parseMessageContent(message.content);
-      console.log(message.content);
-      return message.content.toLowerCase().includes(input.toLowerCase());
+      return message.content.toLowerCase().includes(searchTerm.toLowerCase());
     });
   }
 
   private parseMessageContent(content: string): string {
-    // Replace user mentions in format @{[userId]}
     let parsedContent = content.replace(/@{\[(.*?)\]}/g, (match, userId) => {
       const user = this.users.find(u => u.id === userId);
-      return user ? ` @${user.name} ` : ' @Unknown User ';
+      return user ? `@${user.name}` : '@Unknown User';
     });
 
-    // Replace channel mentions in format #{[channelId]}
     parsedContent = parsedContent.replace(/#{\[(.*?)\]}/g, (match, channelId) => {
       const channel = this.channels.find(c => c.id === channelId);
-      return channel ? ` #${channel.name} ` : ' #Unknown Channel ';
+      return channel ? `#${channel.name}` : '#Unknown Channel';
     });
 
     return parsedContent;

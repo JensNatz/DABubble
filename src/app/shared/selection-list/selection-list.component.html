@@ -5,25 +5,25 @@
                 <span>Keine Ergebnisse</span>
             </div>
         } @else {
-            @for (category of elements['categories']; track category; let i = $index) {
-                <div class="selection-list-header" (click)="onElementClick(i)">
+            @for (category of elements['categories']; track category) {
+                <div class="selection-list-header">
                     <span>{{ category.title }}</span>
                 </div>
                 @if (category.items.length > 0) {
                     @for (item of category.items; track item; let j = $index) {
-                        <div class="selection-list-item" (click)="onElementClick(j)">
+                        <div class="selection-list-item" (click)="onElementClick(item, category.type)">
                             @if (category.type === 'channel') {
-                                <span>#{{ item.name }}</span>
+                                <span [innerHTML]="'#' + item.name"></span>
                             }
                             @if (category.type === 'user') {
                                 <app-avatar [avatar]="item.avatar" size="small"></app-avatar>
-                                <span>{{ item.name }}</span>
+                                <span [innerHTML]="item.name"></span>
                                 @if (item.email) {
                                     <span class="item-email">{{ item.email }}</span>
                                 }
                             }
                             @if (category.type === 'message') {
-                                <span>{{ item.content }}</span>
+                                <span [innerHTML]="item.content"></span>
                             }
                         </div>
                     }

@@ -83,7 +83,7 @@
             }
             <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container">
                 @for (message of messages; track message.id; let i = $index) {
-                <app-message [message]="message" (repliesClicked)="handleRepliesClick($event)"
+                <app-message [id]="'message-' + message.id" [message]="message" (repliesClicked)="handleRepliesClick($event)"
                     (messageParseComplete)="handleMainMessageParsed($event)"></app-message>
                 @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
                 <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>

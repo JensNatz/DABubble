@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { LoginService } from './login-service';
+import { Message } from '../../models/message';
+import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,8 @@ export class ChannelServiceService {
   private channelNameCache = new Map<string, string>();
   private currentChannelSubject = new BehaviorSubject<Channel | null>(null);
   currentChannel$ = this.currentChannelSubject.asObservable();
+
+  messageRendered = new Subject<string>();
 
   constructor() {
     this.channels = collectionData(this.getChannelsRef());
@@ -218,6 +222,31 @@ export class ChannelServiceService {
     
     const updatedMembers = channelData['members'].filter((id: string) => id !== userId);
     await updateDoc(channelRef, { members: updatedMembers });
+  }
+
+  async jumpToMessage(message: Message) {
+    console.log(message, 'jump to message');
+    if(message.parentMessageId === null && message.id)  {
+      this.setCurrentChannelById(message.channelId);
+      this.scrollToMessage(message.id);
+    } else {
+      // this.setCurrentChannelById(message.parentMessageId);
+      // this.scrollToMessage(message.id);
+    }
+  }
+
+  private scrollToMessage(messageId: string) {
+    this.messageRendered
+      .pipe(
+        filter(id => id === messageId),
+        take(1)
+      )
+      .subscribe(() => {
+        const element = document.getElementById('message-' + messageId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
   }
 }
 

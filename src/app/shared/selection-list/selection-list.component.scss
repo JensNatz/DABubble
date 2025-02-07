@@ -37,6 +37,7 @@
         width: 100%;
         border-bottom: 1px solid $light-purple;
         background-color: $white;
+        overflow: hidden;
         cursor: pointer;
 
         &:hover {
