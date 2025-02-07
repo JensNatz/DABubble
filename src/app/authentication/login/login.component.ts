@@ -12,11 +12,12 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { LoginUserAcceptedComponent } from "../user-feedback/login-user-accepted/login-user-accepted.component";
 import { CommonModule } from '@angular/common';
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
+import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent],
+  imports: [CommonModule, InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
   providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']

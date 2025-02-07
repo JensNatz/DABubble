@@ -7,12 +7,13 @@ import { User } from '../../models/user';
 import { Route } from '@angular/router';
 import { AccountCreatedSuccessfullyComponent } from "../user-feedback/account-created-successfully/account-created-successfully.component";
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
+import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 
 
 @Component({
   selector: 'app-avatar',
   standalone: true,
-  imports: [RouterModule, FormsModule, CommonModule, AccountCreatedSuccessfullyComponent, LegalInformationComponent],
+  imports: [RouterModule, FormsModule, CommonModule, AccountCreatedSuccessfullyComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
   templateUrl: './avatar.component.html',
   styleUrl: './avatar.component.scss'
 })
