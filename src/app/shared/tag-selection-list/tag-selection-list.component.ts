@@ -18,11 +18,12 @@ export class TagSelectionListComponent implements OnChanges {
   loginService: LoginService = inject(LoginService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserService = inject(UserService);
-  tags: { id: string; name: string; avatar?: string }[] = [];
+  // tags: { id: string; name: string; avatar?: string }[] = [];
+  tags: any;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['type']) {
-      this.tags = [];
+      this.tags = {};
       this.loadTags();
     }
   }
@@ -40,24 +41,39 @@ export class TagSelectionListComponent implements OnChanges {
   }
 
   async updateTagsWithUserData(userIds: string[]) {
+    let users = [];
     for (const userId of userIds) {
       if (userId) {
         const user = await this.userService.getCompleteUserInfo(userId);
         if (user) {
-          this.tags.push({ id: userId, name: user.name, avatar: user.avatar });
+          users.push(user);
         }
       }
     }
+    this.tags = {
+      categories: [{
+        type: 'user',
+        title: 'Mitglieder',
+        items: users
+      }]
+    };
   }
 
   updateTagsWithChannelData(channels: any[]) {
-    for (const channel of channels) {
-      this.tags.push({ id: channel.id, name: channel.name });
-    }
+    this.tags = {
+      categories: [{
+        type: 'channel',
+        title: 'Channels',
+        items: channels
+      }]
+    };
   }
 
-  onTagClick($event: { id: string, name: string, type: 'user' | 'channel' }) {
-    this.tagSelected.emit({ id: $event.id, name: $event.name, type: this.type });
+
+  onTagClick($event: { element: { id: string, name: string }, categoryType: string }) {
+    const id = $event.element.id;
+    const name = $event.element.name;
+    this.tagSelected.emit({ id, name, type: this.type });
   }
  
 }
