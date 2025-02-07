@@ -24,11 +24,11 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss'
 })
-export class WorkspaceMenuComponent { 
-  
+export class WorkspaceMenuComponent {
+
   isOpenChannelListe = true;
   isOpenUserListe = true;
-  channels: Channel[] = [];
+  channels: any[] = [];
   users: User[] = [];
   otherUsers: User[] = [];
   loggedInUser: User | null = null;
@@ -41,27 +41,29 @@ export class WorkspaceMenuComponent {
   constructor(public channelService: ChannelServiceService) { }
 
   ngOnInit() {
-    this.loading = true;
+    this.loading = true;    
     this.loginService.currentUser.subscribe(async user => {
       if (user?.id) {
         this.userService.getUserById(user.id).subscribe(updatedUser => {
           this.loggedInUser = updatedUser;
-        });
-        
-        await this.loadChannels();
-        await this.loadUsers();
+        });        
+    this.loadChannels();
+    this.loadUsers();
         this.loading = false;
+        console.log(this.channels);
       } 
     });
   }
 
-  async loadChannels() {
+
+  loadChannels() {
     const userId = this.loginService.currentUserValue?.id;
-    if (!userId) {
-      return;
-    }
-    this.channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(userId) as Channel[];
-  }
+    if (!userId) return;  
+    this.channelService.getUserChannels(userId).subscribe(channels => {
+      this.channels = channels;
+    });
+  }  
+
 
   async loadUsers() {
     const users = await firstValueFrom(this.userService.getUsers());
@@ -71,7 +73,7 @@ export class WorkspaceMenuComponent {
   openAddChannel() {
     this.showModal = true;
   }
-  
+
 
   closeAddChannel() {
     this.showModal = false;
@@ -79,12 +81,12 @@ export class WorkspaceMenuComponent {
 
 
   toggleMenuChannel() {
-    this.isOpenChannelListe = !this.isOpenChannelListe;    
+    this.isOpenChannelListe = !this.isOpenChannelListe;
   }
 
 
   toggleMenuUser() {
-    this.isOpenUserListe  = !this.isOpenUserListe ; 
+    this.isOpenUserListe = !this.isOpenUserListe;
   }
 
 

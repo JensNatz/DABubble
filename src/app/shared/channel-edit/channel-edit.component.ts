@@ -44,6 +44,7 @@ export class ChannelEditComponent {
     this.nameEdit = true;
   }
 
+
   openChannelEdit() {
     this.channelEdit = true;
   }
@@ -56,6 +57,7 @@ export class ChannelEditComponent {
       }
     })
   }
+  
 
   saveNewChannelName(newName: string) {
     if (!newName.trim()) return; 
