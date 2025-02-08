@@ -66,6 +66,7 @@ export class MessageBoardComponent {
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
 
+
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
       if (channel?.id) {
@@ -89,6 +90,17 @@ export class MessageBoardComponent {
       }
     });
   }
+
+
+  updateChannelName(newName: string) {
+    this.channelName = newName;
+  }
+
+
+  updateChannelDescription(newDescription: string) {
+    this.channelDescription = newDescription;
+  }
+
 
   ngOnDestroy() {
     this.channelSubscription.unsubscribe();
