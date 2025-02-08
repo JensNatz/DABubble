@@ -35,6 +35,7 @@ export class WorkspaceMenuComponent {
   loginService: LoginService = inject(LoginService);
   userService: UserServiceService = inject(UserServiceService);
   loading: boolean = false;
+  activeChannel: Channel | null = null;
 
   public showModal: boolean = false;
 
@@ -53,7 +54,13 @@ export class WorkspaceMenuComponent {
         this.loading = false;
       } 
     });
+
+    this.channelService.currentChannel$.subscribe(channel => {
+      this.activeChannel = channel;
+    });
   }
+
+
 
   async loadChannels() {
     const userId = this.loginService.currentUserValue?.id;

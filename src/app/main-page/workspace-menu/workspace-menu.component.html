@@ -32,8 +32,10 @@
                     <app-loading-indicator></app-loading-indicator>
                 } @else {
                     @for (channel of channels; track channel) {
-                    <div class="channel_name">
-                        <p (click)="switchToGroupChannel(channel)"><b>#</b>{{ channel.name }}</p>
+                    <div class="channel_name" 
+                    [class.active]="channel.id === activeChannel?.id"
+                    (click)="switchToGroupChannel(channel)">
+                        <p><b>#</b>{{ channel.name }}</p>
                     </div>
                     }
                 }
@@ -53,16 +55,16 @@
 
         <div class="user_list" *ngIf="isOpenUserListe">
             <div class="name_plus_icon" *ngIf="loggedInUser && loggedInUser.id">
-                <div>
+                <div (click)="switchToDirectMessageChannel(loggedInUser.id)" [class.active]="activeChannel?.members?.includes(loggedInUser.id) && activeChannel?.members?.length === 1">
                     <app-avatar [avatar]="loggedInUser.avatar" size="small"></app-avatar>
-                    <span  (click)="switchToDirectMessageChannel(loggedInUser.id)">{{loggedInUser.name}} (Du)</span>
+                    <span >{{loggedInUser.name}} (Du)</span>
                 </div>
             </div>
             @for (user of otherUsers; track user) {
                 <div class="name_plus_icon" *ngIf="user.id">
-                    <div>
+                    <div (click)="switchToDirectMessageChannel(user.id)" [class.active]="activeChannel?.members?.includes(user.id) && activeChannel?.members?.length === 2">
                         <app-avatar [avatar]="user.avatar" size="small"></app-avatar>
-                        <span  (click)="switchToDirectMessageChannel(user.id)">{{user.name}}</span>
+                        <span >{{user.name}}</span>
                     </div>
                 </div>
             }

@@ -81,7 +81,7 @@
             @if (!areAllMainMessagesParsed()) {
             <app-loading-indicator></app-loading-indicator>
             }
-            <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container">
+            <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container" >
                 @for (message of messages; track message.id; let i = $index) {
                 <app-message [id]="'message-' + message.id" [message]="message" (repliesClicked)="handleRepliesClick($event)"
                     (messageParseComplete)="handleMainMessageParsed($event)"></app-message>

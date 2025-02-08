@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { LoginService } from './login-service';
 import { Message } from '../../models/message';
 import { filter, take } from 'rxjs/operators';
+import { NgZone } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class ChannelServiceService {
 
   messageRendered = new Subject<string>();
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
     this.channels = collectionData(this.getChannelsRef());
     this.users = collectionData(this.getUsersRef());
     //TODO: einen Start Channel setzen
@@ -225,7 +226,6 @@ export class ChannelServiceService {
   }
 
   async jumpToMessage(message: Message) {
-    console.log(message, 'jump to message');
     if(message.parentMessageId === null && message.id)  {
       this.setCurrentChannelById(message.channelId);
       this.scrollToMessage(message.id);
@@ -236,15 +236,25 @@ export class ChannelServiceService {
   }
 
   private scrollToMessage(messageId: string) {
+    console.log( ' jump to message', messageId);
     this.messageRendered
       .pipe(
         filter(id => id === messageId),
         take(1)
       )
       .subscribe(() => {
+        console.log( 'scroll to message' + messageId);
         const element = document.getElementById('message-' + messageId);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          this.ngZone.runOutsideAngular(() => {
+            element.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'end',
+              inline: 'nearest'
+            });
+          });
+          
+          element.classList.add('selected-message');
         }
       });
   }

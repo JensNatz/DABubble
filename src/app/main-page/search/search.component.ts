@@ -94,7 +94,6 @@ export class SearchComponent {
   }
 
   onElementSelected(entry: any): void {
-    console.log(entry, 'selected');
     if(entry.categoryType === 'channel') {
       const channelId = entry.element.id;
       this.channelService.setCurrentChannelById(channelId);

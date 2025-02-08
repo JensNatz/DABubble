@@ -36,9 +36,7 @@ export class SearchService {
     );
   }
 
-
   filterChannelsByName(searchTerm: string) {
-    console.log(this.channels, 'channels');
     return this.channels.filter(channel => channel.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }
 

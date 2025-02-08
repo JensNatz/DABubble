@@ -125,24 +125,23 @@
     padding-top: 10px;
 
     .channel_name {
-        display: flex;
-        align-items: center;
+        @include rounded();
+        @include flex($justify: start);
+        cursor: pointer;
+        white-space: nowrap;
+        padding: 8px 22px;
+        font-size: 18px;
 
-        p {
-            display: inline-block;
-            white-space: nowrap;
-            border-radius: 20px;
-            padding: 4px 22px;
-            font-size: 18px;
-            margin-left: 0;
-            margin-bottom: 12px;
-            cursor: pointer;
-
-            &:hover {
-                color: $purple-3;
-                background-color: $bg-color;
-            }
+        &:hover {
+            color: $purple-3;
+            background-color: $bg-color;
         }
+
+        &.active {
+            background-color: $purple-3;
+            color: $white;
+        }
+
 
         b {
             margin-right: 16px;
@@ -256,10 +255,18 @@
         gap: 15px;
         padding: 4px 16px 4px 8px;
         cursor: pointer;
+        @include rounded();
 
         &:hover {
-            @include rounded();
             background-color: $bg-color;
-        }       
+        }  
+
+        &.active {
+            background-color: $purple-3;
+            color: $white;
+        }
+
+
+             
     }
 }
