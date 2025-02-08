@@ -10,11 +10,13 @@ import { RouterModule,Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { EmailSendComponent } from "../../user-feedback/email-send/email-send.component";
 import { CommonModule } from '@angular/common';
+import { LegalInformationComponent } from "../../../legal-information/legal-information.component";
+import { DaBubbleHeaderAuthenticationComponent } from "../../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 
 @Component({
   standalone: true,
   selector: 'app-reste-password-email',
-  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, EmailSendComponent, CommonModule, RouterModule],
+  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, EmailSendComponent, CommonModule, RouterModule, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
   templateUrl: './reste-password-email.component.html',
   styleUrls: ['./reste-password-email.component.scss']
 })
