@@ -27,6 +27,7 @@ export class ChannelEditComponent {
   @Input() closeFunction!: () => void;
 
   @Output() channelNameChanged = new EventEmitter<string>();
+  @Output() channelDescriptionChanged = new EventEmitter<string>();
 
   constructor() {
     this.getCurrentUserData();
@@ -68,9 +69,7 @@ export class ChannelEditComponent {
       this.channelName = newName;
       this.tempChannelName = newName;
       this.nameEdit = false;
-      this.channelService.editChannelName(this.channelId, newName);
-      
-      // Neuen Namen an MessageBoardComponent weitergeben
+      this.channelService.editChannelName(this.channelId, newName);      
       this.channelNameChanged.emit(newName);
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Namens:', error);
@@ -85,6 +84,7 @@ export class ChannelEditComponent {
       this.tempChannelDescription = newDescription;
       this.channelEdit = false;
       this.channelService.editChannelDescription(this.channelId, newDescription);
+      this.channelDescriptionChanged.emit(newDescription);
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Namens:', error);
     }     

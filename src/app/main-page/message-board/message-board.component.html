@@ -2,7 +2,8 @@
 <div class="modal modal-channel" *ngIf="showModal">
     <img src="assets/img/close.svg" (click)="closeEditChannel()">
     <app-channel-edit [channelId]="channelId" [channelName]="channelName" [channelCreator]="channelCreator"
-        [channelDescription]="channelDescription" [closeFunction]="closeEditChannel.bind(this)" (channelNameChanged)="updateChannelName($event)">
+        [channelDescription]="channelDescription" [closeFunction]="closeEditChannel.bind(this)"
+         (channelNameChanged)="updateChannelName($event)" (channelDescriptionChanged)="updateChannelDescription($event)">
     </app-channel-edit>
 </div>
 

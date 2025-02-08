@@ -97,6 +97,11 @@ export class MessageBoardComponent {
   }
 
 
+  updateChannelDescription(newDescription: string) {
+    this.channelDescription = newDescription;
+  }
+
+
   ngOnDestroy() {
     this.channelSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
