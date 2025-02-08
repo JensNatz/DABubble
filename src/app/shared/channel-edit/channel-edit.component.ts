@@ -4,6 +4,7 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/firebase-services/login-service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-channel-edit',
@@ -24,6 +25,8 @@ export class ChannelEditComponent {
   @Input() channelCreator: any = '';
   @Input() channelDescription: string = '';
   @Input() closeFunction!: () => void;
+
+  @Output() channelNameChanged = new EventEmitter<string>();
 
   constructor() {
     this.getCurrentUserData();
@@ -60,15 +63,18 @@ export class ChannelEditComponent {
   
 
   saveNewChannelName(newName: string) {
-    if (!newName.trim()) return; 
+    if (!newName.trim()) return;
     try {
       this.channelName = newName;
       this.tempChannelName = newName;
       this.nameEdit = false;
       this.channelService.editChannelName(this.channelId, newName);
+      
+      // Neuen Namen an MessageBoardComponent weitergeben
+      this.channelNameChanged.emit(newName);
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Namens:', error);
-    } 
+    }
   }
 
 

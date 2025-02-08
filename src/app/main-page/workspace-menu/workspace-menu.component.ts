@@ -41,34 +41,34 @@ export class WorkspaceMenuComponent {
   constructor(public channelService: ChannelServiceService) { }
 
   ngOnInit() {
-    this.loading = true;    
+    this.loading = true;
     this.loginService.currentUser.subscribe(async user => {
       if (user?.id) {
         this.userService.getUserById(user.id).subscribe(updatedUser => {
           this.loggedInUser = updatedUser;
-        });        
-    this.loadChannels();
-    this.loadUsers();
+        });
+        this.loadChannels();
+        this.loadUsers();
         this.loading = false;
-        console.log(this.channels);
-      } 
+      }
     });
   }
 
 
   loadChannels() {
     const userId = this.loginService.currentUserValue?.id;
-    if (!userId) return;  
+    if (!userId) return;
     this.channelService.getUserChannels(userId).subscribe(channels => {
       this.channels = channels;
     });
-  }  
+  }
 
 
   async loadUsers() {
     const users = await firstValueFrom(this.userService.getUsers());
     this.otherUsers = users.filter(user => user.id !== this.loggedInUser?.id);
   }
+
 
   openAddChannel() {
     this.showModal = true;
@@ -101,6 +101,7 @@ export class WorkspaceMenuComponent {
     this.channelService.setDirectMessageChannel(userId);
   }
 
+  
   onNewMessageClick() {
     this.channelService.currentChannel = null;
   }
