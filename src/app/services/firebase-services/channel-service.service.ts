@@ -106,6 +106,16 @@ export class ChannelServiceService {
     return null; 
   }
 
+
+  getUserChannels(userId: string) {
+    const channelsRef = collection(this.firestore, 'channels');
+    const q = query(channelsRef, 
+      where('members', 'array-contains', userId),
+      where('type', '==', 'group'));
+    return collectionData(q, { idField: 'id' });
+  }
+
+
   async getAllGroupChannelsWhereUserIsMember(userId: string) {
     const channels = await getDocs(query(
       collection(this.firestore, 'channels'),
@@ -115,6 +125,7 @@ export class ChannelServiceService {
     return channels.docs.map(doc => doc.data());
   }
 
+  
   async setDirectMessageChannel(userId: string) {
     const loggedInUserId = this.loginService.currentUserValue?.id;
     if (!loggedInUserId) return;

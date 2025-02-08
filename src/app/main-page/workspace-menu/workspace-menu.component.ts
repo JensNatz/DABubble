@@ -24,11 +24,11 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss'
 })
-export class WorkspaceMenuComponent { 
-  
+export class WorkspaceMenuComponent {
+
   isOpenChannelListe = true;
   isOpenUserListe = true;
-  channels: Channel[] = [];
+  channels: any[] = [];
   users: User[] = [];
   otherUsers: User[] = [];
   loggedInUser: User | null = null;
@@ -48,11 +48,10 @@ export class WorkspaceMenuComponent {
         this.userService.getUserById(user.id).subscribe(updatedUser => {
           this.loggedInUser = updatedUser;
         });
-        
-        await this.loadChannels();
-        await this.loadUsers();
+        this.loadChannels();
+        this.loadUsers();
         this.loading = false;
-      } 
+      }
     });
 
     this.channelService.currentChannel$.subscribe(channel => {
@@ -60,25 +59,25 @@ export class WorkspaceMenuComponent {
     });
   }
 
-
-
-  async loadChannels() {
+  loadChannels() {
     const userId = this.loginService.currentUserValue?.id;
-    if (!userId) {
-      return;
-    }
-    this.channels = await this.channelService.getAllGroupChannelsWhereUserIsMember(userId) as Channel[];
+    if (!userId) return;
+    this.channelService.getUserChannels(userId).subscribe(channels => {
+      this.channels = channels;
+    });
   }
+
 
   async loadUsers() {
     const users = await firstValueFrom(this.userService.getUsers());
     this.otherUsers = users.filter(user => user.id !== this.loggedInUser?.id);
   }
 
+
   openAddChannel() {
     this.showModal = true;
   }
-  
+
 
   closeAddChannel() {
     this.showModal = false;
@@ -86,12 +85,12 @@ export class WorkspaceMenuComponent {
 
 
   toggleMenuChannel() {
-    this.isOpenChannelListe = !this.isOpenChannelListe;    
+    this.isOpenChannelListe = !this.isOpenChannelListe;
   }
 
 
   toggleMenuUser() {
-    this.isOpenUserListe  = !this.isOpenUserListe ; 
+    this.isOpenUserListe = !this.isOpenUserListe;
   }
 
 
@@ -106,6 +105,7 @@ export class WorkspaceMenuComponent {
     this.channelService.setDirectMessageChannel(userId);
   }
 
+  
   onNewMessageClick() {
     this.channelService.currentChannel = null;
   }

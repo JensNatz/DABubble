@@ -7,24 +7,22 @@ import { User } from '../../models/user';
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 
 @Component({
-  selector: 'app-user-info',
+  selector: 'app-user-add',
   standalone: true,
-  imports: [
-    MessageBoardComponent
-  ],
-  templateUrl: './user-info.component.html',
-  styleUrl: './user-info.component.scss'
+  imports: [],
+  templateUrl: './user-add.component.html',
+  styleUrl: './user-add.component.scss'
 })
-
-export class UserInfoComponent {
+export class UserAddComponent {
 
   @Input() userId: string = '';
+  @Input() channelId: string = '';
+  @Input() channelName: string = '';
 
   userAvatar: string = '';
   userName: string = '';
   userEmail: string = '';
   userStatus: string = '';
-  
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -32,11 +30,8 @@ export class UserInfoComponent {
 
   private userSubscription: Subscription = new Subscription();
 
-  constructor( private messageBoard: MessageBoardComponent ) {
+  constructor() {}
 
-  }
-
-  
   ngOnInit() {    
     if (this.userId) {
       this.userSubscription.unsubscribe();
@@ -49,14 +44,7 @@ export class UserInfoComponent {
     }    
   }
 
-
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
-  }
-  
-
-  switchToDirectMessageChannel(userId: string) {
-    this.channelService.setDirectMessageChannel(userId);
-    this.messageBoard.closeUserToChannel();
   }
 }
