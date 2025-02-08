@@ -113,3 +113,12 @@ body {
     padding: 0 2px;
     color: $white;
 }
+
+.highlight {
+  background-color: $bg-color;
+}
+
+.selected-message {
+  background: $light-purple !important;
+  transition: background-color 0.5s ease;
+}
