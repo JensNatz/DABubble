@@ -1,11 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { LoginService } from './login-service';
 import { Message } from '../../models/message';
 import { filter, take } from 'rxjs/operators';
-import { NgZone } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +25,9 @@ export class ChannelServiceService {
 
   messageRendered = new Subject<string>();
 
-  constructor(private ngZone: NgZone) {
+  private currentScrollSubscription?: Subscription; 
+
+  constructor() {
     this.channels = collectionData(this.getChannelsRef());
     this.users = collectionData(this.getUsersRef());
     //TODO: einen Start Channel setzen
@@ -236,27 +237,46 @@ export class ChannelServiceService {
   }
 
   private scrollToMessage(messageId: string) {
-    console.log( ' jump to message', messageId);
-    this.messageRendered
+    if (this.currentScrollSubscription) {
+      this.currentScrollSubscription.unsubscribe();
+      this.currentScrollSubscription = undefined;
+    }
+    
+    const element = document.getElementById('message-' + messageId);
+    if (element) {
+      this.scrollElementIntoView(element);
+      this.highlightMessage(element);
+      return;
+    }
+
+    this.currentScrollSubscription = this.messageRendered
       .pipe(
-        filter(id => id === messageId),
-        take(1)
+        filter(renderedId => renderedId === messageId)
       )
-      .subscribe(() => {
-        console.log( 'scroll to message' + messageId);
-        const element = document.getElementById('message-' + messageId);
-        if (element) {
-          this.ngZone.runOutsideAngular(() => {
-            element.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'end',
-              inline: 'nearest'
-            });
-          });
-          
-          element.classList.add('selected-message');
+      .subscribe({
+        next: () => {
+          const element = document.getElementById('message-' + messageId);
+          if (element) {
+            this.scrollElementIntoView(element);
+            this.highlightMessage(element);
+          } 
         }
       });
+  }
+
+  private scrollElementIntoView(element: HTMLElement): void {
+    element.scrollIntoView({ 
+      behavior: 'instant',
+      block: 'center',
+      inline: 'center'
+    });
+  }
+
+  private highlightMessage(element: HTMLElement): void {
+    element.classList.add('selected-message');
+    setTimeout(() => {
+      element.classList.remove('selected-message');
+    }, 1500);
   }
 }
 

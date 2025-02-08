@@ -4,8 +4,10 @@
     @include flex($direction: row, $align: start, $justify: start);
     gap: 24px;
     padding: 16px 32px;
-    background-color: $white;
+    // background-color: $white;
     position: relative;
+    // transition: background-color 1s ease;
+
 
     .avatar {
         cursor: pointer;
