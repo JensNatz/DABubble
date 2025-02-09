@@ -88,7 +88,7 @@ export class SearchService {
 
   private setupMessageSubscription() {
     this.subscription.add(
-      this.messageService.getAllMessagesOfUser(this.userId).subscribe(messages => {
+      this.messageService.getAllMainMessagesOfUser(this.userId).subscribe(messages => {
         this.messages = messages as Message[];
       })
     );

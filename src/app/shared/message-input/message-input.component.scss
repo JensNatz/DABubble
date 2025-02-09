@@ -4,7 +4,7 @@
     @include rounded($all: 20px);
     border: 1px solid $light-purple;
     height: 145px;
-    padding: 24px 16px;
+    padding: 24px 8px;
     background-color: $white;
     width: 100%;
     position: relative;
@@ -20,7 +20,7 @@
     .placeholder {
         position: absolute;
         top: 24px;
-        left: 16px;
+        left: 8px;
         color: $gray;
         pointer-events: none;
 
@@ -46,7 +46,7 @@
 
         .toolbar-left {
             @include flex();
-            gap: 8px;
+            gap: 6px;
         }
 
         .emoji-container {

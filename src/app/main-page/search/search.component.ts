@@ -104,6 +104,7 @@ export class SearchComponent {
       this.channelService.jumpToMessage(entry.element);
     }
     this.listShown = false;
+    this.inputValue = '';
   }
 
 

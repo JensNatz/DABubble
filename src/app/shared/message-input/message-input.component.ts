@@ -9,11 +9,11 @@ import { MentionComponent } from '../mention/mention.component';
 import { MessagePart } from '../../models/message-part';
 import { Subscription } from 'rxjs';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
-
+import { ButtonComponent } from '../button/button.component';
 @Component({
   selector: 'app-message-input',
   standalone: true,
-  imports: [FormsModule, CommonModule, EmojiPickerComponent, TagSelectionListComponent, ClickOutsideDirective, MentionComponent],
+  imports: [FormsModule, CommonModule, EmojiPickerComponent, TagSelectionListComponent, ClickOutsideDirective, MentionComponent, ButtonComponent],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
@@ -25,7 +25,6 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   @ViewChild('messageInput', { read: ViewContainerRef }) messageInput!: ViewContainerRef;
 
   isEmojiPickerOpen: boolean = false;
-  isSubmittingDisabled: boolean = true;
   isInputEnabled: boolean = true;
   isPlaceholderVisible: boolean = true;
   isTaggingDisabled: boolean = false;
@@ -116,7 +115,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  get sendButtonStatus(): boolean {
+  get isSendButtonDisabled(): boolean {
     if (this.channelService.currentChannel === null) {
       return true;
     }
@@ -274,7 +273,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
     }
     if (event.key === 'Enter') {
       event.preventDefault();
-      if(!this.isSubmittingDisabled) {
+      if(!this.isSendButtonDisabled) {
         this.emitMessageToParent();
       }
     }
