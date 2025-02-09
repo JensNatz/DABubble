@@ -43,6 +43,7 @@
 
     .toolbar {
         @include flex($justify: space-between); 
+        padding-top: 8px;
 
         .toolbar-left {
             @include flex();

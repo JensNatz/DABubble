@@ -75,13 +75,13 @@
                 color: $gray;
                 font-size: 12px;
             }
-    
         }
 
         .message-reactions {
             @include flex($justify: start);
             gap: 8px;
             flex-wrap: wrap;
+            padding: 0 16px;
 
             .reaction-indicator {
                 cursor: pointer;

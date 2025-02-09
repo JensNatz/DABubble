@@ -17,13 +17,18 @@ import { CommonModule } from '@angular/common';
   styleUrl: './main-page.component.scss'
 })
 export class MainPageComponent {
-  isOpen = true;
+  isMenuOpen = true;
+  isMessageBoardOpen = false;
 
   toggleMenu() {
-    this.isOpen = !this.isOpen;
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   get menuText() {
-    return this.isOpen ? 'schließen' : 'öffnen';
+    return this.isMenuOpen ? 'schließen' : 'öffnen';
+  }
+
+  onChannelSelected() {
+    this.isMessageBoardOpen = true;
   }
 }

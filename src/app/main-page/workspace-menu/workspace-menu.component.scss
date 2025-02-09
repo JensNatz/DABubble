@@ -10,6 +10,10 @@
     background-color: $white;
     height: 100%;
     overflow: hidden;
+
+    @media (max-width: $breakpoint-md) {
+        border-radius: 0;
+    }
 }
 
 .workspace-title {

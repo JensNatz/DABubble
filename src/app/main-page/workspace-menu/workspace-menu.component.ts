@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
@@ -25,6 +25,8 @@ import { firstValueFrom } from 'rxjs';
   styleUrl: './workspace-menu.component.scss'
 })
 export class WorkspaceMenuComponent {
+
+  @Output() channelSelected = new EventEmitter<Channel>();
 
   isOpenChannelListe = true;
   isOpenUserListe = true;
@@ -97,17 +99,20 @@ export class WorkspaceMenuComponent {
   switchToGroupChannel(channel: Channel) {
     if (this.channelService.currentChannel?.id !== channel.id) {
       this.channelService.currentChannel = channel;
+      this.channelSelected.emit();
     }
   }
 
 
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
+    this.channelSelected.emit();
   }
 
   
   onNewMessageClick() {
     this.channelService.currentChannel = null;
+    this.channelSelected.emit();
   }
 }
 

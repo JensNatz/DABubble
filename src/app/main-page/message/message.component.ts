@@ -213,6 +213,10 @@ export class MessageComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
            this.renderMessageContent(content);
         });
+      } else {
+        setTimeout(() => {
+          this.renderMessageContent(content);
+       });
       }
       this.isEditing = false;
     }
