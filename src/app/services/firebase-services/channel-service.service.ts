@@ -241,10 +241,7 @@ export class ChannelServiceService {
     if(message.parentMessageId === null && message.id)  {
       this.setCurrentChannelById(message.channelId);
       this.scrollToMessage(message.id);
-    } else {
-      // this.setCurrentChannelById(message.parentMessageId);
-      // this.scrollToMessage(message.id);
-    }
+    } 
   }
 
   private scrollToMessage(messageId: string) {
