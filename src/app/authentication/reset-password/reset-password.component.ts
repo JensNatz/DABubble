@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { InputFieldComponent } from "../../shared/authentication-input/input-field.component";
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule, NgClass, Location } from '@angular/common';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { FormsModule, NgForm, FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
@@ -31,7 +31,8 @@ export class ResetPasswordComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserServiceService
+    private userService: UserServiceService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -87,5 +88,9 @@ export class ResetPasswordComponent {
     if (control) {
       control.markAsTouched();
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
