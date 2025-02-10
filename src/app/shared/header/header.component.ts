@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,6 +19,9 @@ import { AvatarComponent } from '../avatar/avatar.component';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+
+  @Input() isMessageBoardOpen: boolean = false;
+  @Output() backButtonClicked = new EventEmitter<void>();
 
   public showProfilMenu: boolean = false;
   public showProfil: boolean = false;
@@ -104,5 +107,9 @@ export class HeaderComponent {
   logOut() {
     this.loginService.logout();
     this.router.navigate(['']);
+  }
+
+  onBackButtonClick() {
+    this.backButtonClicked.emit();
   }
 }

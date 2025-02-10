@@ -31,4 +31,8 @@ export class MainPageComponent {
   onChannelSelected() {
     this.isMessageBoardOpen = true;
   }
+
+  onBackButtonClicked() {
+    this.isMessageBoardOpen = false;
+  }
 }

@@ -21,6 +21,34 @@
         flex-wrap: wrap;
         height: 160px;
     }
+
+    .standard-logo {
+        display: block;
+
+        @media (max-width: $breakpoint-md) {
+            display: none;
+        }
+    }
+
+    .mobile-logo {
+        display: none;
+
+        @media (max-width: $breakpoint-md) {
+            display: block;
+        }
+
+        div {
+            @include flex();
+            gap: 8px;
+            margin-left: 20px;
+            cursor: pointer;
+
+            .workspace-logo {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
 }
 
 .logo {
@@ -32,6 +60,7 @@
     }
 
     @media (max-width: $breakpoint-md) {
+        height: 40px;
         order: 1;
         margin-left: 20px;
     }
@@ -62,11 +91,19 @@
     @media (max-width: $breakpoint-md) {
         order: 2;
         margin-right: 20px;
+
+        svg {
+            display: none;
+        }
     }
 
 
     &:hover {
         color: $purple-2;
+
+        svg {
+            color: $purple-2;
+        }
     }
 
     h2 {
@@ -76,23 +113,14 @@
             display: none;
         }
     }
-}
 
-.user_avatar_arrow {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+    .user_avatar_arrow {
+        @include flex();
+        gap: 20px;
+    }
 
-.arrow_down {
-    height: 8px;
-    width: 14px;
-    filter: invert(0%);
-    transition: filter 0.3s ease;
-}
 
-.user_name:hover .arrow_down {
-    filter: invert(46%) sepia(99%) saturate(1444%) hue-rotate(213deg) brightness(100%) contrast(91%);
+
 }
 
 .modal-overlay {

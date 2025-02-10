@@ -1,5 +1,6 @@
 <div class="wrapper">
-    <app-header></app-header>
+    <app-header [isMessageBoardOpen]="isMessageBoardOpen"
+    (backButtonClicked)="onBackButtonClicked()"></app-header>
     <div class="main_content">
         <app-workspace-menu 
         class="workspace-menu" 
