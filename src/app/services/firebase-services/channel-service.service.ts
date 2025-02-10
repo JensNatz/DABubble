@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { LoginService } from './login-service';
+import { Message } from '../../models/message';
+import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,10 @@ export class ChannelServiceService {
   private channelNameCache = new Map<string, string>();
   private currentChannelSubject = new BehaviorSubject<Channel | null>(null);
   currentChannel$ = this.currentChannelSubject.asObservable();
+
+  messageRendered = new Subject<string>();
+
+  private currentScrollSubscription?: Subscription; 
 
   constructor() {
     this.channels = collectionData(this.getChannelsRef());
@@ -229,6 +235,59 @@ export class ChannelServiceService {
     
     const updatedMembers = channelData['members'].filter((id: string) => id !== userId);
     await updateDoc(channelRef, { members: updatedMembers });
+  }
+
+  async jumpToMessage(message: Message) {
+    if(message.parentMessageId === null && message.id)  {
+      this.setCurrentChannelById(message.channelId);
+      this.scrollToMessage(message.id);
+    } else {
+      // this.setCurrentChannelById(message.parentMessageId);
+      // this.scrollToMessage(message.id);
+    }
+  }
+
+  private scrollToMessage(messageId: string) {
+    if (this.currentScrollSubscription) {
+      this.currentScrollSubscription.unsubscribe();
+      this.currentScrollSubscription = undefined;
+    }
+    
+    const element = document.getElementById('message-' + messageId);
+    if (element) {
+      this.scrollElementIntoView(element);
+      this.highlightMessage(element);
+      return;
+    }
+
+    this.currentScrollSubscription = this.messageRendered
+      .pipe(
+        filter(renderedId => renderedId === messageId)
+      )
+      .subscribe({
+        next: () => {
+          const element = document.getElementById('message-' + messageId);
+          if (element) {
+            this.scrollElementIntoView(element);
+            this.highlightMessage(element);
+          } 
+        }
+      });
+  }
+
+  private scrollElementIntoView(element: HTMLElement): void {
+    element.scrollIntoView({ 
+      behavior: 'instant',
+      block: 'center',
+      inline: 'center'
+    });
+  }
+
+  private highlightMessage(element: HTMLElement): void {
+    element.classList.add('selected-message');
+    setTimeout(() => {
+      element.classList.remove('selected-message');
+    }, 1500);
   }
 }
 

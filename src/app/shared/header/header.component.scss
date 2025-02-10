@@ -1,6 +1,4 @@
-@import './../../styles/variables';
-@import './../../styles/mixins';
-@import './../../shared/avatar/avatar.component.scss';
+@import '../../../styles.scss';
 
 .header {
     @include flex($justify: space-between, $align: center);
@@ -18,6 +16,11 @@
 .logo {
     height: 70px;
     width: auto;
+}
+
+.search {
+    width: 100%;
+    max-width: 640px;
 }
 
 .user_name {
@@ -54,32 +57,6 @@
 
 .user_name:hover .arrow_down {
     filter: invert(46%) sepia(99%) saturate(1444%) hue-rotate(213deg) brightness(100%) contrast(91%);
-}
-
-.search {
-    width: 26px;
-    height: 26px;
-    top: 22px;
-    right: 24px;
-    position: absolute;
-}
-
-.input_search {
-    width: 50%;
-    position: relative;
-
-    input {
-        @include rounded();
-        width: 100%;
-        height: 70px;
-        border: 0;
-        padding: 0 30px;
-        font-size: 24px;
-
-        &::placeholder {
-            color: $gray;
-        }
-    }
 }
 
 .modal-overlay {

@@ -6,12 +6,14 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { CommonModule, NgClass } from '@angular/common';
 import { Observable, of } from 'rxjs';
+import { LegalInformationComponent } from "../../legal-information/legal-information.component";
+import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, ReactiveFormsModule, CommonModule],
+  imports: [InputFieldComponent, RouterModule, FormsModule, NgClass, ReactiveFormsModule, CommonModule, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss', '../../shared/authentication-input/input-field.component.scss']
 })

@@ -1,0 +1,32 @@
+@import '../styles/_variables';
+@import '../styles/mixins';
+
+
+
+:host{
+    position: absolute;
+    bottom: 30px;
+}
+
+.legal-infomation-link{
+    display: flex;
+    font-size: 18px;
+    font-weight: 400;
+    gap: 16px;
+    
+
+    a{
+        @include flex(center,center, normal);
+        height: 42px;
+        width: 154px;
+        color: $purple-2;
+        text-decoration: none;
+
+        &:hover{
+            cursor: pointer;
+            border: 1px solid $purple-2;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+    }
+}
