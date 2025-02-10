@@ -21,6 +21,7 @@ export class UserAddComponent {
   @Input() userId: string = '';
   @Input() channelId: string = '';
   @Input() channelName: string = '';
+  @Input() closeUserAddInfos!: () => void;
 
   userAvatar: string = '';
   userName: string = '';
@@ -67,6 +68,7 @@ export class UserAddComponent {
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
+ 
 
   addUserToChannel() {
     if (!this.channelId || !this.inputValue) {
@@ -80,14 +82,23 @@ export class UserAddComponent {
     if (userId) {
       this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
         if (!channel) {
+          console.error('Channel nicht gefunden.');
           return;
-        }        
-        const members = channel.members ?? [];
+        }   
+        
+        const members = channel.members ?? []; 
+    
         if (members.includes(userId)) {
+          console.log('Benutzer ist bereits Mitglied.');
           return;
         }
+    
         const updatedMembers = [...members, userId];
+    
         this.channelService.editChannelMembers(this.channelId, updatedMembers);
+        
+        console.log(`Benutzer ${userId} wurde hinzugefügt.`);
+        this.closeUserAddInfos();
       });
     }
   }

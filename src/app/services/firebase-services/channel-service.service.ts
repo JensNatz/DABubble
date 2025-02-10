@@ -241,8 +241,6 @@ export class ChannelServiceService {
   editChannelMembers(channelId: string, members: string[]) {
     const channelRef = doc(this.firestore, 'channels', channelId);
     updateDoc(channelRef, { members })
-      .then(() => console.log('Mitglieder aktualisiert'))
-      .catch(err => console.error('Fehler beim Aktualisieren der Mitglieder:', err));
   }
 
 
