@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { UserInfoComponent } from '../user-info/user-info.component';
+import { UserAddComponent } from "../user-add/user-add.component";
 
 @Component({
   selector: 'app-add-user-to-channel',
@@ -13,8 +14,9 @@ import { UserInfoComponent } from '../user-info/user-info.component';
   imports: [
     CommonModule,
     FormsModule,
-    UserInfoComponent
-  ],
+    UserInfoComponent,
+    UserAddComponent
+],
   templateUrl: './add-user-to-channel.component.html',
   styleUrls: ['./add-user-to-channel.component.scss']
 })
@@ -24,6 +26,7 @@ export class AddUserToChannelComponent {
   @Input() channelMembers: any[] = [];
 
   showUserInfo: boolean = false;
+  showUserAddInfo: boolean = false;
   selectedUser: any = null;
 
   usersNames: any[] = [];
@@ -97,6 +100,19 @@ export class AddUserToChannelComponent {
   closeUserInfos() {
     this.showUserInfo = false;
   }
+
+
+  openUserAddInfos() {
+    this.showUserAddInfo = true;
+  }
+
+
+  closeUserAddInfos() {
+    this.showUserAddInfo = false;
+  }
+
+
+
 
 
 }

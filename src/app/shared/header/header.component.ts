@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { LoginService } from '../../services/firebase-services/login-service';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SearchComponent } from '../../main-page/search/search.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    SearchComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

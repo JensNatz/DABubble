@@ -10,6 +10,7 @@ import { MessageToolbarComponent } from "./message-toolbar/message-toolbar.compo
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { LoginService } from '../../services/firebase-services/login-service';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 
 @Component({
   selector: 'app-message',
@@ -28,11 +29,12 @@ import { LoginService } from '../../services/firebase-services/login-service';
 export class MessageComponent implements OnInit, AfterViewInit {
   @ViewChild('messageContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
   messageService: MessageService = inject(MessageService);
+  channelService: ChannelServiceService = inject(ChannelServiceService);
   loginService: LoginService = inject(LoginService);
+
   @Input() message!: Message;
   @Output() repliesClicked = new EventEmitter<string>();
   @Output() messageParseComplete = new EventEmitter<string>();
-
 
   authorName: string = 'Unknown User';
   isOwn: boolean = false;
@@ -62,7 +64,10 @@ export class MessageComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
     await this.renderMessageContent(this.message.content);
     this.messageParseComplete.emit(this.message.id);
-      
+    if(this.message.id) {
+      this.channelService.messageRendered.next(this.message.id);
+
+    }
   }
 
   get lastReplyTimeDisplay(): string {
@@ -208,17 +213,18 @@ export class MessageComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
            this.renderMessageContent(content);
         });
-        
       }
       this.isEditing = false;
     }
   }
 
   handleOutsideOfMessageClick() {
-     this.isEditing = false;
-     setTimeout(() => {
-      this.renderMessageContent(this.message.content);
-   });
+    if (this.isEditing) {
+      this.isEditing = false;
+      setTimeout(() => {
+        this.renderMessageContent(this.message.content);
+      });
+    }
   }
 
   handleRepliesClick() {

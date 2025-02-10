@@ -1,3 +1,18 @@
+<div class="modal-overlay" *ngIf="showUserInfo" (click)="closeUserInfos()"></div>
+<div class="modal user_info" *ngIf="showUserInfo">
+    <img src="assets/img/close.svg" (click)="closeUserInfos()">
+    <app-user-info *ngIf="selectedUser" [userId]="selectedUser.id"></app-user-info>
+</div>
+
+<div class="modal-overlay" *ngIf="showUserAddInfo" (click)="closeUserAddInfos()"></div>
+<div class="modal user_add_to_channel" *ngIf="showUserAddInfo">
+    <img src="assets/img/close.svg" (click)="closeUserAddInfos()">
+    <app-user-add
+        [channelId]="channelId"
+        [channelName]="channelName"
+    ></app-user-add>
+</div>
+
 <div class="add_user_to_channel_content">
     <h1>Mitglieder</h1>
     <div class="all_users_from_channel">
@@ -16,13 +31,7 @@
             </div>
         }
     </div>
-
-    <div class="modal-overlay" *ngIf="showUserInfo" (click)="closeUserInfos()"></div>
-    <div class="modal" *ngIf="showUserInfo">
-        <img src="assets/img/close.svg" (click)="closeUserInfos()">
-        <app-user-info *ngIf="selectedUser" [userId]="selectedUser.id"></app-user-info>
-    </div>
-    <div class="mitglieder_hinzufügen">
+    <div class="mitglieder_hinzufügen" (click)="openUserAddInfos()">
         <img src="assets/img/44. Add members button.svg">
         <span>Mitglieder hinzufügen</span>
     </div>

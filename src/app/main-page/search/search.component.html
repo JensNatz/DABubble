@@ -1,0 +1,15 @@
+<div class="search-container">
+    <div class="input-container">
+        <input type="text" 
+        [placeholder]="placeholder"
+        [(ngModel)]="inputValue"
+        (ngModelChange)="onInputChange($event)">
+</div>
+    @if(listShown) {
+        <app-selection-list
+        class="selection-list" 
+        [elements]="filteredResults"
+        [size]="'large'"
+        (elementSelected)="onElementSelected($event)"></app-selection-list>
+    }
+</div>

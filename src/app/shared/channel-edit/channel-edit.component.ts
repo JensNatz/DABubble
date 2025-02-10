@@ -4,6 +4,7 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/firebase-services/login-service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-channel-edit',
@@ -25,6 +26,9 @@ export class ChannelEditComponent {
   @Input() channelDescription: string = '';
   @Input() closeFunction!: () => void;
 
+  @Output() channelNameChanged = new EventEmitter<string>();
+  @Output() channelDescriptionChanged = new EventEmitter<string>();
+
   constructor() {
     this.getCurrentUserData();
   }
@@ -44,6 +48,7 @@ export class ChannelEditComponent {
     this.nameEdit = true;
   }
 
+
   openChannelEdit() {
     this.channelEdit = true;
   }
@@ -56,17 +61,19 @@ export class ChannelEditComponent {
       }
     })
   }
+  
 
   saveNewChannelName(newName: string) {
-    if (!newName.trim()) return; 
+    if (!newName.trim()) return;
     try {
       this.channelName = newName;
       this.tempChannelName = newName;
       this.nameEdit = false;
-      this.channelService.editChannelName(this.channelId, newName);
+      this.channelService.editChannelName(this.channelId, newName);      
+      this.channelNameChanged.emit(newName);
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Namens:', error);
-    } 
+    }
   }
 
 
@@ -77,6 +84,7 @@ export class ChannelEditComponent {
       this.tempChannelDescription = newDescription;
       this.channelEdit = false;
       this.channelService.editChannelDescription(this.channelId, newDescription);
+      this.channelDescriptionChanged.emit(newDescription);
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Namens:', error);
     }     

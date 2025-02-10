@@ -1,10 +1,7 @@
 <div class="header">
     <div class="content">
         <img class="logo" src="assets/img/Property 1=Default.svg">
-        <div class="input_search">
-            <input type="text" placeholder="Devspace durchsuchen">
-            <img class="search" src="assets/img/search.png">
-        </div>
+        <app-search class="search" [placeholder]="'Devspace durchsuchen'"></app-search>
 
         <div class="user_name">
             <h2>{{ userName }}</h2>
