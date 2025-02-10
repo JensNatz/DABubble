@@ -6,7 +6,7 @@
         <div class="user_name">
             <h2>{{ userName }}</h2>
             <div class="user_avatar_arrow">
-                <img class="user_foto avatar" src="assets/img/avatar{{ userAvatar }}.svg">
+                <app-avatar [avatar]="userAvatar"></app-avatar>
                 <img class="arrow_down" src="assets/img/keyboard_arrow_down.png" (click)="openProfilMenu()">
             </div>
         </div>

@@ -4,6 +4,7 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SearchComponent } from '../../main-page/search/search.component';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +12,8 @@ import { SearchComponent } from '../../main-page/search/search.component';
   imports: [
     CommonModule,
     FormsModule,
-    SearchComponent
+    SearchComponent,
+    AvatarComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
