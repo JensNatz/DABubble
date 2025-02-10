@@ -7,6 +7,8 @@ import { User } from '../../models/user';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
+import { take } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-user-add',
@@ -46,23 +48,48 @@ export class UserAddComponent {
   }
 
   onInputChange(event: Event): void {
-  const target = event.target as HTMLInputElement;
-  this.inputValue = target?.value || ''; 
+    const target = event.target as HTMLInputElement;
+    this.inputValue = target?.value || '';
 
-  if (this.inputValue.length > 0) {
-    this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
-    this.listShown = true;
-  } else {
-    this.listShown = false;
+    if (this.inputValue.length > 0) {
+      this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
+      this.listShown = true;
+    } else {
+      this.listShown = false;
+    }
   }
-}
 
   onUserSelect(user: User): void {
-    this.inputValue = user.name;
+    this.inputValue = user.name; 
     this.listShown = false;
   }
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
+
+  addUserToChannel() {
+    if (!this.channelId || !this.inputValue) {
+      return;
+    }
+    const selectedUser = this.allUsers.find(user => user.name === this.inputValue);
+    if (!selectedUser) {
+      return;
+    }
+    const userId = selectedUser.id;
+    if (userId) {
+      this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
+        if (!channel) {
+          return;
+        }        
+        const members = channel.members ?? [];
+        if (members.includes(userId)) {
+          return;
+        }
+        const updatedMembers = [...members, userId];
+        this.channelService.editChannelMembers(this.channelId, updatedMembers);
+      });
+    }
+  }
+
 }

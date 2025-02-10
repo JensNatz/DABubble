@@ -236,6 +236,15 @@ export class ChannelServiceService {
     const updatedMembers = channelData['members'].filter((id: string) => id !== userId);
     await updateDoc(channelRef, { members: updatedMembers });
   }
+  
+
+  editChannelMembers(channelId: string, members: string[]) {
+    const channelRef = doc(this.firestore, 'channels', channelId);
+    updateDoc(channelRef, { members })
+      .then(() => console.log('Mitglieder aktualisiert'))
+      .catch(err => console.error('Fehler beim Aktualisieren der Mitglieder:', err));
+  }
+
 
   async jumpToMessage(message: Message) {
     if(message.parentMessageId === null && message.id)  {
