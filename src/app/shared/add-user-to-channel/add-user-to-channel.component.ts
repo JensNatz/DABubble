@@ -111,8 +111,4 @@ export class AddUserToChannelComponent {
     this.showUserAddInfo = false;
   }
 
-
-
-
-
 }

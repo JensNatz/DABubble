@@ -6,10 +6,18 @@
         </div>
     </div>
 
-    <input type="text" placeholder="Name eingeben">
+    <div class="input-container">
+        <input type="text" placeholder="Name eingeben" [(ngModel)]="inputValue" (input)="onInputChange($event)">
 
-    <div class="add_button">
-        <button class="btn-primary">Hinzufüen</button>
+        <div *ngIf="listShown" class="users_liste">
+            <div class="user_name" *ngFor="let user of filteredUsers" (click)="onUserSelect(user)">
+                <img class="avatar" src="assets/img/avatar{{ user.avatar }}.svg">
+                <span>{{ user.name }}</span>
+            </div>
+        </div>
     </div>
 
+    <div class="add_button">
+        <button class="btn-primary">Hinzufügen</button>
+    </div>
 </div>

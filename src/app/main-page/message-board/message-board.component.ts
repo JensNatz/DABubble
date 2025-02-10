@@ -15,6 +15,7 @@ import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loadin
 import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.component';
 import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
+import { UserAddComponent } from '../../shared/user-add/user-add.component';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -28,7 +29,8 @@ import { RecipientSelectorComponent } from '../../shared/recipient-selector/reci
     ChannelEditComponent,
     AddUserToChannelComponent,
     AddUserToChannelComponent,
-    RecipientSelectorComponent
+    RecipientSelectorComponent,
+    UserAddComponent
 ],
 
   templateUrl: './message-board.component.html',
@@ -48,6 +50,8 @@ export class MessageBoardComponent {
   channelsDataLength: number = 0;
   showModal = false;
   showModalUserEdit = false;
+  showUserInfo: boolean = false;
+  showUserAddInfo: boolean = false;
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -269,6 +273,15 @@ export class MessageBoardComponent {
 
   closeUserToChannel() {
     this.showModalUserEdit = false;
+  }
+
+  openUserAddInfos() {
+    this.showUserAddInfo = true;
+  }
+
+
+  closeUserAddInfos() {
+    this.showUserAddInfo = false;
   }
 
 

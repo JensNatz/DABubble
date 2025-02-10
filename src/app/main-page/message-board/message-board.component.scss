@@ -228,8 +228,6 @@
     }
 }
 
-
-
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -282,4 +280,12 @@
     right: 112px;
     width: 415px;
     border-top-right-radius: 0%;
+}
+
+.user_add_to_channel {
+    top: 203px;
+    width: 514px;
+    height: 294px;
+    right: 30px;
+    border-top-right-radius: 0;
 }
