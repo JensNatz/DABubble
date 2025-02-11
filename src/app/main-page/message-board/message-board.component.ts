@@ -31,7 +31,7 @@ import { UserAddComponent } from '../../shared/user-add/user-add.component';
     AddUserToChannelComponent,
     RecipientSelectorComponent,
     UserAddComponent
-],
+  ],
 
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss'
@@ -53,6 +53,8 @@ export class MessageBoardComponent {
   showUserInfo: boolean = false;
   showUserAddInfo: boolean = false;
 
+  channels: any[] = [];
+
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -63,13 +65,16 @@ export class MessageBoardComponent {
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
   allMessagesLoaded: boolean = false;
-  private parsedMainMessagesId =new Set<string>();
+  private parsedMainMessagesId = new Set<string>();
   private parsedThreadMessagesId = new Set<string>();
 
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
 
+
+  constructor() {
+  }
 
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
@@ -83,7 +88,9 @@ export class MessageBoardComponent {
           this.channelMembers = channel.members || [];
           this.loadMessages();
           this.isThreadOpen = false;
-          this.getUserFromChannel();
+
+          this.loadChannels();
+          this.loadChannelMembers()
 
           if (this.channelType === 'direct' && channel.members) {
             this.setDirectMessagePartnerData(channel.members);
@@ -93,6 +100,39 @@ export class MessageBoardComponent {
         this.clearMessageBoardData();
       }
     });
+  }
+
+  loadChannels() {
+    if (!this.channelId) return;
+    this.channelService.getChannelByIdFromCollection(this.channelId).subscribe(channel => {
+      if (channel) {
+        this.channels = [channel];
+        this.channelMembers = channel.members || [];
+        this.channelsDataLength = this.channelMembers.length;
+      } else {
+        this.channels = [];
+        this.channelMembers = [];
+        this.channelsDataLength = 0;
+      }
+    });
+  }
+
+
+  async loadChannelMembers() {
+    if (!this.channelMembers.length) return;
+    const userInfoPromises = this.channelMembers.map(async (userId) => {
+      return new Promise((resolve) => {
+        this.userService.getUserById(userId).subscribe((user: User) => {
+          resolve({
+            id: userId,
+            name: user.name,
+            avatar: user.avatar
+          });
+        });
+      });
+    });
+    this.channelsData = await Promise.all(userInfoPromises);
+    this.channelsDataLength = this.channelsData.length;
   }
 
 
@@ -132,15 +172,11 @@ export class MessageBoardComponent {
     }
   }
 
-  async getUserFromChannel() {
-    this.channelsData = await this.channelService.getMembersOfChannelWithDetails(this.channelId); 
-    this.channelsDataLength = this.channelsData.length;   
-  }
-  
+
   setDirectMessagePartnerData(members: string[]) {
     const currentUser = this.loginService.currentUserValue;
     const otherUserId = members.find(member => member !== currentUser?.id);
-  
+
     if (otherUserId) {
       this.userSubscription.unsubscribe();
       this.userSubscription = this.userService.getUserById(otherUserId).subscribe((user: User) => {
@@ -184,11 +220,11 @@ export class MessageBoardComponent {
   handleMainMessageParsed(messageId: string) {
     this.parsedMainMessagesId.add(messageId);
   }
-  
+
   handleThreadMessageParsed(messageId: string) {
     this.parsedThreadMessagesId.add(messageId);
   }
-  
+
   areAllMainMessagesParsed(): boolean {
     return this.messages.every(message => message.id && this.parsedMainMessagesId.has(message.id));
   }
@@ -268,7 +304,7 @@ export class MessageBoardComponent {
   }
 
   openUserToChannel() {
-    this.showModalUserEdit= true;
+    this.showModalUserEdit = true;
   }
 
   closeUserToChannel() {
