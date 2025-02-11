@@ -18,6 +18,6 @@
     </div>
 
     <div class="add_button">
-        <button class="btn-primary" (click)="addUserToChannel()">Hinzufügen</button>
+        <button class="btn-primary" [disabled]="!inputValue" (click)="addUserToChannel()">Hinzufügen</button>
     </div>
 </div>
