@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { take } from 'rxjs/operators';
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
+import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
 
 
 @Component({
@@ -17,12 +18,14 @@ import { MessageBoardComponent } from '../../main-page/message-board/message-boa
   imports: [
     FormsModule, 
     CommonModule, 
-    MessageBoardComponent
+    MessageBoardComponent,
+    AddUserToChannelComponent  
   ],
   templateUrl: './user-add.component.html',
   styleUrl: './user-add.component.scss'
 })
 export class UserAddComponent {
+
   @Input() userId: string = '';
   @Input() channelId: string = '';
   @Input() channelName: string = '';
@@ -45,7 +48,7 @@ export class UserAddComponent {
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor(private messageBoard: MessageBoardComponent) {
+  constructor(private messageBoard: MessageBoardComponent, private addUserComponent: AddUserToChannelComponent) {
     this.userSubscription.add(
       this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
@@ -72,8 +75,7 @@ export class UserAddComponent {
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
-  }
- 
+  } 
 
   addUserToChannel() {
     if (!this.channelId || !this.inputValue) {
@@ -89,22 +91,17 @@ export class UserAddComponent {
         if (!channel) {
           console.error('Channel nicht gefunden.');
           return;
-        }   
-        
+        }           
         const members = channel.members ?? []; 
-    
         if (members.includes(userId)) {
           console.log('Benutzer ist bereits Mitglied.');
           return;
         }
-    
         const updatedMembers = [...members, userId];
-    
         this.channelService.editChannelMembers(this.channelId, updatedMembers);
-        
-        console.log(`Benutzer ${userId} wurde hinzugefügt.`);
-        this.closeUserAddInfos();
         this.messageBoard.getUserFromChannel();
+        this.addUserComponent.getUserFromChannel(); 
+        this.closeUserAddInfos();
       });
     }
   }

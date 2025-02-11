@@ -28,7 +28,6 @@ import { UserAddComponent } from '../../shared/user-add/user-add.component';
     LoadingIndicatorComponent,
     ChannelEditComponent,
     AddUserToChannelComponent,
-    AddUserToChannelComponent,
     RecipientSelectorComponent,
     UserAddComponent
 ],

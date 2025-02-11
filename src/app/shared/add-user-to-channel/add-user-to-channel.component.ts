@@ -7,6 +7,7 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { UserInfoComponent } from '../user-info/user-info.component';
 import { UserAddComponent } from "../user-add/user-add.component";
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-add-user-to-channel',
@@ -28,7 +29,6 @@ export class AddUserToChannelComponent {
   showUserInfo: boolean = false;
   showUserAddInfo: boolean = false;
   selectedUser: any = null;
-
   usersNames: any[] = [];
   channelName: string = '';
   channelsData: any[] = [];
@@ -76,7 +76,7 @@ export class AddUserToChannelComponent {
       const [currentUser] = this.channelsData.splice(currentUserIndex, 1);
       currentUser.name += " (Du)";
       this.channelsData.unshift(currentUser);
-    }
+    }  
   }
 
 
