@@ -4,7 +4,7 @@
                 <img class="logo" src="assets/img/logo_main.svg">
             </div>
             <div class="mobile-logo">
-                @if (isMessageBoardOpen) {
+                @if (messageboardService.isMessageBoardOpen) {
                     <div (click)="onBackButtonClick()">
                         <img src="assets/img/arrow_left.svg">
                         <img class="workspace-logo" src="assets/img/Workspace logo.png">

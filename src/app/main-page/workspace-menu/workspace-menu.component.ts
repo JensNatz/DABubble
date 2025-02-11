@@ -10,7 +10,7 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { firstValueFrom } from 'rxjs';
-
+import { MessageboardService } from '../../services/messageboard.service';
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
@@ -26,7 +26,9 @@ import { firstValueFrom } from 'rxjs';
 })
 export class WorkspaceMenuComponent {
 
-  @Output() channelSelected = new EventEmitter<Channel>();
+  loginService: LoginService = inject(LoginService);
+  userService: UserServiceService = inject(UserServiceService);
+  messageboardService: MessageboardService = inject(MessageboardService);
 
   isOpenChannelListe = true;
   isOpenUserListe = true;
@@ -34,8 +36,6 @@ export class WorkspaceMenuComponent {
   users: User[] = [];
   otherUsers: User[] = [];
   loggedInUser: User | null = null;
-  loginService: LoginService = inject(LoginService);
-  userService: UserServiceService = inject(UserServiceService);
   loading: boolean = false;
   activeChannel: Channel | null = null;
 
@@ -99,20 +99,20 @@ export class WorkspaceMenuComponent {
   switchToGroupChannel(channel: Channel) {
     if (this.channelService.currentChannel?.id !== channel.id) {
       this.channelService.currentChannel = channel;
-      this.channelSelected.emit();
+      this.messageboardService.openMessageBoard();
     }
   }
 
 
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
-    this.channelSelected.emit();
+    this.messageboardService.openMessageBoard();
   }
 
   
   onNewMessageClick() {
     this.channelService.currentChannel = null;
-    this.channelSelected.emit();
+    this.messageboardService.openMessageBoard();
   }
 }
 

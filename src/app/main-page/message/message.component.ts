@@ -45,7 +45,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
   lastReplyTimestamp: number | null = null;
   isMessageInMainChannel: boolean = false;
   
-  emojiPickerPosition: string = 'top: 50px; left: 50px;';
+  emojiPickerPosition: string = 'top: 20px; left: 20px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
 
   constructor(private userService: UserService) { }
@@ -97,7 +97,6 @@ export class MessageComponent implements OnInit, AfterViewInit {
 
   showEmojiPicker(event: MouseEvent) {
     this.displayEmojiPicker = true;
-    this.emojiPickerPosition = this.calcPickerPosition(event);
   }
 
   hideEmojiPicker() {
@@ -159,28 +158,6 @@ export class MessageComponent implements OnInit, AfterViewInit {
     return date1.toDateString() === date2.toDateString();
   }
 
-  private calcPickerPosition(event: MouseEvent): string {
-    const buffer = 20;
-    const viewportHeight = window.innerHeight - buffer;
-    const viewportWidth = window.innerWidth - buffer;
-    const pickerHeight = 339;
-    const pickerWidth = 426;
-
-    let position = '';
-
-    if (event.clientY + pickerHeight > viewportHeight) {
-      position += `bottom: ${buffer}px; `;
-    } else {
-      position += `top: ${Math.max(buffer, event.clientY)}px; `;
-    }
-
-    if (event.clientX + pickerWidth > viewportWidth) {
-      position += `right: ${buffer}px;`;
-    } else {
-      position += `left: ${Math.max(buffer, event.clientX)}px;`;
-    }
-    return position;
-  }
 
   handleReactionToggle(reactionType: string) {
     if (!this.message.id) return;

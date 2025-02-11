@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SearchComponent } from '../../main-page/search/search.component';
 import { AvatarComponent } from '../avatar/avatar.component';
+import { MessageboardService } from '../../services/messageboard.service';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +21,9 @@ import { AvatarComponent } from '../avatar/avatar.component';
 })
 export class HeaderComponent {
 
-  @Input() isMessageBoardOpen: boolean = false;
+  messageboardService: MessageboardService = inject(MessageboardService);
+  loginService: LoginService = inject(LoginService);
+
   @Output() backButtonClicked = new EventEmitter<void>();
 
   public showProfilMenu: boolean = false;
@@ -37,9 +40,6 @@ export class HeaderComponent {
   constructor(private router: Router) {
     this.getCurrentUserData();
   }
-
-
-  loginService: LoginService = inject(LoginService);
 
 
   getCurrentUserData() {
@@ -110,6 +110,7 @@ export class HeaderComponent {
   }
 
   onBackButtonClick() {
-    this.backButtonClicked.emit();
+    //this.backButtonClicked.emit();
+    this.messageboardService.closeMessageBoard();
   }
 }
