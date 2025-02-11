@@ -8,12 +8,17 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { take } from 'rxjs/operators';
+import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 
 
 @Component({
   selector: 'app-user-add',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    MessageBoardComponent
+  ],
   templateUrl: './user-add.component.html',
   styleUrl: './user-add.component.scss'
 })
@@ -40,7 +45,7 @@ export class UserAddComponent {
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor() {
+  constructor(private messageBoard: MessageBoardComponent) {
     this.userSubscription.add(
       this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
@@ -99,6 +104,7 @@ export class UserAddComponent {
         
         console.log(`Benutzer ${userId} wurde hinzugefügt.`);
         this.closeUserAddInfos();
+        this.messageBoard.getUserFromChannel();
       });
     }
   }

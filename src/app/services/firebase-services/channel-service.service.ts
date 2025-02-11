@@ -208,7 +208,7 @@ export class ChannelServiceService {
     });
   }
 
-
+  
   async getMembersOfChannelWithDetails(channelId: string) {
     const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
     const memberIds: string[] = channelDoc.data()?.['members'] || [];
@@ -222,6 +222,7 @@ export class ChannelServiceService {
       .filter(user => user !== null);
     return membersData;
   }
+  
 
 
   async removeUserFromChannel(channelId: string, userId: string) {

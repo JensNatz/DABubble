@@ -65,16 +65,15 @@ export class MessageBoardComponent {
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
   allMessagesLoaded: boolean = false;
+  
   private parsedMainMessagesId =new Set<string>();
   private parsedThreadMessagesId = new Set<string>();
-
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
 
 
-  constructor() {
-  }
+  constructor() {}
   
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
@@ -89,10 +88,6 @@ export class MessageBoardComponent {
           this.loadMessages();
           this.isThreadOpen = false;
           this.getUserFromChannel();
-          console.log(channel.members?.length);
-          console.log(this.channelMembers.length);
-          
-          this.loadChannels();
 
           if (this.channelType === 'direct' && channel.members) {
             this.setDirectMessagePartnerData(channel.members);
@@ -104,17 +99,7 @@ export class MessageBoardComponent {
     });
   }
 
-  loadChannels() {
-    const userId = this.channelId;
-    if (!userId) return;
-    this.channelService.getChannelByIdFromCollection(userId).subscribe(channel => {
-      this.channels = channel ? [channel] : []; 
-      console.log(this.channels);
-    });     
-    
-  }
-
-
+  
   updateChannelName(newName: string) {
     this.channelName = newName;
   }
