@@ -72,7 +72,7 @@ export class WorkspaceMenuComponent {
 
   async loadUsers() {
     const users = await firstValueFrom(this.userService.getUsers());
-    this.otherUsers = users.filter(user => user.id !== this.loggedInUser?.id);
+    this.otherUsers = users.filter(user => user.id !== this.loginService.currentUserValue?.id);
   }
 
 
