@@ -15,6 +15,7 @@ import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loadin
 import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.component';
 import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
+import { AnswersSeperatorComponent } from './answers-seperator/answers-seperator.component';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -28,7 +29,8 @@ import { RecipientSelectorComponent } from '../../shared/recipient-selector/reci
     ChannelEditComponent,
     AddUserToChannelComponent,
     AddUserToChannelComponent,
-    RecipientSelectorComponent
+    RecipientSelectorComponent,
+    AnswersSeperatorComponent
 ],
 
   templateUrl: './message-board.component.html',
@@ -91,16 +93,13 @@ export class MessageBoardComponent {
     });
   }
 
-
   updateChannelName(newName: string) {
     this.channelName = newName;
   }
 
-
   updateChannelDescription(newDescription: string) {
     this.channelDescription = newDescription;
   }
-
 
   ngOnDestroy() {
     this.channelSubscription.unsubscribe();
@@ -193,7 +192,6 @@ export class MessageBoardComponent {
     return this.threadMessages.every(message => message.id && this.parsedThreadMessagesId.has(message.id));
   }
 
-
   isSameDay(timestamp1: number, timestamp2: number): boolean {
     const date1 = new Date(timestamp1);
     const date2 = new Date(timestamp2);
@@ -254,7 +252,6 @@ export class MessageBoardComponent {
     this.openTheadWithMessageId(messageId);
   }
 
-
   openEditChannel() {
     this.showModal = true;
   }
@@ -271,6 +268,11 @@ export class MessageBoardComponent {
     this.showModalUserEdit = false;
   }
 
-
+  getParentMessage(): Message | undefined {
+    if (this.parentMessageId) {
+      return this.messages.find(message => message.id === this.parentMessageId);
+    }
+    return undefined;
+  }
 
 }

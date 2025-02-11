@@ -33,6 +33,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
   loginService: LoginService = inject(LoginService);
 
   @Input() message!: Message;
+  @Input() isThreadRootMessage: boolean = false;
   @Output() repliesClicked = new EventEmitter<string>();
   @Output() messageParseComplete = new EventEmitter<string>();
 
@@ -43,6 +44,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
   avatar: string = '0';
   lastReplyTimestamp: number | null = null;
   isMessageInMainChannel: boolean = false;
+  
   emojiPickerPosition: string = 'top: 50px; left: 50px;';
   reactionWithNames: Array<{ type: string; users: Array<{ id: string; name: string }> }> = [];
 
