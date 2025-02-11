@@ -7,11 +7,6 @@ export class MessageboardService {
 
   isMessageBoardOpen: boolean = false;
 
-  constructor() { }
-
-  toggleMessageBoard() {
-    this.isMessageBoardOpen = !this.isMessageBoardOpen;
-  }
 
   openMessageBoard() {
     this.isMessageBoardOpen = true;

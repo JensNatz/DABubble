@@ -69,6 +69,7 @@
         }
 
         .header-left {
+
             .thread-channel-title {
                 font-size: 14px;
                 color: $purple-2;
@@ -76,27 +77,18 @@
 
             .channel-title {
                 @include flex();
-
+                gap: 8px;
                 b {
                     font-size: 24px;
                 }
 
                 h2 {
-                    margin: 0 10px;
-                    font-size: 24px;
+                    font-size: 20px;
                     padding: 8px 0;
-
-                    @media (max-width: $breakpoint-lg) {
-                        font-size: 20px;
-                    }
 
                     @media (max-width: $breakpoint-md) {
                         font-size: 18px;
                     }
-                }
-
-                img {
-                    transition: filter 0.1s ease;
                 }
 
                 &.hover-effect:hover {
@@ -223,7 +215,6 @@
 .channel_title {
     display: flex;
     align-items: center;
-    margin-left: 10px;
     padding: 0 16px;
     cursor: pointer;
     @include rounded();
