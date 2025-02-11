@@ -111,13 +111,7 @@ export class UserServiceService {
   async confirmPasswordReset(code: string, newPassword: string): Promise<void> {
     try {
       await confirmPasswordReset(this.auth, code, newPassword);
-      const email = await verifyPasswordResetCode(this.auth, code);
-      const userDocRef = query(collection(this.firestore, 'users'), where('email', '==', email));
-      const querySnapshot = await getDocs(userDocRef);
-      querySnapshot.forEach(async (doc) => {
-        await updateDoc(doc.ref, { password: newPassword });
-      });
-      console.log('Password reset and updated in Firestore successfully');
+      console.log('Password reset successfully');
     } catch (err) {
       console.error('Error confirming password reset:', err);
       throw err;

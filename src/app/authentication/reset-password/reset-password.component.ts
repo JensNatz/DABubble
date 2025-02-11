@@ -1,25 +1,23 @@
 import { Component } from '@angular/core';
-import { RestePasswordEmailComponent } from "./reste-password-email/reste-password-email.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { InputFieldComponent } from "../../shared/authentication-input/input-field.component";
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { CommonModule, NgClass, Location } from '@angular/common';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
-import { FormsModule, NgForm, FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+import { FormsModule, FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
-
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
   imports: [RouterModule, InputFieldComponent, FormsModule, NgClass, ReactiveFormsModule, CommonModule, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
+  styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent {
-  newPassword:string ='';
+  newPassword: string = '';
   confirmPassword: string = '';
   resetCode: string = '';
   email: string = '';
@@ -37,8 +35,8 @@ export class ResetPasswordComponent {
 
   ngOnInit(): void {
     this.newPasswordForm = this.fb.group({
-      newpw: ['', Validators.required],
-      samepw: ['', Validators.required]
+      newpw: ['', [Validators.required, this.passwordValidator()]],
+      samepw: ['', [Validators.required, this.passwordValidator()]]
     }, { validator: this.passwordMatchValidator });
 
     this.resetCode = this.route.snapshot.queryParams['oobCode'];
@@ -62,22 +60,23 @@ export class ResetPasswordComponent {
       console.error('Error verifying reset code:', error);
     }
   }
+
   async onSubmit() {
     if (this.newPasswordForm.invalid) {
       return;
     }
-  
+
     const { newpw, samepw } = this.newPasswordForm.value;
-  
+
     if (newpw !== samepw) {
       this.passwordErrorMessage = 'Passwörter stimmen nicht überein';
       return;
     }
-  
+
     try {
       await this.userService.confirmPasswordReset(this.resetCode, newpw);
       console.log('Password reset successfully');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
     } catch (error) {
       console.error('Error resetting password:', error);
     }
@@ -92,5 +91,25 @@ export class ResetPasswordComponent {
 
   goBack(): void {
     this.location.back();
+  }
+
+  passwordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value || '';
+
+      if (value.length < 5) {
+        this.passwordErrorMessage = ErrorMessages.passwordMinLength;
+        return { minlength: { requiredLength: 5, actualLength: value.length } };
+      }
+      if (!/[A-Z]/.test(value)) {
+        this.passwordErrorMessage = ErrorMessages.passwordCapitalLetter;
+        return { missingCapitalLetter: true };
+      }
+      if (!/[!@#$%^&*]/.test(value)) {
+        this.passwordErrorMessage = ErrorMessages.passwordSpecialCharacters;
+        return { missingSpecialCharacter: true };
+      }
+      return null;
+    };
   }
 }
