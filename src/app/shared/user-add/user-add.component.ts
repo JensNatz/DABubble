@@ -25,20 +25,15 @@ import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-ch
   styleUrl: './user-add.component.scss'
 })
 export class UserAddComponent {
-
   @Input() userId: string = '';
   @Input() channelId: string = '';
   @Input() channelName: string = '';
   @Input() closeUserAddInfos!: () => void;
 
-  userAvatar: string = '';
-  userName: string = '';
-  userEmail: string = '';
-  userStatus: string = '';
-
   inputValue: string = '';
   filteredUsers: User[] = [];
   listShown: boolean = false;
+  errorMessage: string = ''; 
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -48,7 +43,10 @@ export class UserAddComponent {
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor(private messageBoard: MessageBoardComponent, private addUserComponent: AddUserToChannelComponent) {
+  constructor(
+    private messageBoard: MessageBoardComponent, 
+    private addUserComponent: AddUserToChannelComponent
+  ) {
     this.userSubscription.add(
       this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
@@ -69,7 +67,7 @@ export class UserAddComponent {
   }
 
   onUserSelect(user: User): void {
-    this.inputValue = user.name; 
+    this.inputValue = user.name;
     this.listShown = false;
   }
 
@@ -81,29 +79,32 @@ export class UserAddComponent {
     if (!this.channelId || !this.inputValue) {
       return;
     }
+
     const selectedUser = this.allUsers.find(user => user.name === this.inputValue);
     if (!selectedUser) {
       return;
     }
+
     const userId = selectedUser.id;
     if (userId) {
       this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
         if (!channel) {
-          console.error('Channel nicht gefunden.');
           return;
-        }           
+        }
         const members = channel.members ?? []; 
         if (members.includes(userId)) {
-          console.log('Benutzer ist bereits Mitglied.');
+          this.errorMessage = 'Benutzer ist bereits Mitglied.';
           return;
         }
         const updatedMembers = [...members, userId];
         this.channelService.editChannelMembers(this.channelId, updatedMembers);
         this.messageBoard.getUserFromChannel();
-        this.addUserComponent.getUserFromChannel(); 
-        this.closeUserAddInfos();
+        this.addUserComponent.getUserFromChannel();
+        if (this.closeUserAddInfos) {
+          this.closeUserAddInfos();
+        }
+        this.errorMessage = '';
       });
     }
   }
-
 }

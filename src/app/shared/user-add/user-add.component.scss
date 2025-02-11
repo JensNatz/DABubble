@@ -106,3 +106,11 @@ h2 {
     justify-content: end;
     margin-top: 20px;
 }
+
+.error-message {
+    position: absolute;
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    left: 64px;
+}
