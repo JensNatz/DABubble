@@ -1,11 +1,12 @@
 @import '../../styles/_variables';
 @import '../../styles/_mixins';
+@import '../shared/responsiv-authentication.scss';
 
 
 
 :host {
     height: 100vh;
-    @include flex(center, center);
+    @include flex(center, center, column);
 }
 
 .register-container {
@@ -18,8 +19,10 @@
     height: 100%;
     max-width: 608px;
     max-height: 680px;
+    width: calc(100% - 32px);
+    @include margin-16;
 
-    a{
+    a {
         text-decoration: none
     }
 
@@ -58,15 +61,15 @@ form {
 }
 
 
-.data-protection-container{
-    @include flex(normal,center, normal);
-   margin-top: 32px;
-   width: 100%;
-   position: relative;
-   
+.data-protection-container {
+    @include flex(normal, center, normal);
+    margin-top: 32px;
+    width: 100%;
+    position: relative;
+
 }
 
-.arrow-back{
+.arrow-back {
     @include flex(center, center, column);
     width: 40px;
     height: 40px;
@@ -77,10 +80,10 @@ form {
     background-image: url('../../../assets/img/arrow_back.svg');
     background-repeat: no-repeat;
     background-position: center;
-   
 
 
-    &:hover{
+
+    &:hover {
         cursor: pointer;
         background-color: $bg-color;
         border-radius: 30px;
@@ -90,28 +93,127 @@ form {
     }
 }
 
-.mgtop{
+.mgtop {
     top: 16px;
 }
 
-.btn-container{
+.btn-container {
     position: absolute;
     bottom: 40px;
     right: 53px;
-    
+
     @include flex(flex-end, flex-end, column);
 }
 
 
-.checkbox{
+.checkbox {
     width: 18px;
     height: 18px;
     border-color: $purple-2;
-    margin-right:8px ;
+    margin-right: 8px;
 
-    &:hover{
+    &:hover {
         cursor: pointer;
         border-radius: 38px;
         background-color: $gray;
+    }
+}
+
+
+@media(max-width:700px) {
+
+    .register-container {
+        @include margin-16;
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .headline-section {
+        @include padding-20;
+        width: 100%;
+    }
+
+    form {
+        @include padding-20;
+    }
+
+}
+
+@media(max-width:700px) {
+
+    .btn-container {
+        button {
+            width: 120px !important;
+            font-size: 16px !important;
+        }
+    }
+
+    .btn-container {
+        right: 20px;
+        bottom: 20px;
+    }
+
+    .arrow-back {
+        top: 20px;
+        left: 22px;
+    }
+
+    .data-protection-container {
+        display: none;
+    }
+
+    .headline-section {
+
+        height: auto;
+        margin-top: 0px;
+        justify-content: normal;
+
+        h2 {
+            @include h1-32;
+            margin-bottom: 15px;
+            margin-top: 20px;
+        }
+
+        span {
+            @include span-17
+        }
+    }
+
+    form {
+        @include padding-20;
+
+        .input-field-section {
+            margin-top: 20px;
+            gap: 30px;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+    }
+
+
+    .register-container {
+        max-height: 450px;
+
+
+    }
+}
+
+
+@media(max-width:430px) {
+    form {
+        .input-field-section {
+            gap: 20px;
+        }
+    }
+}
+
+@media(max-width:430px){
+    .arrow-back{
+        top: auto;
+        bottom: 30px;
     }
 }

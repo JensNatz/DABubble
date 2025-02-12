@@ -16,6 +16,9 @@ import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.com
 import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
 import { AnswersSeperatorComponent } from './answers-seperator/answers-seperator.component';
+import { UserAddComponent } from '../../shared/user-add/user-add.component';
+import { UserAddMessageBoardComponent } from '../../shared/user-add-message-board/user-add-message-board.component';
+
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -31,6 +34,9 @@ import { AnswersSeperatorComponent } from './answers-seperator/answers-seperator
     AddUserToChannelComponent,
     RecipientSelectorComponent,
     AnswersSeperatorComponent
+    RecipientSelectorComponent,
+    UserAddComponent,
+    UserAddMessageBoardComponent
 ],
 
   templateUrl: './message-board.component.html',
@@ -50,6 +56,10 @@ export class MessageBoardComponent {
   channelsDataLength: number = 0;
   showModal = false;
   showModalUserEdit = false;
+  showUserInfo: boolean = false;
+  showUserAddInfo: boolean = false;
+
+  channels: any[] = [];
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
@@ -61,14 +71,16 @@ export class MessageBoardComponent {
   isThreadOpen: boolean = false;
   parentMessageId: string = '';
   allMessagesLoaded: boolean = false;
+  
   private parsedMainMessagesId =new Set<string>();
   private parsedThreadMessagesId = new Set<string>();
-
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
 
 
+  constructor() {}
+  
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
       if (channel?.id) {
@@ -275,4 +287,11 @@ export class MessageBoardComponent {
     return undefined;
   }
 
+  openUserAddInfos() {
+    this.showUserAddInfo = true;
+  }
+
+  closeUserAddInfos() {
+    this.showUserAddInfo = false;
+  }
 }

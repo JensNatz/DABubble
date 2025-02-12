@@ -6,6 +6,7 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
 import { CommonModule, NgClass } from '@angular/common';
 import { Observable, of } from 'rxjs';
+import { Location } from '@angular/common';
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 
@@ -31,7 +32,7 @@ export class RegisterComponent {
   registerForm: any;
   dataProtectionErrorMessage: string = ErrorMessages.dataProtectionRequired;
 
-  constructor(private fb: FormBuilder, private router: Router, private userService: UserServiceService) { }
+  constructor(private location: Location,private fb: FormBuilder, private router: Router, private userService: UserServiceService) { }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -143,6 +144,9 @@ export class RegisterComponent {
       const hasTwoWords = value.trim().split(/\s+/).length >= 2;
       return hasTwoWords ? null : { fullName: true };
     };
+  }
+  goBack(): void {
+    this.location.back();
   }
 
 }

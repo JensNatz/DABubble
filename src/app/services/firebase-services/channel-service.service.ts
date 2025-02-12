@@ -11,7 +11,7 @@ import { filter, take } from 'rxjs/operators';
 })
 export class ChannelServiceService {
 
-  id: string ='';
+  id: string = '';
   channels;
   users;
 
@@ -25,7 +25,7 @@ export class ChannelServiceService {
 
   messageRendered = new Subject<string>();
 
-  private currentScrollSubscription?: Subscription; 
+  private currentScrollSubscription?: Subscription;
 
   constructor() {
     this.channels = collectionData(this.getChannelsRef());
@@ -94,22 +94,28 @@ export class ChannelServiceService {
     if (this.channelNameCache.has(channelId)) {
       return this.channelNameCache.get(channelId)!;
     }
-    
+
     const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
     const channelName = channelDoc.data()?.[`name`];
-    
+
     if (channelName) {
       this.channelNameCache.set(channelId, channelName);
       return channelName;
     }
-    
-    return null; 
+
+    return null;
+  }
+
+
+  getChannelByIdFromCollection(channelId: string): Observable<Channel | null> {
+    const channelRef = doc(this.firestore, 'channels', channelId);
+    return docData(channelRef, { idField: 'id' }) as Observable<Channel | null>;
   }
 
 
   getUserChannels(userId: string) {
     const channelsRef = collection(this.firestore, 'channels');
-    const q = query(channelsRef, 
+    const q = query(channelsRef,
       where('members', 'array-contains', userId),
       where('type', '==', 'group'));
     return collectionData(q, { idField: 'id' });
@@ -125,7 +131,6 @@ export class ChannelServiceService {
     return channels.docs.map(doc => doc.data());
   }
 
-  
   async setDirectMessageChannel(userId: string) {
     const loggedInUserId = this.loginService.currentUserValue?.id;
     if (!loggedInUserId) return;
@@ -138,8 +143,8 @@ export class ChannelServiceService {
       const existingChannel = this.getDirectChannelData(channels.docs[0]);
       this.currentChannel = existingChannel;
     } else {
-    const newChannel = await this.createNewDirectMessageChannel(members);
-    this.currentChannel = newChannel;
+      const newChannel = await this.createNewDirectMessageChannel(members);
+      this.currentChannel = newChannel;
     }
   }
 
@@ -193,7 +198,7 @@ export class ChannelServiceService {
     if (!channelData) return false;
     return channelData['members'].includes(userId);
   }
-  
+
   async getMembersOfChannel(channelId: string) {
     const channelMembers = await getDoc(doc(this.firestore, 'channels', channelId))
       .then(doc => doc.data()?.[`members`]);
@@ -217,43 +222,51 @@ export class ChannelServiceService {
     });
   }
 
-
+  
   async getMembersOfChannelWithDetails(channelId: string) {
     const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
-    const memberIds: string[] = channelDoc.data()?.['members'] || [];   
-  
+    const memberIds: string[] = channelDoc.data()?.['members'] || [];
+
     if (memberIds.length === 0) return [];
     const userDocs = await Promise.all(
       memberIds.map(userId => getDoc(doc(this.firestore, 'users', userId)))
-    );      
+    );
     const membersData = userDocs
       .map(userDoc => userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null)
       .filter(user => user !== null);
     return membersData;
   }
+  
 
 
   async removeUserFromChannel(channelId: string, userId: string) {
     const channelRef = doc(this.firestore, 'channels', channelId);
     const channelDoc = await getDoc(channelRef);
-    
+
     if (!channelDoc.exists()) {
       console.error('Channel not found');
       return;
     }
-    
+
     const channelData = channelDoc.data();
     if (!channelData || !channelData['members']) {
       console.error('Invalid channel data');
       return;
     }
-    
+
     const updatedMembers = channelData['members'].filter((id: string) => id !== userId);
     await updateDoc(channelRef, { members: updatedMembers });
   }
 
+
+  editChannelMembers(channelId: string, members: string[]) {
+    const channelRef = doc(this.firestore, 'channels', channelId);
+    updateDoc(channelRef, { members })
+  }
+
+
   async jumpToMessage(message: Message) {
-    if(message.parentMessageId === null && message.id)  {
+    if (message.parentMessageId === null && message.id) {
       this.setCurrentChannelById(message.channelId);
       this.scrollToMessage(message.id);
     } 
@@ -264,7 +277,7 @@ export class ChannelServiceService {
       this.currentScrollSubscription.unsubscribe();
       this.currentScrollSubscription = undefined;
     }
-    
+
     const element = document.getElementById('message-' + messageId);
     if (element) {
       this.scrollElementIntoView(element);
@@ -282,13 +295,13 @@ export class ChannelServiceService {
           if (element) {
             this.scrollElementIntoView(element);
             this.highlightMessage(element);
-          } 
+          }
         }
       });
   }
 
   private scrollElementIntoView(element: HTMLElement): void {
-    element.scrollIntoView({ 
+    element.scrollIntoView({
       behavior: 'instant',
       block: 'center',
       inline: 'center'

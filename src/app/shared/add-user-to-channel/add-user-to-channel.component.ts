@@ -16,7 +16,7 @@ import { UserAddComponent } from "../user-add/user-add.component";
     FormsModule,
     UserInfoComponent,
     UserAddComponent
-],
+  ],
   templateUrl: './add-user-to-channel.component.html',
   styleUrls: ['./add-user-to-channel.component.scss']
 })
@@ -28,7 +28,6 @@ export class AddUserToChannelComponent {
   showUserInfo: boolean = false;
   showUserAddInfo: boolean = false;
   selectedUser: any = null;
-
   usersNames: any[] = [];
   channelName: string = '';
   channelsData: any[] = [];
@@ -110,9 +109,5 @@ export class AddUserToChannelComponent {
   closeUserAddInfos() {
     this.showUserAddInfo = false;
   }
-
-
-
-
 
 }

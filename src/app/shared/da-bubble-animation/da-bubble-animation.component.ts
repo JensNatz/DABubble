@@ -18,6 +18,7 @@ import { CommonModule } from '@angular/common';
       })),
       transition('start => end', [
         animate('0.5s ease-in-out')
+
       ])
     ]),
     trigger('slideIn', [
@@ -29,6 +30,7 @@ import { CommonModule } from '@angular/common';
       })),
       transition('hidden => visible', [
         animate('0.5s 1s ease-in-out')
+
       ])
     ]),
     trigger('moveUpLeft', [
@@ -87,5 +89,6 @@ export class DaBubbleAnimationComponent {
         // this.containerState = 'faded'
       }, 1000);
     }, 500);
+
   }
 }

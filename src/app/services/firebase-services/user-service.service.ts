@@ -30,7 +30,7 @@ export class UserServiceService {
     return collectionData(q, { idField: 'id' }) as Observable<User[]>;
   }
 
-  // Diese Methode gibt ein Observable für den einzelnen Benutzer zurück
+ 
   getUserById(userId: string): Observable<User> {
     const userDocRef = doc(this.firestore, `users/${userId}`);
     return docData(userDocRef) as Observable<User>;
@@ -111,15 +111,24 @@ export class UserServiceService {
   async confirmPasswordReset(code: string, newPassword: string): Promise<void> {
     try {
       await confirmPasswordReset(this.auth, code, newPassword);
-      const email = await verifyPasswordResetCode(this.auth, code);
-      const userDocRef = query(collection(this.firestore, 'users'), where('email', '==', email));
-      const querySnapshot = await getDocs(userDocRef);
-      querySnapshot.forEach(async (doc) => {
-        await updateDoc(doc.ref, { password: newPassword });
-      });
-      console.log('Password reset and updated in Firestore successfully');
+      console.log('Password reset successfully');
+
+      
+
+      
     } catch (err) {
       console.error('Error confirming password reset:', err);
+      throw err;
+    }
+  }
+
+  async updateUser(userId: string, updatedData: Partial<User>): Promise<void> {
+    try {
+      const userDocRef = doc(this.firestore, `users/${userId}`);
+      await updateDoc(userDocRef, updatedData);
+      console.log('User updated successfully');
+    } catch (err) {
+      console.error('Error updating user:', err);
       throw err;
     }
   }
