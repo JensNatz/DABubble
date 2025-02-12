@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, ViewContainerRef, AfterViewInit, OnDestroy, ComponentRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '../../services/firebase-services/message.service';
 import { FormsModule } from '@angular/forms';
@@ -45,7 +45,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
     if (this.messageInput) {
       this.focusOnInput();
     }
-    this.channelSubscription = this.channelService.currentChannel$.subscribe({ });
+    this.channelSubscription = this.channelService.currentChannel$.subscribe({});
   }
 
   ngOnDestroy() {
@@ -65,7 +65,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
 
   async ngAfterViewInit() {
     this.focusOnInput();
-    
+
     if (this.content !== '') {
       this.mentionsCache = [];
       this.mentionCounter = 0;
@@ -76,8 +76,8 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  fillMentionsCacheBasedOnMessageInput(renderedComponents: Array<{component: any, part: MessagePart}>) {
-    renderedComponents.forEach(({part}) => {
+  fillMentionsCacheBasedOnMessageInput(renderedComponents: Array<{ component: any, part: MessagePart }>) {
+    renderedComponents.forEach(({ part }) => {
       if (part.type === 'user' || part.type === 'channel') {
         this.mentionsCache.push({
           type: part.type,
@@ -151,10 +151,11 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onEmojiSelected(event: { emoji: { native: string } }) {
-    if (this.messageInput) {
-      const inputElement = this.messageInput.element.nativeElement;
-      const emojiText = document.createTextNode(` ${event.emoji.native} `);
-      
+    if (!this.messageInput) return;
+
+    const inputElement = this.messageInput.element.nativeElement;
+    const emojiText = document.createTextNode(` ${event.emoji.native} `);
+
       if (this.lastRange && inputElement.contains(this.lastRange.commonAncestorContainer)) {
         const selection = window.getSelection();
         selection?.removeAllRanges();
@@ -165,36 +166,49 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       } else {
         inputElement.appendChild(emojiText);
       }
-    }
+    
     this.isEmojiPickerOpen = false;
     this.lastRange = null;
   }
 
+
   private addTagToInput(id: string, name: string, type: 'user' | 'channel') {
-    if (this.messageInput) {
-      const componentRef = this.messageInput.createComponent(MentionComponent);
-      componentRef.setInput('type', type);
-      componentRef.setInput('id', id);
-      componentRef.setInput('displayName', name);
-      componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;
-      this.mentionCounter++;
-      componentRef.location.nativeElement.contentEditable = false;
+    if (!this.messageInput) return;
 
-      if (this.lastRange && this.messageInput.element.nativeElement.contains(this.lastRange.commonAncestorContainer)) {
-        this.lastRange.insertNode(componentRef.location.nativeElement);
-        this.lastRange.setStartAfter(componentRef.location.nativeElement);
-        this.lastRange.collapse(true);
-      } else {
-        this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
-      }
+    const componentRef = this.createMentionComponent(id, name, type);
+    this.insertMentionIntoInput(componentRef);
+    this.mentionCounter++;
+    this.updateMentionsCache(id, name, type);
+    this.togglePlaceholder();
+  }
 
-      this.mentionsCache.push({ type, content: name, id });
-      this.togglePlaceholder();
+  private createMentionComponent(id: string, name: string, type: 'user' | 'channel') {
+    const componentRef = this.messageInput.createComponent(MentionComponent);
+    componentRef.setInput('type', type);
+    componentRef.setInput('id', id);
+    componentRef.setInput('displayName', name);
+    componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;
+    componentRef.location.nativeElement.contentEditable = false;
+    return componentRef;
+  } 
+
+  private insertMentionIntoInput(componentRef: ComponentRef<MentionComponent>) {
+    if (this.lastRange && this.messageInput.element.nativeElement.contains(this.lastRange.commonAncestorContainer)) {
+      this.lastRange.insertNode(componentRef.location.nativeElement);
+      this.lastRange.setStartAfter(componentRef.location.nativeElement);
+      this.lastRange.collapse(true);
+    } else {
+      this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
     }
   }
 
+  private updateMentionsCache(id: string, name: string, type: 'user' | 'channel') {
+    this.mentionsCache.push({ type, content: name, id });
+  }
+
+
   onTagSelected(tag: { id: string; name: string; type: 'user' | 'channel' }) {
-    if(tag.type === 'user') {
+    if (tag.type === 'user') {
       this.addUserTagToInput(tag.id, tag.name);
     } else {
       this.addChannelTagToInput(tag.id, tag.name);
@@ -241,14 +255,14 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
       .map((part: Node) => {
         if (part.nodeType === Node.TEXT_NODE) {
           return part.textContent?.trim() || '';
-        }     
+        }
         if (part.nodeType === Node.ELEMENT_NODE && (part as HTMLElement).id.startsWith('mentionid')) {
           const mentionIndex = parseInt((part as HTMLElement).id.replace('mentionid', ''));
           const mention = this.mentionsCache[mentionIndex];
           if (mention) {
             return `${mention.type === 'user' ? '@' : '#'}{[${mention.id}]}`;
           }
-        }      
+        }
         return '';
       })
       .join('');
@@ -268,21 +282,21 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    if(this.channelService.currentChannel === null) {
+    if (this.channelService.currentChannel === null) {
       return;
     }
     if (event.key === 'Enter') {
       event.preventDefault();
-      if(!this.isSendButtonDisabled) {
+      if (!this.isSendButtonDisabled) {
         this.emitMessageToParent();
       }
     }
-    if(event.key === '@') {
+    if (event.key === '@') {
       event.preventDefault();
       this.taglistType = 'user';
       this.isTagSelectionListOpen = true;
     }
-    if(event.key === '#') {
+    if (event.key === '#') {
       event.preventDefault();
       this.taglistType = 'channel';
       this.isTagSelectionListOpen = true;
