@@ -1,33 +1,115 @@
 @import './../../styles/variables';
 @import './../../styles/mixins';
 
-:host {
+.animation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100vh;
-    width: 100%;
-    background-color: $purple-2;
-    @include flex(center, center);
+    width: 100vw;
+    z-index: 1000;
+    background: linear-gradient(0deg, rgba($purple-3, 1) 20%, rgba($purple-2, 1) 100%);
+    animation: fadeOut 0.5s ease-in-out forwards;
+    animation-delay: 3.3s;
 }
 
-.logo{
-    background-color: $purple-2;
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
 
 .da-bubble-container {
-    @include flex(center, center, normal);
+    @include flex();
     gap: 16px;
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: moveUpLeft 1s ease-in-out forwards;
+    animation-delay: 2.5s;
+
+    @keyframes moveUpLeft {
+        from {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        to {
+            top: 75px;
+            left: 75px;
+            transform: translate(0, 0);
+        }
+    }
 
     img {
-        z-index: 50;
-        background-color: $purple-2;
+        height: 184px;
+        transform: translateX(200px);
+        animation:
+            moveLeft 0.25s ease-in-out forwards,
+            shrinkImage 0.5s ease forwards;
+        animation-delay: 0.5s, 2.5s;
+    }
+
+    @keyframes moveLeft {
+        from {
+            transform: translateX(200px);
+        }
+
+        to {
+            transform: translateX(0px);
+        }
+    }
+
+    @keyframes shrinkImage {
+        from {
+            height: 184px;
+        }
+
+        to {
+            height: 70px;
+        }
+    }
+
+    .text-container {
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
     }
 
     p {
         font-size: 90px;
         font-weight: 700;
         color: $white;
-        z-index: 30;
-        position: relative;
-      
+        transform: translateX(-100%);
+        animation: 
+        slideText 0.5s ease forwards,
+        shrinkText 0.5s ease forwards;
+        animation-delay: 1.5s, 2.5s;
+
+    }
+
+    @keyframes slideText {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+    @keyframes shrinkText {
+        from {
+            font-size: 90px;
+        }
+
+        to {
+            font-size: 38px;
+        }
     }
 }
