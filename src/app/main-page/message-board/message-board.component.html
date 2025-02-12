@@ -16,10 +16,11 @@
 <div class="modal-overlay" *ngIf="showUserAddInfo" (click)="closeUserAddInfos()"></div>
 <div class="modal user_add_to_channel" *ngIf="showUserAddInfo">
     <img src="assets/img/close.svg" (click)="closeUserAddInfos()">
-    <app-user-add
+    <app-user-add-message-board
         [channelId]="channelId"
         [channelName]="channelName"
-    ></app-user-add>
+        [closeUserAddInfos]="closeUserAddInfos.bind(this)"
+    ></app-user-add-message-board>
 </div>
 
 <div class="message-board">

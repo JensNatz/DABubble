@@ -16,6 +16,7 @@ import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.com
 import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
 import { UserAddComponent } from '../../shared/user-add/user-add.component';
+import { UserAddMessageBoardComponent } from '../../shared/user-add-message-board/user-add-message-board.component';
 @Component({
   selector: 'app-message-board',
   standalone: true,
@@ -29,7 +30,8 @@ import { UserAddComponent } from '../../shared/user-add/user-add.component';
     ChannelEditComponent,
     AddUserToChannelComponent,
     RecipientSelectorComponent,
-    UserAddComponent
+    UserAddComponent,
+    UserAddMessageBoardComponent
 ],
 
   templateUrl: './message-board.component.html',
