@@ -26,7 +26,6 @@ export class LoginService {
         if (userSnapshot.exists()) {
           const userData = userSnapshot.data() as User;
           this.currentUserSubject.next(userData);
-          console.log('Current user:', userData);
         }
       } else {
         this.currentUserSubject.next(null);
