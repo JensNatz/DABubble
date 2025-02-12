@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from '../shared/header/header.component';
 import { WorkspaceMenuComponent } from './workspace-menu/workspace-menu.component';
 import { MessageBoardComponent } from './message-board/message-board.component';
 import { CommonModule } from '@angular/common';
+import { MessageboardService } from '../services/messageboard.service';
 
 @Component({
   selector: 'app-main-page',
@@ -17,13 +18,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './main-page.component.scss'
 })
 export class MainPageComponent {
-  isOpen = true;
+
+  messageboardService: MessageboardService = inject(MessageboardService);
+  isMenuOpen = true;
+  isMessageBoardOpen = false;
 
   toggleMenu() {
-    this.isOpen = !this.isOpen;
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   get menuText() {
-    return this.isOpen ? 'schließen' : 'öffnen';
+    return this.isMenuOpen ? 'schließen' : 'öffnen';
   }
+
 }

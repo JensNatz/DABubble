@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectionListComponent } from '../../shared/selection-list/selection-list.component';
 import { SearchService } from '../../services/search.service';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
+import { MessageboardService } from '../../services/messageboard.service';
 
 @Component({
   selector: 'app-search',
@@ -13,15 +14,15 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 })
 export class SearchComponent {
 
+  searchService = inject(SearchService);
+  channelService = inject(ChannelServiceService);
+  messageboardService = inject(MessageboardService);
+
   @Input() placeholder: string = '';
 
   inputValue: string = '';
   listShown: boolean = false;
   filteredResults: Record<string, any> = {};
-
-  searchService = inject(SearchService);
-  channelService = inject(ChannelServiceService);
-
 
   onInputChange(value: string): void {
     this.inputValue = value;
@@ -103,7 +104,9 @@ export class SearchComponent {
     } else if(entry.categoryType === 'message') {
       this.channelService.jumpToMessage(entry.element);
     }
+    this.messageboardService.openMessageBoard();
     this.listShown = false;
+    this.inputValue = '';
   }
 
 

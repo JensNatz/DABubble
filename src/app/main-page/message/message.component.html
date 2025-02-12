@@ -11,6 +11,7 @@
             <div class="message-text">
                 <div #messageContainer></div>
             </div>
+            @if (!isThreadRootMessage) {
             <div class="message-meta-info" *ngIf="message.numberOfReplies || message.edited">
                 <div class="message-edit-info" *ngIf="message.edited">(Bearbeitet)</div>
                 <div class="message-replies" *ngIf="message.numberOfReplies">
@@ -25,17 +26,21 @@
                     </app-reaction-indicator>
                 </ng-container>
             </div>
+            }
         </div>
-        <app-message-toolbar class="message-toolbar" 
-            [isOwn]="isOwn" [isMessageInMainChannel]="isMessageInMainChannel"
-            (toggleReaction)="handleReactionToggle($event)" (addReaction)="showEmojiPicker($event)"
-            (addReply)="handleAddReplyClick()" (editMessage)="handleEditMessageClick()">
-        </app-message-toolbar>
-        <div class="emoji-picker-overlay" *ngIf="displayEmojiPicker" (click)="onEmojiOverlayClick($event)">
-            <app-emoji-picker [attr.style]="emojiPickerPosition" class="emoji-picker"
-                (emojiSelected)="handleEmojiSelection($event)">
-            </app-emoji-picker>
-        </div>
+        @if (!isThreadRootMessage) {
+            <app-message-toolbar class="message-toolbar" 
+                [isOwn]="isOwn" [isMessageInMainChannel]="isMessageInMainChannel"
+                (toggleReaction)="handleReactionToggle($event)" (addReaction)="showEmojiPicker($event)"
+                (addReply)="handleAddReplyClick()" (editMessage)="handleEditMessageClick()">
+            </app-message-toolbar>
+        
+            <div class="emoji-picker-overlay" *ngIf="displayEmojiPicker" (click)="onEmojiOverlayClick($event)">
+                <app-emoji-picker [attr.style]="emojiPickerPosition" class="emoji-picker"
+                    (emojiSelected)="handleEmojiSelection($event)">
+                </app-emoji-picker>
+            </div>
+        }
     }
     @else {
         <app-message-input class="message-input" [type]="'edit'" [placeholder]="'Nachricht verfassen...'"

@@ -13,14 +13,15 @@ import { LoginUserAcceptedComponent } from "../user-feedback/login-user-accepted
 import { CommonModule } from '@angular/common';
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
+import { DaBubbleAnimationComponent } from "../../shared/da-bubble-animation/da-bubble-animation.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
+  imports: [CommonModule, InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent, DaBubbleAnimationComponent],
   providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']
+  styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss','../shared/responsiv-authentication.scss']
 })
 export class LoginComponent {
   usernameInvalid: boolean | undefined;

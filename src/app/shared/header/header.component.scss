@@ -1,9 +1,14 @@
 @import '../../../styles.scss';
 
 .header {
-    @include flex($justify: space-between, $align: center);
+    @include flex($justify: space-between, $align: start);
     width: 100%;
     padding: 0 20px;
+
+    @media (max-width: $breakpoint-md) {
+       padding: 20px 0 0 0;
+    }
+
 }
 
 .content {
@@ -11,16 +16,71 @@
     height: 120px;
     @include flex($justify: space-between, $align: center);
     gap: 24px;
+
+    @media (max-width: $breakpoint-md) {
+        flex-wrap: wrap;
+        height: 160px;
+    }
+
+    .standard-logo {
+        display: block;
+
+        @media (max-width: $breakpoint-md) {
+            display: none;
+        }
+    }
+
+    .mobile-logo {
+        display: none;
+
+        @media (max-width: $breakpoint-md) {
+            display: block;
+        }
+
+        div {
+            @include flex();
+            gap: 8px;
+            margin-left: 20px;
+            cursor: pointer;
+
+            .workspace-logo {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
 }
 
 .logo {
     height: 70px;
     width: auto;
+
+    @media (max-width: $breakpoint-lg) {
+        height: 50px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        height: 40px;
+        order: 1;
+        margin-left: 20px;
+    }
 }
 
 .search {
     width: 100%;
     max-width: 640px;
+
+    @media (max-width: $breakpoint-xl) {
+        max-width: 400px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        order: 3;
+        max-width: 100%;
+        background-color: $white;
+        padding: 20px;
+    }
+
 }
 
 .user_name {
@@ -28,35 +88,39 @@
     gap: 16px;
     cursor: pointer;
 
+    @media (max-width: $breakpoint-md) {
+        order: 2;
+        margin-right: 20px;
+
+        svg {
+            display: none;
+        }
+    }
+
+
     &:hover {
         color: $purple-2;
+
+        svg {
+            color: $purple-2;
+        }
     }
 
     h2 {
-        font-size: 32px;
+        font-size: 24px;
+
+        @media (max-width: $breakpoint-md) {
+            display: none;
+        }
     }
-}
 
-.user_avatar_arrow {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+    .user_avatar_arrow {
+        @include flex();
+        gap: 20px;
+    }
 
-.user_foto {
-    height: 75px;
-    width: 75px;
-}
 
-.arrow_down {
-    height: 8px;
-    width: 14px;
-    filter: invert(0%);
-    transition: filter 0.3s ease;
-}
 
-.user_name:hover .arrow_down {
-    filter: invert(46%) sepia(99%) saturate(1444%) hue-rotate(213deg) brightness(100%) contrast(91%);
 }
 
 .modal-overlay {
@@ -232,8 +296,6 @@
         margin-inline-start: 0;
         margin-inline-end: 0;
     }
-
-    
 }
 
 
