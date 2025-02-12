@@ -7,17 +7,28 @@
 }
 
 .main_content {
-    @include flex($align: stretch);
+    @include flex($justify: start, $align: stretch);
+    position: relative;
     gap: 20px;
     padding: 20px;
     width: 100%;
     flex: 1;
     overflow: hidden;
 
+    @media (max-width: $breakpoint-lg) {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        padding: 0;
+    }
+
     .workspace-menu {
         width: 320px;
         flex-shrink: 0;
         transition: width 0.125s ease;
+
         &.closed {
             width: 0;
         }
@@ -25,10 +36,28 @@
         @media (max-width: $breakpoint-lg) {
             width: 280px;
         }
+
+        @media (max-width: $breakpoint-md) {
+            width: 100%;
+        }
     }
     
     .message_board_content {
         width: 100%;
+
+        @media (max-width: $breakpoint-md) {
+            position: fixed;
+            z-index: 999;
+            width: 100vw;
+            transform: translateX(100%);
+            bottom: 0;
+            height: calc(100vh - 94px);
+            transition: transform 0.125s ease;
+        }
+
+        &.show {
+            transform: translateX(0);
+        }
     }
 }
 
@@ -48,6 +77,10 @@
     -webkit-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
     -moz-box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);
     box-shadow: -8px 8px 16px -5px rgba(0, 0, 0, 0.27);  
+
+    @media (max-width: $breakpoint-md) {
+       display: none;
+    }
 
 
     h2 {

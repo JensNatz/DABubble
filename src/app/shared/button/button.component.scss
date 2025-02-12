@@ -1,0 +1,50 @@
+@import '../../../styles.scss';
+
+button {
+    @include rounded($all: 25px);
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+
+
+    &.small {
+        font-size: 14px;
+        height: 32px;
+    }
+    
+    &.normal {
+        font-size: 18px;
+        width: 136px;
+        height: 48px;
+    }
+    
+    &.primary {
+        color: $white;
+        background-color: $purple-1;
+
+        &:hover {
+            background-color: $purple-2;
+        }
+    }
+
+    &.secondary {
+        color: $purple-2;
+        background-color: $white;
+        border: 1px solid $purple-2;
+
+        &:hover {
+            background-color: $purple-1;
+            color: $white;
+        }
+    }
+
+    &:disabled {
+        color: $white;
+        background-color: $gray;
+        cursor: not-allowed;
+
+        &:hover {
+            background-color: $gray;
+        }
+    }
+}

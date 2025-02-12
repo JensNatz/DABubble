@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query, QueryDocumentSnapshot, DocumentData } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
 import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { LoginService } from './login-service';
@@ -131,34 +131,49 @@ export class ChannelServiceService {
     return channels.docs.map(doc => doc.data());
   }
 
-
   async setDirectMessageChannel(userId: string) {
     const loggedInUserId = this.loginService.currentUserValue?.id;
     if (!loggedInUserId) return;
 
-    const members = userId === loggedInUserId
-      ? [userId]
-      : [userId, loggedInUserId].sort();
-    const channels = await getDocs(query(
-      collection(this.firestore, 'channels'),
-      where('type', '==', 'direct'),
-      where('members', '==', members)
-    ));
+    const members = this.determineDirectMessageChannelMembers(userId);
+    if (!members) return;
+    const channels = await this.findExistingDirectMessageChannel(members);
 
     if (!channels.empty) {
-      const channelData = channels.docs[0].data();
-      const channel: Channel = {
-        id: channels.docs[0].id,
-        name: channelData[`name`],
-        description: channelData[`description`],
-        members: channelData[`members`],
-        type: channelData[`type`]
-      };
-      this.currentChannel = channel;
+      const existingChannel = this.getDirectChannelData(channels.docs[0]);
+      this.currentChannel = existingChannel;
     } else {
       const newChannel = await this.createNewDirectMessageChannel(members);
       this.currentChannel = newChannel;
     }
+  }
+
+  private determineDirectMessageChannelMembers(userId: string) {
+    const loggedInUserId = this.loginService.currentUserValue?.id;
+    if (!loggedInUserId) return;
+
+    return userId === loggedInUserId 
+        ? [userId] 
+        : [userId, loggedInUserId].sort(); 
+  }
+
+  private findExistingDirectMessageChannel(members: string[]) {
+    const channelsRef = collection(this.firestore, 'channels');
+    const q = query(channelsRef, 
+      where('members', '==', members),
+      where('type', '==', 'direct'));
+    return getDocs(q);
+  }
+
+  private getDirectChannelData(doc: QueryDocumentSnapshot<DocumentData>): Channel {
+    const channelData = doc.data();
+    return {
+      id: doc.id,
+      name: channelData['name'],
+      description: channelData['description'],
+      members: channelData['members'],
+      type: channelData['type']
+    } as Channel;
   }
 
   async createNewDirectMessageChannel(members: string[]) {
@@ -183,7 +198,6 @@ export class ChannelServiceService {
     if (!channelData) return false;
     return channelData['members'].includes(userId);
   }
-
 
   async getMembersOfChannel(channelId: string) {
     const channelMembers = await getDoc(doc(this.firestore, 'channels', channelId))
@@ -255,10 +269,7 @@ export class ChannelServiceService {
     if (message.parentMessageId === null && message.id) {
       this.setCurrentChannelById(message.channelId);
       this.scrollToMessage(message.id);
-    } else {
-      // this.setCurrentChannelById(message.parentMessageId);
-      // this.scrollToMessage(message.id);
-    }
+    } 
   }
 
   private scrollToMessage(messageId: string) {
