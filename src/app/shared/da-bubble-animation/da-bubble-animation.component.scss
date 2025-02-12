@@ -16,10 +16,15 @@
     @include flex(center, center, normal);
     gap: 16px;
     position: relative;
-
+    width: 690px;
+    height: 184px;
+    overflow: hidden;
+ 
     img {
         z-index: 50;
         background-color: $purple-2;
+        width: 180px;
+        height: auto;
     }
 
     p {
@@ -30,4 +35,13 @@
         position: relative;
       
     }
+}
+
+.da-bubble-container.topLeft {
+    transform: translate(-75%, -175%);
+    top: 75px;
+    left: 75px;
+    width: 240px; // Endgröße
+    height: 70px; // Endgröße
+    transition: transform 1s ease-in-out, width 1s ease-in-out, height 1s ease-in-out;
 }

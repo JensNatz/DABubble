@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
         transform: 'translateX(0px)'
       })),
       transition('start => end', [
-        animate('1s 2s ease-in-out')
+        animate('500ms 1s ease-in-out')
       ])
     ]),
     trigger('slideIn', [
@@ -32,7 +32,7 @@ import { CommonModule } from '@angular/common';
         right: '0'
       })),
       transition('hidden => visible', [
-        animate('1s 4s ease-in-out')
+        animate('500ms 1s ease-in-out')
       ])
     ]),
     trigger('moveUpLeft', [
@@ -40,7 +40,8 @@ import { CommonModule } from '@angular/common';
         transform: 'translate(0, 0)'
       })),
       state('topLeft', style({
-        transform: 'translate(-75%,-175%)'
+        transform: 'translate(-175%,-175%)',  
+          
       })),
       transition('center => topLeft', [
         animate('1s ease-in-out')
@@ -59,7 +60,7 @@ export class DaBubbleAnimationComponent {
       this.textState = 'visible';
       setTimeout(() => {
         this.logoState = 'topLeft';
-      }, 5000);
-    }, 2000);
+      }, 2000);
+    }, 1000);
   }
 }

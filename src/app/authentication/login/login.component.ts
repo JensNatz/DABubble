@@ -20,7 +20,7 @@ import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-he
   imports: [CommonModule, InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
   providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss']
+  styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss','../shared/responsiv-authentication.scss']
 })
 export class LoginComponent {
   usernameInvalid: boolean | undefined;
