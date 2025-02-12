@@ -58,10 +58,10 @@ export class UserAddComponent {
   onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.inputValue = target?.value || '';
-
+  
     if (this.inputValue.length > 0) {
       this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
-      this.listShown = true;
+      this.listShown = this.filteredUsers.length > 0;
     } else {
       this.listShown = false;
     }

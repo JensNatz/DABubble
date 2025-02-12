@@ -6,7 +6,6 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { SearchService } from '../../services/search.service';
-import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -40,7 +39,7 @@ export class UserAddMessageBoardComponent {
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor( private messageBoard: MessageBoardComponent, private addUserComponent: AddUserToChannelComponent ) {
+  constructor( private messageBoard: MessageBoardComponent ) {
       this.userSubscription.add(this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
       })
@@ -50,10 +49,10 @@ export class UserAddMessageBoardComponent {
   onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.inputValue = target?.value || '';
-
+  
     if (this.inputValue.length > 0) {
       this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
-      this.listShown = true;
+      this.listShown = this.filteredUsers.length > 0; 
     } else {
       this.listShown = false;
     }
@@ -91,7 +90,6 @@ export class UserAddMessageBoardComponent {
         this.channelService.editChannelMembers(this.channelId, updatedMembers);
         this.messageBoard.getUserFromChannel();    
         this.closeUserAddInfos();  
-        this.errorMessage = '';
       });
     }
   }
