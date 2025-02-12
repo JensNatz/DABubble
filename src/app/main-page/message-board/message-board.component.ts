@@ -33,7 +33,7 @@ import { UserAddMessageBoardComponent } from '../../shared/user-add-message-boar
     AddUserToChannelComponent,
     AddUserToChannelComponent,
     RecipientSelectorComponent,
-    AnswersSeperatorComponent
+    AnswersSeperatorComponent,
     RecipientSelectorComponent,
     UserAddComponent,
     UserAddMessageBoardComponent
