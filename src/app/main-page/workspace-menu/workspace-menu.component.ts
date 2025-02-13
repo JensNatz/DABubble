@@ -61,6 +61,24 @@ export class WorkspaceMenuComponent {
     });
   }
 
+  isActiveGroupChannel(channel: Channel): boolean {
+    if (channel.type !== 'group') return false;
+    return channel.id === this.activeChannel?.id;
+  }
+
+  isActiveDirectMessageChannel(userId: string): boolean {
+    if (this.activeChannel?.type !== 'direct') return false;
+    return this.activeChannel?.members?.length === 2 &&
+    this.activeChannel?.members?.includes(userId);
+  }
+
+  isActivePersonalMessageChannel(): boolean {
+    if (this.activeChannel?.type !== 'direct' || !this.loggedInUser?.id) return false;
+    return this.activeChannel?.members?.length === 1 &&
+    this.activeChannel?.members?.includes(this.loggedInUser?.id);
+  }
+
+  
   loadChannels() {
     const userId = this.loginService.currentUserValue?.id;
     if (!userId) return;
