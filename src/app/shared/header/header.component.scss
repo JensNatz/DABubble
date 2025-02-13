@@ -1,4 +1,5 @@
 @import '../../../styles.scss';
+@import './../avatar/avatar.component.scss';
 
 .header {
     @include flex($justify: space-between, $align: start);
