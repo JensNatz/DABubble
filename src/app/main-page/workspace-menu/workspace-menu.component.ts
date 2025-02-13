@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
@@ -10,7 +10,7 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { firstValueFrom } from 'rxjs';
-
+import { MessageboardService } from '../../services/messageboard.service';
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
@@ -26,14 +26,16 @@ import { firstValueFrom } from 'rxjs';
 })
 export class WorkspaceMenuComponent {
 
+  loginService: LoginService = inject(LoginService);
+  userService: UserServiceService = inject(UserServiceService);
+  messageboardService: MessageboardService = inject(MessageboardService);
+
   isOpenChannelListe = true;
   isOpenUserListe = true;
   channels: any[] = [];
   users: User[] = [];
   otherUsers: User[] = [];
   loggedInUser: User | null = null;
-  loginService: LoginService = inject(LoginService);
-  userService: UserServiceService = inject(UserServiceService);
   loading: boolean = false;
   activeChannel: Channel | null = null;
 
@@ -70,7 +72,7 @@ export class WorkspaceMenuComponent {
 
   async loadUsers() {
     const users = await firstValueFrom(this.userService.getUsers());
-    this.otherUsers = users.filter(user => user.id !== this.loggedInUser?.id);
+    this.otherUsers = users.filter(user => user.id !== this.loginService.currentUserValue?.id);
   }
 
 
@@ -97,17 +99,20 @@ export class WorkspaceMenuComponent {
   switchToGroupChannel(channel: Channel) {
     if (this.channelService.currentChannel?.id !== channel.id) {
       this.channelService.currentChannel = channel;
+      this.messageboardService.openMessageBoard();
     }
   }
 
 
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
+    this.messageboardService.openMessageBoard();
   }
 
   
   onNewMessageClick() {
     this.channelService.currentChannel = null;
+    this.messageboardService.openMessageBoard();
   }
 }
 

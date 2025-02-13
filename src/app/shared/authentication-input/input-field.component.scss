@@ -3,8 +3,8 @@
 
 .input-container {
 
-position: relative;
-    
+    position: relative;
+
     input {
         max-width: 500px;
         width: 100%;
@@ -39,15 +39,65 @@ position: relative;
         &:focus {
             outline: none;
             border: 1px solid $purple-1;
-            
+
         }
     }
 }
 
-.error-message{
+.error-message {
     color: $rose;
     font-size: 14px;
     margin-top: 6px;
     position: absolute;
     left: 0;
+}
+
+
+@media(max-width:700px),(max-height: 1000px) {
+    .input-container {
+        input {
+            max-width: 100%;
+        }
+    }
+}
+
+@media(max-width:700px){
+    .input-container{
+        input{
+            max-height: 50px;
+        }
+    }
+
+    .error-message{
+        font-size: 12px;
+        margin-top: 0px;
+    }
+}
+
+@media(max-width:400px){
+    .input-container{
+        input{
+           font-size: 16px;
+        }
+    }
+}
+
+@media(max-width:380px){
+    .input-container{
+        input{
+           font-size: 14px;
+           background-position: 20px center;
+           padding-left: 60px;
+        }
+    }
+}
+
+@media(max-width:380px){
+    .input-container{
+        input{
+           font-size: 14px;
+           background-position: 16px center;
+           padding-left: 50px;
+        }
+    }
 }

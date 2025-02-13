@@ -2,12 +2,9 @@
 
 .message-container {
     @include flex($direction: row, $align: start, $justify: start);
-    gap: 24px;
-    padding: 16px 32px;
-    // background-color: $white;
+    gap: 16px;
+    padding: 16px 24px;
     position: relative;
-    // transition: background-color 1s ease;
-
 
     .avatar {
         cursor: pointer;
@@ -77,13 +74,13 @@
                 color: $gray;
                 font-size: 12px;
             }
-    
         }
 
         .message-reactions {
             @include flex($justify: start);
             gap: 8px;
             flex-wrap: wrap;
+            padding: 0 16px;
 
             .reaction-indicator {
                 cursor: pointer;

@@ -41,6 +41,16 @@ export class MessageService {
     return collectionData(queryRef, { idField: 'id' });
   }
 
+  getAllMainMessagesOfUser(userId: string) {
+    const messagesRef = collection(this.firestore, 'messages');
+    const queryRef = query(
+      messagesRef,
+      where('author', '==', userId),
+      where('parentMessageId', '==', null)
+    );
+    return collectionData(queryRef, { idField: 'id' });
+  }
+
   async getMessagesFromAllChannelsOfUser(userId: string) {
     const userChannels = await this.channelService.getAllGroupChannelsWhereUserIsMember(userId);
     const channelIds = userChannels.map((channel) => channel['id']);

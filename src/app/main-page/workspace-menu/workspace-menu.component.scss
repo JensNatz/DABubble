@@ -1,6 +1,4 @@
-@import './../../styles/variables';
-@import './../../styles/mixins';
-@import './../../shared/avatar/avatar.component.scss';
+@import '../../../styles.scss';
 
 
 .workspace-menu {
@@ -10,21 +8,36 @@
     background-color: $white;
     height: 100%;
     overflow: hidden;
+
+    @media (max-width: $breakpoint-md) {
+        border-radius: 0;
+    }
 }
 
 .workspace-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex($justify: space-between);
     padding: 32px 16px;
 
-    div {
-        display: flex;
-        align-items: center;
+    @media (max-width: $breakpoint-md) {
+       padding: 0;
     }
 
     h2 {
         font-size: 24px;
+    }
+
+    .logo {
+        @include flex();
+
+        @media (max-width: $breakpoint-md) {
+            display: none;
+        }
+       
+        img {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
     }
 }
 
@@ -35,29 +48,49 @@
     padding: 0 8px 0 32px;
 }
 
-.new-message {
-    img {
+.new-message-btn {
+    @include rounded();
+    cursor: pointer;
+
+    @media (max-width: $breakpoint-md) {
+        @include rounded($all: 50%);
+        @include flex();
+        background-color: $purple-1;
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        z-index: 100;
+        box-shadow: 0px 6px 10px 0px rgba($black, 0.2);
+    }
+
+    &:hover {
+        background-color: $bg-color;
+
+        svg {
+            color: $purple-1;
+        }
+
+        @media (max-width: $breakpoint-md) {
+            background-color: $purple-2;
+
+            svg {
+                color: $white;
+            }
+        }
+    }
+
+    svg {
         width: 20px;
         height: 20px;
         margin: 10px;
-        cursor: pointer;
-    }           
-}
+        color: $black;
 
-.new-message:hover {
-    background-color: rgba(99, 61, 189, 0.2);
-    @include rounded();
-}
-
-.new-message:hover img {
-    filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
-
-}
-
-.logo {
-    width: 60px;
-    height: 60px;
-    margin-right: 15px;
+        @media (max-width: $breakpoint-md) {
+            color: $white;
+        }
+    }
 }
 
 .channels_content {

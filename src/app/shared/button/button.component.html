@@ -1,0 +1,9 @@
+<button class="button" 
+[disabled]="disabled"
+[class.small]="size === 'small'" 
+[class.normal]="size === 'normal'" 
+[class.primary]="type === 'primary'"
+[class.secondary]="type === 'secondary'"
+>
+    {{ label }}
+</button>

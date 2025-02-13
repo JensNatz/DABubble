@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SearchComponent } from '../../main-page/search/search.component';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { MessageboardService } from '../../services/messageboard.service';
 
 @Component({
   selector: 'app-header',
@@ -11,12 +13,18 @@ import { SearchComponent } from '../../main-page/search/search.component';
   imports: [
     CommonModule,
     FormsModule,
-    SearchComponent
+    SearchComponent,
+    AvatarComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+
+  messageboardService: MessageboardService = inject(MessageboardService);
+  loginService: LoginService = inject(LoginService);
+
+  @Output() backButtonClicked = new EventEmitter<void>();
 
   public showProfilMenu: boolean = false;
   public showProfil: boolean = false;
@@ -32,9 +40,6 @@ export class HeaderComponent {
   constructor(private router: Router) {
     this.getCurrentUserData();
   }
-
-
-  loginService: LoginService = inject(LoginService);
 
 
   getCurrentUserData() {
@@ -102,5 +107,10 @@ export class HeaderComponent {
   logOut() {
     this.loginService.logout();
     this.router.navigate(['']);
+  }
+
+  onBackButtonClick() {
+    //this.backButtonClicked.emit();
+    this.messageboardService.closeMessageBoard();
   }
 }

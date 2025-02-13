@@ -18,7 +18,7 @@
                     }
                     }
                     @if (category.type === 'message') {
-                        <span [innerHTML]="item.content"></span>
+                        <span [innerHTML]="item.content | truncateHtml: 75 "></span>
                     }
                 </div>
             }
