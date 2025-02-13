@@ -33,6 +33,21 @@
     }
 }
 
+@media(max-width:1300px){
+    .register-button-container{
+        top: 15px;
+        right: 15px;
+    }
+}
+
+
+@media(min-width:701), (max-height: 910px){
+    .register-button-container{
+        top: 10px;
+        left: 10px;
+    }
+}
+
 @media(max-width:700px){
     
     .register-button-container{

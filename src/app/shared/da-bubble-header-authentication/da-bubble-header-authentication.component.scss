@@ -17,6 +17,13 @@ img {
     }
 }
 
+@media(max-width:1300px){
+    :host{
+        top: 15px;
+        left: 15px;
+    }
+}
+
 @media(max-width:1180px) and (min-width: 701px){
     :host{
         top: 10px;
