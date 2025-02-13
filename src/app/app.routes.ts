@@ -8,6 +8,9 @@ import { RestePasswordEmailComponent } from './authentication/reset-password/res
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { PrivacyPolicyComponent } from './legal-information/privacy-policy/privacy-policy.component';
 import { DaBubbleAnimationComponent } from './shared/da-bubble-animation/da-bubble-animation.component';
+import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
 
 export const routes: Routes = [
   { path: '', component: AuthenticationComponent },
@@ -18,7 +21,9 @@ export const routes: Routes = [
   { path: 'animation', component: DaBubbleAnimationComponent },
   {
     path: 'chat',
-    component: MainPageComponent
+    component: MainPageComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
   {
     path: 'imprint',

@@ -4,6 +4,7 @@ import { WorkspaceMenuComponent } from './workspace-menu/workspace-menu.componen
 import { MessageBoardComponent } from './message-board/message-board.component';
 import { CommonModule } from '@angular/common';
 import { MessageboardService } from '../services/messageboard.service';
+import { LoginService } from '../services/firebase-services/login-service';
 
 @Component({
   selector: 'app-main-page',
@@ -12,7 +13,7 @@ import { MessageboardService } from '../services/messageboard.service';
     HeaderComponent,
     WorkspaceMenuComponent,
     MessageBoardComponent,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
@@ -20,6 +21,7 @@ import { MessageboardService } from '../services/messageboard.service';
 export class MainPageComponent {
 
   messageboardService: MessageboardService = inject(MessageboardService);
+  loginService: LoginService = inject(LoginService);
   isMenuOpen = true;
   isMessageBoardOpen = false;
 

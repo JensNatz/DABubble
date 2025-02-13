@@ -1,7 +1,7 @@
 <div class="workspace-menu">
     <div class="workspace-title">
         <div class="logo">
-            <img src="assets/img/Workspace logo.png">
+            <img src="assets/img/workspace_logo.svg">
             <h2>Devspace</h2>
         </div>
         <div class="new-message-btn" (click)="onNewMessageClick()">
@@ -14,8 +14,8 @@
         <div class="channels_content">
             <div class="channel_title" (click)="toggleMenuChannel()">
                 <img class="arrow"
-                    src="{{ isOpenChannelListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
-                <img class="space" src="assets/img/workspaces.png">
+                    src="{{ isOpenChannelListe ? 'assets/img/arrow_drop_down.svg': 'assets/img/arrow_drop_down_right.svg' }}">
+                <img class="space" src="assets/img/workspaces_icon.svg">
                 <p>Channels</p>
             </div>
             <div class="add">
@@ -43,15 +43,15 @@
                 }
             </div>
             <div class="add_channel" (click)="openAddChannel()">
-                <img src="assets/img/add_circle.png">
+                <img src="assets/img/add_circle.svg">
                 <p>Channel hinzufügen</p>
             </div>
         </div>
 
         <div class="message_content" (click)="toggleMenuUser()">
             <img class="arrow"
-                src="{{ isOpenUserListe ? 'assets/img/arrow_drop_down.png': 'assets/img/arrow_drop_down (2).png' }}">
-            <img class="account_circle" src="assets/img/account_circle.png">
+                src="{{ isOpenUserListe ? 'assets/img/arrow_drop_down.svg': 'assets/img/arrow_drop_down_right.svg' }}">
+            <img class="account_circle" src="assets/img/account_circle.svg">
             <p>Direktnachrichten</p>
         </div>
 
