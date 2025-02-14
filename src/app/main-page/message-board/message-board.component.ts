@@ -17,6 +17,7 @@ import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
 import { AnswersSeperatorComponent } from './answers-seperator/answers-seperator.component';
 import { UserAddMessageBoardComponent } from '../../shared/user-add-message-board/user-add-message-board.component';
+import { ModalService } from './../../services/modal.service';
 
 @Component({
   selector: 'app-message-board',
@@ -29,7 +30,6 @@ import { UserAddMessageBoardComponent } from '../../shared/user-add-message-boar
     AvatarComponent,
     LoadingIndicatorComponent,
     ChannelEditComponent,
-    AddUserToChannelComponent,
     AddUserToChannelComponent,
     RecipientSelectorComponent,
     AnswersSeperatorComponent,
@@ -63,6 +63,7 @@ export class MessageBoardComponent {
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
+  modalService: ModalService = inject(ModalService);
 
   messages: Message[] = [];
   threadMessages: Message[] = [];
@@ -292,4 +293,9 @@ export class MessageBoardComponent {
   closeUserAddInfos() {
     this.showUserAddInfo = false;
   }
+
+  openModal() {  
+    this.modalService.openModal();
+  }
+
 }

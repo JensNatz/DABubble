@@ -7,11 +7,11 @@
     </app-channel-edit>
 </div>
 
-<div class="modal-overlay" *ngIf="showModalUserEdit" (click)="closeUserToChannel()"> </div>
+<!-- <div class="modal-overlay" *ngIf="showModalUserEdit" (click)="closeUserToChannel()"> </div>
 <div class="modal modal-users" *ngIf="showModalUserEdit">
     <img src="assets/img/close.svg" (click)="closeUserToChannel()">
     <app-add-user-to-channel [channelId]="channelId" [channelMembers]="channelMembers"></app-add-user-to-channel>
-</div>
+</div> -->
 
 <div class="modal-overlay" *ngIf="showUserAddInfo" (click)="closeUserAddInfos()"></div>
 <div class="modal user_add_to_channel" *ngIf="showUserAddInfo">
@@ -46,7 +46,7 @@
                 </div>
                 <div class="header-right">
                     @if (channelType === 'group' && channelTitle) {
-                    <div (click)="openUserToChannel()" class="channel-members">
+                    <div (click)="openModal()" class="channel-members">
                         <div class="user_from_channels_avatar">
                             @for (channelData of channelsData.slice(0, 3); track $index) {
                             <app-avatar [avatar]="channelData.avatar" [border]="true" [size]="'small'"
