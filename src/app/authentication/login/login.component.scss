@@ -3,6 +3,8 @@
 @import '../shared/responsiv-authentication.scss';
 
 :host {
+    position: relative;
+    overflow: auto;
     height: 100vh;
     @include flex(center, center, column);
 }
@@ -132,7 +134,7 @@ form {
 }
 
 
-@media(min-width:701), (max-height: 910px) {
+@media (min-width: 701px) and (max-width: 5000px) and (max-height: 940px) {
 
     .login-container {
         max-height: 630px;
@@ -153,22 +155,84 @@ form {
         margin-top: 25px;
     }
 
-    .or-container{
+    .or-container {
         margin-top: 20px;
     }
 
-    .google-btn{
+    .google-btn {
         margin-top: 20px;
     }
 
-    .btn-container{
+    .btn-container {
         margin-top: 25px;
     }
 
-    
+
 }
 
 
+@media (min-width: 701px) and (max-width: 5000px) and (max-height: 800px) {
+    .login-container {
+        @include margin-16;
+    }
+
+    .login-container {
+        height: 550px;
+        justify-content: center;
+
+    }
+
+    .btn-container {
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+
+    .headline-section {
+        height: auto;
+        margin-top: 0px;
+        justify-content: normal;
+        @include padding-20;
+
+        h1 {
+            @include h1-32;
+            margin-bottom: 15px
+        }
+
+        span {
+            @include span-17
+        }
+    }
+
+    form {
+        @include padding-20;
+
+        .input-field-section {
+            margin-top: 20px;
+            gap: 30px;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+    }
+
+}
+
+
+@media (min-width: 701px) and (max-width: 5000px) and (max-height: 720px) {
+    :host {
+        height: 100%;
+    }
+
+    .login-container {
+        margin-bottom: 100px;
+        margin-top: 100px;
+
+    }
+
+
+}
 
 @media(max-width:700px) {
 
@@ -192,9 +256,7 @@ form {
 }
 
 @media(max-width:700px) {
-    :host {
-        justify-content: space-evenly;
-    }
+
 
     .headline-section {
         height: auto;
@@ -241,6 +303,61 @@ form {
     .login-container {
         height: 550px;
         justify-content: center;
+
+    }
+}
+
+@media(max-width:700px) and (max-height: 775px) {
+    .login-container {
+        height: 450px;
+    }
+
+    .headline-section {
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            margin-block-start: 0em;
+            margin-block-end: 0em;
+        }
+
+        span {
+            font-size: 16px;
+        }
+    }
+
+    form {
+        .input-field-section {
+            margin-top: 10px;
+            gap: 10px;
+        }
+    }
+
+
+    .or-container {
+        margin-top: 10px;
+    }
+
+    .google-btn {
+        margin-top: 10px;
+
+    }
+
+    .btn-container {
+        margin-top: 20px;
+
+    }
+
+
+}
+
+@media(max-width:700px) and (max-height: 650px){
+    :host {
+        height: 100%;
+    }
+
+    .login-container {
+        margin-bottom: 0px;
+        margin-top: 0px;
 
     }
 }
