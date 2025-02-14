@@ -1,5 +1,90 @@
-@import '../../../styles.scss';
+@import './../../styles/variables';
+@import './../../styles/mixins';
 @import './../../shared/avatar/avatar.component.scss';
+
+h1 {
+    font-size: 24px;
+}
+
+.all_users_from_channel {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+    gap: 17px;
+    height: 222px;
+    max-height: 222px;
+    overflow: hidden;
+
+    img {
+        width: 50px;
+        height: 50px;
+    }
+
+    &:hover {
+        overflow: auto;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        margin: 100px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: $light-purple;
+    }
+}
+
+.user_name_and_avatar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 18px;
+    cursor: pointer;
+
+    div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: max-content;
+        padding: 5px 10px;
+
+        &:hover {
+            @include rounded();
+            color: $purple-3;
+            background-color: $bg-color;
+        }
+    }
+
+}
+
+.mitglieder_hinzufügen {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+    cursor: pointer;
+    width: max-content;
+    padding: 3px 27px 3px 0;
+
+    img {
+        margin-left: 20px;
+    }
+
+    span {
+        font-size: 18px;
+    }
+
+    &:hover {
+        @include rounded();
+        color: $purple-3;
+        background-color: $bg-color;
+    }
+}
 
 .modal-overlay {
     position: fixed;

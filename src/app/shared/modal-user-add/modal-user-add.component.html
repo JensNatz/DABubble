@@ -1,7 +1,29 @@
 <div class="modal-overlay"> </div>
 <div class="modal modal-users" >
     <img class="close_button" src="assets/img/close.svg" (click)="closeModal()">
-    <div class="content">
-        <h1>Hallo</h1>
+    <div class="add_user_to_channel_content">
+        <h1>Mitglieder</h1>
+        <div class="all_users_from_channel">
+            @for (userData of channelsData; track $index) {
+                <div class="user_name_and_avatar">
+                    <!-- <div class="user_name_and_avatar" *ngIf="userData.id !== currentUserId; else noClick" (click)="openUserInfos(userData)"> -->
+                    <div class="user_name_and_avatar" *ngIf="userData.id !== currentUserId; else noClick">
+                        <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
+                        <span>{{ userData.name }}</span>
+                    </div>
+                    <ng-template #noClick>
+                        <div class="user_name_and_avatar" class="no-click">
+                            <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
+                            <span>{{ userData.name }}</span>
+                        </div>
+                    </ng-template>
+                </div>
+            }
+        </div>
+        <!-- <div class="mitglieder_hinzufügen" (click)="openUserAddInfos()"> -->
+        <div class="mitglieder_hinzufügen">
+            <img src="assets/img/add_members.svg">
+            <span>Mitglieder hinzufügen</span>
+        </div>
     </div>
 </div>
