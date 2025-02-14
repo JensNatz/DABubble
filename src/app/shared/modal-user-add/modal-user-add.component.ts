@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-modal-user-add',
@@ -8,5 +9,11 @@ import { Component, Input } from '@angular/core';
   styleUrl: './modal-user-add.component.scss'
 })
 export class ModalUserAddComponent {
-  @Input() closeModal!: () => void;
+  // @Input() closeModal!: () => void;
+
+  constructor( private modalService: ModalService) {}
+
+  closeModal() {
+    this.modalService.closeModal();
+  }
 }
