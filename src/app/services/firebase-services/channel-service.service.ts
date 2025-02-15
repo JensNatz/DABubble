@@ -1,15 +1,15 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, OnDestroy } from '@angular/core';
 import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query, QueryDocumentSnapshot, DocumentData } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
 import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { LoginService } from './login-service';
 import { Message } from '../../models/message';
-import { filter, take } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChannelServiceService {
+export class ChannelServiceService implements OnDestroy {
 
   id: string = '';
   channels;
@@ -22,6 +22,7 @@ export class ChannelServiceService {
   private channelNameCache = new Map<string, string>();
   private currentChannelSubject = new BehaviorSubject<Channel | null>(null);
   currentChannel$ = this.currentChannelSubject.asObservable();
+  private currentChannelSubscription: Subscription = new Subscription();
 
   messageRendered = new Subject<string>();
 
@@ -39,18 +40,47 @@ export class ChannelServiceService {
     // });
   }
 
-  get currentChannel(): Channel | null {
-    return this.currentChannelSubject.getValue();
+  ngOnDestroy() {
+    this.cleanUpChannelSubscription();
   }
 
-  set currentChannel(channel: Channel | null) {
-    this.currentChannelSubject.next(channel);
+  // get currentChannel(): Channel | null {
+  //   return this.currentChannelSubject.getValue();
+  // }
+
+  // set currentChannel(channel: Channel | null) {
+  //   this.currentChannelSubject.next(channel);
+  // }
+
+  get currentChannelValue(): Channel | null {
+    return this.currentChannelSubject.value;
+  }
+
+  private cleanUpChannelSubscription() {
+    if (this.currentChannelSubscription) {
+      this.currentChannelSubscription.unsubscribe();
+    }
+  }
+
+  clearCurrentChannel() {
+    this.cleanUpChannelSubscription();
+    this.currentChannelSubject.next(null);
+  }
+
+  setCurrentChannel(channel: Channel) {
+    if (channel.id) {
+      this.setCurrentChannelById(channel.id); 
+    }
   }
 
   setCurrentChannelById(channelId: string) {
-    this.getChannelById(channelId).subscribe(channel => {
-      this.currentChannelSubject.next(channel);
-    });
+    this.cleanUpChannelSubscription();
+    this.currentChannelSubscription = docData(doc(this.firestore, `channels/${channelId}`))
+      .subscribe(channelData => {
+        if (channelData) {
+          this.currentChannelSubject.next({ id: channelId, ...channelData } as Channel);
+        }
+      });
   }
 
   getAllChannelsFromDatabase() {
@@ -141,10 +171,10 @@ export class ChannelServiceService {
 
     if (!channels.empty) {
       const existingChannel = this.getDirectChannelData(channels.docs[0]);
-      this.currentChannel = existingChannel;
+      this.setCurrentChannel(existingChannel);
     } else {
       const newChannel = await this.createNewDirectMessageChannel(members);
-      this.currentChannel = newChannel;
+      this.setCurrentChannel(newChannel);
     }
   }
 

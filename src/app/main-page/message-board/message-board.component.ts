@@ -119,7 +119,7 @@ export class MessageBoardComponent {
     this.loadUserSubscription.unsubscribe();
   }
 
-  get channelTitle() {
+  get headerTitle() {
     if (this.channelType === 'direct') {
       return this.directMessagePartnerName;
     } else if (this.channelType === 'group') {
