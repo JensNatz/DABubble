@@ -92,6 +92,9 @@ export class MessageBoardComponent {
           this.channelMembers = channel.members || [];
           this.loadMessages();
           this.isThreadOpen = false;
+          this.modalService.refreshChannelUsers$.subscribe(() => {
+            this.getUserFromChannel();
+          });
           this.getUserFromChannel();
 
           if (this.channelType === 'direct' && channel.members) {

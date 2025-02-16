@@ -10,6 +10,7 @@ import { SearchService } from '../../services/search.service';
 import { take } from 'rxjs/operators';
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
+import { ModalService } from '../../services/modal.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-ch
   styleUrl: './user-add.component.scss'
 })
 export class UserAddComponent {
-  
+
   @Input() userId: string = '';
   @Input() channelId: string = '';
   @Input() channelName: string = '';
@@ -40,6 +41,7 @@ export class UserAddComponent {
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
   searchService = inject(SearchService);
+  modalServe = inject(ModalService);
 
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
@@ -58,7 +60,7 @@ export class UserAddComponent {
   onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.inputValue = target?.value || '';
-  
+
     if (this.inputValue.length > 0) {
       this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
       this.listShown = this.filteredUsers.length > 0;
@@ -99,8 +101,9 @@ export class UserAddComponent {
         }
         const updatedMembers = [...members, userId];
         this.channelService.editChannelMembers(this.channelId, updatedMembers);
-        this.messageBoard.getUserFromChannel();
+        this.modalServe.triggerRefreshChannelUsers();
         this.addUserComponent.getUserFromChannel();
+
         if (this.closeUserAddInfos) {
           this.closeUserAddInfos();
         }
