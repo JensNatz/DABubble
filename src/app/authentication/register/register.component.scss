@@ -209,6 +209,7 @@ form {
             @include h1-32;
             margin-bottom: 15px;
             margin-top: 20px;
+            
         }
 
         span {
@@ -249,7 +250,7 @@ form {
 @media(max-width:430px) {
     .arrow-back {
         top: auto;
-        bottom: 30px;
+        bottom: 20px;
     }
 }
 
