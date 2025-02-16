@@ -9,18 +9,23 @@ export class ModalService {
   private modalState = new BehaviorSubject<boolean>(false);
   modalState$ = this.modalState.asObservable();
 
+  private modalContent = new BehaviorSubject<string | null>(null);
+  modalContent$ = this.modalContent.asObservable();
+
   private refreshChannelUsersSource = new BehaviorSubject<boolean>(false);
   refreshChannelUsers$ = this.refreshChannelUsersSource.asObservable();
 
-  triggerRefreshChannelUsers() {
-    this.refreshChannelUsersSource.next(true);
-  }
-
-  openModal() {
+  openModal(content: string) {
+    this.modalContent.next(content);
     this.modalState.next(true);
   }
 
   closeModal() {
     this.modalState.next(false);
+    this.modalContent.next(null);
+  }
+
+  triggerRefreshChannelUsers() {
+    this.refreshChannelUsersSource.next(true);
   }
 }

@@ -7,15 +7,17 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { Subscription } from 'rxjs';
 import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
+import { UserAddComponent } from "../user-add/user-add.component";
 
 @Component({
   selector: 'app-modal-user-add',
   standalone: true,
   imports: [
-      CommonModule,
-      FormsModule, 
-      AddUserToChannelComponent    
-    ],
+    CommonModule,
+    FormsModule,
+    AddUserToChannelComponent,
+    UserAddComponent
+],
   templateUrl: './modal-user-add.component.html',
   styleUrl: './modal-user-add.component.scss'
 })
@@ -30,6 +32,9 @@ export class ModalUserAddComponent {
   channelsData: any[] = [];
   channelsDataLength: number = 0;
 
+  modalContent: string | null = null;
+  private contentSubscription: Subscription;
+
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
@@ -37,6 +42,9 @@ export class ModalUserAddComponent {
   private channelSubscription: Subscription = new Subscription();
 
   constructor(private modalService: ModalService) { 
+    this.contentSubscription = this.modalService.modalContent$.subscribe(content => {
+      this.modalContent = content;
+    });
     this.getCurrentUserData();
   }
 

@@ -46,7 +46,7 @@
                 </div>
                 <div class="header-right">
                     @if (channelType === 'group' && channelTitle) {
-                    <div (click)="openModal()" class="channel-members">
+                    <div (click)="openAddUserToChannel()" class="channel-members">
                         <div class="user_from_channels_avatar">
                             @for (channelData of channelsData.slice(0, 3); track $index) {
                             <app-avatar [avatar]="channelData.avatar" [border]="true" [size]="'small'"

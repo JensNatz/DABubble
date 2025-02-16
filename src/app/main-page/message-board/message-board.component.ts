@@ -289,16 +289,19 @@ export class MessageBoardComponent {
     return undefined;
   }
 
-  openUserAddInfos() {
-    this.showUserAddInfo = true;
-  }
+  
 
   closeUserAddInfos() {
     this.showUserAddInfo = false;
   }
 
-  openModal() {  
-    this.modalService.openModal();
+  openAddUserToChannel() {
+    this.modalService.openModal('addUserToChannel');
   }
+  
+  openUserAddInfos() {
+    this.modalService.openModal('userAdd');
+  }
+  
 
 }
