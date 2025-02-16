@@ -46,9 +46,9 @@ export class AvatarComponent {
       this.email = params['email'];
       this.password = params['password'];
       
-      if (!this.name || !this.email || !this.password) {
-        this.router.navigate(['/register']);
-      }
+     // if (!this.name || !this.email || !this.password) {
+     //   this.router.navigate(['/register']);
+     // }
     });
   }
 
