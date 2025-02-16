@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
     CommonModule,
     ModalUserAddComponent
   ],
+  providers: [ MessageBoardComponent ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })

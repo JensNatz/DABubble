@@ -6,13 +6,15 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
 import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { Subscription } from 'rxjs';
+import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
 
 @Component({
   selector: 'app-modal-user-add',
   standalone: true,
   imports: [
       CommonModule,
-      FormsModule,     
+      FormsModule, 
+      AddUserToChannelComponent    
     ],
   templateUrl: './modal-user-add.component.html',
   styleUrl: './modal-user-add.component.scss'
