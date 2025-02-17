@@ -45,10 +45,10 @@ export class AvatarComponent {
       this.name = params['name'];
       this.email = params['email'];
       this.password = params['password'];
-      
-     // if (!this.name || !this.email || !this.password) {
-     //   this.router.navigate(['/register']);
-     // }
+
+      if (!this.name || !this.email || !this.password) {
+        this.router.navigate(['/register']);
+      }
     });
   }
 
@@ -57,7 +57,7 @@ export class AvatarComponent {
 
   selectAvatar(avatar: string, avatarKey: string) {
     this.selectedAvatar = avatar;
-    this.avatarKey = avatarKey;   
+    this.avatarKey = avatarKey;
   }
 
 
@@ -79,14 +79,14 @@ export class AvatarComponent {
     try {
       await this.UserServiceService.registerUser(this.email, this.password, newUser);
       //await this.UserServiceService.addNewUser(newUser);
-      
+
       this.registrationSuccessful = true;
       setTimeout(() => {
         this.registrationSuccessful = false;
         this.router.navigate([''])
       }, 2000);
     } catch (err) {
-     
+
     }
   }
 }
