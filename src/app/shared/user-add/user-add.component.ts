@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { take } from 'rxjs/operators';
-import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
 import { ModalService } from '../../services/modal.service';
 

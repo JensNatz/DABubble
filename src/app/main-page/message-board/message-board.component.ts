@@ -13,10 +13,8 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
 import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.component';
-import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
 import { AnswersSeperatorComponent } from './answers-seperator/answers-seperator.component';
-import { UserAddMessageBoardComponent } from '../../shared/user-add-message-board/user-add-message-board.component';
 import { ModalService } from './../../services/modal.service';
 
 @Component({
@@ -30,11 +28,9 @@ import { ModalService } from './../../services/modal.service';
     AvatarComponent,
     LoadingIndicatorComponent,
     ChannelEditComponent,
-    AddUserToChannelComponent,
     RecipientSelectorComponent,
     AnswersSeperatorComponent,
     RecipientSelectorComponent,
-    UserAddMessageBoardComponent
 ],
 
   templateUrl: './message-board.component.html',

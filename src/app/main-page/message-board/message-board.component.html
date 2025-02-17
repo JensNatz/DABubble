@@ -7,22 +7,6 @@
     </app-channel-edit>
 </div>
 
-<!-- <div class="modal-overlay" *ngIf="showModalUserEdit" (click)="closeUserToChannel()"> </div>
-<div class="modal modal-users" *ngIf="showModalUserEdit">
-    <img src="assets/img/close.svg" (click)="closeUserToChannel()">
-    <app-add-user-to-channel [channelId]="channelId" [channelMembers]="channelMembers"></app-add-user-to-channel>
-</div> -->
-
-<div class="modal-overlay" *ngIf="showUserAddInfo" (click)="closeUserAddInfos()"></div>
-<div class="modal user_add_to_channel" *ngIf="showUserAddInfo">
-    <img src="assets/img/close.svg" (click)="closeUserAddInfos()">
-    <app-user-add-message-board
-        [channelId]="channelId"
-        [channelName]="channelName"
-        [closeUserAddInfos]="closeUserAddInfos.bind(this)"
-    ></app-user-add-message-board>
-</div>
-
 <div class="message-board">
     <div class="message-container main-channel">
         <div class="message-board-header">
