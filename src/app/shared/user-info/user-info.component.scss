@@ -4,13 +4,9 @@
 
 
 h1 {
-    font-size: 24px;
+    font-size: clamp(18px, 2.5vw, 24px);
     margin-block-start: 0;
-    margin-block-end: 0;
-
-    @media (max-width: $breakpoint-sm) {
-        font-size: 18px;
-    }
+    margin-block-end: 0;    
 }
 
 .profil_avatar {   
@@ -30,33 +26,21 @@ h1 {
 
 .user_name_status {
     h2 {
-        font-size: 32px;
+        font-size: clamp(18px, 3vw, 32px);
         font-weight: 700;
-
-        @media (max-width: $breakpoint-sm) {
-            font-size: 18px;
-        }
     }
 
     p {
-        font-size: 20px;
-
-        @media (max-width: $breakpoint-sm) {
-            font-size: 18px;
-        }
+        font-size: clamp(18px, 2.5vw, 20px);
     }
 }
 
 .email_addresse {
     margin-top: 40px;
     display: flex;
-    font-size: 20px;
+    font-size: clamp(16px, 2vw, 20px);
     display: flex;
     flex-direction: column;
-
-    @media (max-width: $breakpoint-sm) {
-        font-size: 16px;
-    }
 
     div {
         display: flex;
@@ -65,13 +49,9 @@ h1 {
 
     p {
         color: $purple-1;
-        font-size: 18px;
+        font-size: clamp(16px, 2vw, 18px);
         margin-top: 20px;
         margin-left: 50px;
-
-        @media (max-width: $breakpoint-sm) {
-            font-size: 16px;
-        }
     }
 
     img {
@@ -90,7 +70,7 @@ h1 {
     width: 100%;
 
     span {
-        font-size: 18px;
+        font-size: clamp(16px, 2vw, 18px);
         color: $purple-2;
         font-weight: 400;
 
@@ -111,7 +91,7 @@ h1 {
         align-items: center;
         justify-content: center;
         gap: 10px;
-        font-size: 18px;
+        font-size: clamp(16px, 2vw, 18px);
         width: 180px;
         
 
