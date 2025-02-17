@@ -88,21 +88,22 @@
         font-weight: 700;
         color: $white;
         transform: translateX(-100%);
-        animation: 
-        slideText 0.5s ease forwards,
-        shrinkText 0.5s ease forwards;
+        animation:
+            slideText 0.5s ease forwards,
+            shrinkText 0.5s ease forwards;
         animation-delay: 1.5s, 2.5s;
 
     }
 
     @keyframes slideText {
         0% {
-          transform: translateX(-100%);
+            transform: translateX(-100%);
         }
+
         100% {
-          transform: translateX(0);
+            transform: translateX(0);
         }
-      }
+    }
 
     @keyframes shrinkText {
         from {
@@ -113,4 +114,22 @@
             font-size: 38px;
         }
     }
+}
+
+@media (max-width: 1400px) {
+
+    @keyframes moveUpLeft {
+        from {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        to {
+            top: 25px;
+            left: 25px;
+            transform: translate(0, 0);
+        }
+    }
+
 }

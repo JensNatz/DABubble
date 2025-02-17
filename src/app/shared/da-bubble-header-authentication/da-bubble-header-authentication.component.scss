@@ -4,21 +4,28 @@
     left: 75px;
 }
 
-img { 
+img {
     cursor: pointer;
     width: 242px;
     height: 70px;
 }
 
 @media (max-width: 1400px) and (min-width: 701px)and (max-height: 1070px) {
-    :host{
+    :host {
         top: 40px;
         left: 40px;
     }
 }
 
-@media(max-width:1180px) and (min-width: 701px){
-    :host{
+@media(max-width:1300px) {
+    :host {
+        top: 15px;
+        left: 15px;
+    }
+}
+
+@media(max-width:1180px) and (min-width: 701px) {
+    :host {
         top: 10px;
         left: 10px;
     }
@@ -41,6 +48,21 @@ img {
         position: relative;
         top: auto;
         left: auto;
-        //margin-bottom: 30px;
+        margin-bottom: 30px;
+    }
+}
+
+@media(max-width:700px) and (max-height: 840px) {
+
+    :host {
+        margin-bottom: 10px;
+    }
+
+}
+
+@media(max-width:700px) and (max-height: 650px) {
+    :host {
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 }
