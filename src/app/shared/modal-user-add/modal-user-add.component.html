@@ -1,0 +1,16 @@
+<div class="modal-overlay"> </div>
+
+<div class="modal modal-users" *ngIf="modalContent === 'addUserToChannel'">
+    <img class="close_button" src="assets/img/close.svg" (click)="closeModal()">
+        <app-add-user-to-channel></app-add-user-to-channel>    
+</div>
+
+<div class="modal user_add_to_channel" *ngIf="modalContent === 'userAdd'">
+    <img class="close_button" src="assets/img/close.svg" (click)="closeModal()">
+    <app-user-add [channelId]="channelId" [channelName]="channelName"></app-user-add>
+</div>
+
+<div class="modal modal-channel" *ngIf="modalContent === 'editChannel'">
+    <img class="close_button" src="assets/img/close.svg" (click)="closeModal()">
+    <app-channel-edit [channelId]="channelId"></app-channel-edit>
+</div>

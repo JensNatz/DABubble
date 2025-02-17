@@ -5,6 +5,7 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-user-info',
@@ -29,6 +30,7 @@ export class UserInfoComponent {
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
+  modalService: ModalService = inject(ModalService);
 
   private userSubscription: Subscription = new Subscription();
 
@@ -57,6 +59,6 @@ export class UserInfoComponent {
 
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
-    this.messageBoard.closeUserToChannel();
+    this.modalService.closeModal();
   }
 }
