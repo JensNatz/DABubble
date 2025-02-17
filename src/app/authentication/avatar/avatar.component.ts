@@ -46,7 +46,7 @@ export class AvatarComponent {
       this.name = params['name'];
       this.email = params['email'];
       this.password = params['password'];
-      
+
       if (!this.name || !this.email || !this.password) {
         this.router.navigate(['/register']);
       }
@@ -58,7 +58,7 @@ export class AvatarComponent {
 
   selectAvatar(avatar: string, avatarKey: string) {
     this.selectedAvatar = avatar;
-    this.avatarKey = avatarKey;   
+    this.avatarKey = avatarKey;
   }
 
 
@@ -87,7 +87,7 @@ export class AvatarComponent {
         this.router.navigate([''])
       }, 2000);
     } catch (err) {
-     
+
     }
   }
 }

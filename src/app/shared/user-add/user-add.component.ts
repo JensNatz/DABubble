@@ -8,8 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { take } from 'rxjs/operators';
-import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
+import { ModalService } from '../../services/modal.service';
 
 
 @Component({
@@ -18,14 +18,13 @@ import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-ch
   imports: [
     FormsModule,
     CommonModule,
-    MessageBoardComponent,
     AddUserToChannelComponent
   ],
   templateUrl: './user-add.component.html',
   styleUrl: './user-add.component.scss'
 })
 export class UserAddComponent {
-  
+
   @Input() userId: string = '';
   @Input() channelId: string = '';
   @Input() channelName: string = '';
@@ -40,14 +39,12 @@ export class UserAddComponent {
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
   searchService = inject(SearchService);
+  modalServe = inject(ModalService);
 
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor(
-    private messageBoard: MessageBoardComponent,
-    private addUserComponent: AddUserToChannelComponent
-  ) {
+  constructor( private addUserComponent: AddUserToChannelComponent ) {
     this.userSubscription.add(
       this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
@@ -58,7 +55,7 @@ export class UserAddComponent {
   onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.inputValue = target?.value || '';
-  
+
     if (this.inputValue.length > 0) {
       this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
       this.listShown = this.filteredUsers.length > 0;
@@ -99,10 +96,12 @@ export class UserAddComponent {
         }
         const updatedMembers = [...members, userId];
         this.channelService.editChannelMembers(this.channelId, updatedMembers);
-        this.messageBoard.getUserFromChannel();
+        this.modalServe.triggerRefreshChannelUsers();
         this.addUserComponent.getUserFromChannel();
         if (this.closeUserAddInfos) {
           this.closeUserAddInfos();
+        } else {
+          this.modalServe.closeModal();
         }
         this.errorMessage = '';
       });

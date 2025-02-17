@@ -1,28 +1,3 @@
-<div class="modal-overlay" *ngIf="showModal" (click)="closeEditChannel()"></div>
-<div class="modal modal-channel" *ngIf="showModal">
-    <img src="assets/img/close.svg" (click)="closeEditChannel()">
-    <app-channel-edit [channelId]="channelId" [channelName]="channelName" [channelCreator]="channelCreator"
-        [channelDescription]="channelDescription" [closeFunction]="closeEditChannel.bind(this)"
-         (channelNameChanged)="updateChannelName($event)" (channelDescriptionChanged)="updateChannelDescription($event)">
-    </app-channel-edit>
-</div>
-
-<div class="modal-overlay" *ngIf="showModalUserEdit" (click)="closeUserToChannel()"> </div>
-<div class="modal modal-users" *ngIf="showModalUserEdit">
-    <img src="assets/img/close.svg" (click)="closeUserToChannel()">
-    <app-add-user-to-channel [channelId]="channelId" [channelMembers]="channelMembers"></app-add-user-to-channel>
-</div>
-
-<div class="modal-overlay" *ngIf="showUserAddInfo" (click)="closeUserAddInfos()"></div>
-<div class="modal user_add_to_channel" *ngIf="showUserAddInfo">
-    <img src="assets/img/close.svg" (click)="closeUserAddInfos()">
-    <app-user-add-message-board
-        [channelId]="channelId"
-        [channelName]="channelName"
-        [closeUserAddInfos]="closeUserAddInfos.bind(this)"
-    ></app-user-add-message-board>
-</div>
-
 <div class="message-board">
     <div class="message-container main-channel">
         <div class="message-board-header">
@@ -45,8 +20,8 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    @if (channelType === 'group' && headerTitle) {
-                    <div (click)="openUserToChannel()" class="channel-members">
+                    @if (channelType === 'group' && channelTitle) {
+                    <div (click)="openAddUserToChannel()" class="channel-members">
                         <div class="user_from_channels_avatar">
                             @for (channelData of channelsData.slice(0, 3); track $index) {
                             <app-avatar [avatar]="channelData.avatar" [border]="true" [size]="'small'"
@@ -55,7 +30,11 @@
                         </div>
                         <p class="channel-members-count">{{ channelsDataLength }}</p>
                     </div>
-                    <img class="members_button" src="assets/img/add_members.svg">
+                    
+                    <img class="members_button" src="assets/img/add_members.svg" (click)="openUserAddInfos()">
+
+                    <img class="members_button_small" src="assets/img/add_members.svg" (click)="openAddUserToChannel()">
+
                     }
                 </div>
             </div>
@@ -92,9 +71,10 @@
             @if (!areAllMainMessagesParsed()) {
             <app-loading-indicator></app-loading-indicator>
             }
-            <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container" >
+            <div [class.hidden]="!areAllMainMessagesParsed()" class="messages-container">
                 @for (message of messages; track message.id; let i = $index) {
-                <app-message [id]="'message-' + message.id" [message]="message" (repliesClicked)="handleRepliesClick($event)"
+                <app-message [id]="'message-' + message.id" [message]="message"
+                    (repliesClicked)="handleRepliesClick($event)"
                     (messageParseComplete)="handleMainMessageParsed($event)"></app-message>
                 @if (i === messages.length - 1 || !isSameDay(messages[i+1].timestamp, message.timestamp)) {
                 <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
@@ -135,19 +115,18 @@
             <app-loading-indicator></app-loading-indicator>
             }
             <div [class.hidden]="!areAllThreadMessagesParsed()" class="messages-container">
-               
+
                 @for (message of threadMessages; track message.id; let i = $index) {
-                    <app-message [message]="message"
-                        (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
-                    @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
-                        <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
-                    }
+                <app-message [message]="message"
+                    (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
+                @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
+                <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
+                }
                 }
                 @if (getParentMessage() !== undefined) {
-                    <app-answers-seperator [numberOfReplies]="getParentMessage()!.numberOfReplies || 0"></app-answers-seperator>
-                    <app-message 
-                    [message]="getParentMessage()!" 
-                    [isThreadRootMessage]="true"
+                <app-answers-seperator
+                    [numberOfReplies]="getParentMessage()!.numberOfReplies || 0"></app-answers-seperator>
+                <app-message [message]="getParentMessage()!" [isThreadRootMessage]="true"
                     (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
                 }
             </div>

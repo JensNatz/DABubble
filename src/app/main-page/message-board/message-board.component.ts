@@ -13,11 +13,9 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { Subscription } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../shared/loading-indicator/loading-indicator.component';
 import { ChannelEditComponent } from '../../shared/channel-edit/channel-edit.component';
-import { AddUserToChannelComponent } from "../../shared/add-user-to-channel/add-user-to-channel.component";
 import { RecipientSelectorComponent } from '../../shared/recipient-selector/recipient-selector.component';
 import { AnswersSeperatorComponent } from './answers-seperator/answers-seperator.component';
-import { UserAddComponent } from '../../shared/user-add/user-add.component';
-import { UserAddMessageBoardComponent } from '../../shared/user-add-message-board/user-add-message-board.component';
+import { ModalService } from './../../services/modal.service';
 
 @Component({
   selector: 'app-message-board',
@@ -30,13 +28,9 @@ import { UserAddMessageBoardComponent } from '../../shared/user-add-message-boar
     AvatarComponent,
     LoadingIndicatorComponent,
     ChannelEditComponent,
-    AddUserToChannelComponent,
-    AddUserToChannelComponent,
     RecipientSelectorComponent,
     AnswersSeperatorComponent,
     RecipientSelectorComponent,
-    UserAddComponent,
-    UserAddMessageBoardComponent
 ],
 
   templateUrl: './message-board.component.html',
@@ -54,17 +48,13 @@ export class MessageBoardComponent {
   channelMembers: string[] = [];
   channelsData: any[] = [];
   channelsDataLength: number = 0;
-  showModal = false;
-  showModalUserEdit = false;
-  showUserInfo: boolean = false;
-  showUserAddInfo: boolean = false;
-
   channels: any[] = [];
 
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
   loginService: LoginService = inject(LoginService);
+  modalService: ModalService = inject(ModalService);
 
   messages: Message[] = [];
   threadMessages: Message[] = [];
@@ -77,6 +67,22 @@ export class MessageBoardComponent {
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
+
+  private subscription: Subscription = new Subscription();
+
+  constructor() {
+    this.subscription.add(
+      this.modalService.channelName$.subscribe(newName => {
+        this.channelName = newName;
+      })
+    );
+
+    this.subscription.add(
+      this.modalService.channelDescription$.subscribe(newDescription => {
+        this.channelDescription = newDescription;
+      })
+    );
+  }
   
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
@@ -90,6 +96,9 @@ export class MessageBoardComponent {
           this.channelMembers = channel.members || [];
           this.loadMessages();
           this.isThreadOpen = false;
+          this.modalService.refreshChannelUsers$.subscribe(() => {
+            this.getUserFromChannel();
+          });
           this.getUserFromChannel();
 
           if (this.channelType === 'direct' && channel.members) {
@@ -114,6 +123,7 @@ export class MessageBoardComponent {
     this.channelSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
     this.loadUserSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   get headerTitle() {
@@ -261,22 +271,6 @@ export class MessageBoardComponent {
     this.openTheadWithMessageId(messageId);
   }
 
-  openEditChannel() {
-    this.showModal = true;
-  }
-
-  closeEditChannel() {
-    this.showModal = false;
-  }
-
-  openUserToChannel() {
-    this.showModalUserEdit= true;
-  }
-
-  closeUserToChannel() {
-    this.showModalUserEdit = false;
-  }
-
   getParentMessage(): Message | undefined {
     if (this.parentMessageId) {
       return this.messages.find(message => message.id === this.parentMessageId);
@@ -284,11 +278,15 @@ export class MessageBoardComponent {
     return undefined;
   }
 
-  openUserAddInfos() {
-    this.showUserAddInfo = true;
+  openEditChannel() {
+    this.modalService.openModal('editChannel');
   }
 
-  closeUserAddInfos() {
-    this.showUserAddInfo = false;
+  openAddUserToChannel() {
+    this.modalService.openModal('addUserToChannel');
+  }
+  
+  openUserAddInfos() {
+    this.modalService.openModal('userAdd');
   }
 }
