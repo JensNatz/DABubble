@@ -1,5 +1,5 @@
 import { Injectable, inject, OnDestroy } from '@angular/core';
-import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query, QueryDocumentSnapshot, DocumentData } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query, QueryDocumentSnapshot, DocumentData, arrayUnion } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
 import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { LoginService } from './login-service';
@@ -265,7 +265,17 @@ export class ChannelServiceService implements OnDestroy {
     return membersData;
   }
   
+  private async addUserToChannel(channelId: string, userId: string) {
+    const channelRef = doc(this.firestore, 'channels', channelId);
+    await updateDoc(channelRef, {
+      members: arrayUnion(userId)
+    });
+  }
 
+  async addUserToWelcomeChannel(userId: string) {
+    const welcomeChannelId = 't8O3yiCShX4jTjm9Kanc';
+    await this.addUserToChannel(welcomeChannelId, userId);
+  }
 
   async removeUserFromChannel(channelId: string, userId: string) {
     const channelRef = doc(this.firestore, 'channels', channelId);

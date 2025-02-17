@@ -51,7 +51,7 @@ export class UserServiceService {
     }
   }
 
-  async registerUser(email: string, password: string, userData: Partial<User>): Promise<void> {
+  async registerUser(email: string, password: string, userData: Partial<User>): Promise<string> {
     try {
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
       const firebaseUser = userCredential.user;
@@ -66,7 +66,9 @@ export class UserServiceService {
       };
 
       await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);
+      
       console.log('User registered and added to Firestore:', firebaseUser.uid);
+      return firebaseUser.uid;
     } catch (error) {
       console.error('Error during user registration:', error);
       throw error;
