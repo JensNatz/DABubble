@@ -69,15 +69,32 @@
 }
 
 
+@media (min-width: 701px) and (max-width: 5000px) and (max-height: 640px) {
+    :host {
+        height: 100%;
+    }
+
+    .container {
+        height: 468px;
+        margin-bottom: 100px;
+        margin-top: 100px;
+
+
+    }
+}
+
 @media(max-width:700px){
 
     .container{
         max-width: 400px;
+        
     }
-    .arrow-back{
+    .arrow-back {
+        top: 20px;
         left: 20px;
     }
     .imprint-section{
+        padding-top: 80px;
         padding-left: 20px;
         h2{
             font-size: 32px;
@@ -86,5 +103,19 @@
         h3{
             font-size: 22px;
         }
+    }
+}
+
+@media(max-width:700px) and (max-height: 620px) {
+    :host {
+        height: 100%;
+
+    }
+
+    .container {
+        height: 450px;
+        margin-bottom: 50px;
+
+
     }
 }
