@@ -5,20 +5,22 @@
 
 :host {
     height: 100vh;
-    @include flex(center, center);
+    @include flex(center, center, column);
 }
 
 
 .container {
     position: relative;
-    max-width: 680px;
-    width: 100%;
+    max-width: 680px;    
     height: 468px;
     background-color: $white;
     border-radius: 30px;
+    padding-bottom: 48px;
+    padding-top: 120px;
+    width: calc(100% - 32px);
 }
 
-.arrow-back{
+.arrow-back {
     @include flex(center, center, column);
     width: 40px;
     height: 40px;
@@ -29,10 +31,10 @@
     background-image: url('../../../assets/img/arrow_back.svg');
     background-repeat: no-repeat;
     background-position: center;
-   
 
 
-    &:hover{
+
+    &:hover {
         cursor: pointer;
         background-color: $bg-color;
         border-radius: 30px;
@@ -42,25 +44,34 @@
     }
 }
 
-.privacy-policy-section{
-    padding-top: 120px;
+.privacy-policy-section {
+    
     padding-left: 56px;
-    padding-right: 56px;
+    margin-right: 56px;
     padding-bottom: 48px;
-    width: 100%;
+    
     height: 100%;
     overflow-y: auto;
 
-    h2{
+  
+
+    h1 {
         color: $purple-2;
         font-size: 32px;
         font-weight: 700;
         margin-bottom: 16px;
     }
 
-    h3{
+    h2 {
         color: $purple-2;
-        font-size: 32px;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    h3 {
+        color: $purple-2;
+        font-size: 24px;
         font-weight: 700;
         margin-top: 32px;
         margin-bottom: 16px;
