@@ -27,8 +27,8 @@ p {
 .channel_name_edit {
     display: flex;
     justify-content: space-between;
-    align-items: center; 
-    margin-bottom: 20px;   
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .channel_name {
@@ -75,9 +75,10 @@ p {
     h2 {
         margin-bottom: 20px;
     }
+
     span {
         font-size: 24px;
-        color: $purple-2;       
+        color: $purple-2;
     }
 }
 
@@ -103,7 +104,7 @@ p {
 .channel_name_content_edit {
     margin: 20px 0;
     height: 114px;
-    
+
     p {
         margin-right: 20px;
     }
@@ -116,18 +117,33 @@ input {
     height: 100%;
     background-position: 32px center;
     background-size: 24px 24px;
-    padding: 18px 20px;    
+    padding: 18px 20px;
     border-radius: 100px;
     border: 1px solid $light-purple;
     font-size: 18px;
 
     &:hover {
-        cursor: pointer;    
+        cursor: pointer;
         border: 1px solid $black;
     }
 
     &:focus {
         outline: none;
-        border: 1px solid $purple-1;        
+        border: 1px solid $purple-1;
+    }
+}
+
+.app-add-user-to-channel {
+    display: none;
+    box-sizing: border-box;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgb(173, 176, 217);
+    border-radius: 20px;
+}
+
+@media (max-width: $breakpoint-md) {
+    .app-add-user-to-channel {
+        display: block;
     }
 }

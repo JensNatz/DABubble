@@ -7,14 +7,16 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ModalService } from '../../services/modal.service';
+import { AddUserToChannelComponent } from "../add-user-to-channel/add-user-to-channel.component";
 
 @Component({
   selector: 'app-channel-edit',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
-  ],
+    FormsModule,
+    AddUserToChannelComponent
+],
   templateUrl: './channel-edit.component.html',
   styleUrl: './channel-edit.component.scss'
 })

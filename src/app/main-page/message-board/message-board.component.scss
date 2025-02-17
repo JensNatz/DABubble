@@ -217,20 +217,18 @@
     display: none;
 }
 
-@media (max-width: 770px) {
-    .members_button {
-        display: none;
-    }
-}
-
-@media (max-width: 770px) {
+@media (max-width: $breakpoint-md) {
     .members_button_small {
         display: initial;
         width: 40px;
-    height: 40px;
-    cursor: pointer;
-    margin-right: 15px;
-    display: inline-block;
+        height: 40px;
+        cursor: pointer;
+        margin-right: 15px;
+        display: inline-block;
+    }
+
+    .members_button {
+        display: none;
     }
 }
 
