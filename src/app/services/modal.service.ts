@@ -15,6 +15,13 @@ export class ModalService {
   private refreshChannelUsersSource = new BehaviorSubject<boolean>(false);
   refreshChannelUsers$ = this.refreshChannelUsersSource.asObservable();
 
+  private channelNameSource = new BehaviorSubject<string>('');
+  channelName$ = this.channelNameSource.asObservable();
+
+  private channelDescriptionSource = new BehaviorSubject<string>('');
+  channelDescription$ = this.channelDescriptionSource.asObservable();
+  
+
   openModal(content: string) {
     this.modalContent.next(content);
     this.modalState.next(true);
@@ -27,5 +34,13 @@ export class ModalService {
 
   triggerRefreshChannelUsers() {
     this.refreshChannelUsersSource.next(true);
+  }
+
+  updateChannelName(newName: string) {
+    this.channelNameSource.next(newName);
+  }
+
+  updateChannelDescription(newDescription: string) {
+    this.channelDescriptionSource.next(newDescription);
   }
 }

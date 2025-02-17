@@ -48,12 +48,6 @@ export class MessageBoardComponent {
   channelMembers: string[] = [];
   channelsData: any[] = [];
   channelsDataLength: number = 0;
-  
-  // showModal = false;
-  // showModalUserEdit = false;
-  // showUserInfo: boolean = false;
-  // showUserAddInfo: boolean = false;
-
   channels: any[] = [];
 
   messageService: MessageService = inject(MessageService);
@@ -73,9 +67,21 @@ export class MessageBoardComponent {
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
+  private subscription: Subscription = new Subscription();
 
+  constructor() {
+    this.subscription.add(
+      this.modalService.channelName$.subscribe(newName => {
+        this.channelName = newName;
+      })
+    );
 
-  constructor() {}
+    this.subscription.add(
+      this.modalService.channelDescription$.subscribe(newDescription => {
+        this.channelDescription = newDescription;
+      })
+    );
+  }
   
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
@@ -117,6 +123,7 @@ export class MessageBoardComponent {
     this.channelSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
     this.loadUserSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   get channelTitle() {
