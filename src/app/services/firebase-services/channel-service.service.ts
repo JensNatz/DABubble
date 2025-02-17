@@ -44,14 +44,6 @@ export class ChannelServiceService implements OnDestroy {
     this.cleanUpChannelSubscription();
   }
 
-  // get currentChannel(): Channel | null {
-  //   return this.currentChannelSubject.getValue();
-  // }
-
-  // set currentChannel(channel: Channel | null) {
-  //   this.currentChannelSubject.next(channel);
-  // }
-
   get currentChannelValue(): Channel | null {
     return this.currentChannelSubject.value;
   }
@@ -91,6 +83,12 @@ export class ChannelServiceService implements OnDestroy {
   getChannelById(channelId: string): Observable<Channel> {
     const channelDocRef = doc(this.firestore, `channels/${channelId}`);
     return docData(channelDocRef) as Observable<Channel>;
+  }
+
+  async getChannelByIdOnce(channelId: string): Promise<Channel | null> {
+    const channelDocRef = doc(this.firestore, `channels/${channelId}`);
+    const snapshot = await getDoc(channelDocRef);
+    return snapshot.exists() ? (snapshot.data() as Channel) : null;
   }
 
   async addNewChannel(item: Channel) {

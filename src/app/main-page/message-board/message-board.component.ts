@@ -77,9 +77,6 @@ export class MessageBoardComponent {
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
-
-
-  constructor() {}
   
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {

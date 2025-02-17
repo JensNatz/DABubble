@@ -69,6 +69,11 @@ export class SearchService {
     return parsedContent;
   }
 
+  private async lookUpUsernameById(userId: string) {
+    const user = await this.userService.getUserByIdOnce(userId);
+    return user ? user.name : 'Unknown User';
+  }
+
   private setupUserSubscription() {
     this.subscription.add(
       this.userService.getUsers().subscribe(users => {
