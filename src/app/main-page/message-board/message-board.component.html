@@ -6,16 +6,16 @@
                     <div class="channel-title" [class.hover-effect]="channelType === 'group'">
                         @if (channelType === 'direct') {
                         <app-avatar [avatar]="userAvatar"></app-avatar>
-                        <h2>{{ channelTitle }}</h2>
+                        <h2>{{ headerTitle }}</h2>
                         }
                         @else if (channelType === 'group') {
-                        <div class="channel_title" (click)="openEditChannel()" *ngIf="channelTitle">
+                        <div class="channel_title" (click)="openEditChannel()" *ngIf="headerTitle">
                             <b>#</b>
-                            <h2>{{ channelTitle }}</h2>
+                            <h2>{{ headerTitle }}</h2>
                             <img src="assets/img/keyboard_arrow_down.svg">
                         </div>
                         } @else {
-                        <h2>{{ channelTitle }}</h2>
+                        <h2>{{ headerTitle }}</h2>
                         }
                     </div>
                 </div>
@@ -49,7 +49,7 @@
             @if (messages.length === 0) {
             <div class="no-messages-container">
                 @if (channelType === 'group') {
-                <h2>{{channelTitle}}</h2>
+                <h2>{{headerTitle}}</h2>
                 <p *ngIf="channelDescription !== ''" class="channel-description">Thema: {{channelDescription}}</p>
                 <p>Es gibt noch keine Nachrichten in diesem Channel. Schreibe eine erste Nachricht!</p>
                 } @else if (channelType === 'direct') {

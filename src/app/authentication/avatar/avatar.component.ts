@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { User } from '../../models/user';
-import { Route } from '@angular/router';
 import { AccountCreatedSuccessfullyComponent } from "../user-feedback/account-created-successfully/account-created-successfully.component";
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
-
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 
 @Component({
   selector: 'app-avatar',
@@ -18,6 +17,8 @@ import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-he
   styleUrl: './avatar.component.scss'
 })
 export class AvatarComponent {
+
+  channelService = inject(ChannelServiceService);
 
   name: string = '';
   email: string = '';
@@ -77,8 +78,8 @@ export class AvatarComponent {
     };
 
     try {
-      await this.UserServiceService.registerUser(this.email, this.password, newUser);
-      //await this.UserServiceService.addNewUser(newUser);
+      const newUserId = await this.UserServiceService.registerUser(this.email, this.password, newUser);
+      await this.channelService.addUserToWelcomeChannel(newUserId);
 
       this.registrationSuccessful = true;
       setTimeout(() => {

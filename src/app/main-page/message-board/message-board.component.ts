@@ -67,6 +67,7 @@ export class MessageBoardComponent {
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
   private loadUserSubscription: Subscription = new Subscription();
+
   private subscription: Subscription = new Subscription();
 
   constructor() {
@@ -125,7 +126,7 @@ export class MessageBoardComponent {
     this.subscription.unsubscribe();
   }
 
-  get channelTitle() {
+  get headerTitle() {
     if (this.channelType === 'direct') {
       return this.directMessagePartnerName;
     } else if (this.channelType === 'group') {
@@ -288,6 +289,4 @@ export class MessageBoardComponent {
   openUserAddInfos() {
     this.modalService.openModal('userAdd');
   }
-  
-
 }

@@ -61,6 +61,23 @@ export class WorkspaceMenuComponent {
     });
   }
 
+  isActiveGroupChannel(channel: Channel): boolean {
+    if (channel.type !== 'group') return false;
+    return channel.id === this.activeChannel?.id;
+  }
+
+  isActiveDirectMessageChannel(userId: string): boolean {
+    if (this.activeChannel?.type !== 'direct') return false;
+    return this.activeChannel?.members?.length === 2 &&
+    this.activeChannel?.members?.includes(userId);
+  }
+
+  isActivePersonalMessageChannel(): boolean {
+    if (this.activeChannel?.type !== 'direct' || !this.loggedInUser?.id) return false;
+    return this.activeChannel?.members?.length === 1 &&
+    this.activeChannel?.members?.includes(this.loggedInUser?.id);
+  }
+
   loadChannels() {
     const userId = this.loginService.currentUserValue?.id;
     if (!userId) return;
@@ -69,49 +86,41 @@ export class WorkspaceMenuComponent {
     });
   }
 
-
   async loadUsers() {
     const users = await firstValueFrom(this.userService.getUsers());
     this.otherUsers = users.filter(user => user.id !== this.loginService.currentUserValue?.id);
   }
 
-
   openAddChannel() {
     this.showModal = true;
   }
-
 
   closeAddChannel() {
     this.showModal = false;
   }
 
-
   toggleMenuChannel() {
     this.isOpenChannelListe = !this.isOpenChannelListe;
   }
-
 
   toggleMenuUser() {
     this.isOpenUserListe = !this.isOpenUserListe;
   }
 
-
   switchToGroupChannel(channel: Channel) {
-    if (this.channelService.currentChannel?.id !== channel.id) {
-      this.channelService.currentChannel = channel;
+    if (this.channelService.currentChannelValue?.id !== channel.id) {
+      this.channelService.setCurrentChannel(channel);
       this.messageboardService.openMessageBoard();
     }
   }
-
 
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
     this.messageboardService.openMessageBoard();
   }
-
   
   onNewMessageClick() {
-    this.channelService.currentChannel = null;
+    this.channelService.clearCurrentChannel();
     this.messageboardService.openMessageBoard();
   }
 }

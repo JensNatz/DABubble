@@ -1,27 +1,26 @@
-import { Injectable, inject } from '@angular/core';
-import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query, QueryDocumentSnapshot, DocumentData } from '@angular/fire/firestore';
+import { Injectable, inject, OnDestroy } from '@angular/core';
+import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, getDoc, getDocs, where, query, QueryDocumentSnapshot, DocumentData, arrayUnion } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel';
 import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { LoginService } from './login-service';
 import { Message } from '../../models/message';
-import { filter, take } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChannelServiceService {
+export class ChannelServiceService implements OnDestroy {
 
   id: string = '';
   channels;
   users;
 
   firestore: Firestore = inject(Firestore);
-
   loginService: LoginService = inject(LoginService);
 
-  private channelNameCache = new Map<string, string>();
   private currentChannelSubject = new BehaviorSubject<Channel | null>(null);
   currentChannel$ = this.currentChannelSubject.asObservable();
+  private currentChannelSubscription: Subscription = new Subscription();
 
   messageRendered = new Subject<string>();
 
@@ -30,27 +29,41 @@ export class ChannelServiceService {
   constructor() {
     this.channels = collectionData(this.getChannelsRef());
     this.users = collectionData(this.getUsersRef());
-    //TODO: einen Start Channel setzen
-    // this.currentChannelSubject.next({
-    //   name: 'Test Channel',
-    //   description: 'This is a test channel',
-    //   id: '9kacAebjb6GEQZJC7jFL',
-    //   members: ['HYyPBoR4IaheDog70se4', 'YAJxDG5vwYHoCbYjwFhb', 'ZqmYwvCFAQ1xHQf1ZRKy']
-    // });
   }
 
-  get currentChannel(): Channel | null {
-    return this.currentChannelSubject.getValue();
+  ngOnDestroy() {
+    this.cleanUpChannelSubscription();
   }
 
-  set currentChannel(channel: Channel | null) {
-    this.currentChannelSubject.next(channel);
+  get currentChannelValue(): Channel | null {
+    return this.currentChannelSubject.value;
+  }
+
+  private cleanUpChannelSubscription() {
+    if (this.currentChannelSubscription) {
+      this.currentChannelSubscription.unsubscribe();
+    }
+  }
+
+  clearCurrentChannel() {
+    this.cleanUpChannelSubscription();
+    this.currentChannelSubject.next(null);
+  }
+
+  setCurrentChannel(channel: Channel) {
+    if (channel.id) {
+      this.setCurrentChannelById(channel.id); 
+    }
   }
 
   setCurrentChannelById(channelId: string) {
-    this.getChannelById(channelId).subscribe(channel => {
-      this.currentChannelSubject.next(channel);
-    });
+    this.cleanUpChannelSubscription();
+    this.currentChannelSubscription = docData(doc(this.firestore, `channels/${channelId}`))
+      .subscribe(channelData => {
+        if (channelData) {
+          this.currentChannelSubject.next({ id: channelId, ...channelData } as Channel);
+        }
+      });
   }
 
   getAllChannelsFromDatabase() {
@@ -61,6 +74,12 @@ export class ChannelServiceService {
   getChannelById(channelId: string): Observable<Channel> {
     const channelDocRef = doc(this.firestore, `channels/${channelId}`);
     return docData(channelDocRef) as Observable<Channel>;
+  }
+
+  async getChannelByIdOnce(channelId: string): Promise<Channel | null> {
+    const channelDocRef = doc(this.firestore, `channels/${channelId}`);
+    const snapshot = await getDoc(channelDocRef);
+    return snapshot.exists() ? (snapshot.data() as Channel) : null;
   }
 
   async addNewChannel(item: Channel) {
@@ -91,15 +110,10 @@ export class ChannelServiceService {
   }
 
   async getChannelNameById(channelId: string): Promise<string | null> {
-    if (this.channelNameCache.has(channelId)) {
-      return this.channelNameCache.get(channelId)!;
-    }
-
     const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
     const channelName = channelDoc.data()?.[`name`];
 
     if (channelName) {
-      this.channelNameCache.set(channelId, channelName);
       return channelName;
     }
 
@@ -141,10 +155,10 @@ export class ChannelServiceService {
 
     if (!channels.empty) {
       const existingChannel = this.getDirectChannelData(channels.docs[0]);
-      this.currentChannel = existingChannel;
+      this.setCurrentChannel(existingChannel);
     } else {
       const newChannel = await this.createNewDirectMessageChannel(members);
-      this.currentChannel = newChannel;
+      this.setCurrentChannel(newChannel);
     }
   }
 
@@ -250,7 +264,17 @@ export class ChannelServiceService {
 }
 
   
+  private async addUserToChannel(channelId: string, userId: string) {
+    const channelRef = doc(this.firestore, 'channels', channelId);
+    await updateDoc(channelRef, {
+      members: arrayUnion(userId)
+    });
+  }
 
+  async addUserToWelcomeChannel(userId: string) {
+    const welcomeChannelId = 't8O3yiCShX4jTjm9Kanc';
+    await this.addUserToChannel(welcomeChannelId, userId);
+  }
 
   async removeUserFromChannel(channelId: string, userId: string) {
     const channelRef = doc(this.firestore, 'channels', channelId);

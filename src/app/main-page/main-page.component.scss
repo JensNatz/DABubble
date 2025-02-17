@@ -31,6 +31,7 @@
 
         &.closed {
             width: 0;
+            margin-left: -20px;
         }
 
         @media (max-width: $breakpoint-lg) {
@@ -53,11 +54,11 @@
             bottom: 0;
             height: calc(100vh - 94px);
             transition: transform 0.125s ease;
-        }
 
-        &.show {
-            transform: translateX(0);
-        }
+            &.show {
+                transform: translateX(0);
+            }
+        }   
     }
 }
 
