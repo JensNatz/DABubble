@@ -144,5 +144,26 @@ h1 {
 
 .modal-channel {
     left: 385px;
-    border-top-left-radius: 0%;    
+    border-top-left-radius: 0%;
+}
+
+@media (max-width: $breakpoint-md) {
+    .modal-users {
+        top: 373px;
+        left: 50%;
+        width: 90%;
+        transform: translate(-50%, -50%);
+    }
+
+    .close_button {
+        top: 30px;
+        right: 20px;
+    }
+}
+
+@media (max-width: $breakpoint-sm) {
+    .modal-users {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
