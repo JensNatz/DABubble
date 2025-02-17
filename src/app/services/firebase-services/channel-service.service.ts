@@ -16,10 +16,8 @@ export class ChannelServiceService implements OnDestroy {
   users;
 
   firestore: Firestore = inject(Firestore);
-
   loginService: LoginService = inject(LoginService);
 
-  private channelNameCache = new Map<string, string>();
   private currentChannelSubject = new BehaviorSubject<Channel | null>(null);
   currentChannel$ = this.currentChannelSubject.asObservable();
   private currentChannelSubscription: Subscription = new Subscription();
@@ -31,13 +29,6 @@ export class ChannelServiceService implements OnDestroy {
   constructor() {
     this.channels = collectionData(this.getChannelsRef());
     this.users = collectionData(this.getUsersRef());
-    //TODO: einen Start Channel setzen
-    // this.currentChannelSubject.next({
-    //   name: 'Test Channel',
-    //   description: 'This is a test channel',
-    //   id: '9kacAebjb6GEQZJC7jFL',
-    //   members: ['HYyPBoR4IaheDog70se4', 'YAJxDG5vwYHoCbYjwFhb', 'ZqmYwvCFAQ1xHQf1ZRKy']
-    // });
   }
 
   ngOnDestroy() {
@@ -119,15 +110,10 @@ export class ChannelServiceService implements OnDestroy {
   }
 
   async getChannelNameById(channelId: string): Promise<string | null> {
-    if (this.channelNameCache.has(channelId)) {
-      return this.channelNameCache.get(channelId)!;
-    }
-
     const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
     const channelName = channelDoc.data()?.[`name`];
 
     if (channelName) {
-      this.channelNameCache.set(channelId, channelName);
       return channelName;
     }
 
