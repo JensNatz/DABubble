@@ -19,7 +19,6 @@ import { ModalService } from '../../services/modal.service';
   imports: [
     FormsModule,
     CommonModule,
-    MessageBoardComponent,
     AddUserToChannelComponent
   ],
   templateUrl: './user-add.component.html',
@@ -46,10 +45,7 @@ export class UserAddComponent {
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor(
-    private messageBoard: MessageBoardComponent,
-    private addUserComponent: AddUserToChannelComponent
-  ) {
+  constructor( private addUserComponent: AddUserToChannelComponent ) {
     this.userSubscription.add(
       this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
@@ -103,9 +99,10 @@ export class UserAddComponent {
         this.channelService.editChannelMembers(this.channelId, updatedMembers);
         this.modalServe.triggerRefreshChannelUsers();
         this.addUserComponent.getUserFromChannel();
-
         if (this.closeUserAddInfos) {
           this.closeUserAddInfos();
+        } else {
+          this.modalServe.closeModal();
         }
         this.errorMessage = '';
       });

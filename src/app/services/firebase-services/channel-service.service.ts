@@ -222,20 +222,33 @@ export class ChannelServiceService {
     });
   }
 
-  
+
   async getMembersOfChannelWithDetails(channelId: string) {
+    if (!channelId) {
+        return [];
+    }
     const channelDoc = await getDoc(doc(this.firestore, 'channels', channelId));
+    if (!channelDoc.exists()) {
+        return [];
+    }
     const memberIds: string[] = channelDoc.data()?.['members'] || [];
 
-    if (memberIds.length === 0) return [];
+    if (memberIds.length === 0) {
+        return [];
+    }
     const userDocs = await Promise.all(
-      memberIds.map(userId => getDoc(doc(this.firestore, 'users', userId)))
+        memberIds.map(async (userId) => {
+            if (!userId) {
+                return null;
+            }
+            const userDoc = await getDoc(doc(this.firestore, 'users', userId));
+            return userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null;
+        })
     );
-    const membersData = userDocs
-      .map(userDoc => userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null)
-      .filter(user => user !== null);
+    const membersData = userDocs.filter((user) => user !== null) as { id: string; [key: string]: any }[];
     return membersData;
-  }
+}
+
   
 
 
