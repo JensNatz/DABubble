@@ -5,7 +5,7 @@
 
 :host {
     height: 100vh;
-    @include flex(center, center);
+    @include flex(center, center,column);
 }
 
 
@@ -16,6 +16,7 @@
     height: 468px;
     background-color: $white;
     border-radius: 30px;
+    width: calc(100% - 32px);
 }
 
 .arrow-back{
@@ -64,5 +65,26 @@
         font-weight: 700;
         margin-top: 32px;
         margin-bottom: 16px;
+    }
+}
+
+
+@media(max-width:700px){
+
+    .container{
+        max-width: 400px;
+    }
+    .arrow-back{
+        left: 20px;
+    }
+    .imprint-section{
+        padding-left: 20px;
+        h2{
+            font-size: 32px;
+        }
+
+        h3{
+            font-size: 22px;
+        }
     }
 }
