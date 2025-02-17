@@ -147,3 +147,35 @@ input {
         display: block;
     }
 }
+
+@media (max-width: $breakpoint-sm) {
+    input {
+        font-size: 16px;
+    }
+
+    .channel_create_von {
+        h2 {
+            margin-bottom: 15px;
+        }
+    
+        span {
+            font-size: 18px;
+        }
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+    
+    h2 {
+        font-size: 16px;
+    }
+    
+    span {
+        font-size: 16px;
+    }
+    
+    p {
+        font-size: 16px;        
+    }
+}
