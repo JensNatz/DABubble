@@ -48,6 +48,7 @@ export class MessageBoardComponent {
   channelMembers: string[] = [];
   channelsData: any[] = [];
   channelsDataLength: number = 0;
+  
   showModal = false;
   showModalUserEdit = false;
   showUserInfo: boolean = false;
@@ -262,9 +263,9 @@ export class MessageBoardComponent {
     this.openTheadWithMessageId(messageId);
   }
 
-  openEditChannel() {
-    this.showModal = true;
-  }
+  // openEditChannel() {
+  //   this.showModal = true;
+  // }
 
   closeEditChannel() {
     this.showModal = false;
@@ -289,6 +290,10 @@ export class MessageBoardComponent {
 
   closeUserAddInfos() {
     this.showUserAddInfo = false;
+  }
+
+  openEditChannel() {
+    this.modalService.openModal('editChannel');
   }
 
   openAddUserToChannel() {

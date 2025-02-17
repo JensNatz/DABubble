@@ -8,6 +8,7 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { Subscription } from 'rxjs';
 import { AddUserToChannelComponent } from '../add-user-to-channel/add-user-to-channel.component';
 import { UserAddComponent } from "../user-add/user-add.component";
+import { ChannelEditComponent } from "../channel-edit/channel-edit.component";
 
 @Component({
   selector: 'app-modal-user-add',
@@ -16,7 +17,8 @@ import { UserAddComponent } from "../user-add/user-add.component";
     CommonModule,
     FormsModule,
     AddUserToChannelComponent,
-    UserAddComponent
+    UserAddComponent,
+    ChannelEditComponent
 ],
   templateUrl: './modal-user-add.component.html',
   styleUrl: './modal-user-add.component.scss'

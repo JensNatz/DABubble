@@ -9,3 +9,8 @@
     <img class="close_button" src="assets/img/close.svg" (click)="closeModal()">
     <app-user-add [channelId]="channelId" [channelName]="channelName"></app-user-add>
 </div>
+
+<div class="modal modal-channel" *ngIf="modalContent === 'editChannel'">
+    <img class="close_button" src="assets/img/close.svg" (click)="closeModal()">
+    <app-channel-edit [channelId]="channelId"></app-channel-edit>
+</div>

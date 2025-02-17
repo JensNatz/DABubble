@@ -5,6 +5,7 @@ import { MessageBoardComponent } from '../../main-page/message-board/message-boa
 import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { Output, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-channel-edit',
@@ -21,9 +22,9 @@ import { Output, EventEmitter } from '@angular/core';
 export class ChannelEditComponent {
 
   @Input() channelId: string = '';
-  @Input() channelName: string = '';
-  @Input() channelCreator: any = '';
-  @Input() channelDescription: string = '';
+ channelName: string = '';
+  channelCreator: any = '';
+   channelDescription: string = '';
   @Input() closeFunction!: () => void;
 
   @Output() channelNameChanged = new EventEmitter<string>();
@@ -42,6 +43,20 @@ export class ChannelEditComponent {
   channelService: ChannelServiceService = inject(ChannelServiceService);
   messageBoard: MessageBoardComponent = inject(MessageBoardComponent);
   loginService: LoginService = inject(LoginService);
+
+   private channelSubscription: Subscription = new Subscription();
+
+  ngOnInit() {
+    this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
+      if (channel?.id) {
+        this.channelId = channel.id;
+        this.channelName = channel.name;
+        this.channelCreator = channel.creator;
+        this.channelDescription = channel.description;
+        this.channelName = channel.name;      
+      }
+    });
+  }
 
 
   openNameEdit() {
@@ -93,5 +108,9 @@ export class ChannelEditComponent {
   channelLeave() {    
     this.channelService.removeUserFromChannel(this.channelId, this.currentUserId); 
     this.closeFunction();
+  }
+
+  ngOnDestroy() {
+    this.channelSubscription.unsubscribe();
   }
 }
