@@ -30,3 +30,43 @@
         }
     }
 }
+
+@media (min-width: 701px) and (max-width: 5000px)and (max-height: 900px){
+    :host{
+        bottom: 10px;
+    }
+
+}
+
+@media(max-width:700px) {
+
+    :host{
+        bottom: 10px;
+    }
+
+}
+
+@media(max-width:700px) and (max-height: 840px){
+    :host{
+        bottom: 0px;
+    }
+
+    .legal-infomation-link{
+        font-size: 14px;
+    }
+
+}
+
+@media(max-width:700px) and (max-height: 775px){
+    .legal-infomation-link{
+        a{
+            height: 25px;
+        }
+    }
+}
+
+@media(max-width: 400px){
+    .legal-infomation-link{
+        gap: 0px;
+    }
+}

@@ -4,6 +4,7 @@ import { WorkspaceMenuComponent } from './workspace-menu/workspace-menu.componen
 import { MessageBoardComponent } from './message-board/message-board.component';
 import { CommonModule } from '@angular/common';
 import { MessageboardService } from '../services/messageboard.service';
+import { LoginService } from '../services/firebase-services/login-service';
 import { ModalUserAddComponent } from '../shared/modal-user-add/modal-user-add.component';
 import { ModalService } from '../services/modal.service';
 import { Subscription } from 'rxjs';
@@ -29,6 +30,7 @@ import { AddUserToChannelComponent } from '../shared/add-user-to-channel/add-use
 export class MainPageComponent implements OnDestroy {  
 
   messageboardService: MessageboardService = inject(MessageboardService);
+  loginService: LoginService = inject(LoginService);
   isMenuOpen = true;
   isMessageBoardOpen = false;
 

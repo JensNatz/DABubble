@@ -6,6 +6,7 @@ import { User } from '../../models/user';
 import { UserServiceService } from './user-service.service';
 import { Router } from '@angular/router';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,6 +37,26 @@ export class LoginService {
   public get currentUserValue(): User | null {
     return this.currentUserSubject.value;
   }
+
+  async getCurrentUserAsync(): Promise<User | null> {
+    return new Promise((resolve) => {
+      onAuthStateChanged(this.auth, async (firebaseUser) => {
+        if (firebaseUser) {
+          const userDoc = await this.userService.getSingleUser('users', firebaseUser.uid);
+          const userSnapshot = await getDoc(userDoc);
+          if (userSnapshot.exists()) {
+            const userData = userSnapshot.data() as User;
+            resolve(userData);
+          } else {
+            resolve(null);
+          }
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+
 
   async login(email: string, password: string): Promise<void> {
     try {
@@ -73,6 +94,7 @@ export class LoginService {
     } catch (error) {     
     }
   }
+
   editUserName(userId: string, name: string) {
     const userRef = doc(this.firestore, 'users', userId);
     updateDoc(userRef, {
@@ -98,3 +120,4 @@ export class LoginService {
     }
   }
 }
+

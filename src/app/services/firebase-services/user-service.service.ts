@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, serverTimestamp, doc, setDoc, updateDoc, docData, where, getDocs, } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, setDoc, updateDoc, docData, getDoc } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
 import { confirmPasswordReset, createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, verifyPasswordResetCode } from '@angular/fire/auth';
@@ -30,10 +30,15 @@ export class UserServiceService {
     return collectionData(q, { idField: 'id' }) as Observable<User[]>;
   }
 
- 
   getUserById(userId: string): Observable<User> {
     const userDocRef = doc(this.firestore, `users/${userId}`);
     return docData(userDocRef) as Observable<User>;
+  }
+
+  async getUserByIdOnce(userId: string): Promise<User | null> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    const snapshot = await getDoc(userDocRef);
+    return snapshot.exists() ? (snapshot.data() as User) : null;
   }
 
   async addNewUser(item: User) {
@@ -46,7 +51,7 @@ export class UserServiceService {
     }
   }
 
-  async registerUser(email: string, password: string, userData: Partial<User>): Promise<void> {
+  async registerUser(email: string, password: string, userData: Partial<User>): Promise<string> {
     try {
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
       const firebaseUser = userCredential.user;
@@ -61,7 +66,9 @@ export class UserServiceService {
       };
 
       await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);
+      
       console.log('User registered and added to Firestore:', firebaseUser.uid);
+      return firebaseUser.uid;
     } catch (error) {
       console.error('Error during user registration:', error);
       throw error;

@@ -8,9 +8,20 @@ import { RestePasswordEmailComponent } from './authentication/reset-password/res
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { PrivacyPolicyComponent } from './legal-information/privacy-policy/privacy-policy.component';
 import { DaBubbleAnimationComponent } from './shared/da-bubble-animation/da-bubble-animation.component';
+import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
 
 export const routes: Routes = [
-  { path: '', component: AuthenticationComponent },
+  { 
+    path: '', 
+    component: AuthenticationComponent,
+    resolve: {
+      platformCheck: () => isPlatformBrowser(PLATFORM_ID)
+    }
+  },
   { path: 'register', component: RegisterComponent },
   { path: 'register/avatar', component: AvatarComponent },
   { path: 'resetpw-email', component: RestePasswordEmailComponent },
@@ -18,7 +29,9 @@ export const routes: Routes = [
   { path: 'animation', component: DaBubbleAnimationComponent },
   {
     path: 'chat',
-    component: MainPageComponent
+    component: MainPageComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
   {
     path: 'imprint',

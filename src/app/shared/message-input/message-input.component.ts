@@ -7,7 +7,6 @@ import { TagSelectionListComponent } from '../tag-selection-list/tag-selection-l
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { MentionComponent } from '../mention/mention.component';
 import { MessagePart } from '../../models/message-part';
-import { Subscription } from 'rxjs';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { ButtonComponent } from '../button/button.component';
 @Component({
@@ -17,10 +16,9 @@ import { ButtonComponent } from '../button/button.component';
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
-export class MessageInputComponent implements AfterViewInit, OnDestroy {
+export class MessageInputComponent implements AfterViewInit {
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
-  private channelSubscription: Subscription;
 
   @ViewChild('messageInput', { read: ViewContainerRef }) messageInput!: ViewContainerRef;
 
@@ -45,17 +43,10 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
     if (this.messageInput) {
       this.focusOnInput();
     }
-    this.channelSubscription = this.channelService.currentChannel$.subscribe({});
-  }
-
-  ngOnDestroy() {
-    if (this.channelSubscription) {
-      this.channelSubscription.unsubscribe();
-    }
   }
 
   ngOnChanges() {
-    if (this.channelService.currentChannel === null) {
+    if (this.channelService.currentChannelValue === null) {
       this.isTaggingDisabled = true;
     } else {
       this.isTaggingDisabled = false;
@@ -116,7 +107,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   get isSendButtonDisabled(): boolean {
-    if (this.channelService.currentChannel === null) {
+    if (this.channelService.currentChannelValue === null) {
       return true;
     }
     const inputElement = this.messageInput?.element.nativeElement;
@@ -282,7 +273,7 @@ export class MessageInputComponent implements AfterViewInit, OnDestroy {
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    if (this.channelService.currentChannel === null) {
+    if (this.channelService.currentChannelValue === null) {
       return;
     }
     if (event.key === 'Enter') {
