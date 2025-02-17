@@ -97,7 +97,6 @@ export class MessageBoardComponent {
           this.isThreadOpen = false;
           this.modalService.refreshChannelUsers$.subscribe(() => {
             this.getUserFromChannel();
-            this.updateChannelName(this.channelName);
           });
           this.getUserFromChannel();
 

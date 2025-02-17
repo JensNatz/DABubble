@@ -41,7 +41,7 @@ export class ChannelEditComponent {
   tempChannelName: string = this.channelName;
   tempChannelDescription: string = this.channelDescription;
   currentUserId: any = '';
-  
+
   channelService: ChannelServiceService = inject(ChannelServiceService);
   messageBoard: MessageBoardComponent = inject(MessageBoardComponent);
   loginService: LoginService = inject(LoginService);
@@ -50,13 +50,16 @@ export class ChannelEditComponent {
   private channelSubscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
+    this.loadChannelData();
+  }
+
+  loadChannelData() {
+    this.channelSubscription = this.channelService.currentChannel$.subscribe(async (channel) => {
       if (channel?.id) {
         this.channelId = channel.id;
         this.channelName = channel.name;
         this.channelCreator = channel.creator;
-        this.channelDescription = channel.description;
-        this.channelName = channel.name;
+        this.channelDescription = channel.description; 
       }
     });
   }
@@ -71,6 +74,10 @@ export class ChannelEditComponent {
     this.channelEdit = true;
   }
 
+  updateChannelDescription(newDescription: string) {
+    this.channelDescription = newDescription;
+    this.channelDescriptionChanged.emit(newDescription);
+  }
 
   getCurrentUserData() {
     this.loginService.currentUser.subscribe(user => {
@@ -103,8 +110,9 @@ export class ChannelEditComponent {
       this.channelEdit = false;
       this.channelService.editChannelDescription(this.channelId, newDescription);
       this.modalService.updateChannelDescription(newDescription);
+      this.channelDescriptionChanged.emit(newDescription); // Emit description change
     } catch (error) {
-      console.error('Fehler beim Aktualisieren des Namens:', error);
+      console.error('Fehler beim Aktualisieren der Beschreibung:', error);
     }
   }
   
