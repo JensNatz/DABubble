@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-channel-edit',
@@ -22,13 +23,14 @@ import { Subscription } from 'rxjs';
 export class ChannelEditComponent {
 
   @Input() channelId: string = '';
- channelName: string = '';
+  channelName: string = '';
   channelCreator: any = '';
-   channelDescription: string = '';
+  channelDescription: string = '';
   @Input() closeFunction!: () => void;
 
   @Output() channelNameChanged = new EventEmitter<string>();
   @Output() channelDescriptionChanged = new EventEmitter<string>();
+  
 
   constructor() {
     this.getCurrentUserData();
@@ -43,8 +45,9 @@ export class ChannelEditComponent {
   channelService: ChannelServiceService = inject(ChannelServiceService);
   messageBoard: MessageBoardComponent = inject(MessageBoardComponent);
   loginService: LoginService = inject(LoginService);
+  modalServe = inject(ModalService);
 
-   private channelSubscription: Subscription = new Subscription();
+  private channelSubscription: Subscription = new Subscription();
 
   ngOnInit() {
     this.channelSubscription = this.channelService.currentChannel$.subscribe(async channel => {
@@ -53,7 +56,7 @@ export class ChannelEditComponent {
         this.channelName = channel.name;
         this.channelCreator = channel.creator;
         this.channelDescription = channel.description;
-        this.channelName = channel.name;      
+        this.channelName = channel.name;
       }
     });
   }
@@ -72,11 +75,11 @@ export class ChannelEditComponent {
   getCurrentUserData() {
     this.loginService.currentUser.subscribe(user => {
       if (user) {
-        this.currentUserId = user.id;        
+        this.currentUserId = user.id;
       }
     })
   }
-  
+
 
   saveNewChannelName(newName: string) {
     if (!newName.trim()) return;
@@ -84,8 +87,8 @@ export class ChannelEditComponent {
       this.channelName = newName;
       this.tempChannelName = newName;
       this.nameEdit = false;
-      this.channelService.editChannelName(this.channelId, newName);      
-      this.channelNameChanged.emit(newName);
+      this.channelService.editChannelName(this.channelId, newName);
+      this.channelNameChanged.emit(newName);      
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Namens:', error);
     }
@@ -93,7 +96,7 @@ export class ChannelEditComponent {
 
 
   saveNewChannelDescription(newDescription: string) {
-    if (!newDescription.trim()) return; 
+    if (!newDescription.trim()) return;
     try {
       this.channelDescription = newDescription;
       this.tempChannelDescription = newDescription;
@@ -102,11 +105,11 @@ export class ChannelEditComponent {
       this.channelDescriptionChanged.emit(newDescription);
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Namens:', error);
-    }     
+    }
   }
 
-  channelLeave() {    
-    this.channelService.removeUserFromChannel(this.channelId, this.currentUserId); 
+  channelLeave() {
+    this.channelService.removeUserFromChannel(this.channelId, this.currentUserId);
     this.closeFunction();
   }
 

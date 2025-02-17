@@ -49,10 +49,10 @@ export class MessageBoardComponent {
   channelsData: any[] = [];
   channelsDataLength: number = 0;
   
-  showModal = false;
-  showModalUserEdit = false;
-  showUserInfo: boolean = false;
-  showUserAddInfo: boolean = false;
+  // showModal = false;
+  // showModalUserEdit = false;
+  // showUserInfo: boolean = false;
+  // showUserAddInfo: boolean = false;
 
   channels: any[] = [];
 
@@ -91,6 +91,7 @@ export class MessageBoardComponent {
           this.isThreadOpen = false;
           this.modalService.refreshChannelUsers$.subscribe(() => {
             this.getUserFromChannel();
+            this.updateChannelName(this.channelName);
           });
           this.getUserFromChannel();
 
@@ -263,33 +264,11 @@ export class MessageBoardComponent {
     this.openTheadWithMessageId(messageId);
   }
 
-  // openEditChannel() {
-  //   this.showModal = true;
-  // }
-
-  closeEditChannel() {
-    this.showModal = false;
-  }
-
-  openUserToChannel() {
-    this.showModalUserEdit= true;
-  }
-
-  closeUserToChannel() {
-    this.showModalUserEdit = false;
-  }
-
   getParentMessage(): Message | undefined {
     if (this.parentMessageId) {
       return this.messages.find(message => message.id === this.parentMessageId);
     }
     return undefined;
-  }
-
-  
-
-  closeUserAddInfos() {
-    this.showUserAddInfo = false;
   }
 
   openEditChannel() {
