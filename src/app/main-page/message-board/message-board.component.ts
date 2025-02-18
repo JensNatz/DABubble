@@ -42,6 +42,7 @@ export class MessageBoardComponent {
   channelName: string = '';
   channelCreator: any = '';
   userAvatar = '';
+  userOnlineStatus = '';
   channelType: string = '';
   channelDescription: string = '';
   directMessagePartnerName: string = '';
@@ -159,10 +160,12 @@ export class MessageBoardComponent {
       this.userSubscription.unsubscribe();
       this.userSubscription = this.userService.getUserById(otherUserId).subscribe((user: User) => {
         this.userAvatar = user.avatar;
+        this.userOnlineStatus = user.onlineStatusbar;
         this.directMessagePartnerName = user.name;
       });
     } else if (currentUser) {
       this.userAvatar = currentUser.avatar;
+      this.userOnlineStatus = currentUser.onlineStatusbar;
       this.directMessagePartnerName = currentUser.name + ' (Du)';
     }
   }
