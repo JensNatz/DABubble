@@ -4,7 +4,7 @@
 
 :host {
     position: relative;
-    overflow: auto;
+    overflow: hidden;
     height: 100vh;
     @include flex(center, center, column);
 }
