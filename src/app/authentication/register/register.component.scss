@@ -157,16 +157,19 @@ form {
 
     .register-container {
         @include margin-16;
+        max-width: 400px;
+    }
+
+    .headline-section {
+        @include padding-20;
+        width: 100%;
     }
 
 }
 
 @media(max-width:600px) {
 
-    .headline-section {
-        @include padding-20;
-        width: 100%;
-    }
+   
 
     form {
         @include padding-20;
