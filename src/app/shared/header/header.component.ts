@@ -34,6 +34,7 @@ export class HeaderComponent {
   userName: string = '';
   tempUserName: string = '';
   userAvatar: string = '';
+  userOnlineStatus: string = '';
   userEmail: string = '';
   userStatus: string = '';
 
@@ -50,7 +51,7 @@ export class HeaderComponent {
         this.tempUserName = user.name;
         this.userAvatar = user.avatar;
         this.userEmail = user.email;
-        this.userStatus = user.onlineStatusbar;
+        this.userOnlineStatus = user.onlineStatusbar;
       } else {
         this.userAvatar = '0';
       }

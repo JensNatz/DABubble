@@ -12,6 +12,7 @@ export class AvatarComponent {
   @Input() size: 'small' | 'standard' | 'large' = 'standard';
   @Input() avatar: string = '0';
   @Input() border: boolean = false;
+  @Input() onlineStatus: string = '';
   
   
   get avatarImage(): string {

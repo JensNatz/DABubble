@@ -5,7 +5,7 @@
                 <div class="header-left">
                     <div class="channel-title" [class.hover-effect]="channelType === 'group'">
                         @if (channelType === 'direct') {
-                        <app-avatar [avatar]="userAvatar"></app-avatar>
+                        <app-avatar [avatar]="userAvatar" [onlineStatus]="userOnlineStatus"></app-avatar>
                         <h2>{{ headerTitle }}</h2>
                         }
                         @else if (channelType === 'group') {
