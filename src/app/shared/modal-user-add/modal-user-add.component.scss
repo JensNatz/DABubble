@@ -76,7 +76,7 @@ h1 {
     }
 
     span {
-        font-size: clamp(18px, 2.5vw, 24px);
+        font-size: clamp(16px, 2vw, 18px);
     }
 
     &:hover {
@@ -165,7 +165,6 @@ h1 {
     .modal-users {
         top: 373px;
         left: 50%;
-        width: 90%;
         transform: translate(-50%, -50%);
     }
 
@@ -189,5 +188,6 @@ h1 {
     .modal-users {
         padding-left: 20px;
         padding-right: 20px;
+        width: 90%;
     }
 }
