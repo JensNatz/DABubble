@@ -139,6 +139,8 @@
                 }
 
                 .user_from_channels_avatar {
+                    @include flex();
+
                     .avatar {
                         margin-right: -10px;
                     }

@@ -11,6 +11,7 @@ import { User } from '../../models/user';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { firstValueFrom } from 'rxjs';
 import { MessageboardService } from '../../services/messageboard.service';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
@@ -19,7 +20,8 @@ import { MessageboardService } from '../../services/messageboard.service';
     FormsModule,
     AddChannelComponent,
     LoadingIndicatorComponent,
-    AvatarComponent
+    AvatarComponent,
+    TruncatePipe
   ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss'

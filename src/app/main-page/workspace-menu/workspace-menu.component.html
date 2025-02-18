@@ -37,7 +37,7 @@
                     <div class="channel_name" 
                     [class.active]="isActiveGroupChannel(channel)"
                     (click)="switchToGroupChannel(channel)">
-                        <p><b>#</b>{{ channel.name }}</p>
+                        <p><b>#</b>{{ channel.name | truncate: 20 }}</p>
                     </div>
                     }
                 }
