@@ -50,7 +50,7 @@ export class AddChannelComponent {
     })
   }
 
-  onSubmit(ngForm: NgForm) {
+  async onSubmit(ngForm: NgForm) {
     if (ngForm.valid && ngForm.submitted) {
       this.channel = {
         name: this.channel.name,
@@ -60,7 +60,10 @@ export class AddChannelComponent {
         type: 'group'
       }
       
-      this.channelService.addNewChannel(this.channel);
+      const newChannelId = await this.channelService.addNewChannel(this.channel);
+      if (newChannelId) {
+        this.channelService.setCurrentChannelById(newChannelId);
+      }
       this.workSpace.loadChannels();
       this.closeFunction();
     }

@@ -81,7 +81,7 @@
     left: -155px;
     transform: translate(-50%, -50%);
     transform: rotate(270deg);
-    padding: 0 40px;
+    padding: 0 32px;
     height: 48px;
     width: 360px;
     @include rounded($top-left: 0, $top-right: 0, $bottom-left: 30px, $bottom-right: 30px);
@@ -101,8 +101,9 @@
 
     svg {
         transform: rotate(90deg);
-        height: 16px;
-        width: 16px;
+         height: 16px;
+         width: 16px;
+         flex-shrink: 0;
     }
 
     &:hover {
