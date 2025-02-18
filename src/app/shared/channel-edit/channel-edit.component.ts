@@ -121,6 +121,7 @@ export class ChannelEditComponent {
 
   channelLeave() {
     this.channelService.removeUserFromChannel(this.channelId, this.currentUserId);
+    this.channelService.clearCurrentChannel();
     this.closeFunction();
   }
 

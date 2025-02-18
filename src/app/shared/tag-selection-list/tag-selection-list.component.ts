@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { SelectionListComponent } from '../selection-list/selection-list.component';
 import { Subscription } from 'rxjs';
+import { log } from 'console';
 
 @Component({
   selector: 'app-tag-selection-list',
@@ -16,31 +17,15 @@ export class TagSelectionListComponent implements OnChanges {
   @Input() type: 'user' | 'channel' = 'user';
   @Output() tagSelected = new EventEmitter<{ id: string; name: string; type: 'user' | 'channel' }>();
   
-  private currentChannelSubscription: Subscription;
-
   loginService: LoginService = inject(LoginService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserService = inject(UserService);
   tags: any;
 
-  constructor() {
-    this.currentChannelSubscription = this.channelService.currentChannel$.subscribe(() => {
-      if (this.type === 'user') {
-        this.loadTags();
-      }
-    });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges(changes: SimpleChanges) {
     if (changes['type']) {
       this.tags = {};
-      this.loadTags();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.currentChannelSubscription) {
-      this.currentChannelSubscription.unsubscribe();
+      await this.loadTags();
     }
   }
 

@@ -45,6 +45,8 @@ export class MessageInputComponent implements AfterViewInit {
     }
   }
 
+
+
   ngOnChanges() {
     if (this.channelService.currentChannelValue === null) {
       this.isTaggingDisabled = true;
@@ -67,6 +69,19 @@ export class MessageInputComponent implements AfterViewInit {
     }
   }
 
+  get isSendButtonDisabled(): boolean {
+    if (this.channelService.currentChannelValue === null) {
+      return true;
+    }
+    const inputElement = this.messageInput?.element.nativeElement;
+    if (inputElement) {
+      const hasText = !!inputElement.textContent?.trim();
+      const hasMentions = inputElement.getElementsByTagName('app-mention').length > 0;
+      return hasText || hasMentions ? false : true;
+    }
+    return true;
+  }
+
   fillMentionsCacheBasedOnMessageInput(renderedComponents: Array<{ component: any, part: MessagePart }>) {
     renderedComponents.forEach(({ part }) => {
       if (part.type === 'user' || part.type === 'channel') {
@@ -80,8 +95,20 @@ export class MessageInputComponent implements AfterViewInit {
     });
   }
 
+  private updateLastRange() {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      this.lastRange = selection.getRangeAt(0);
+    }
+  }
+
   onInputChange() {
     this.togglePlaceholder();
+    this.updateLastRange();
+  }
+
+  onInputClick() {
+    this.updateLastRange();
   }
 
   togglePlaceholder() {
@@ -104,19 +131,6 @@ export class MessageInputComponent implements AfterViewInit {
       selection?.removeAllRanges();
       selection?.addRange(range);
     }
-  }
-
-  get isSendButtonDisabled(): boolean {
-    if (this.channelService.currentChannelValue === null) {
-      return true;
-    }
-    const inputElement = this.messageInput?.element.nativeElement;
-    if (inputElement) {
-      const hasText = !!inputElement.textContent?.trim();
-      const hasMentions = inputElement.getElementsByTagName('app-mention').length > 0;
-      return hasText || hasMentions ? false : true;
-    }
-    return true;
   }
 
   onCancelEditClick() {
@@ -184,19 +198,29 @@ export class MessageInputComponent implements AfterViewInit {
   } 
 
   private insertMentionIntoInput(componentRef: ComponentRef<MentionComponent>) {
-    if (this.lastRange && this.messageInput.element.nativeElement.contains(this.lastRange.commonAncestorContainer)) {
+    const inputElement = this.messageInput.element.nativeElement;
+    let range: Range;
+
+    if (this.lastRange && inputElement.contains(this.lastRange.commonAncestorContainer)) {
       this.lastRange.insertNode(componentRef.location.nativeElement);
-      this.lastRange.setStartAfter(componentRef.location.nativeElement);
-      this.lastRange.collapse(true);
+      range = this.lastRange;
     } else {
-      this.messageInput.element.nativeElement.appendChild(componentRef.location.nativeElement);
+      inputElement.appendChild(componentRef.location.nativeElement);
+      range = document.createRange();
     }
+
+    range.setStartAfter(componentRef.location.nativeElement);
+    range.collapse(true);
+    
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    this.updateLastRange();
   }
 
   private updateMentionsCache(id: string, name: string, type: 'user' | 'channel') {
     this.mentionsCache.push({ type, content: name, id });
   }
-
 
   onTagSelected(tag: { id: string; name: string; type: 'user' | 'channel' }) {
     if (tag.type === 'user') {
