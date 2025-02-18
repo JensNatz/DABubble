@@ -121,6 +121,7 @@ h1 {
         right: 30px;
         cursor: pointer;
         padding: 10px;
+        z-index: 999;
 
         &:hover {
             background-color: rgba(99, 61, 189, 0.2);
@@ -151,7 +152,6 @@ h1 {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 80%;
         height: 700px;
     }
 }
@@ -179,6 +179,8 @@ h1 {
 
     .user_info {
         width: 90%;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 }
 
