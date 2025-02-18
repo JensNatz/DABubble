@@ -131,7 +131,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 80;
+    z-index: 1001;
 }
 
 .modal {
@@ -164,15 +164,15 @@
 .modal_profil_menu {
     align-items: center;
     justify-content: center;
-    z-index: 99;
+    z-index: 1001;
 }
 
 .modal-overlay-profil {
-    z-index: 100;
+    z-index: 1002;
 }
 
 .modal_profil {
-    z-index: 120;
+    z-index: 1003;
     width: 500px;
     height: 600px;
 }
