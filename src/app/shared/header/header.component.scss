@@ -307,3 +307,30 @@
     gap: 32px;
     margin-top: 35px;
 }
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+@media (max-width: $breakpoint-md) {
+    .modal_profil_menu {
+        top: auto;
+        right: auto; 
+        bottom: 0;
+        width: 100%;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 30px;
+
+        animation: slideUp 0.3s ease-out;
+    }
+    
+}
