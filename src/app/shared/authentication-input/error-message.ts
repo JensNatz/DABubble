@@ -10,6 +10,7 @@ export const ErrorMessages = {
     passwordMinLength: 'Passwort muss mindestens 5 Zeichen lang sein',
     passwordCapitalLetter:'Das Passwort muss mindestens einen Großbuchstaben enthalten',
     passwordSpecialCharacters:'Das Passwort muss mindestens ein Sonderzeichen enthalten',
+    emptyLogin:'Bitte füllen sie die Felder aus!',
     passwordLogin:'Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen',
     passwordNotTheSame:'Passwort stimt nicht überein!',
     dataProtectionRequired: 'Sie müssen der Datenschutzerklärung zustimmen.',

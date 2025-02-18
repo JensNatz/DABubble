@@ -21,7 +21,7 @@ import { DaBubbleAnimationComponent } from "../../shared/da-bubble-animation/da-
   imports: [CommonModule, InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent, DaBubbleAnimationComponent],
   providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss','../shared/responsiv-authentication.scss']
+  styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss', '../shared/responsiv-authentication.scss']
 })
 export class LoginComponent {
   usernameInvalid: boolean | undefined;
@@ -31,11 +31,13 @@ export class LoginComponent {
   emailInvalid: boolean = false;
   passwordInvalid: boolean = false;
   emailErrorMessage: string = ErrorMessages.emailInvalid;
+  emptyErrorMessage: string = ErrorMessages.emptyLogin;
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
   userFound: boolean | undefined = false;
-  
+  emptyLogin: boolean = false;
 
-  constructor(private userService: UserServiceService,private googleAuthService: GoogleAuthenticationService,private loginService: LoginService,private router: Router) {
+
+  constructor(private userService: UserServiceService, private googleAuthService: GoogleAuthenticationService, private loginService: LoginService, private router: Router) {
     this.users = this.userService.getUsers();
   }
 
@@ -45,11 +47,21 @@ export class LoginComponent {
     });
   }
 
+  getErrorMessage(): string {
+    if (this.emptyLogin) {
+      return this.emptyErrorMessage;
+    } else if (this.emailInvalid) {
+      return this.emailErrorMessage;
+    } else if (this.passwordInvalid) {
+      return this.passwordErrorMessage;
+    }
+    return '';
+  }
 
   async guestLogin() {
     try {
       await this.loginService.guestLogin();
-      
+
     } catch (error) {
       console.error('Error during guest login:', error);
     }
@@ -59,15 +71,17 @@ export class LoginComponent {
     this.validateEmail();
     this.validatePassword();
 
-    if (!this.emailInvalid && !this.passwordInvalid) {
+    if (!this.email && !this.password) {
+      this.emptyLogin = true;
+      
+    } else if (!this.emailInvalid && !this.passwordInvalid) {
       try {
         await this.loginService.login(this.email, this.password);
         const userExists = await this.userService.userExists(this.email, this.password);
         if (userExists) {
           console.log('Login erfolgreich');
-          
         } else {
-          this.emailInvalid = true;
+          this.emptyLogin = false;          
           this.passwordInvalid = true;
           this.passwordErrorMessage = ErrorMessages.passwordLogin;
         }
@@ -80,7 +94,6 @@ export class LoginComponent {
       console.log('Formular ist ungültig');
     }
   }
-
 
 
   validateEmail() {
@@ -104,14 +117,14 @@ export class LoginComponent {
   signInWithGoogle() {
     this.googleAuthService.signInWithGoogle();
     this.userFound = true;
-        setTimeout(() => {
-          this.userFound = false;
-          this.router.navigate(['/chat']);
-        }, 2000);
+    setTimeout(() => {
+      this.userFound = false;
+      this.router.navigate(['/chat']);
+    }, 2000);
   }
 
 
-  logout(){
+  logout() {
     this.loginService.logout();
   }
 }
