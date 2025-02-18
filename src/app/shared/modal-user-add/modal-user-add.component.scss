@@ -126,6 +126,7 @@ h1 {
     right: 30px;
     cursor: pointer;
     padding: 10px;
+    z-index: 999;
 
     &:hover {
         background-color: rgba(99, 61, 189, 0.2);
