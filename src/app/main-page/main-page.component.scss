@@ -32,6 +32,15 @@
         &.closed {
             width: 0;
             margin-left: -20px;
+
+            @media (max-width: $breakpoint-lg) {
+                margin-left: -12px;
+            }
+
+            @media (max-width: $breakpoint-md) {
+               width: inherit;
+               margin-left: 0;
+            }
         }
 
         @media (max-width: $breakpoint-lg) {
@@ -83,7 +92,6 @@
     @media (max-width: $breakpoint-md) {
        display: none;
     }
-
 
     h2 {
         font-size: 20px;
