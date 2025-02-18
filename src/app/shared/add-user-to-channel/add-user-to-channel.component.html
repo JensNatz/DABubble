@@ -20,12 +20,12 @@
         @for (userData of channelsData; track $index) {
             <div class="user_name_and_avatar">
                 <div class="user_name_and_avatar" *ngIf="userData.id !== currentUserId; else noClick" (click)="openUserInfos(userData)">
-                    <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
+                    <app-avatar [avatar]="userData['avatar'] " [onlineStatus]="userData.onlineStatusbar" size="small"></app-avatar>                    
                     <span>{{ userData.name }}</span>
                 </div>
                 <ng-template #noClick>
                     <div class="user_name_and_avatar" class="no-click">
-                        <img class="avatar" src="assets/img/avatar{{ userData['avatar'] }}.svg">
+                        <app-avatar [avatar]="userData['avatar']" size="small"></app-avatar>
                         <span>{{ userData.name }}</span>
                     </div>
                 </ng-template>

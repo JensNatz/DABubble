@@ -7,6 +7,7 @@ import { LoginService } from '../../services/firebase-services/login-service';
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { UserInfoComponent } from '../user-info/user-info.component';
 import { UserAddComponent } from "../user-add/user-add.component";
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'app-add-user-to-channel',
@@ -15,7 +16,8 @@ import { UserAddComponent } from "../user-add/user-add.component";
     CommonModule,
     FormsModule,
     UserInfoComponent,
-    UserAddComponent
+    UserAddComponent,
+    AvatarComponent
   ],
   templateUrl: './add-user-to-channel.component.html',
   styleUrls: ['./add-user-to-channel.component.scss']
@@ -75,7 +77,7 @@ export class AddUserToChannelComponent {
       const [currentUser] = this.channelsData.splice(currentUserIndex, 1);
       currentUser.name += " (Du)";
       this.channelsData.unshift(currentUser);
-    }
+    }    
   }
 
 
