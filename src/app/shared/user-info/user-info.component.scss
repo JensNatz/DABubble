@@ -80,6 +80,32 @@ h1 {
     }
 }
 
+.user_status {
+    position: relative;
+    p {
+        margin-left: 32px;
+    }
+}
+
+.online-indicator {    
+    left: 0 !important;
+    width: 20px;
+    height: 20px;  
+    bottom: 3px !important;  
+}
+
+.status-text {
+    font-weight: bold;
+
+    &.online {
+        color: $green;
+    }
+
+    &.offline {
+        color: $gray;
+    }
+}
+
 .button_section {
     width: 100%;
     display: flex;
