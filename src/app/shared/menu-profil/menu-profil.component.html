@@ -6,13 +6,13 @@
     <div class="slide_box">
         <img class="img_slide" src="assets/img/Rectangle 203.svg">
         <div class="logout_profil">
-            <div>
+            <div (click)="openProfil()">
                 <img src="assets/img/account_circle.svg">
-                <span (click)="openProfil()">Profil</span>
+                <span>Profil</span>
             </div>
-            <div>
+            <div (click)="logOut()">
                 <img src="assets/img/logout.svg">
-                <span (click)="logOut()">Log out</span>
+                <span>Log out</span>
             </div>
         </div>
     </div>
