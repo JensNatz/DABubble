@@ -51,6 +51,7 @@ export class AddChannelComponent {
     })
   }
 
+
   async checkChannelExists() {
     if (!this.channel.name.trim()) {
       this.channelExists = false;

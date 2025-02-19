@@ -1,6 +1,6 @@
 <img class="avatar" [ngClass]="[size, border ? 'border' : '']" [src]="avatarImage" (error)="onImageError()" alt="Avatar">
 @if (onlineStatus === 'online') {
-    <div class="online-indicator online"></div>
+    <div class="online-indicator online" [ngClass]="size"></div>
 } @else if (onlineStatus === 'offline') {
-    <div class="online-indicator offline"></div>
+    <div class="online-indicator offline" [ngClass]="size"></div>
 } 

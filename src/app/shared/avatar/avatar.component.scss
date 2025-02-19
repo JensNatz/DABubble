@@ -44,10 +44,19 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
     border: 2px solid $white;
-    background-color: red;
+
+    @media (max-width: $breakpoint-xl) {
+        width: 12px;
+        height: 12px;
+    }
+
+    &.small {
+        width: 12px;
+        height: 12px;
+    }
 
     &.online {
         background-color: $green;
