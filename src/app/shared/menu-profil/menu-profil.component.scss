@@ -1,0 +1,75 @@
+@import '../../../styles.scss';
+@import './../avatar/avatar.component.scss';
+
+.menu_profil_content {
+    font-size: 24px;
+    font-weight: 700;
+
+    span {
+        cursor: pointer;
+    }
+}
+
+.profile_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.slide_box {
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 14px;
+
+    span {
+        font-weight: 400 !important;
+    }
+
+    div {
+        cursor: pointer;
+    }
+}
+
+.img_slide {
+    margin-bottom: 15px;
+}
+
+.logout_profil {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    img {
+        margin-left: 60px;
+        margin-right: 15px;
+    }
+
+    div {
+        display: flex;
+        align-items: center;
+    }
+
+    > div:first-child {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: $breakpoint-md) {
+    
+
+    .profile_box {
+        display: none;
+    }
+
+    .slide_box {
+        visibility: initial;
+    }
+
+
+   
+}
