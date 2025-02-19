@@ -26,13 +26,11 @@ h1 {
 
 .user_name_status {
     h2 {
-        font-size: clamp(18px, 3vw, 32px);
+        font-size: clamp(20px, 2vw, 24px);
         font-weight: 700;
     }
 
-    p {
-        font-size: clamp(18px, 2.5vw, 20px);
-    }
+    
 }
 
 .email_addresse {
@@ -68,15 +66,32 @@ h1 {
     margin-top: 10px;
     margin-bottom: 15px;
     width: 100%;
+}
 
-    span {
-        font-size: clamp(16px, 2vw, 18px);
-        color: $purple-2;
-        font-weight: 400;
+.user_status {
+    position: relative;    
+    p {
+        font-size: clamp(18px, 2.5vw, 20px);
+        margin-left: 32px;
+    }
+}
 
-        &:hover {
-            font-weight: 700;
-        }
+.online-indicator {    
+    left: 0 !important;
+    width: 20px;
+    height: 20px;  
+    bottom: 3px !important;  
+}
+
+.status-text {
+    font-weight: bold;
+
+    &.online {
+        color: $green;
+    }
+
+    &.offline {
+        color: $gray;
     }
 }
 

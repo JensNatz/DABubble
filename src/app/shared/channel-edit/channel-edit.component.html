@@ -5,6 +5,9 @@
         <div class="channel_name_edit">
             <h2>Channel-name</h2>
             <p (click)="openNameEdit()">Bearbeiten</p>
+            <div class="check_edit_button">
+                <img src="assets/img/edit.svg" (click)="openNameEdit()">
+            </div>
         </div>
         <div class="channel_name">
             <b>#</b>
@@ -16,6 +19,9 @@
         <div class="channel_name_edit">
             <h2>Channel-name</h2>
             <p (click)="saveNewChannelName(channelName)">Speichern</p>
+            <div class="check_edit_button">
+                <img src="assets/img/check_circle.svg"  (click)="saveNewChannelName(channelName)">
+            </div>
         </div>
         <input type="text" [(ngModel)]="channelName">
     </div>
@@ -25,6 +31,9 @@
             <div>
                 <h2>Beschreibung</h2>
                 <p (click)="openChannelEdit()">Bearbeiten</p>
+                <div class="check_edit_button">
+                    <img src="assets/img/edit.svg" (click)="openChannelEdit()">
+                </div>
             </div>
             <span>{{ channelDescription }}</span>
         </div>
@@ -42,6 +51,9 @@
             <div>
                 <h2>Beschreibung</h2>
                 <p (click)="saveNewChannelDescription(channelDescription)">Speichern</p>
+                <div class="check_edit_button">
+                    <img src="assets/img/check_circle.svg" (click)="saveNewChannelDescription(channelDescription)">
+                </div>
             </div>
             <input type="text" [(ngModel)]="channelDescription">
         </div>

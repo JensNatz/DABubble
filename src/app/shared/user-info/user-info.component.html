@@ -1,13 +1,21 @@
 <div class="user_infos_content">
         <h1>Profil</h1>
     <div class="profil_avatar">
-        <img class="avatar" src="assets/img/avatar{{ userAvatar }}.svg">
+        <app-avatar [avatar]="userAvatar" size="large"></app-avatar>
     </div>
     <div class="user_name_status">
         <div class="user_name_profil">
             <h2>{{ userName }}</h2>
         </div>
-        <p>{{ userStatus }}</p>
+        <div class="user_status">
+            @if (userStatus === 'online') {
+                <div class="online-indicator online"></div>
+                <p class="status-text online">{{ userStatus }}</p>
+            } @else if (userStatus === 'offline') {
+                <div class="online-indicator offline"></div>
+                <p class="status-text offline">{{ userStatus }}</p>
+            }
+        </div>
     </div>    
     <div class="email_addresse">
         <div>

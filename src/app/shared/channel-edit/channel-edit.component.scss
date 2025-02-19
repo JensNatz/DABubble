@@ -146,9 +146,45 @@ input {
     border-radius: 20px;
 }
 
+.check_edit_button {
+    display: none !important;
+    img {
+        cursor: pointer;
+        &:hover {
+            background-color: rgba(99, 61, 189, 0.2);
+            @include rounded();
+            filter: invert(35%) sepia(92%) saturate(3979%) hue-rotate(230deg) brightness(99%) contrast(91%);
+        }
+    }
+}
+
 @media (max-width: $breakpoint-md) {
     .app-add-user-to-channel {
         display: block;
+    }
+
+    p {
+        display: none;
+    }
+
+    .check_edit_button {
+        display: block !important;
+    }
+
+    .channel_description_content_edit,
+    .channel_name_content_edit {
+        padding: 20px 20px 0 20px;
+        margin-right: 0;
+    }
+
+    .channel_name_edit {
+        margin-bottom: 0;
+    }
+
+    .channel_description_edit {
+        div {
+            margin-bottom: 0;
+        }
     }
 }
 
@@ -161,7 +197,7 @@ input {
         h2 {
             margin-bottom: 15px;
         }
-    
+
         span {
             font-size: 18px;
         }

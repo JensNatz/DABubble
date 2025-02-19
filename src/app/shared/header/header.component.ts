@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { SearchComponent } from '../../main-page/search/search.component';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { MessageboardService } from '../../services/messageboard.service';
+import { MenuProfilComponent } from '../menu-profil/menu-profil.component';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,8 @@ import { MessageboardService } from '../../services/messageboard.service';
     CommonModule,
     FormsModule,
     SearchComponent,
-    AvatarComponent
+    AvatarComponent,
+    MenuProfilComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
