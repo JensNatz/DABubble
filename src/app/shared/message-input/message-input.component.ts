@@ -192,6 +192,7 @@ export class MessageInputComponent implements AfterViewInit {
     componentRef.setInput('type', type);
     componentRef.setInput('id', id);
     componentRef.setInput('displayName', name);
+    componentRef.setInput('isClickable', false);
     componentRef.location.nativeElement.id = `mentionid${this.mentionCounter}`;
     componentRef.location.nativeElement.contentEditable = false;
     return componentRef;

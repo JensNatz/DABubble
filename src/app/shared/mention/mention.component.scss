@@ -5,13 +5,17 @@
   background-color: $purple-3;
   padding: 0 2px;
   color: $white;
-  cursor: pointer;
   display: inline-block;
-  
-  &:hover {
-    background-color: $purple-1;
-  }
+  cursor: default;
 
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: $purple-1;
+    }
+  }
+  
   &.unavailable {
     background-color: $gray;
     color: $white;
