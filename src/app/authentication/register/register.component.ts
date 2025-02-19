@@ -32,7 +32,7 @@ export class RegisterComponent {
   registerForm: any;
   dataProtectionErrorMessage: string = ErrorMessages.dataProtectionRequired;
 
-  constructor(private location: Location,private fb: FormBuilder, private router: Router, private userService: UserServiceService) { }
+  constructor(private location: Location, private fb: FormBuilder, private router: Router, private userService: UserServiceService) { }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -122,9 +122,9 @@ export class RegisterComponent {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value || '';
 
-      if (value.length < 5) {
+      if (value.length < 6) {
         this.passwordErrorMessage = ErrorMessages.passwordMinLength;
-        return { minlength: { requiredLength: 5, actualLength: value.length } };
+        return { minlength: { requiredLength: 6, actualLength: value.length } };
       }
       if (!/[A-Z]/.test(value)) {
         this.passwordErrorMessage = ErrorMessages.passwordCapitalLetter;
