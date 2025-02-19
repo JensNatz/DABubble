@@ -23,7 +23,7 @@ import { DaBubbleHeaderAuthenticationComponent } from "../../../shared/da-bubble
 export class RestePasswordEmailComponent {
   email: string = '';
   emailInvalid: boolean = false;
-  emailErrorMessage: string = '';
+  emailErrorMessage: string ='';
   isSubmitting:boolean = false;
   emailSend:boolean = false;
   showError: boolean = false;
@@ -33,11 +33,13 @@ export class RestePasswordEmailComponent {
 
 
 
-  async validateEmail() {
+   async validateEmail() {
     if (!this.email) {
-      this.emailInvalid = true;      
+      this.emailInvalid = true;
+      this.emailErrorMessage = ErrorMessages.emailInvalid;
     } else if (!await this.userService.emailExists(this.email)) {
-      this.emailInvalid = true;    
+      this.emailInvalid = true;
+      
     } else {
       this.emailInvalid = false;
     }
@@ -45,7 +47,7 @@ export class RestePasswordEmailComponent {
 
   async onBlur() {
     await this.validateEmail();
-    this.showError = this.emailInvalid;
+   this.showError = this.emailInvalid;
   }
 
   async onSubmit(form: NgForm) {
@@ -55,15 +57,17 @@ export class RestePasswordEmailComponent {
       this.isSubmitting = true;
       try {
         await this.userService.sendPasswordResetEmail(this.email);
-        console.log('email gesendet', this.email)
-        this.emailSend = true
+        console.log('email gesendet', this.email);
+        this.emailSend = true;
         setTimeout(() => {
           this.emailSend = false;
-          this.router.navigate([''])
+          this.router.navigate(['']);
         }, 2000);
       } catch (error) {
-       
-      } 
+        console.error('Error sending password reset email:', error);
+      } finally {
+        this.isSubmitting = false;
+      }
     }
   }
 }

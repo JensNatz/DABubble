@@ -1,5 +1,7 @@
 
-
+<div *ngIf="animationPlayed">
+    <app-da-bubble-animation></app-da-bubble-animation>
+</div>
 
 <app-da-bubble-header-authentication></app-da-bubble-header-authentication>
 
@@ -18,7 +20,7 @@
                 [(ngModel)]="email" name="email">
             </app-input-field>
             <app-input-field type="password" placeholder="Passwort" [showError]="passwordInvalid || false"
-                [errorMessage]="passwordErrorMessage" imagePath="../../../assets/img/lock.svg" [(ngModel)]="password"
+            [errorMessage]="getErrorMessage()" imagePath="../../../assets/img/lock.svg" [(ngModel)]="password"
                 name="password">
                 ></app-input-field>
         </div>

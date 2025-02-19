@@ -87,9 +87,11 @@ export class ChannelServiceService implements OnDestroy {
       const docRef = await addDoc(this.getChannelsRef(), item);
       this.id = docRef.id;
       await updateDoc(docRef, { id: this.id });
+      return this.id;
 
     } catch (err) {
       console.error('Error adding document:', err);
+      return null;
     }
   }
 

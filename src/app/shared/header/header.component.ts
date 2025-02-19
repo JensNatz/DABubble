@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { SearchComponent } from '../../main-page/search/search.component';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { MessageboardService } from '../../services/messageboard.service';
+import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
 import { MenuProfilComponent } from '../menu-profil/menu-profil.component';
 
 @Component({
@@ -25,7 +26,8 @@ export class HeaderComponent {
 
   messageboardService: MessageboardService = inject(MessageboardService);
   loginService: LoginService = inject(LoginService);
-
+  channelService: ChannelServiceService = inject(ChannelServiceService);
+  
   @Output() backButtonClicked = new EventEmitter<void>();
 
   public showProfilMenu: boolean = false;
@@ -109,11 +111,11 @@ export class HeaderComponent {
 
   logOut() {
     this.loginService.logout();
+    this.channelService.clearCurrentChannel();
     this.router.navigate(['']);
   }
 
   onBackButtonClick() {
-    //this.backButtonClicked.emit();
     this.messageboardService.closeMessageBoard();
   }
 }

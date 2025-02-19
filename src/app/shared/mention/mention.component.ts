@@ -15,7 +15,7 @@ export class MentionComponent {
   @Input() id: string = '';
   @Input() displayName: string = '';
   @Input() available: boolean = true;
-
+  @Input() isClickable: boolean = true;
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
 
@@ -28,7 +28,7 @@ export class MentionComponent {
   }
 
   handleMentionClick() {
-    if (this.available) {
+    if (this.available && this.isClickable) {
       if (this.type === 'user') {
         this.channelService.setDirectMessageChannel(this.id);
       } else if (this.type === 'channel') {

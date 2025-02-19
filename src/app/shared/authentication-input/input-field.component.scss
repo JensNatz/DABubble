@@ -81,7 +81,12 @@
         }
     }
 }
-
+@media(max-width:400px){
+    .error-message{
+        font-size: 10px;
+        margin-top: 0px;
+    }
+}
 @media(max-width:380px){
     .input-container{
         input{

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 
@@ -10,5 +11,10 @@ import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-he
   styleUrl: './imprint.component.scss'
 })
 export class ImprintComponent {
+  constructor(private location: Location) {}
 
+ 
+  goBack(): void {
+    this.location.back();
+  }
 }

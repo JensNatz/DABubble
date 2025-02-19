@@ -8,11 +8,12 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { FormsModule, FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
+import { PwResetAcceptedComponent } from "../user-feedback/pw-reset-accepted/pw-reset-accepted.component";
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [RouterModule, InputFieldComponent, FormsModule, NgClass, ReactiveFormsModule, CommonModule, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent],
+  imports: [RouterModule, InputFieldComponent, FormsModule, NgClass, ReactiveFormsModule, CommonModule, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent, PwResetAcceptedComponent],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
@@ -22,8 +23,10 @@ export class ResetPasswordComponent {
   resetCode: string = '';
   email: string = '';
   errorMessage: string = '';
+  passwortReset: boolean = false;
   newPasswordForm: any;
   passwordErrorMessage: string = ErrorMessages.passwordNotTheSame;
+
 
   constructor(
     private fb: FormBuilder,
@@ -31,7 +34,7 @@ export class ResetPasswordComponent {
     private router: Router,
     private userService: UserServiceService,
     private location: Location
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.newPasswordForm = this.fb.group({
@@ -76,7 +79,11 @@ export class ResetPasswordComponent {
     try {
       await this.userService.confirmPasswordReset(this.resetCode, newpw);
       console.log('Password reset successfully');
-      this.router.navigate(['/']);
+      this.passwortReset = true;
+      setTimeout(() => {
+        this.passwortReset = false;
+        this.router.navigate(['/']);
+      }, 2000);
     } catch (error) {
       console.error('Error resetting password:', error);
     }
