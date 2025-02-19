@@ -6,12 +6,14 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { User } from '../../models/user';
 import { MessageBoardComponent } from '../../main-page/message-board/message-board.component';
 import { ModalService } from '../../services/modal.service';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
   imports: [
-    MessageBoardComponent
+    MessageBoardComponent,
+    AvatarComponent
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss'

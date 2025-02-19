@@ -76,7 +76,7 @@ h1 {
     }
 
     span {
-        font-size: clamp(18px, 2.5vw, 24px);
+        font-size: clamp(16px, 2vw, 18px);
     }
 
     &:hover {
@@ -126,6 +126,7 @@ h1 {
     right: 30px;
     cursor: pointer;
     padding: 10px;
+    z-index: 999;
 
     &:hover {
         background-color: rgba(99, 61, 189, 0.2);
@@ -144,26 +145,36 @@ h1 {
 
 .modal-channel {
     left: 385px;
+    width: 700px;
     border-top-left-radius: 0%;
 }
 
 @media (max-width: $breakpoint-xl) {
     .modal-channel {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        left: 240px;
+    }
+}
+
+@media (max-width: $breakpoint-lg) {
+    .modal-channel {
+        left: 40px;
     }
 }
 
 @media (max-width: $breakpoint-md) {
     .modal-users {
-        top: 373px;
-        left: 50%;
-        width: 90%;
-        transform: translate(-50%, -50%);
+        top: 167px;
+        width: 400px;
+        right: 0;
+        left: 0;
+        margin: 0 auto; 
     }
 
     .modal-channel {
+        left: 0;
+        top: 0;
+        padding-left: 20px;
+        padding-right: 20px;
         width: 100vw;
         height: 100vh;
         border-radius: 0;
@@ -179,5 +190,6 @@ h1 {
     .modal-users {
         padding-left: 20px;
         padding-right: 20px;
+        width: 85%;
     }
 }

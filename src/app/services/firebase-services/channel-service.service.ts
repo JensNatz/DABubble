@@ -66,9 +66,9 @@ export class ChannelServiceService implements OnDestroy {
       });
   }
 
-  getAllChannelsFromDatabase() {
+  getAllChannelsFromDatabase(): Observable<Channel[]> {
     const channelsRef = collection(this.firestore, 'channels');
-    return collectionData(channelsRef, { idField: 'id' });
+    return collectionData(channelsRef, { idField: 'id' }) as Observable<Channel[]>;
   }
 
   getChannelById(channelId: string): Observable<Channel> {

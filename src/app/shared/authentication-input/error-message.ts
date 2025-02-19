@@ -5,12 +5,16 @@ export const ErrorMessages = {
     emailMissingAt: 'Die E-Mail-Adresse muss ein @ enthalten',
     emailExists: 'Diese E-Mail-Adresse ist bereits vorhanden',
     emailNotFound:'Diese E-Mail-Adresse wurde nicht gefunden',
+    emailInvalidTLD:'',
+    emailInvalidDomain:'Nach dem @ mindestns 2 zeichen',
     passwordInvalid: 'Bitte geben Sie ein Passwort ein',
     passwordInvalidInfo: 'Muss mindestens ein Großsbuchstabe und ein Sonderzeichen enthalten',
-    passwordMinLength: 'Passwort muss mindestens 5 Zeichen lang sein',
+    passwordMinLength: 'Passwort muss mindestens 6 Zeichen lang sein',
     passwordCapitalLetter:'Das Passwort muss mindestens einen Großbuchstaben enthalten',
     passwordSpecialCharacters:'Das Passwort muss mindestens ein Sonderzeichen enthalten',
+    emptyLogin:'Bitte füllen sie die Felder aus!',
     passwordLogin:'Falsches Passwort oder E-Mail. Bitte noch einmal Versuchen',
     passwordNotTheSame:'Passwort stimt nicht überein!',
     dataProtectionRequired: 'Sie müssen der Datenschutzerklärung zustimmen.',
+
   };

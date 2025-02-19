@@ -91,7 +91,7 @@ export class LoginService {
       await signOut(this.auth);
       this.currentUserSubject.next(null);
       console.log(`User ${currentUser?.email} hat sich ausgelogt`);
-    } catch (error) {     
+    } catch (error) {
     }
   }
 
@@ -106,14 +106,22 @@ export class LoginService {
     const guestEmail = 'guest@guest.de';
     const guestPassword = 'Guest!';
     try {
-      await signInWithEmailAndPassword(this.auth, guestEmail, guestPassword);
-      console.log('Guest user logged in');
-      this.userFound = true;
-      setTimeout(() => {
-        this.userFound = false;
-        this.router.navigate(['/chat'])
-      }, 2000);
+      const result = await signInWithEmailAndPassword(this.auth, guestEmail, guestPassword);
+      const firebaseUser = result.user;
+      const userDoc = await this.userService.getSingleUser('users', firebaseUser.uid);
+      const userSnapshot = await getDoc(userDoc);
 
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.data() as User;
+        this.userFound = true;
+        this.currentUserSubject.next(userData);
+        await updateDoc(userDoc, { onlineStatusbar: 'online' });
+        console.log('Guest user logged in:', userData);
+        setTimeout(() => {
+          this.userFound = false;
+          this.router.navigate(['/chat']);
+        }, 2000);
+      }
     } catch (error) {
       console.error('Error during guest login:', error);
       throw error;

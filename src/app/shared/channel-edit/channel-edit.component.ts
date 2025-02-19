@@ -112,7 +112,7 @@ export class ChannelEditComponent {
       this.channelEdit = false;
       this.channelService.editChannelDescription(this.channelId, newDescription);
       this.modalService.updateChannelDescription(newDescription);
-      this.channelDescriptionChanged.emit(newDescription); // Emit description change
+      this.channelDescriptionChanged.emit(newDescription);
     } catch (error) {
       console.error('Fehler beim Aktualisieren der Beschreibung:', error);
     }

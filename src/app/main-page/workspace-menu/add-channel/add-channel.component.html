@@ -3,19 +3,17 @@
     <form (ngSubmit)="onSubmit(channelForm)" #channelForm="ngForm">
         <p>Channnels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum
             Beispiel. </p>
-        <div class="name_input">
-            <label for="name">Channel-Name</label>
-            <input #name="ngModel" [(ngModel)]="channel.name" type="text" id="name" name="name" required>
-            @if (!name.valid && name.touched && !name.disabled) {
-            <span>Bitte geben Sie den Channel-Namen ein</span>
-            }
-        </div>
+            <div class="name_input">
+                <label for="name">Channel-Name</label>
+                <input #name="ngModel" [(ngModel)]="channel.name" type="text" id="name" name="name" required (input)="checkChannelExists()">
+                <span *ngIf="channelExists" class="error">Dieser Channel existiert bereits!</span>
+            </div>
         <div class="description_input">
             <label for="escription">Beschreibung <b>(optional)</b></label>
             <input [(ngModel)]="channel.description" type="text" id="description" name="description">
         </div>
         <div class="button_add">
-            <button class="btn-primary" type="submit">Erstellen</button>
+            <button class="btn-primary" type="submit" [disabled]="channelExists || name.invalid">Erstellen</button>
         </div>
     </form>
 </div>

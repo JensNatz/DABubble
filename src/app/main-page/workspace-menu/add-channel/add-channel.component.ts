@@ -21,6 +21,7 @@ export class AddChannelComponent {
 
   userId: any = '';
   userName: string = '';
+  channelExists: boolean = false;
 
   @Input() closeFunction!: () => void;
 
@@ -50,21 +51,31 @@ export class AddChannelComponent {
     })
   }
 
-  async onSubmit(ngForm: NgForm) {
-    if (ngForm.valid && ngForm.submitted) {
+
+  async checkChannelExists() {
+    if (!this.channel.name.trim()) {
+      this.channelExists = false;
+      return;
+    }
+  
+    this.channelService.getAllChannelsFromDatabase().subscribe(channels => {
+      if (channels) {
+        this.channelExists = channels.some((ch: Channel) => ch.name.toLowerCase() === this.channel.name.toLowerCase());
+      }
+    });
+  }
+
+  onSubmit(ngForm: NgForm) {
+    if (ngForm.valid && !this.channelExists) {
       this.channel = {
         name: this.channel.name,
         description: this.channel.description,
         creator: this.userName,
         members: [this.userId],
         type: 'group'
-      }
-      
-      const newChannelId = await this.channelService.addNewChannel(this.channel);
-      if (newChannelId) {
-        this.channelService.setCurrentChannelById(newChannelId);
-      }
-      this.workSpace.loadChannels();
+      };
+
+      this.channelService.addNewChannel(this.channel);
       this.closeFunction();
     }
   }

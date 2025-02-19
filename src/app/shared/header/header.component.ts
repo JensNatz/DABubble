@@ -7,6 +7,8 @@ import { SearchComponent } from '../../main-page/search/search.component';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { MessageboardService } from '../../services/messageboard.service';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
+import { MenuProfilComponent } from '../menu-profil/menu-profil.component';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -14,7 +16,8 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
     CommonModule,
     FormsModule,
     SearchComponent,
-    AvatarComponent
+    AvatarComponent,
+    MenuProfilComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

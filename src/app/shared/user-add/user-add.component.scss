@@ -2,6 +2,14 @@
 @import './../../styles/variables';
 @import './../../shared/avatar/avatar.component.scss';
 
+h1 {
+    font-size: clamp(18px, 2.5vw, 24px) !important;
+}
+
+h2 {
+    font-size: clamp(18px, 2.5vw, 20px) !important;
+}
+
 input {
     margin-top: 10px;
     width: 100%;
@@ -12,7 +20,7 @@ input {
     padding: 18px 20px;
     border-radius: 100px;
     border: 1px solid $light-purple;
-    font-size: 18px;
+    font-size: clamp(16px, 2vw, 18px);
 
     &:hover {
         cursor: pointer;
@@ -40,7 +48,7 @@ input {
     top: 58px;
     left: 20px;
     width: 80%;
-    font-size: 18px;
+    font-size: clamp(16px, 2vw, 18px);
     padding: 8px;
     max-height: 350px;
     overflow: hidden;
@@ -62,6 +70,11 @@ input {
         border-radius: 5px;
         background-color: $light-purple;
     }
+}
+
+.rectangle {
+    display: none;
+
 }
 
 .user_name {
@@ -113,4 +126,25 @@ h2 {
     font-size: 14px;
     margin-top: 5px;
     left: 64px;
+}
+
+@media (max-width: $breakpoint-md) {
+    .rectangle {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    input {
+        padding: 10px 20px;
+    }
+
+    .btn-primary {
+        height: 39px;
+    }
+
+    .users_liste {
+        top: 37px;
+        max-height: 115px;
+    }
 }
