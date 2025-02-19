@@ -1,7 +1,7 @@
 <app-da-bubble-header-authentication></app-da-bubble-header-authentication>
 <div class="register-container">
 
-    <div (click)="goBack()" class="arrow-back">
+    <div [routerLink]="'/'" class="arrow-back">
        
     </div>
 
@@ -50,7 +50,7 @@
       
         <div class="data-protection-container">
           <input class="checkbox" type="checkbox" formControlName="dataProtection" required>
-          <span>Ich stimme der <a href="http://">Datenschutzerklärung</a> zu.</span>
+          <span>Ich stimme der <a [routerLink]="'/privacy-police'">Datenschutzerklärung</a> zu.</span>
 
           <div *ngIf="registerForm.get('dataProtection').invalid && registerForm.get('dataProtection').touched" class="error-message mgtop">
             {{ dataProtectionErrorMessage }}

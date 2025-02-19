@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Location } from '@angular/common';
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 
 @Component({
@@ -10,5 +11,9 @@ import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-he
   styleUrls: ['./privacy-policy.component.scss']
 })
 export class PrivacyPolicyComponent {
-
+  constructor(private location: Location){} 
+  
+  goBack(): void {
+    this.location.back();
+  }
 }
