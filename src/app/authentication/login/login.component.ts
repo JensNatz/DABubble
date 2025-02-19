@@ -35,13 +35,14 @@ export class LoginComponent {
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
   userFound: boolean | undefined = false;
   emptyLogin: boolean = false;
+  animationPlayed: boolean = false;
 
 
   constructor(private userService: UserServiceService, private googleAuthService: GoogleAuthenticationService, private loginService: LoginService, private router: Router) {
     this.users = this.userService.getUsers();
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.loginService.currentUser.subscribe(user => {
       this.userFound = this.loginService.userFound;
     });
