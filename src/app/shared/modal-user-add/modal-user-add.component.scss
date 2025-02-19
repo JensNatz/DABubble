@@ -163,9 +163,11 @@ h1 {
 
 @media (max-width: $breakpoint-md) {
     .modal-users {
-        top: 373px;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: 167px;
+        width: 400px;
+        right: 0;
+        left: 0;
+        margin: 0 auto; 
     }
 
     .modal-channel {
@@ -188,6 +190,6 @@ h1 {
     .modal-users {
         padding-left: 20px;
         padding-right: 20px;
-        width: 90%;
+        width: 85%;
     }
 }
