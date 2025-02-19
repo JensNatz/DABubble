@@ -51,7 +51,7 @@ export class LoginComponent {
     if (this.emptyLogin) {
       return this.emptyErrorMessage;
     } else if (this.emailInvalid) {
-      return this.emailErrorMessage;
+      return this.passwordErrorMessage;
     } else if (this.passwordInvalid) {
       return this.passwordErrorMessage;
     }
@@ -73,25 +73,20 @@ export class LoginComponent {
 
     if (!this.email && !this.password) {
       this.emptyLogin = true;
-      
+
     } else if (!this.emailInvalid && !this.passwordInvalid) {
       try {
         await this.loginService.login(this.email, this.password);
         const userExists = await this.userService.userExists(this.email, this.password);
         if (userExists) {
-          console.log('Login erfolgreich');
+
         } else {
-          this.emptyLogin = false;          
+          this.emptyLogin = false;
           this.passwordInvalid = true;
+          this.emailInvalid = true;
           this.passwordErrorMessage = ErrorMessages.passwordLogin;
         }
-      } catch (error) {
-        this.emailInvalid = true;
-        this.passwordInvalid = true;
-        this.passwordErrorMessage = ErrorMessages.passwordLogin;
-      }
-    } else {
-      console.log('Formular ist ungültig');
+      } catch { }
     }
   }
 

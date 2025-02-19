@@ -36,3 +36,18 @@
         transform: translateX(0); 
     }
 }
+
+@media (max-width: 1000px){
+    .info-container{
+        right: 100px;
+    }
+}
+
+@media (max-width: 700px) {
+   .info-container{
+    padding: 30px;
+    font-size: 20px;
+    right: 20px;
+    bottom: 50px;
+   }
+}
