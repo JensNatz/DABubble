@@ -35,6 +35,7 @@ export class UserAddComponent {
   listShown: boolean = false;
   errorMessage: string = '';
   selectedUser: User | null = null;
+  selectedUsers: User[] = [];
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -55,7 +56,7 @@ export class UserAddComponent {
   }
 
 
-  onInputChange(event: Event): void {    
+  onInputChange(event: Event): void {
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
 
@@ -69,7 +70,9 @@ export class UserAddComponent {
 
 
   onUserSelect(user: User): void {
-    this.selectedUser = user;
+    if (!this.selectedUsers.some(u => u.id === user.id)) {
+      this.selectedUsers.push(user);
+    }
     this.inputValue = '';
     const editableDiv = document.querySelector('.editable-input') as HTMLDivElement;
     if (editableDiv) {
@@ -82,45 +85,49 @@ export class UserAddComponent {
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
-  
 
-  removeSelectedUser(): void {
-    this.selectedUser = null;
+
+  removeSelectedUser(user: User): void {
+    this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
+    
+    if (this.selectedUsers.length === 0) {
+      this.errorMessage = '';
+    }
   }
 
 
   addUserToChannel() {
-    if (!this.channelId || !this.selectedUser) {
-      return;
-    }
-    
-    const selectedUser = this.allUsers.find(user => user.name === this.selectedUser?.name);
-    if (!selectedUser) {
+    if (!this.channelId || this.selectedUsers.length === 0) {
       return;
     }
 
-    const userId = selectedUser.id;
-    if (userId) {
-      this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
-        if (!channel) {
-          return;
-        }
-        const members = channel.members ?? [];
-        if (members.includes(userId)) {
-          this.errorMessage = 'Benutzer ist bereits Mitglied.';
-          return;
-        }
-        const updatedMembers = [...members, userId];
-        this.channelService.editChannelMembers(this.channelId, updatedMembers);
-        this.modalServe.triggerRefreshChannelUsers();
-        this.addUserComponent.getUserFromChannel();
-        if (this.closeUserAddInfos) {
-          this.closeUserAddInfos();
-        } else {
-          this.modalServe.closeModal();
-        }
-        this.errorMessage = '';
-      });
-    }
+    this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
+      if (!channel) {
+        return;
+      }
+
+      let members = channel.members ?? [];
+      let newUsers = this.selectedUsers.filter(user => user.id !== undefined && !members.includes(user.id as string));
+
+      if (newUsers.length === 0) {
+        this.errorMessage = 'Alle ausgewählten Benutzer sind bereits Mitglieder.';
+        return;
+      }
+
+      const updatedMembers = [...members, ...newUsers.map(user => user.id as string)].filter(id => id !== undefined);
+      this.channelService.editChannelMembers(this.channelId, updatedMembers);
+      this.modalServe.triggerRefreshChannelUsers();
+      this.addUserComponent.getUserFromChannel();
+
+      if (this.closeUserAddInfos) {
+        this.closeUserAddInfos();
+      } else {
+        this.modalServe.closeModal();
+      }
+
+      this.selectedUsers = [];
+      this.errorMessage = '';
+    });
   }
+
 }
