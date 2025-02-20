@@ -36,24 +36,33 @@ export class LoginComponent {
   userFound: boolean | undefined = false;
   emptyLogin: boolean = false;
   animationPlayed: boolean = false;
+  errorMessage: string = '';
+  isSubmitting: boolean = true;
 
 
   constructor(private userService: UserServiceService, private googleAuthService: GoogleAuthenticationService, private loginService: LoginService, private router: Router) {
     this.users = this.userService.getUsers();
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.loginService.currentUser.subscribe(user => {
       this.userFound = this.loginService.userFound;
     });
   }
 
+  async checkUserExists() {
+    if (this.email && this.password) {
+      const userExists = await this.userService.userExists(this.email, this.password);
+      this.isSubmitting = !userExists;
+    } else {
+      this.isSubmitting = true;
+    }
+  }
+
   getErrorMessage(): string {
     if (this.emptyLogin) {
       return this.emptyErrorMessage;
-    } else if (this.emailInvalid) {
-      return this.passwordErrorMessage;
-    } else if (this.passwordInvalid) {
+    } else if (this.emailInvalid || this.passwordInvalid) {
       return this.passwordErrorMessage;
     }
     return '';
@@ -62,35 +71,66 @@ export class LoginComponent {
   async guestLogin() {
     try {
       await this.loginService.guestLogin();
-
     } catch (error) {
       console.error('Error during guest login:', error);
     }
+  }
+
+  checkEmptyInput(): boolean {
+    if (!this.email || !this.password) {
+      this.emptyLogin = true;
+      this.passwordInvalid = false;
+      this.emailInvalid = false;
+      this.errorMessage = this.emptyErrorMessage;
+      return false;
+    }
+    this.emptyLogin = false;
+    return true;
   }
 
   async onSubmit() {
     this.validateEmail();
     this.validatePassword();
 
-    if (!this.email && !this.password) {
-      this.emptyLogin = true;
-
-    } else if (!this.emailInvalid && !this.passwordInvalid) {
+    if (this.checkEmptyInput()) {
+      this.isSubmitting = true;
       try {
-        await this.loginService.login(this.email, this.password);
         const userExists = await this.userService.userExists(this.email, this.password);
         if (userExists) {
+          await this.loginService.login(this.email, this.password);
 
+          setTimeout(() => {
+            this.userFound = false;
+            this.router.navigate(['/chat']);
+          }, 2000);
         } else {
           this.emptyLogin = false;
           this.passwordInvalid = true;
           this.emailInvalid = true;
-          this.passwordErrorMessage = ErrorMessages.passwordLogin;
+          this.errorMessage = this.passwordErrorMessage;
         }
-      } catch { }
+      } catch (error) {
+        this.passwordInvalid = true;
+        this.emailInvalid = true;
+        this.errorMessage = this.passwordErrorMessage;
+      } finally {
+        this.isSubmitting = false; // Button wieder aktivieren
+      }
     }
   }
 
+  signInWithGoogle() {
+    this.googleAuthService.signInWithGoogle();
+    this.userFound = true;
+    setTimeout(() => {
+      this.userFound = false;
+      this.router.navigate(['/chat']);
+    }, 2000);
+  }
+
+  logout() {
+    this.loginService.logout();
+  }
 
   validateEmail() {
     if (!this.email) {
@@ -108,19 +148,5 @@ export class LoginComponent {
     } else {
       this.passwordInvalid = false;
     }
-  }
-
-  signInWithGoogle() {
-    this.googleAuthService.signInWithGoogle();
-    this.userFound = true;
-    setTimeout(() => {
-      this.userFound = false;
-      this.router.navigate(['/chat']);
-    }, 2000);
-  }
-
-
-  logout() {
-    this.loginService.logout();
   }
 }

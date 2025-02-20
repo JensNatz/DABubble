@@ -1,4 +1,3 @@
-
 <div *ngIf="animationPlayed">
     <app-da-bubble-animation></app-da-bubble-animation>
 </div>
@@ -17,14 +16,15 @@
         <div class="input-field-section">
             <app-input-field type="email" placeholder="beispielname@email.com"
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" imagePath="../../../assets/img/mail.svg"
-                [(ngModel)]="email" name="email">
+                [(ngModel)]="email" name="email" (ngModelChange)="checkUserExists()">
             </app-input-field>
             <app-input-field type="password" placeholder="Passwort" [showError]="passwordInvalid || false"
             [errorMessage]="getErrorMessage()" imagePath="../../../assets/img/lock.svg" [(ngModel)]="password"
-                name="password">
+                name="password" (ngModelChange)="checkUserExists()">
                 ></app-input-field>
         </div>
 
+        
         <p [routerLink]="['/resetpw-email']" class="pw-forget-btn br-30">Passwort vergessen?</p>
 
         <div class="or-container">
@@ -37,7 +37,7 @@
         </div>
 
         <div class="btn-container">
-            <button type="submit" class="btn-primary">Anmelden</button>
+            <button type="submit" class="btn-primary" [disabled]="isSubmitting">Anmelden</button>
             <button type="button" class="btn-secondary" (click)="guestLogin()">Gäste-Login</button>
         </div>
 

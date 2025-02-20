@@ -47,7 +47,7 @@ export class UserServiceService {
       this.id = docRef.id;
       await updateDoc(docRef, { id: this.id });
     } catch (err) {
-      console.error('Error adding document:', err);
+     
     }
   }
 
@@ -65,12 +65,11 @@ export class UserServiceService {
         onlineStatusbar: userData.onlineStatusbar || 'offline'
       };
 
-      await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);
-      
-      console.log('User registered and added to Firestore:', firebaseUser.uid);
+      await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);      
+     
       return firebaseUser.uid;
     } catch (error) {
-      console.error('Error during user registration:', error);
+      
       throw error;
     }
   }
@@ -80,7 +79,7 @@ export class UserServiceService {
       const users = await firstValueFrom(this.getUsers());
       return users ? users.some(user => user.email === email && user.password === password) : false;
     } catch (err) {
-      console.error('Error checking if user exists:', err);
+     
       return false;
     }
   }
@@ -90,7 +89,7 @@ export class UserServiceService {
       const users = await firstValueFrom(this.getUsers());
       return users ? users.some(user => user.email === email) : false;
     } catch (err) {
-      console.error('Error checking if email exists:', err);
+      
       return false;
     }
   }
@@ -98,19 +97,18 @@ export class UserServiceService {
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.auth, email);
-      console.log(email);
-    } catch (err) {
-      console.error('Error sending password reset email:', err);
+      
+    } catch (err) {      
     }
   }
 
   async verifyPasswordResetCode(code: string): Promise<string> {
     try {
       const email = await verifyPasswordResetCode(this.auth, code);
-      console.log(`Reset code verified for email: ${email}`);
+      
       return email;
     } catch (err) {
-      console.error('Error verifying reset code:', err);
+      
       throw err;
     }
   }
@@ -118,13 +116,12 @@ export class UserServiceService {
   async confirmPasswordReset(code: string, newPassword: string): Promise<void> {
     try {
       await confirmPasswordReset(this.auth, code, newPassword);
-      console.log('Password reset successfully');
-
+      
       
 
       
     } catch (err) {
-      console.error('Error confirming password reset:', err);
+      
       throw err;
     }
   }
@@ -133,9 +130,9 @@ export class UserServiceService {
     try {
       const userDocRef = doc(this.firestore, `users/${userId}`);
       await updateDoc(userDocRef, updatedData);
-      console.log('User updated successfully');
+      
     } catch (err) {
-      console.error('Error updating user:', err);
+    
       throw err;
     }
   }
