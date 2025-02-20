@@ -59,15 +59,6 @@ export class LoginComponent {
     }
   }
 
-  getErrorMessage(): string {
-    if (this.emptyLogin) {
-      return this.emptyErrorMessage;
-    } else if (this.emailInvalid || this.passwordInvalid) {
-      return this.passwordErrorMessage;
-    }
-    return '';
-  }
-
   async guestLogin() {
     try {
       await this.loginService.guestLogin();
@@ -76,47 +67,23 @@ export class LoginComponent {
     }
   }
 
-  checkEmptyInput(): boolean {
-    if (!this.email || !this.password) {
-      this.emptyLogin = true;
-      this.passwordInvalid = false;
-      this.emailInvalid = false;
-      this.errorMessage = this.emptyErrorMessage;
-      return false;
-    }
-    this.emptyLogin = false;
-    return true;
-  }
-
   async onSubmit() {
-    this.validateEmail();
-    this.validatePassword();
+    try {
+      const userExists = await this.userService.userExists(this.email, this.password);
+      if (userExists) {
+        await this.loginService.login(this.email, this.password);
 
-    if (this.checkEmptyInput()) {
-      this.isSubmitting = true;
-      try {
-        const userExists = await this.userService.userExists(this.email, this.password);
-        if (userExists) {
-          await this.loginService.login(this.email, this.password);
-
-          setTimeout(() => {
-            this.userFound = false;
-            this.router.navigate(['/chat']);
-          }, 2000);
-        } else {
-          this.emptyLogin = false;
-          this.passwordInvalid = true;
-          this.emailInvalid = true;
-          this.errorMessage = this.passwordErrorMessage;
-        }
-      } catch (error) {
-        this.passwordInvalid = true;
-        this.emailInvalid = true;
-        this.errorMessage = this.passwordErrorMessage;
-      } finally {
-        this.isSubmitting = false; // Button wieder aktivieren
+        setTimeout(() => {
+          this.userFound = false;
+          this.router.navigate(['/chat']);
+        }, 2000);
       }
+    } catch (error) {
+
+    } finally {
+      this.isSubmitting = false;
     }
+
   }
 
   signInWithGoogle() {
@@ -125,28 +92,11 @@ export class LoginComponent {
     setTimeout(() => {
       this.userFound = false;
       this.router.navigate(['/chat']);
-    }, 2000);
+    }, 4000);
   }
 
   logout() {
     this.loginService.logout();
   }
 
-  validateEmail() {
-    if (!this.email) {
-      this.emailInvalid = true;
-      this.emailErrorMessage = ErrorMessages.emailInvalid;
-    } else {
-      this.emailInvalid = false;
-    }
-  }
-
-  validatePassword() {
-    if (!this.password) {
-      this.passwordInvalid = true;
-      this.passwordErrorMessage = ErrorMessages.passwordLogin;
-    } else {
-      this.passwordInvalid = false;
-    }
-  }
 }

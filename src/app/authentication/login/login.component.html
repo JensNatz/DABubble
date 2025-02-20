@@ -19,7 +19,7 @@
                 [(ngModel)]="email" name="email" (ngModelChange)="checkUserExists()">
             </app-input-field>
             <app-input-field type="password" placeholder="Passwort" [showError]="passwordInvalid || false"
-            [errorMessage]="getErrorMessage()" imagePath="../../../assets/img/lock.svg" [(ngModel)]="password"
+            imagePath="../../../assets/img/lock.svg" [(ngModel)]="password"
                 name="password" (ngModelChange)="checkUserExists()">
                 ></app-input-field>
         </div>

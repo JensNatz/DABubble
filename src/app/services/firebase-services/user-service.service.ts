@@ -130,9 +130,9 @@ export class UserServiceService {
     try {
       const userDocRef = doc(this.firestore, `users/${userId}`);
       await updateDoc(userDocRef, updatedData);
-      
+      console.log('User updated successfully');
     } catch (err) {
-    
+      console.error('Error updating user:', err);
       throw err;
     }
   }
