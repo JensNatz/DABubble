@@ -53,7 +53,7 @@ export class UserAddComponent {
       })
     );
   }
-  
+
 
   onInputChange(event: Event): void {    
     const target = event.target as HTMLDivElement;
@@ -90,11 +90,11 @@ export class UserAddComponent {
 
 
   addUserToChannel() {
-    if (!this.channelId || !this.inputValue) {
+    if (!this.channelId || !this.selectedUser) {
       return;
     }
-
-    const selectedUser = this.allUsers.find(user => user.name === this.inputValue);
+    
+    const selectedUser = this.allUsers.find(user => user.name === this.selectedUser?.name);
     if (!selectedUser) {
       return;
     }
