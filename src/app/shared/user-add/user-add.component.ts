@@ -34,6 +34,8 @@ export class UserAddComponent {
   filteredUsers: User[] = [];
   listShown: boolean = false;
   errorMessage: string = '';
+  selectedUser: User | null = null;
+  
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -53,21 +55,25 @@ export class UserAddComponent {
   }
 
   onInputChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.inputValue = target?.value || '';
+    const target = event.target as HTMLDivElement;
+    this.inputValue = target.innerText.trim();
 
     if (this.inputValue.length > 0) {
-      this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
-      this.listShown = this.filteredUsers.length > 0;
+        this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
+        this.listShown = this.filteredUsers.length > 0;
     } else {
-      this.listShown = false;
+        this.listShown = false;
     }
-  }
+}
 
-  onUserSelect(user: User): void {
-    this.inputValue = user.name;
-    this.listShown = false;
-  }
+
+
+onUserSelect(user: User): void {
+  this.selectedUser = user;
+  this.inputValue = ''; // Leert das Eingabefeld
+  this.listShown = false;  
+}
+
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();

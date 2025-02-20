@@ -10,7 +10,14 @@
     </div>
 
     <div class="input-container">
-        <input type="text" placeholder="Name eingeben" [(ngModel)]="inputValue" (input)="onInputChange($event)">
+        <div class="editable-input" contenteditable="true" (input)="onInputChange($event)" #editableDiv>
+            <ng-container *ngIf="selectedUser">
+                <div>
+                    <img class="avatar" [src]="'assets/img/avatar' + selectedUser.avatar + '.svg'" alt="avatar">
+                    <span>{{ selectedUser.name }}</span>
+                </div>
+            </ng-container>
+        </div>
 
         <div *ngIf="listShown" class="users_liste">
             <div class="user_name" *ngFor="let user of filteredUsers" (click)="onUserSelect(user)">
