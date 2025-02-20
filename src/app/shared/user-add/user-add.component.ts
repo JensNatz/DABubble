@@ -54,9 +54,7 @@ export class UserAddComponent {
         this.allUsers = users;
       })
     );
-    this.getCurrentUserData();
-    console.log(this.currentName);
-    
+    this.getCurrentUserData();    
   }
 
 
