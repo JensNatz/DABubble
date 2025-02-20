@@ -17,28 +17,42 @@ const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
 export const routes: Routes = [
   { 
     path: '', 
+    title: 'DaBubble - Login',
     component: AuthenticationComponent,
     resolve: {
       platformCheck: () => isPlatformBrowser(PLATFORM_ID)
     }
   },
-  { path: 'register', component: RegisterComponent },
-  { path: 'register/avatar', component: AvatarComponent },
-  { path: 'resetpw-email', component: RestePasswordEmailComponent },
-  { path: 'resetpw', component: ResetPasswordComponent },
-  { path: 'animation', component: DaBubbleAnimationComponent },
+  { path: 'register', 
+    title: 'DaBubble - Registrierung',
+    component: RegisterComponent },
+  { path: 'register/avatar', 
+    title: 'DaBubble - Avatar',
+    component: AvatarComponent },
+  { path: 'resetpw-email', 
+    title: 'DaBubble - Passwort vergessen',
+    component: RestePasswordEmailComponent },
+  { path: 'resetpw', 
+    title: 'DaBubble - Passwort zurücksetzen',
+    component: ResetPasswordComponent },
+  { path: 'animation', 
+    title: 'DaBubble - Startseite',
+    component: DaBubbleAnimationComponent },
   {
     path: 'chat',
+    title: 'DaBubble - Chat',
     component: MainPageComponent,
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
   {
     path: 'imprint',
+    title: 'DaBubble - Impressum',
     component: ImprintComponent
   },
   {
     path: 'privacy-police',
+    title: 'DaBubble - Datenschutz',
     component: PrivacyPolicyComponent
   }
 ];
