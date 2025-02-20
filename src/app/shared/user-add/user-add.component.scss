@@ -96,6 +96,21 @@ h2 {
     }
 }
 
+.selected_users {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.selected_user {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px;
+    background-color: $light-purple;
+    border-radius: 10px;
+}
+
 .user_name {
     display: flex;
     align-items: center;
