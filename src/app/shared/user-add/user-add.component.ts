@@ -36,6 +36,7 @@ export class UserAddComponent {
   errorMessage: string = '';
   selectedUser: User | null = null;
   selectedUsers: User[] = [];
+  currentName: string  = '';
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -53,20 +54,27 @@ export class UserAddComponent {
         this.allUsers = users;
       })
     );
+    this.getCurrentUserData();
+    console.log(this.currentName);
+    
   }
 
 
   onInputChange(event: Event): void {
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
-
+  
     if (this.inputValue.length > 0) {
-      this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
+      this.filteredUsers = this.searchService
+        .filterUsersByName(this.inputValue)
+        .filter(user => user.name !== this.currentName);
+  
       this.listShown = this.filteredUsers.length > 0;
     } else {
       this.listShown = false;
     }
   }
+  
 
 
   onUserSelect(user: User): void {
@@ -93,6 +101,15 @@ export class UserAddComponent {
     if (this.selectedUsers.length === 0) {
       this.errorMessage = '';
     }
+  }
+
+
+  getCurrentUserData() {
+    this.loginService.currentUser.subscribe(user => {
+      if (user) {
+        this.currentName = user.name;
+      }
+    })
   }
 
 

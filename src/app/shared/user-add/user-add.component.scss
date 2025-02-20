@@ -12,9 +12,9 @@ h2 {
 
 .editable-input {
     width: 50%;   
+    min-width: 100px;
     font-size: clamp(16px, 2vw, 18px);
     cursor: text;
-    min-height: 40px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -40,6 +40,11 @@ h2 {
 
 .input-container {
     position: relative;
+}
+
+.editable-input:empty:before {
+    content: "Name eingeben";
+    color: gray;
 }
 
 .users_liste {
