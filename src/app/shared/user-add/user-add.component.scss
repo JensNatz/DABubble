@@ -80,6 +80,20 @@ h2 {
 
 .selected_user {
     position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    top: 5px;
+    left: 18px;
+    padding: 5px;
+    background-color: $light-purple;
+    @include rounded();
+
+    button {
+        cursor: pointer;
+        background-color: $light-purple;
+        border: 0;
+    }
 }
 
 .user_name {

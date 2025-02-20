@@ -53,11 +53,9 @@ export class UserAddComponent {
       })
     );
   }
+  
 
-  onInputChange(event: Event): void {
-    // const target = event.target as HTMLDivElement;
-    // this.inputValue = target.innerText.trim();
-
+  onInputChange(event: Event): void {    
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
 
@@ -73,12 +71,10 @@ export class UserAddComponent {
   onUserSelect(user: User): void {
     this.selectedUser = user;
     this.inputValue = '';
-
     const editableDiv = document.querySelector('.editable-input') as HTMLDivElement;
     if (editableDiv) {
-      editableDiv.innerText = ''; // Setzt das Feld visuell zurück
+      editableDiv.innerText = '';
     }
-
     this.listShown = false;
   }
 

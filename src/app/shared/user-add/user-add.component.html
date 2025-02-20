@@ -15,7 +15,7 @@
             <div class="selected_user">
                 <img class="avatar" [src]="'assets/img/avatar' + selectedUser.avatar + '.svg'" alt="avatar">
                 <span>{{ selectedUser.name }}</span>
-                <button class="remove-user-btn" (click)="removeSelectedUser()">X</button>
+                <button class="remove-user-btn" (click)="removeSelectedUser()"><img src="assets/img/close.svg"></button>
             </div>
         </ng-container>
 
@@ -31,6 +31,6 @@
     </div>
 
     <div class="add_button">
-        <button class="btn-primary" [disabled]="!inputValue" (click)="addUserToChannel()">Hinzufügen</button>
+        <button class="btn-primary" [disabled]="!selectedUser" (click)="addUserToChannel()">Hinzufügen</button>
     </div>
 </div>
