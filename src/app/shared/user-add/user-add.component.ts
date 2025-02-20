@@ -54,8 +54,10 @@ export class UserAddComponent {
     );
   }
 
-
   onInputChange(event: Event): void {
+    // const target = event.target as HTMLDivElement;
+    // this.inputValue = target.innerText.trim();
+
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
 
