@@ -34,29 +34,6 @@ h2 {
     border: 1px solid $purple-1;
 }
 
-input {
-    margin-top: 10px;
-    width: 100%;
-    max-height: 60px;
-    height: 100%;
-    background-position: 32px center;
-    background-size: 24px 24px;
-    padding: 18px 20px;
-    border-radius: 100px;
-    border: 1px solid $light-purple;
-    font-size: clamp(16px, 2vw, 18px);
-
-    &:hover {
-        cursor: pointer;
-        border: 1px solid $black;
-    }
-
-    &:focus {
-        outline: none;
-        border: 1px solid $purple-1;
-    }
-}
-
 .input-container {
     position: relative;
 }
@@ -99,6 +76,10 @@ input {
 .rectangle {
     display: none;
 
+}
+
+.selected_user {
+    position: absolute;
 }
 
 .user_name {

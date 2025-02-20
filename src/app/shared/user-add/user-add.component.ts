@@ -35,7 +35,6 @@ export class UserAddComponent {
   listShown: boolean = false;
   errorMessage: string = '';
   selectedUser: User | null = null;
-  
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -46,7 +45,8 @@ export class UserAddComponent {
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor( private addUserComponent: AddUserToChannelComponent ) {
+
+  constructor(private addUserComponent: AddUserToChannelComponent) {
     this.userSubscription.add(
       this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
@@ -54,30 +54,42 @@ export class UserAddComponent {
     );
   }
 
+
   onInputChange(event: Event): void {
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
 
     if (this.inputValue.length > 0) {
-        this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
-        this.listShown = this.filteredUsers.length > 0;
+      this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
+      this.listShown = this.filteredUsers.length > 0;
     } else {
-        this.listShown = false;
+      this.listShown = false;
     }
-}
+  }
 
 
+  onUserSelect(user: User): void {
+    this.selectedUser = user;
+    this.inputValue = '';
 
-onUserSelect(user: User): void {
-  this.selectedUser = user;
-  this.inputValue = ''; // Leert das Eingabefeld
-  this.listShown = false;  
-}
+    const editableDiv = document.querySelector('.editable-input') as HTMLDivElement;
+    if (editableDiv) {
+      editableDiv.innerText = ''; // Setzt das Feld visuell zurück
+    }
+
+    this.listShown = false;
+  }
 
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
+  
+
+  removeSelectedUser(): void {
+    this.selectedUser = null;
+  }
+
 
   addUserToChannel() {
     if (!this.channelId || !this.inputValue) {
