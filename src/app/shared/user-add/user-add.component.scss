@@ -216,5 +216,28 @@ h2 {
     .users_liste {
         top: 37px;
         max-height: 115px;
+    }   
+}
+
+@media (max-width: $breakpoint-sm) {
+    .input_content {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding: 8px 10px;
+        border-radius: 10px;
+    }
+
+    .editable-input {
+        width: 100%;
+    }
+
+    .selected_users {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        max-height: 42px;
+        overflow: auto;
+        margin-top: 5px; 
     }
 }
