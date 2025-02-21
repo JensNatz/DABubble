@@ -29,7 +29,6 @@ export class ResetPasswordComponent {
   passwordNotTheSame: string = ErrorMessages.passwordNotTheSame;
   userId: string = '';
 
-
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,

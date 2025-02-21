@@ -5,7 +5,7 @@ import { UserServiceService } from '../../services/firebase-services/user-servic
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { Route, Router, RouterModule } from '@angular/router';
 import { GoogleAuthenticationService } from '../../services/firebase-services/google-athentication.servive';
 import { LoginService } from '../../services/firebase-services/login-service';
@@ -18,7 +18,7 @@ import { DaBubbleAnimationComponent } from "../../shared/da-bubble-animation/da-
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, InputFieldComponent, RegisterButtonComponent, FormsModule, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent, DaBubbleAnimationComponent],
+  imports: [ReactiveFormsModule, CommonModule, InputFieldComponent, RegisterButtonComponent, RouterModule, LoginUserAcceptedComponent, LegalInformationComponent, DaBubbleHeaderAuthenticationComponent, DaBubbleAnimationComponent],
   providers: [UserServiceService, GoogleAuthenticationService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', '../../shared/authentication-input/input-field.component.scss', '../shared/responsiv-authentication.scss']
@@ -38,24 +38,42 @@ export class LoginComponent {
   animationPlayed: boolean = false;
   errorMessage: string = '';
   isSubmitting: boolean = true;
+  loginForm: FormGroup = new FormGroup({});
+  emailTouched: boolean = false; // Neu: Speichert, ob das E-Mail-Feld berührt wurde
+  passwordTouched: boolean = false;
 
-
-  constructor(private userService: UserServiceService, private googleAuthService: GoogleAuthenticationService, private loginService: LoginService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserServiceService,
+    private googleAuthService: GoogleAuthenticationService,
+    private loginService: LoginService,
+    private router: Router
+  ) {
     this.users = this.userService.getUsers();
-  }
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
 
-  ngOnInit(): void {
-    this.loginService.currentUser.subscribe(user => {
-      this.userFound = this.loginService.userFound;
+    this.loginForm.valueChanges.subscribe(() => {
+      this.checkUserExists();
     });
   }
 
   async checkUserExists() {
-    if (this.email && this.password) {
-      const userExists = await this.userService.userExists(this.email, this.password);
+    const email = this.loginForm.get('email')?.value;
+    const password = this.loginForm.get('password')?.value;
+
+    if (email && password) {
+      const userExists = await this.userService.userExists(email, password);
       this.isSubmitting = !userExists;
+      if (!userExists) {
+        this.passwordInvalid = true;
+        this.errorMessage = ErrorMessages.passwordLogin;
+      }
     } else {
       this.isSubmitting = true;
+      this.passwordInvalid = false;
     }
   }
 
@@ -68,22 +86,29 @@ export class LoginComponent {
   }
 
   async onSubmit() {
-    try {
-      const userExists = await this.userService.userExists(this.email, this.password);
-      if (userExists) {
-        await this.loginService.login(this.email, this.password);
+    this.loginForm.markAllAsTouched();
+    if (this.loginForm.invalid) {
+      return;
+    }
 
+    const { email, password } = this.loginForm.value;
+
+    try {
+      const userExists = await this.userService.userExists(email, password);
+      if (userExists) {
+        await this.loginService.login(email, password);
+        this.userFound = true;
         setTimeout(() => {
           this.userFound = false;
           this.router.navigate(['/chat']);
         }, 2000);
+      } else {
+        this.passwordInvalid = true;
+        this.errorMessage = ErrorMessages.passwordLogin;
       }
     } catch (error) {
-
-    } finally {
-      this.isSubmitting = false;
+      console.error('Error during login:', error);
     }
-
   }
 
   signInWithGoogle() {
@@ -97,6 +122,28 @@ export class LoginComponent {
 
   logout() {
     this.loginService.logout();
+  }
+
+  onBlur(field: string) {
+    const control = this.loginForm.get(field);
+    if (control) {
+      control.markAsTouched();
+
+      // Setze das entsprechende "Touched"-Flag
+      if (field === 'email') {
+        this.emailTouched = true;
+        console.log('d')
+      } else if (field === 'password') {
+        this.passwordTouched = true;
+        console.log('d')
+      }
+
+      // Überprüfung nur, wenn beide Felder berührt wurden
+      if (this.emailTouched && this.passwordTouched) {
+        this.checkUserExists();
+        console.log('d')
+      }
+    }
   }
 
 }

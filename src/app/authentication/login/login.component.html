@@ -12,15 +12,16 @@
     </div>
 
 
-    <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
         <div class="input-field-section">
             <app-input-field type="email" placeholder="beispielname@email.com"
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" imagePath="../../../assets/img/mail.svg"
-                [(ngModel)]="email" name="email" (ngModelChange)="checkUserExists()">
+                 name="email" formControlName="email" (blur)="onBlur('email')">
             </app-input-field>
             <app-input-field type="password" placeholder="Passwort" [showError]="passwordInvalid || false"
-            imagePath="../../../assets/img/lock.svg" [(ngModel)]="password"
-                name="password" (ngModelChange)="checkUserExists()">
+            imagePath="../../../assets/img/lock.svg" 
+                name="password" formControlName="password" (blur)="onBlur('password')"
+                [errorMessage]="passwordErrorMessage">
                 ></app-input-field>
         </div>
 
