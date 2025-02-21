@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, setDoc, updateDoc, docData, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, setDoc, updateDoc, docData, getDoc, where } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
 import { confirmPasswordReset, createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, verifyPasswordResetCode } from '@angular/fire/auth';
@@ -40,6 +40,14 @@ export class UserServiceService {
     const snapshot = await getDoc(userDocRef);
     return snapshot.exists() ? (snapshot.data() as User) : null;
   }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    const userRef = this.getUserRef();
+    const q = query(userRef, where('email', '==', email));
+    const querySnapshot = await firstValueFrom(collectionData(q, { idField: 'id' }) as Observable<User[]>);
+    return querySnapshot.length > 0 ? querySnapshot[0] : null;
+  }
+
 
   async addNewUser(item: User) {
     try {
@@ -108,20 +116,14 @@ export class UserServiceService {
       
       return email;
     } catch (err) {
-      
       throw err;
     }
   }
 
   async confirmPasswordReset(code: string, newPassword: string): Promise<void> {
     try {
-      await confirmPasswordReset(this.auth, code, newPassword);
-      
-      
-
-      
-    } catch (err) {
-      
+      await confirmPasswordReset(this.auth, code, newPassword);    
+    } catch (err) { 
       throw err;
     }
   }
@@ -133,6 +135,17 @@ export class UserServiceService {
       console.log('User updated successfully');
     } catch (err) {
       console.error('Error updating user:', err);
+      throw err;
+    }
+  }
+
+  async updateUserPasswordInDatabase(userId: string, newPassword: string): Promise<void> {
+    try {
+      const userDocRef = doc(this.firestore, `users/${userId}`);
+      await updateDoc(userDocRef, { password: newPassword });
+      console.log('Password updated successfully in database');
+    } catch (err) {
+      console.error('Error updating password in database:', err);
       throw err;
     }
   }

@@ -27,6 +27,7 @@ export class ResetPasswordComponent {
   newPasswordForm: any;
   passwordErrorMessage: string = '';
   passwordNotTheSame: string = ErrorMessages.passwordNotTheSame;
+  userId: string = '';
 
 
   constructor(
@@ -60,6 +61,11 @@ export class ResetPasswordComponent {
     try {
       const email = await this.userService.verifyPasswordResetCode(this.resetCode);
       console.log(`Reset code verified for email: ${email}`);
+      this.email = email;
+      const user = await this.userService.getUserByEmail(email);
+      if (user) {
+        this.userId = user.id || '';
+      }
     } catch (error) {
       console.error('Error verifying reset code:', error);
     }
@@ -80,6 +86,9 @@ export class ResetPasswordComponent {
     try {
       await this.userService.confirmPasswordReset(this.resetCode, newpw);
       console.log('Password reset successfully');
+      if (this.userId) {
+        await this.userService.updateUserPasswordInDatabase(this.userId, newpw);
+      }
       this.passwortReset = true;
       setTimeout(() => {
         this.passwortReset = false;
