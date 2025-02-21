@@ -25,7 +25,8 @@ export class ResetPasswordComponent {
   errorMessage: string = '';
   passwortReset: boolean = false;
   newPasswordForm: any;
-  passwordErrorMessage: string = ErrorMessages.passwordNotTheSame;
+  passwordErrorMessage: string = '';
+  passwordNotTheSame: string = ErrorMessages.passwordNotTheSame;
 
 
   constructor(
@@ -104,9 +105,9 @@ export class ResetPasswordComponent {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value || '';
 
-      if (value.length < 5) {
+      if (value.length < 6) {
         this.passwordErrorMessage = ErrorMessages.passwordMinLength;
-        return { minlength: { requiredLength: 5, actualLength: value.length } };
+        return { minlength: { requiredLength: 6, actualLength: value.length } };
       }
       if (!/[A-Z]/.test(value)) {
         this.passwordErrorMessage = ErrorMessages.passwordCapitalLetter;
