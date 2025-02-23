@@ -44,7 +44,7 @@ export class AvatarComponent {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.name = params['name'];
-      this.email = params['email'];
+      this.email = params['email'] ? params['email'].toLowerCase() : '';
       this.password = params['password'];
 
       if (!this.name || !this.email || !this.password) {

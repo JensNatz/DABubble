@@ -51,7 +51,7 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-
+    
     this.loginForm.valueChanges.subscribe(() => {
       this.checkUserExists();
 
@@ -65,7 +65,7 @@ export class LoginComponent {
   }
 
   async checkUserExists() {
-    const email = this.loginForm.get('email')?.value;
+    const email = this.loginForm.get('email')?.value.toLowerCase();
     const password = this.loginForm.get('password')?.value;
 
     if (password) {
@@ -81,7 +81,7 @@ export class LoginComponent {
 
   async guestLogin() {
     try {
-      await this.loginService.guestLogin();
+      await this.loginService.guestLogin();      
       this.userFound = true;
         setTimeout(() => {
           this.userFound = false;
