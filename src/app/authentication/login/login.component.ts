@@ -82,8 +82,13 @@ export class LoginComponent {
   async guestLogin() {
     try {
       await this.loginService.guestLogin();
-    } catch (error) {
-      console.error('Error during guest login:', error);
+      this.userFound = true;
+        setTimeout(() => {
+          this.userFound = false;
+          this.router.navigate(['/chat']);
+        }, 2000);
+     
+    } catch (error) {     
     }
   }
 
@@ -109,7 +114,7 @@ export class LoginComponent {
         this.errorMessage = ErrorMessages.passwordLogin;
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      
     }
   }
 

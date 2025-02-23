@@ -109,6 +109,7 @@ export class LoginService {
       const firebaseUser = result.user;
       const userDoc = await this.userService.getSingleUser('users', firebaseUser.uid);
       const userSnapshot = await getDoc(userDoc);
+      this.userFound = true;
 
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data() as User;
