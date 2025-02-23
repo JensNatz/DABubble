@@ -16,12 +16,16 @@
         <div class="input-field-section">
             <app-input-field type="email" placeholder="beispielname@email.com"
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" imagePath="../../../assets/img/mail.svg"
-                 name="email" formControlName="email" (blur)="onBlur('email')">
+                 name="email" formControlName="email" (onBlur)="onBlur('email')" [showError]="(!!emailInvalid && loginForm.get('email')?.touched) ?? false">
             </app-input-field>
-            <app-input-field type="password" placeholder="Passwort" [showError]="passwordInvalid || false"
-            imagePath="../../../assets/img/lock.svg" 
-                name="password" formControlName="password" (blur)="onBlur('password')"
-                [errorMessage]="passwordErrorMessage">
+            <app-input-field type="password"
+            placeholder="Passwort"
+            [showError]="!!passwordInvalid && !!loginForm.get('password')?.touched"
+            imagePath="../../../assets/img/lock.svg"
+            name="password"
+            formControlName="password"
+            (onBlur)="onBlur('password')" 
+            [errorMessage]="errorMessage">
                 ></app-input-field>
         </div>
 

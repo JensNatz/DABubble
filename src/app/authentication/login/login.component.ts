@@ -26,12 +26,8 @@ import { DaBubbleAnimationComponent } from "../../shared/da-bubble-animation/da-
 export class LoginComponent {
   usernameInvalid: boolean | undefined;
   users: Observable<User[]>;
-  email: string = '';
-  password: string = '';
-  emailInvalid: boolean = false;
   passwordInvalid: boolean = false;
-  emailErrorMessage: string = ErrorMessages.emailInvalid;
-  emptyErrorMessage: string = ErrorMessages.emptyLogin;
+
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
   userFound: boolean | undefined = false;
   emptyLogin: boolean = false;
@@ -39,8 +35,9 @@ export class LoginComponent {
   errorMessage: string = '';
   isSubmitting: boolean = true;
   loginForm: FormGroup = new FormGroup({});
-  emailTouched: boolean = false; // Neu: Speichert, ob das E-Mail-Feld berührt wurde
+  emailTouched: boolean = false;
   passwordTouched: boolean = false;
+  emailInvalid:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -57,23 +54,28 @@ export class LoginComponent {
 
     this.loginForm.valueChanges.subscribe(() => {
       this.checkUserExists();
+
+      if (this.emailInvalid || this.passwordInvalid) {
+        this.emailInvalid = false;
+        this.passwordInvalid = false;
+        this.errorMessage = '';
+      }
     });
+
   }
 
   async checkUserExists() {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
 
-    if (email && password) {
+    if (password) {
       const userExists = await this.userService.userExists(email, password);
       this.isSubmitting = !userExists;
-      if (!userExists) {
-        this.passwordInvalid = true;
-        this.errorMessage = ErrorMessages.passwordLogin;
-      }
+      return userExists;
     } else {
       this.isSubmitting = true;
       this.passwordInvalid = false;
+      return false;
     }
   }
 
@@ -124,26 +126,31 @@ export class LoginComponent {
     this.loginService.logout();
   }
 
-  onBlur(field: string) {
+  async onBlur(field: string) {
     const control = this.loginForm.get(field);
     if (control) {
       control.markAsTouched();
-
-      // Setze das entsprechende "Touched"-Flag
+  
       if (field === 'email') {
-        this.emailTouched = true;
-        console.log('d')
-      } else if (field === 'password') {
-        this.passwordTouched = true;
-        console.log('d')
+       
+        if (control.invalid) {
+          this.emailInvalid = true;
+          this.errorMessage = ErrorMessages.passwordLogin; 
+        } else {
+          this.emailInvalid = false;
+        }
       }
-
-      // Überprüfung nur, wenn beide Felder berührt wurden
-      if (this.emailTouched && this.passwordTouched) {
-        this.checkUserExists();
-        console.log('d')
+  
+      if (field === 'password') {
+        
+        const userExists = await this.checkUserExists();
+        if (!userExists) {
+          this.passwordInvalid = true;
+          this.errorMessage = ErrorMessages.passwordLogin; 
+        } else {
+          this.passwordInvalid = false;
+        }
       }
     }
   }
-
 }
