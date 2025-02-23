@@ -31,7 +31,7 @@ export class LoginComponent {
   passwordErrorMessage: string = ErrorMessages.passwordLogin;
   userFound: boolean | undefined = false;
   emptyLogin: boolean = false;
-  animationPlayed: boolean = false;
+  animationPlayed: boolean = true;
   errorMessage: string = '';
   isSubmitting: boolean = true;
   loginForm: FormGroup = new FormGroup({});
