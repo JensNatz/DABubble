@@ -10,31 +10,41 @@ h2 {
     font-size: clamp(18px, 2.5vw, 20px) !important;
 }
 
-input {
-    margin-top: 10px;
-    width: 100%;
-    max-height: 60px;
-    height: 100%;
-    background-position: 32px center;
-    background-size: 24px 24px;
-    padding: 18px 20px;
+.editable-input {
+    width: 50%;
+    min-width: 100px;
+    font-size: clamp(16px, 2vw, 18px);
+    cursor: text;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.input_content {
+    height: 58px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 8px 15px;
     border-radius: 100px;
     border: 1px solid $light-purple;
-    font-size: clamp(16px, 2vw, 18px);
+    box-sizing: border-box;
+}
 
-    &:hover {
-        cursor: pointer;
-        border: 1px solid $black;
-    }
-
-    &:focus {
-        outline: none;
-        border: 1px solid $purple-1;
-    }
+.editable-input:focus {
+    outline: none;
+    border: 0;
 }
 
 .input-container {
     position: relative;
+}
+
+.editable-input:empty:before {
+    content: "Name eingeben";
+    color: gray;
 }
 
 .users_liste {
@@ -77,6 +87,66 @@ input {
 
 }
 
+.selected_users {
+    cursor: pointer;
+    max-height: 50px;
+    overflow: hidden;
+    background-color: white;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+
+    &:hover {
+        overflow: auto;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        margin: 100px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: $light-purple;
+    }
+}
+
+.selected_user {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: max-content;
+    gap: 4px;
+    top: 5px;
+    left: 18px;
+    padding: 5px;
+    background-color: $light-purple;
+    margin-bottom: 2px;
+    margin-top: 2px;
+    @include rounded();
+
+    img {
+        width: 30px;
+        height: 30px;
+    }
+
+    button {
+        cursor: pointer;
+        background-color: $light-purple;
+        border: 0;
+
+        img {
+            width: 10px;
+            height: 10px;
+        }
+    }
+}
+
 .user_name {
     display: flex;
     align-items: center;
@@ -117,7 +187,7 @@ h2 {
 .add_button {
     display: flex;
     justify-content: end;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .error-message {
@@ -125,7 +195,7 @@ h2 {
     color: red;
     font-size: 14px;
     margin-top: 5px;
-    left: 64px;
+    left: 24px;
 }
 
 @media (max-width: $breakpoint-md) {
@@ -146,5 +216,28 @@ h2 {
     .users_liste {
         top: 37px;
         max-height: 115px;
+    }   
+}
+
+@media (max-width: $breakpoint-sm) {
+    .input_content {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding: 8px 10px;
+        border-radius: 10px;
+    }
+
+    .editable-input {
+        width: 100%;
+    }
+
+    .selected_users {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        max-height: 42px;
+        overflow: auto;
+        margin-top: 5px; 
     }
 }

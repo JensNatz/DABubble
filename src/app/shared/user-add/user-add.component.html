@@ -10,7 +10,21 @@
     </div>
 
     <div class="input-container">
-        <input type="text" placeholder="Name eingeben" [(ngModel)]="inputValue" (input)="onInputChange($event)">
+        <div class="input_content">
+            <div class="editable-input" contenteditable="true" (input)="onInputChange($event)" #editableDiv></div>
+            
+            <ng-container *ngIf="selectedUsers.length > 0">
+                <div class="selected_users">
+                    <div class="selected_user" *ngFor="let user of selectedUsers">
+                        <img class="avatar" [src]="'assets/img/avatar' + user.avatar + '.svg'" alt="avatar">
+                        <span>{{ user.name }}</span>
+                        <button class="remove-user-btn" (click)="removeSelectedUser(user)">
+                            <img src="assets/img/close.svg">
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
 
         <div *ngIf="listShown" class="users_liste">
             <div class="user_name" *ngFor="let user of filteredUsers" (click)="onUserSelect(user)">
@@ -24,6 +38,6 @@
     </div>
 
     <div class="add_button">
-        <button class="btn-primary" [disabled]="!inputValue" (click)="addUserToChannel()">Hinzufügen</button>
+        <button class="btn-primary" [disabled]="selectedUsers.length === 0" (click)="addUserToChannel()">Hinzufügen</button>
     </div>
 </div>
