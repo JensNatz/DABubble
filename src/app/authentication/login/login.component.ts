@@ -98,7 +98,8 @@ export class LoginComponent {
       return;
     }
 
-    const { email, password } = this.loginForm.value;
+    const email = this.loginForm.get('email')?.value.toLowerCase();
+    const password = this.loginForm.get('password')?.value;
 
     try {
       const userExists = await this.userService.userExists(email, password);
