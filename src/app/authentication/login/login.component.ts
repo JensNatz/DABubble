@@ -64,6 +64,23 @@ export class LoginComponent {
 
   }
 
+  ngOnInit() {
+    const animationPlayed = localStorage.getItem('animationPlayed');
+    if (!animationPlayed) {
+      this.animationPlayed = true;
+      setTimeout(() => {
+        this.animationPlayed = false;
+        localStorage.setItem('animationPlayed', 'true');
+      }, 4000);
+    } else {
+      this.animationPlayed = false;
+    }
+    
+    window.addEventListener('beforeunload', () => {
+      localStorage.removeItem('animationPlayed');
+    });
+  }
+
   async checkUserExists() {
     const email = this.loginForm.get('email')?.value.toLowerCase();
     const password = this.loginForm.get('password')?.value;

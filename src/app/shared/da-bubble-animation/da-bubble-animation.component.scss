@@ -213,49 +213,61 @@
 }
 
 @media (max-width: 1400px) {
-    .da-bubble-container{       
+    .da-bubble-container {
         animation: moveUpLeft1400 1s ease-in-out forwards;
         animation-delay: 2.5s;
     }
 }
 
 @media (max-width: 1300px) {
-    .da-bubble-container{       
+    .da-bubble-container {
         animation: moveUpLeft1300 1s ease-in-out forwards;
         animation-delay: 2.5s;
     }
 
- 
+
 }
 
 @media (max-width: 1180px) and (min-width: 701px) {
-    .da-bubble-container{
+    .da-bubble-container {
         animation: moveUpLeft1180 1s ease-in-out forwards;
         animation-delay: 2.5s;
+
         img {
-            
+
             animation:
                 moveLeft 0.25s ease-in-out forwards,
                 shrinkImageMobil700 0.5s ease forwards;
             animation-delay: 0.5s, 2.5s;
         }
 
-        p {            
+        p {
             animation:
                 slideText 0.5s ease forwards,
                 shrinkTextMobile 0.5s ease forwards;
             animation-delay: 1.5s, 2.5s;
-    
+
         }
     }
 }
 
 @media (max-width: 700px) {
-    .da-bubble-container{       
+
+    :host{
+        display: flex;
+        justify-content: center;
+    }
+        
+    .da-bubble-container {
         animation: moveUpLeftMobile 1s ease-in-out forwards;
         animation-delay: 2.5s;
+        display: flex;
+        justify-content: center;
+       width: 100%;
+       
 
-        img{
+      
+        img {
             height: 80px;
             animation:
                 moveLeft 0.25s ease-in-out forwards,
@@ -263,7 +275,7 @@
             animation-delay: 0.5s, 2.5s;
         }
 
-        p{
+        p {
             animation:
                 slideText 0.5s ease forwards,
                 shrinkTextMobile700 0.5s ease forwards;
