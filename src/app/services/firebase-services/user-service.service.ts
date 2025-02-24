@@ -132,9 +132,9 @@ export class UserServiceService {
     try {
       const userDocRef = doc(this.firestore, `users/${userId}`);
       await updateDoc(userDocRef, updatedData);
-      console.log('User updated successfully');
+      //console.log('User updated successfully');
     } catch (err) {
-      console.error('Error updating user:', err);
+      //console.error('Error updating user:', err);
       throw err;
     }
   }
@@ -143,9 +143,9 @@ export class UserServiceService {
     try {
       const userDocRef = doc(this.firestore, `users/${userId}`);
       await updateDoc(userDocRef, { password: newPassword });
-      console.log('Password updated successfully in database');
+      //console.log('Password updated successfully in database');
     } catch (err) {
-      console.error('Error updating password in database:', err);
+      //console.error('Error updating password in database:', err);
       throw err;
     }
   }

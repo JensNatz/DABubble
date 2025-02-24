@@ -59,14 +59,14 @@ export class ResetPasswordComponent {
   async verifyResetCode() {
     try {
       const email = await this.userService.verifyPasswordResetCode(this.resetCode);
-      console.log(`Reset code verified for email: ${email}`);
+      //console.log(`Reset code verified for email: ${email}`);
       this.email = email;
       const user = await this.userService.getUserByEmail(email);
       if (user) {
         this.userId = user.id || '';
       }
     } catch (error) {
-      console.error('Error verifying reset code:', error);
+     // console.error('Error verifying reset code:', error);
     }
   }
 
