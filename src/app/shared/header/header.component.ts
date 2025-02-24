@@ -43,6 +43,9 @@ export class HeaderComponent {
   userStatus: string = '';
 
   constructor(private router: Router) {
+  }
+
+  ngOnInit() {
     this.getCurrentUserData();
   }
 

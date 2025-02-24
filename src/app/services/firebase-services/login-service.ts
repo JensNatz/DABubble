@@ -66,10 +66,11 @@ export class LoginService {
       const userSnapshot = await getDoc(userDoc);
 
       if (userSnapshot.exists()) {
-        const userData = userSnapshot.data() as User;
         this.userFound = true;
-        this.currentUserSubject.next(userData);
         await updateDoc(userDoc, { onlineStatusbar: 'online' });
+        const userData = userSnapshot.data() as User;
+        userData.onlineStatusbar = 'online';
+        this.currentUserSubject.next(userData);
        
         setTimeout(() => {
           this.userFound = false;
