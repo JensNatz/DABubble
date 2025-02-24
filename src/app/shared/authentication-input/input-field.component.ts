@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
@@ -23,6 +23,7 @@ export class InputFieldComponent implements ControlValueAccessor {
   @Input() showError: boolean = false;
   @Input() errorMessage: string = '';
   @Input() imagePath: string = '';
+  @Output() onBlur = new EventEmitter<void>();
   
   value: string = '';
   onChange: (value: string) => void = () => {};
@@ -45,5 +46,10 @@ export class InputFieldComponent implements ControlValueAccessor {
   onInputChange(value: string): void {
     this.value = value;
     this.onChange(value);
+  }
+
+  handleBlur(): void {
+    this.onTouched(); 
+    this.onBlur.emit(); 
   }
 }

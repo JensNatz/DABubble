@@ -70,14 +70,14 @@ export class LoginService {
         this.userFound = true;
         this.currentUserSubject.next(userData);
         await updateDoc(userDoc, { onlineStatusbar: 'online' });
-        console.log('User logged in:', userData);
+       
         setTimeout(() => {
           this.userFound = false;
           this.router.navigate(['/chat']);
         }, 2000);
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      
     }
   }
 
@@ -89,8 +89,7 @@ export class LoginService {
         await updateDoc(userDoc, { onlineStatusbar: 'offline' });
       }
       await signOut(this.auth);
-      this.currentUserSubject.next(null);
-      console.log(`User ${currentUser?.email} hat sich ausgelogt`);
+      this.currentUserSubject.next(null);      
     } catch (error) {
     }
   }
@@ -110,22 +109,20 @@ export class LoginService {
       const firebaseUser = result.user;
       const userDoc = await this.userService.getSingleUser('users', firebaseUser.uid);
       const userSnapshot = await getDoc(userDoc);
+      this.userFound = true;
 
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data() as User;
         this.userFound = true;
         this.currentUserSubject.next(userData);
-        await updateDoc(userDoc, { onlineStatusbar: 'online' });
-        console.log('Guest user logged in:', userData);
+        await updateDoc(userDoc, { onlineStatusbar: 'online' });        
         setTimeout(() => {
           this.userFound = false;
           this.router.navigate(['/chat']);
         }, 2000);
       }
-    } catch (error) {
-      console.error('Error during guest login:', error);
+    } catch (error) {      
       throw error;
     }
   }
 }
-

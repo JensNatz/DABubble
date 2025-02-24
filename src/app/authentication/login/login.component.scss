@@ -9,7 +9,13 @@
     @include flex(center, center, column);
 }
 
-
+.error-message {
+    color: $rose;
+    font-size: 14px;
+    margin-top: 6px;
+    position: absolute;
+    left: 0;
+}
 
 .login-container {
     @include flex(normal, center, column);
