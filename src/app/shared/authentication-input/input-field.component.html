@@ -7,7 +7,7 @@
         [type]="type" 
         [placeholder]="placeholder" 
         [ngStyle]="{'background-image': imagePath ? 'url(' + imagePath + ')' : 'none'}"
-        (blur)="onTouched()"
+        (blur)="handleBlur()"
         #inputField="ngModel"           
         />
         

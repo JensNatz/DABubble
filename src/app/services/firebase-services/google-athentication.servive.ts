@@ -23,10 +23,7 @@ export class GoogleAuthenticationService {
 
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
-
-      const user = result.user;
-      console.log('User signed in:', user);
-
+      const user = result.user;     
       const userDocRef = doc(this.firestore, 'users', user.uid);
       const userDoc = await getDoc(userDocRef);
 
@@ -44,10 +41,10 @@ export class GoogleAuthenticationService {
           onlineStatusbar: 'online'
         };
         await setDoc(userDocRef, newUser);
-        console.log('New user created and added to Firestore');
+        
       }
     } catch (error) {
-      console.error('Error signing in with Google:', error);
+     
     }
   }
 }

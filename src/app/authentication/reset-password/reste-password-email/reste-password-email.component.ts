@@ -33,15 +33,17 @@ export class RestePasswordEmailComponent {
 
 
 
-   async validateEmail() {
+  async validateEmail() {
     if (!this.email) {
       this.emailInvalid = true;
       this.emailErrorMessage = ErrorMessages.emailInvalid;
-    } else if (!await this.userService.emailExists(this.email)) {
-      this.emailInvalid = true;
-      
     } else {
-      this.emailInvalid = false;
+      const lowerCaseEmail = this.email.toLowerCase();
+      if (!await this.userService.emailExists(lowerCaseEmail)) {
+        this.emailInvalid = true;
+      } else {
+        this.emailInvalid = false;
+      }
     }
   }
 
@@ -56,15 +58,13 @@ export class RestePasswordEmailComponent {
     if (form.valid && !this.emailInvalid) {
       this.isSubmitting = true;
       try {
-        await this.userService.sendPasswordResetEmail(this.email);
-        console.log('email gesendet', this.email);
+        await this.userService.sendPasswordResetEmail(this.email);        
         this.emailSend = true;
         setTimeout(() => {
           this.emailSend = false;
           this.router.navigate(['']);
         }, 2000);
-      } catch (error) {
-        console.error('Error sending password reset email:', error);
+      } catch (error) {       
       } finally {
         this.isSubmitting = false;
       }

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, setDoc, updateDoc, docData, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, orderBy, addDoc, doc, setDoc, updateDoc, docData, getDoc, where } from '@angular/fire/firestore';
 import { User } from '../../models/user';
 import { firstValueFrom, Observable } from 'rxjs';
 import { confirmPasswordReset, createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, verifyPasswordResetCode } from '@angular/fire/auth';
@@ -41,13 +41,21 @@ export class UserServiceService {
     return snapshot.exists() ? (snapshot.data() as User) : null;
   }
 
+  async getUserByEmail(email: string): Promise<User | null> {
+    const userRef = this.getUserRef();
+    const q = query(userRef, where('email', '==', email));
+    const querySnapshot = await firstValueFrom(collectionData(q, { idField: 'id' }) as Observable<User[]>);
+    return querySnapshot.length > 0 ? querySnapshot[0] : null;
+  }
+
+
   async addNewUser(item: User) {
     try {
       const docRef = await addDoc(this.getUserRef(), item);
       this.id = docRef.id;
       await updateDoc(docRef, { id: this.id });
     } catch (err) {
-      console.error('Error adding document:', err);
+     
     }
   }
 
@@ -65,12 +73,11 @@ export class UserServiceService {
         onlineStatusbar: userData.onlineStatusbar || 'offline'
       };
 
-      await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);
-      
-      console.log('User registered and added to Firestore:', firebaseUser.uid);
+      await setDoc(doc(this.firestore, 'users', firebaseUser.uid), newUser);      
+     
       return firebaseUser.uid;
     } catch (error) {
-      console.error('Error during user registration:', error);
+      
       throw error;
     }
   }
@@ -80,7 +87,7 @@ export class UserServiceService {
       const users = await firstValueFrom(this.getUsers());
       return users ? users.some(user => user.email === email && user.password === password) : false;
     } catch (err) {
-      console.error('Error checking if user exists:', err);
+     
       return false;
     }
   }
@@ -90,7 +97,7 @@ export class UserServiceService {
       const users = await firstValueFrom(this.getUsers());
       return users ? users.some(user => user.email === email) : false;
     } catch (err) {
-      console.error('Error checking if email exists:', err);
+      
       return false;
     }
   }
@@ -98,33 +105,25 @@ export class UserServiceService {
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.auth, email);
-      console.log(email);
-    } catch (err) {
-      console.error('Error sending password reset email:', err);
+      
+    } catch (err) {      
     }
   }
 
   async verifyPasswordResetCode(code: string): Promise<string> {
     try {
       const email = await verifyPasswordResetCode(this.auth, code);
-      console.log(`Reset code verified for email: ${email}`);
+      
       return email;
     } catch (err) {
-      console.error('Error verifying reset code:', err);
       throw err;
     }
   }
 
   async confirmPasswordReset(code: string, newPassword: string): Promise<void> {
     try {
-      await confirmPasswordReset(this.auth, code, newPassword);
-      console.log('Password reset successfully');
-
-      
-
-      
-    } catch (err) {
-      console.error('Error confirming password reset:', err);
+      await confirmPasswordReset(this.auth, code, newPassword);    
+    } catch (err) { 
       throw err;
     }
   }
@@ -136,6 +135,17 @@ export class UserServiceService {
       console.log('User updated successfully');
     } catch (err) {
       console.error('Error updating user:', err);
+      throw err;
+    }
+  }
+
+  async updateUserPasswordInDatabase(userId: string, newPassword: string): Promise<void> {
+    try {
+      const userDocRef = doc(this.firestore, `users/${userId}`);
+      await updateDoc(userDocRef, { password: newPassword });
+      console.log('Password updated successfully in database');
+    } catch (err) {
+      console.error('Error updating password in database:', err);
       throw err;
     }
   }
