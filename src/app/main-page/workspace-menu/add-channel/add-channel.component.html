@@ -46,16 +46,16 @@
                         <div class="selected_user" *ngFor="let user of selectedUsers">
                             <img class="avatar" [src]="'assets/img/avatar' + user.avatar + '.svg'" alt="avatar">
                             <span>{{ user.name }}</span>
-                            <!-- <button class="remove-user-btn" (click)="removeSelectedUser(user)">
+                            <button class="remove-user-btn" (click)="removeSelectedUser(user)">
                                 <img src="assets/img/close.svg">
-                            </button> -->
+                            </button>
                         </div>
                     </div>
                 </ng-container>
             </div>
 
             <div *ngIf="listShown" class="users_liste">
-                <div class="user_name" *ngFor="let user of filteredUsers">
+                <div class="user_name" *ngFor="let user of filteredUsers" (click)="onUserSelect(user)">
                     <img class="avatar" src="assets/img/avatar{{ user.avatar }}.svg">
                     <span>{{ user.name }}</span>
                 </div>

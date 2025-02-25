@@ -35,6 +35,7 @@ export class AddChannelComponent {
   listShown: boolean = false;
   selectedUsers: User[] = [];
   selectedUser: User | null = null;
+  errorMessage: string = '';
 
   @Input() closeFunction!: () => void;
 
@@ -64,12 +65,12 @@ export class AddChannelComponent {
     );
   }
 
+
   onInputFocus(): void {
     this.filteredUsers = this.allUsers
         .filter(user => user.name !== this.userName)      
       this.listShown = this.filteredUsers.length > 0;
   }
-
 
   
   onInputChange(event: Event): void {
@@ -85,6 +86,7 @@ export class AddChannelComponent {
     } 
   }
 
+
   getCurrentUserData() {
     this.loginService.currentUser.subscribe(user => {
       if (user) {
@@ -94,11 +96,13 @@ export class AddChannelComponent {
     })
   }
 
+
   onAddUser(userId: string): void {
     if (!this.tempMembers.includes(userId)) {
       this.tempMembers.push(userId);
     }
   }
+
 
   async checkChannelExists() {
     if (!this.channel.name.trim()) {
@@ -111,6 +115,28 @@ export class AddChannelComponent {
         this.channelExists = channels.some((ch: Channel) => ch.name.toLowerCase() === this.channel.name.toLowerCase());
       }
     });
+  }
+
+
+  onUserSelect(user: User): void {
+    if (!this.selectedUsers.some(u => u.id === user.id)) {
+      this.selectedUsers.push(user);
+    }
+    this.inputValue = '';
+    const editableDiv = document.querySelector('.editable-input') as HTMLDivElement;
+    if (editableDiv) {
+      editableDiv.innerText = '';
+    }
+    this.listShown = false;
+  }
+
+
+  removeSelectedUser(user: User): void {
+    this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
+    
+    if (this.selectedUsers.length === 0) {
+      this.errorMessage = '';
+    }
   }
 
   // onSubmit(ngForm: NgForm) {
