@@ -303,7 +303,6 @@
     align-items: center;
     justify-content: center;
     gap: 32px;
-    margin-top: 35px;
 }
 
 @keyframes slideUp {
@@ -389,4 +388,8 @@
         font-weight: 400;
         color: $black;
     }
+}
+
+.headline-section {
+    font-size: 18px;
 }
