@@ -119,15 +119,21 @@ export class AddChannelComponent {
 
 
   onUserSelect(user: User): void {
+    if (!this.channel.members) {
+      this.channel.members = [];
+    }
+  
     if (!this.selectedUsers.some(u => u.id === user.id)) {
       this.selectedUsers.push(user);
+      this.channel.members.push(user.id!); 
     }
+  
     this.inputValue = '';
     const editableDiv = document.querySelector('.editable-input') as HTMLDivElement;
     if (editableDiv) {
       editableDiv.innerText = '';
     }
-    this.listShown = false;
+    this.listShown = false;   
   }
 
 
@@ -139,42 +145,36 @@ export class AddChannelComponent {
     }
   }
 
-  // onSubmit(ngForm: NgForm) {
-  //   if (ngForm.valid && !this.channelExists) {
-  //     this.channel = {
-  //       name: this.channel.name,
-  //       description: this.channel.description,
-  //       creator: this.userName,
-  //       members: [this.userId],
-  //       type: 'group'
-  //     };
-      
-     
-  //     // this.channelService.addNewChannel(this.channel);
-  //     this.addChannel = false;
-  //     this.addUser = true;
-  //     // this.closeFunction();
-  //   }
-  // }
-
   onSubmit(ngForm: NgForm) {
     if (ngForm.valid && !this.channelExists) {
       this.channel = {
         name: this.channel.name,
         description: this.channel.description,
         creator: this.userName,
-        members: [this.userId, ...this.tempMembers], // Добавляем участников до сохранения
+        members: [this.userId],
         type: 'group'
       };
-
-      // Сохраняем канал в Firebase
-      // this.channelService.addNewChannel(this.channel);
+  
       this.addChannel = false;
       this.addUser = true;
-      // Опционально, закрываем модальное окно
-      this.closeFunction();
     }
   }
 
+  channelSave(): void {
+    if (!this.channel.members) {
+      this.channel.members = [];
+    }
+
+    this.channel = {
+      name: this.channel.name,
+      description: this.channel.description,
+      creator: this.userName,
+      members: this.channel.members, 
+      type: 'group'
+    };
+
+    this.channelService.addNewChannel(this.channel);
+    this.closeFunction();  
+  }
   
 }

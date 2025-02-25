@@ -22,7 +22,7 @@
 
 <div class="add_user_to_channel" *ngIf="addUser">
     <h1>Leute hinzufügen</h1>
-    <form>
+    <!-- <form> -->
         <div class="radio-group">
             <div class="all_users">
                 <input type="radio" id="allMembers" name="memberOption" value="all" [(ngModel)]="memberOption">
@@ -63,7 +63,7 @@
         </div>
 
         <div class="button_section">
-            <button class="btn-primary">Erstellen</button>
+            <button class="btn-primary" (click)="channelSave()">Erstellen</button>
         </div>
-    </form>
+    <!-- </form> -->
 </div>
