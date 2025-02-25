@@ -83,6 +83,29 @@ export class MessageBoardComponent {
         this.channelDescription = newDescription;
       })
     );
+
+    this.subscription.add(
+      this.channelService.threadParentMessageId$.subscribe(messageId => {
+        if (messageId) {
+          this.parentMessageId = messageId;
+        }
+      })
+    );
+
+    this.subscription.add(
+      this.channelService.threadOpenState$.subscribe(state => {
+        this.isThreadOpen = state;
+        if (this.isThreadOpen && this.parentMessageId) {
+          this.messageService.getRepliesFromMessageOrderByTimestampDESC(this.parentMessageId).subscribe((messages) => {
+            this.threadMessages = messages as Message[];
+            console.log('neue nachrichten geladen');
+          });
+        } else {
+          this.threadMessages = [];
+          console.log('thread messages cleared');
+        }
+      })
+    );
   }
   
   ngOnInit() {
@@ -96,7 +119,6 @@ export class MessageBoardComponent {
           this.channelCreator = channel.creator;
           this.channelMembers = channel.members || [];
           this.loadMessages();
-          this.isThreadOpen = false;
           this.modalService.refreshChannelUsers$.subscribe(() => {
             this.getUserFromChannel();
           });
@@ -177,9 +199,9 @@ export class MessageBoardComponent {
     this.channelDescription = '';
     this.channelMembers = [];
     this.messages = [];
-    this.isThreadOpen = false;
     this.directMessagePartnerName = '';
     this.userAvatar = '';
+    this.channelService.setThreadOpenState(false);
   }
 
   loadUserName() {
@@ -220,15 +242,9 @@ export class MessageBoardComponent {
     return date1.toDateString() === date2.toDateString();
   }
 
-  openTheadWithMessageId(messageId: string) {
-    this.messageService.getRepliesFromMessageOrderByTimestampDESC(messageId).subscribe((messages) => {
-      this.threadMessages = messages as Message[];
-    });
-    this.isThreadOpen = true;
-  }
-
   closeThread() {
-    this.isThreadOpen = false;
+    this.channelService.setThreadOpenState(false);
+    this.channelService.setThreadParentMessageId(null);
   }
 
   onSendMessage(content: string) {
@@ -270,8 +286,8 @@ export class MessageBoardComponent {
   }
 
   handleRepliesClick(messageId: string) {
-    this.parentMessageId = messageId;
-    this.openTheadWithMessageId(messageId);
+    this.channelService.setThreadParentMessageId(messageId);
+    this.channelService.setThreadOpenState(true);
   }
 
   getParentMessage(): Message | undefined {

@@ -8,6 +8,8 @@ import { LoginService } from './firebase-services/login-service';
 import { Channel } from '../models/channel';
 import { User } from '../models/user';
 import { Message } from '../models/message';
+import { switchMap } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -88,7 +90,9 @@ export class SearchService {
 
   private setupMessageSubscription() {
     this.subscription.add(
-      this.messageService.getAllMainMessagesOfUser(this.userId).subscribe(messages => {
+      from(this.messageService.getMessagesFromAllChannelsOfUser(this.userId)).pipe(
+        switchMap(observable => observable)
+      ).subscribe(messages => {
         this.messages = messages as Message[];
       })
     );

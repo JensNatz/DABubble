@@ -62,7 +62,6 @@ export class MessageService {
     const queryRef = query(
       messagesRef,
       where('channelId', 'in', channelIds),
-      where('parentMessageId', '==', null),
       orderBy('timestamp', 'desc')
     );
 
