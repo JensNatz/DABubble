@@ -5,7 +5,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Channel } from '../../../models/channel';
 import { LoginService } from '../../../services/firebase-services/login-service';
 import { WorkspaceMenuComponent } from '../workspace-menu.component';
-import { take } from 'rxjs/operators';
 import { User } from '../../../models/user';
 import { SearchService } from '../../../services/search.service';
 import { Subscription } from 'rxjs';

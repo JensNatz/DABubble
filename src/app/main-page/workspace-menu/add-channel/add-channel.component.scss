@@ -104,40 +104,40 @@
 
 .input_section {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 20px;   
+}
 
-    .editable-input {
-        width: 50%;
-        min-width: 100px;
-        font-size: clamp(16px, 2vw, 18px);
-        cursor: text;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        overflow: hidden;
-        word-wrap: break-word;
-    }
+.editable-input {
+    width: 50%;
+    min-width: 100px;
+    font-size: clamp(16px, 2vw, 18px);
+    cursor: text;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
 
-    .editable-input:focus {
-        outline: none;
-        border: 0;
-    }
+.editable-input:focus {
+    outline: none;
+    border: 0;
+}
 
-    .editable-input:empty:before {
-        content: "Name eingeben";
-        color: gray;
-    }
+.editable-input:empty:before {
+    content: "Name eingeben";
+    color: gray;
+}
 
-    .input_content {
-        height: 58px;
-        display: flex;
-        align-items: center;
-        background-color: white;
-        padding: 8px 15px;
-        border-radius: 100px;
-        border: 1px solid $light-purple;
-        box-sizing: border-box;        
-    }
+.input_content {
+    height: 58px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 8px 15px;
+    border-radius: 100px;
+    border: 1px solid $light-purple;
+    box-sizing: border-box;        
 }
 
 input[type="radio"] {
@@ -288,5 +288,29 @@ input[type="radio"]:checked + label::after {
             width: 10px;
             height: 10px;
         }
+    }
+}
+
+@media (max-width: $breakpoint-sm) {
+    .input_content {
+        display: block;
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding: 8px 10px;
+        border-radius: 10px;
+    }
+
+    .editable-input {
+        width: 100%;
+    }
+
+    .selected_users {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        max-height: 42px;
+        overflow: auto;
+        margin-top: 5px; 
     }
 }
