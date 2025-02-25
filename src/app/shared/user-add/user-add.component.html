@@ -11,7 +11,12 @@
 
     <div class="input-container">
         <div class="input_content">
-            <div class="editable-input" contenteditable="true" (input)="onInputChange($event)" #editableDiv></div>
+            <div class="editable-input" 
+                 contenteditable="true" 
+                 (input)="onInputChange($event)" 
+                 (focus)="onInputFocus()" 
+                 #editableDiv>
+            </div>
             
             <ng-container *ngIf="selectedUsers.length > 0">
                 <div class="selected_users">
@@ -33,6 +38,7 @@
             </div>
         </div>
     </div>
+
     <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
     </div>

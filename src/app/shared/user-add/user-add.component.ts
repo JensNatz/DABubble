@@ -58,6 +58,23 @@ export class UserAddComponent {
   }
 
 
+  onInputFocus(): void {
+    this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
+      if (!channel) {
+        return;
+      }
+  
+      const members = channel.members ?? [];
+
+      this.filteredUsers = this.allUsers
+        .filter(user => user.name !== this.currentName)
+        .filter(user => user.id !== undefined && !members.includes(user.id));
+      
+      this.listShown = this.filteredUsers.length > 0;
+    });
+  }
+
+
   onInputChange(event: Event): void {
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
@@ -72,17 +89,15 @@ export class UserAddComponent {
   
         this.filteredUsers = this.searchService
           .filterUsersByName(this.inputValue)
-          .filter(user => user.name !== this.currentName) // Entfernt den aktuellen Nutzer
-          .filter(user => user.id !== undefined && !members.includes(user.id)); // Prüft, ob user.id definiert ist
+          .filter(user => user.name !== this.currentName)
+          .filter(user => user.id !== undefined && !members.includes(user.id));
   
         this.listShown = this.filteredUsers.length > 0;
       });
     } else {
-      this.listShown = false;
+      this.onInputFocus(); 
     }
   }
-  
-  
 
 
   onUserSelect(user: User): void {
