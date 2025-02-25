@@ -45,8 +45,6 @@ export class MessageInputComponent implements AfterViewInit {
     }
   }
 
-
-
   ngOnChanges() {
     if (this.channelService.currentChannelValue === null) {
       this.isTaggingDisabled = true;
@@ -171,7 +169,7 @@ export class MessageInputComponent implements AfterViewInit {
       } else {
         inputElement.appendChild(emojiText);
       }
-    
+    this.togglePlaceholder();
     this.isEmojiPickerOpen = false;
     this.lastRange = null;
   }

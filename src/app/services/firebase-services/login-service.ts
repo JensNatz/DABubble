@@ -95,11 +95,23 @@ export class LoginService {
     }
   }
 
-  editUserName(userId: string, name: string) {
-    const userRef = doc(this.firestore, 'users', userId);
-    updateDoc(userRef, {
-      name: name
-    });
+  async editUserName(userId: string, newName: string) {
+    try {
+      await updateDoc(doc(this.firestore, 'users', userId), {
+        name: newName
+      });
+      
+      const currentUserValue = this.currentUserSubject.value;
+      if (currentUserValue) {
+        this.currentUserSubject.next({
+          ...currentUserValue,
+          name: newName
+        });
+      }
+    } catch (error) {
+      console.error('Error updating username:', error);
+      throw error;
+    }
   }
 
   editUserNameAndAvatar(userId: string, newName: string, avatar: string) {

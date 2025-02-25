@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { InputFieldComponent } from "../../shared/authentication-input/input-field.component";
 import { RegisterButtonComponent } from "./register-button/register-button.component";
 import { UserServiceService } from '../../services/firebase-services/user-service.service';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { ErrorMessages } from '../../shared/authentication-input/error-message';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
-import { Route, Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { GoogleAuthenticationService } from '../../services/firebase-services/google-athentication.servive';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { LoginUserAcceptedComponent } from "../user-feedback/login-user-accepted/login-user-accepted.component";
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { LegalInformationComponent } from "../../legal-information/legal-information.component";
 import { DaBubbleHeaderAuthenticationComponent } from "../../shared/da-bubble-header-authentication/da-bubble-header-authentication.component";
 import { DaBubbleAnimationComponent } from "../../shared/da-bubble-animation/da-bubble-animation.component";
-
+import { AnimationService } from '../../services/animation.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -44,7 +44,8 @@ export class LoginComponent {
     private userService: UserServiceService,
     private googleAuthService: GoogleAuthenticationService,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private animationService: AnimationService
   ) {
     this.users = this.userService.getUsers();
     this.loginForm = this.fb.group({
@@ -61,7 +62,13 @@ export class LoginComponent {
         this.errorMessage = '';
       }
     });
+  }
 
+  ngOnInit() {
+    this.animationPlayed = this.animationService.hasAnimationPlayed();
+    setTimeout(() => {
+      this.animationService.setAnimationPlayed();
+    }, 5000);
   }
 
   async checkUserExists() {

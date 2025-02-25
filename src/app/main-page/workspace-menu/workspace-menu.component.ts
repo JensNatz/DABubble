@@ -112,17 +112,20 @@ export class WorkspaceMenuComponent {
   switchToGroupChannel(channel: Channel) {
     if (this.channelService.currentChannelValue?.id !== channel.id) {
       this.channelService.setCurrentChannel(channel);
+      this.channelService.setThreadOpenState(false);
       this.messageboardService.openMessageBoard();
     }
   }
 
   switchToDirectMessageChannel(userId: string) {
     this.channelService.setDirectMessageChannel(userId);
+    this.channelService.setThreadOpenState(false);
     this.messageboardService.openMessageBoard();
   }
   
   onNewMessageClick() {
     this.channelService.clearCurrentChannel();
+    this.channelService.setThreadOpenState(false);
     this.messageboardService.openMessageBoard();
   }
 }
