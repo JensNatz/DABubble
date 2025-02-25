@@ -7,6 +7,10 @@
     overflow: hidden;
     height: 100vh;
     @include flex(center, center, column);
+    max-width: 1450px;
+    width: 100%;
+    margin: 0 auto;
+
 }
 
 .error-message {
@@ -352,7 +356,7 @@ form {
     }
 
     .btn-container {
-        margin-top: 20px;
+        margin-top: 10px;
 
     }
 

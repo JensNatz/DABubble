@@ -57,6 +57,8 @@ export class SearchService {
     });
   }
 
+  
+
   private parseMessageContent(content: string): string {
     let parsedContent = content.replace(/@{\[(.*?)\]}/g, (match, userId) => {
       const user = this.users.find(u => u.id === userId);

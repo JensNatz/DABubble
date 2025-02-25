@@ -8,6 +8,9 @@
     @include flex(center, center, column);
     position: relative;
     overflow: hidden;
+    max-width: 1450px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .avatar-section {
