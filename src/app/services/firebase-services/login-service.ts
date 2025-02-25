@@ -102,6 +102,14 @@ export class LoginService {
     });
   }
 
+  editUserNameAndAvatar(userId: string, newName: string, avatar: string) {
+    const userRef = doc(this.firestore, 'users', userId); // Deine Sammlung und Dokumentenreferenz
+    updateDoc(userRef, {
+      name: newName,
+      avatar: avatar // Speichern des ausgewählten Avatars
+    });
+  }
+
   async guestLogin(): Promise<void> {
     const guestEmail = 'guest@guest.de';
     const guestPassword = 'Guest!';

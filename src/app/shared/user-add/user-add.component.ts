@@ -58,21 +58,46 @@ export class UserAddComponent {
   }
 
 
+  onInputFocus(): void {
+    this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
+      if (!channel) {
+        return;
+      }
+  
+      const members = channel.members ?? [];
+
+      this.filteredUsers = this.allUsers
+        .filter(user => user.name !== this.currentName)
+        .filter(user => user.id !== undefined && !members.includes(user.id));
+      
+      this.listShown = this.filteredUsers.length > 0;
+    });
+  }
+
+
   onInputChange(event: Event): void {
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
   
     if (this.inputValue.length > 0) {
-      this.filteredUsers = this.searchService
-        .filterUsersByName(this.inputValue)
-        .filter(user => user.name !== this.currentName);
+      this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
+        if (!channel) {
+          return;
+        }
   
-      this.listShown = this.filteredUsers.length > 0;
+        const members = channel.members ?? [];
+  
+        this.filteredUsers = this.searchService
+          .filterUsersByName(this.inputValue)
+          .filter(user => user.name !== this.currentName)
+          .filter(user => user.id !== undefined && !members.includes(user.id));
+  
+        this.listShown = this.filteredUsers.length > 0;
+      });
     } else {
-      this.listShown = false;
+      this.onInputFocus(); 
     }
   }
-  
 
 
   onUserSelect(user: User): void {
@@ -123,12 +148,7 @@ export class UserAddComponent {
 
       let members = channel.members ?? [];
       let newUsers = this.selectedUsers.filter(user => user.id !== undefined && !members.includes(user.id as string));
-
-      if (newUsers.length === 0) {
-        this.errorMessage = 'Alle ausgewählten Benutzer sind bereits Mitglieder.';
-        return;
-      }
-
+     
       const updatedMembers = [...members, ...newUsers.map(user => user.id as string)].filter(id => id !== undefined);
       this.channelService.editChannelMembers(this.channelId, updatedMembers);
       this.modalServe.triggerRefreshChannelUsers();

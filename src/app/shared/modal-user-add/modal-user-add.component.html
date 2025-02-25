@@ -12,5 +12,5 @@
 
 <div class="modal modal-channel" *ngIf="modalContent === 'editChannel'">
     <img class="close_button" src="assets/img/close.svg" (click)="closeModal()">
-    <app-channel-edit [channelId]="channelId"></app-channel-edit>
+    <app-channel-edit [channelId]="channelId" [closeFunction]="closeModal.bind(this)"></app-channel-edit>
 </div>
