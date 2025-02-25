@@ -64,11 +64,6 @@ export class LoginComponent {
 
   }
 
-  ngOnInit() {
-    const animationPlayed = localStorage.getItem('animationPlayed');
-    this.animationPlayed = !animationPlayed;
-  }
-
   async checkUserExists() {
     const email = this.loginForm.get('email')?.value.toLowerCase();
     const password = this.loginForm.get('password')?.value;
