@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, inject, ViewContainerRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, inject, ViewContainerRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from '../../shared/avatar/avatar.component';
 import { Message } from '../../models/message';
@@ -11,6 +11,7 @@ import { MessageInputComponent } from '../../shared/message-input/message-input.
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { LoginService } from '../../services/firebase-services/login-service';
 import { ChannelServiceService } from '../../services/firebase-services/channel-service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-message',
@@ -26,11 +27,13 @@ import { ChannelServiceService } from '../../services/firebase-services/channel-
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
-export class MessageComponent implements OnInit, AfterViewInit {
+export class MessageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('messageContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
   messageService: MessageService = inject(MessageService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
   loginService: LoginService = inject(LoginService);
+
+  private autorNameSubscription?: Subscription;
 
   @Input() message!: Message;
   @Input() isThreadRootMessage: boolean = false;
@@ -51,16 +54,15 @@ export class MessageComponent implements OnInit, AfterViewInit {
   constructor(private userService: UserService) { }
 
   async ngOnInit() {
-    this.authorName = (await this.userService.getUserName(this.message.author)) || 'Unknown User';
     this.avatar = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
     if (this.message.author === this.loginService.currentUserValue?.id) {
       this.isOwn = true;
     }
+    await this.loadAuthorName(this.message.author);
     if (this.message.parentMessageId === null) {
       this.isMessageInMainChannel = true;
     }
-
   }
 
   async ngAfterViewInit() {
@@ -68,7 +70,12 @@ export class MessageComponent implements OnInit, AfterViewInit {
     this.messageParseComplete.emit(this.message.id);
     if(this.message.id) {
       this.channelService.messageRendered.next(this.message.id);
+    }
+  }
 
+  ngOnDestroy() {
+    if (this.autorNameSubscription) {
+      this.autorNameSubscription.unsubscribe();
     }
   }
 
@@ -229,4 +236,21 @@ export class MessageComponent implements OnInit, AfterViewInit {
     this.addReaction(emoji);
     this.hideEmojiPicker();
   }
+
+  private async loadAuthorName(userId: string) {
+    if (this.isOwn) {
+      this.autorNameSubscription = this.loginService.currentUser.subscribe(user => {
+        if (user) {
+          this.authorName = user.name;
+        } else {
+          this.authorName = 'Unknown User';
+        }
+      })
+    } else {
+      this.authorName = 'Unknown User';
+      //this.authorName = (await this.userService.getUserName(userId)) || 'Unknown User';
+    }
+  }
 }
+
+
