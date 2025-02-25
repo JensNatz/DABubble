@@ -30,19 +30,19 @@
         height: 100%;
         background-position: 32px center;
         background-size: 24px 24px;
-        padding: 18px 20px;    
+        padding: 18px 20px;
         border-radius: 100px;
         border: 1px solid $light-purple;
         font-size: 18px;
-    
+
         &:hover {
-            cursor: pointer;    
+            cursor: pointer;
             border: 1px solid $black;
         }
-    
+
         &:focus {
             outline: none;
-            border: 1px solid $purple-1;        
+            border: 1px solid $purple-1;
         }
     }
 }
@@ -78,6 +78,7 @@
     margin: 20px 0;
     display: flex;
     align-items: center;
+
     input {
         margin-right: 20px;
     }
@@ -104,7 +105,7 @@
 
 .input_section {
     width: 100%;
-    margin-bottom: 20px;   
+    margin-bottom: 20px;
 }
 
 .editable-input {
@@ -137,21 +138,21 @@
     padding: 8px 15px;
     border-radius: 100px;
     border: 1px solid $light-purple;
-    box-sizing: border-box;        
+    box-sizing: border-box;
 }
 
 input[type="radio"] {
     display: none;
 }
 
-input[type="radio"] + label {
+input[type="radio"]+label {
     position: relative;
     padding-left: 46px;
     line-height: 20px;
     cursor: pointer;
 }
 
-input[type="radio"] + label::before {
+input[type="radio"]+label::before {
     content: "";
     position: absolute;
     left: 0;
@@ -164,7 +165,7 @@ input[type="radio"] + label::before {
     transition: all 0.3s ease;
 }
 
-input[type="radio"]:checked + label::after {
+input[type="radio"]:checked+label::after {
     content: "";
     position: absolute;
     left: 5px;
@@ -311,6 +312,12 @@ input[type="radio"]:checked + label::after {
         align-items: flex-start;
         max-height: 42px;
         overflow: auto;
-        margin-top: 5px; 
+        margin-top: 5px;
+    }
+
+    .users_liste {
+        top: 209px;
+        left: 10px;
+        width: 85%;
     }
 }

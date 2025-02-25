@@ -1,4 +1,4 @@
-<div class="add_chanel_form" *ngIf="!addChannel">
+<div class="add_chanel_form" *ngIf="addChannel">
     <h1>Channel erstellen</h1>
     <form (ngSubmit)="onSubmit(channelForm)" #channelForm="ngForm">
         <p>Channnels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum
@@ -20,7 +20,7 @@
 </div>
 
 
-<div class="add_user_to_channel" *ngIf="!addUser">
+<div class="add_user_to_channel" *ngIf="addUser">
     <h1>Leute hinzufügen</h1>
   
     <div class="radio-group">
