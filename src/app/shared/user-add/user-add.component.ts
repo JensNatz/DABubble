@@ -34,6 +34,9 @@ export class UserAddComponent {
   filteredUsers: User[] = [];
   listShown: boolean = false;
   errorMessage: string = '';
+  selectedUser: User | null = null;
+  selectedUsers: User[] = [];
+  currentName: string  = '';
 
   channelService: ChannelServiceService = inject(ChannelServiceService);
   userService: UserServiceService = inject(UserServiceService);
@@ -44,67 +47,102 @@ export class UserAddComponent {
   private userSubscription: Subscription = new Subscription();
   private allUsers: User[] = [];
 
-  constructor( private addUserComponent: AddUserToChannelComponent ) {
+
+  constructor(private addUserComponent: AddUserToChannelComponent) {
     this.userSubscription.add(
       this.userService.getUsers().subscribe((users: User[]) => {
         this.allUsers = users;
       })
     );
+    this.getCurrentUserData();    
   }
 
-  onInputChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.inputValue = target?.value || '';
 
+  onInputChange(event: Event): void {
+    const target = event.target as HTMLDivElement;
+    this.inputValue = target.innerText.trim();
+  
     if (this.inputValue.length > 0) {
-      this.filteredUsers = this.searchService.filterUsersByName(this.inputValue);
+      this.filteredUsers = this.searchService
+        .filterUsersByName(this.inputValue)
+        .filter(user => user.name !== this.currentName);
+  
       this.listShown = this.filteredUsers.length > 0;
     } else {
       this.listShown = false;
     }
   }
+  
+
 
   onUserSelect(user: User): void {
-    this.inputValue = user.name;
+    if (!this.selectedUsers.some(u => u.id === user.id)) {
+      this.selectedUsers.push(user);
+    }
+    this.inputValue = '';
+    const editableDiv = document.querySelector('.editable-input') as HTMLDivElement;
+    if (editableDiv) {
+      editableDiv.innerText = '';
+    }
     this.listShown = false;
   }
+
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
 
-  addUserToChannel() {
-    if (!this.channelId || !this.inputValue) {
-      return;
-    }
 
-    const selectedUser = this.allUsers.find(user => user.name === this.inputValue);
-    if (!selectedUser) {
-      return;
-    }
-
-    const userId = selectedUser.id;
-    if (userId) {
-      this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
-        if (!channel) {
-          return;
-        }
-        const members = channel.members ?? [];
-        if (members.includes(userId)) {
-          this.errorMessage = 'Benutzer ist bereits Mitglied.';
-          return;
-        }
-        const updatedMembers = [...members, userId];
-        this.channelService.editChannelMembers(this.channelId, updatedMembers);
-        this.modalServe.triggerRefreshChannelUsers();
-        this.addUserComponent.getUserFromChannel();
-        if (this.closeUserAddInfos) {
-          this.closeUserAddInfos();
-        } else {
-          this.modalServe.closeModal();
-        }
-        this.errorMessage = '';
-      });
+  removeSelectedUser(user: User): void {
+    this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
+    
+    if (this.selectedUsers.length === 0) {
+      this.errorMessage = '';
     }
   }
+
+
+  getCurrentUserData() {
+    this.loginService.currentUser.subscribe(user => {
+      if (user) {
+        this.currentName = user.name;
+      }
+    })
+  }
+
+
+  addUserToChannel() {
+    if (!this.channelId || this.selectedUsers.length === 0) {
+      return;
+    }
+
+    this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
+      if (!channel) {
+        return;
+      }
+
+      let members = channel.members ?? [];
+      let newUsers = this.selectedUsers.filter(user => user.id !== undefined && !members.includes(user.id as string));
+
+      if (newUsers.length === 0) {
+        this.errorMessage = 'Alle ausgewählten Benutzer sind bereits Mitglieder.';
+        return;
+      }
+
+      const updatedMembers = [...members, ...newUsers.map(user => user.id as string)].filter(id => id !== undefined);
+      this.channelService.editChannelMembers(this.channelId, updatedMembers);
+      this.modalServe.triggerRefreshChannelUsers();
+      this.addUserComponent.getUserFromChannel();
+
+      if (this.closeUserAddInfos) {
+        this.closeUserAddInfos();
+      } else {
+        this.modalServe.closeModal();
+      }
+
+      this.selectedUsers = [];
+      this.errorMessage = '';
+    });
+  }
+
 }

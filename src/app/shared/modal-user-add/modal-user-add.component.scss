@@ -144,22 +144,12 @@ h1 {
 }
 
 .modal-channel {
-    left: 385px;
     width: 700px;
-    border-top-left-radius: 0%;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-@media (max-width: $breakpoint-xl) {
-    .modal-channel {
-        left: 240px;
-    }
-}
-
-@media (max-width: $breakpoint-lg) {
-    .modal-channel {
-        left: 40px;
-    }
-}
 
 @media (max-width: $breakpoint-md) {
     .modal-users {
@@ -178,6 +168,7 @@ h1 {
         width: 100vw;
         height: 100vh;
         border-radius: 0;
+        transform: translate(0);
     }
 
     .close_button {

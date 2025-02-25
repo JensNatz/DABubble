@@ -72,7 +72,6 @@ export class RecipientSelectorComponent {
 
   onRecipientSelected(recipient: any): void {
     this.listShown = false;
-    console.log(recipient, 'recipient');
     if(recipient.categoryType === 'channel') {
       this.channelService.setCurrentChannelById(recipient.element.id);
     } else if(recipient.categoryType === 'user') {
