@@ -85,9 +85,25 @@ export class MessageBoardComponent {
     );
 
     this.subscription.add(
+      this.channelService.threadParentMessageId$.subscribe(messageId => {
+        if (messageId) {
+          this.parentMessageId = messageId;
+        }
+      })
+    );
+
+    this.subscription.add(
       this.channelService.threadOpenState$.subscribe(state => {
         this.isThreadOpen = state;
-        console.log('thread open state:', state);
+        if (this.isThreadOpen && this.parentMessageId) {
+          this.messageService.getRepliesFromMessageOrderByTimestampDESC(this.parentMessageId).subscribe((messages) => {
+            this.threadMessages = messages as Message[];
+            console.log('neue nachrichten geladen');
+          });
+        } else {
+          this.threadMessages = [];
+          console.log('thread messages cleared');
+        }
       })
     );
   }
@@ -226,15 +242,9 @@ export class MessageBoardComponent {
     return date1.toDateString() === date2.toDateString();
   }
 
-  openTheadWithMessageId(messageId: string) {
-    this.messageService.getRepliesFromMessageOrderByTimestampDESC(messageId).subscribe((messages) => {
-      this.threadMessages = messages as Message[];
-    });
-    this.channelService.setThreadOpenState(true);
-  }
-
   closeThread() {
     this.channelService.setThreadOpenState(false);
+    this.channelService.setThreadParentMessageId(null);
   }
 
   onSendMessage(content: string) {
@@ -276,8 +286,8 @@ export class MessageBoardComponent {
   }
 
   handleRepliesClick(messageId: string) {
-    this.parentMessageId = messageId;
-    this.openTheadWithMessageId(messageId);
+    this.channelService.setThreadParentMessageId(messageId);
+    this.channelService.setThreadOpenState(true);
   }
 
   getParentMessage(): Message | undefined {

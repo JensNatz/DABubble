@@ -118,6 +118,7 @@
 
                 @for (message of threadMessages; track message.id; let i = $index) {
                 <app-message [message]="message"
+                    [id]="'message-' + message.id"
                     (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
                 @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
                 <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>

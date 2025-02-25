@@ -25,6 +25,9 @@ export class ChannelServiceService implements OnDestroy {
   private threadOpenStateSubject = new BehaviorSubject<boolean>(false);
   threadOpenState$ = this.threadOpenStateSubject.asObservable();
 
+  private threadParentMessageIdSubject = new BehaviorSubject<string | null>(null);
+  threadParentMessageId$ = this.threadParentMessageIdSubject.asObservable();
+
   messageRendered = new Subject<string>();
 
   private currentScrollSubscription?: Subscription;
@@ -44,6 +47,10 @@ export class ChannelServiceService implements OnDestroy {
 
   setThreadOpenState(state: boolean) {
     this.threadOpenStateSubject.next(state);
+  }
+
+  setThreadParentMessageId(messageId: string | null) {
+    this.threadParentMessageIdSubject.next(messageId);
   }
 
   private cleanUpChannelSubscription() {
@@ -314,12 +321,11 @@ export class ChannelServiceService implements OnDestroy {
   async jumpToMessage(message: Message) {
     if(message.id){
       this.setCurrentChannelById(message.channelId);
-      if (message.parentMessageId === null) {
-        this.scrollToMessage(message.id);
-      } else {
-        console.log('thread open state set to true');
+      if (message.parentMessageId !== null) {
+        this.setThreadParentMessageId(message.parentMessageId);
         this.setThreadOpenState(true);
-      }
+      } 
+      this.scrollToMessage(message.id);
     }
   }
 
