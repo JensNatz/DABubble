@@ -373,3 +373,20 @@
         }           
     }
 }
+
+.user-select-images {
+    width: 100%;
+    @include flex(space-around, center, row);
+
+    img {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    span {
+        font-size: 20px;
+        font-weight: 400;
+        color: $black;
+    }
+}

@@ -29,8 +29,8 @@
             </div>
         </div>
 
-        <div class="modal-overlay modal-overlay-profil" *ngIf="showProfil" (click)="closeProfil()"></div>
-        <div class="modal modal_profil" *ngIf="showProfil">
+        <div class="modal-overlay modal-overlay-profil" *ngIf="!showProfil" (click)="closeProfil()"></div>
+        <div class="modal modal_profil" *ngIf="!showProfil">
             <div>
                 <span>Profil</span>
                 <img class="close_profil" src="assets/img/close.svg" (click)="closeProfil()">
@@ -46,13 +46,26 @@
                 <p>{{ userStatus }}</p>
             </div>
 
-            <div class="modal-overlay no-background" *ngIf="showEditProfil" (click)="closeEditProfil()"></div>
-            <div class="modal modal_profil modal_profil_edit" *ngIf="showEditProfil">
+            <div class="modal-overlay no-background" *ngIf="!showEditProfil" (click)="closeEditProfil()"></div>
+            <div class="modal modal_profil modal_profil_edit" *ngIf="!showEditProfil">
                 <h1> Dein Profil bearbeiten</h1>
                 <img class="close_profil" src="assets/img/close.svg" (click)="closeEditProfil()">
                 <div class="profil_avatar">
-                    <img class="avatar" src="assets/img/avatar{{ userAvatar }}.svg">
+                    <img class="avatar" [src]="selectedAvatar ? 'assets/img/avatar' + selectedAvatar + '.svg' : '../../../assets/img/' + userAvatar + '.svg'">
                 </div>
+
+                <div class="headline-section">
+                    <h2>Wähle dein Avatar</h2>        
+                </div>
+            
+                <div class="avatar-section">                           
+                    <div class="user-select-images">         
+                        <div *ngFor="let avatar of avatarImages ">
+                            <img class="avatar" [src]='"assets/img/avatar"+ avatar+".svg"' (click)="selectAvatar(avatar)">
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     <div class="user_name_edit">
                         <img src="assets/img/account_circle.svg">
@@ -63,8 +76,8 @@
                 
                 <div class="btn_group">
                     <button class="btn-secondary" (click)="closeEditProfil()">Abbrechen</button>
-                    <button class="btn-primary" (click)="updateUserName(userName)"
-                    [disabled]="!userName || userName.trim() === ''">Speichern</button>
+                    <button class="btn-primary" (click)="updateUserNameAndAvatar(userName)"
+        [disabled]="!userName || userName.trim() === ''">Speichern</button>
                 </div>
             </div>
             

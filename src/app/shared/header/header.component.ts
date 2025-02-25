@@ -17,7 +17,8 @@ import { MenuProfilComponent } from '../menu-profil/menu-profil.component';
     FormsModule,
     SearchComponent,
     AvatarComponent,
-    MenuProfilComponent
+    MenuProfilComponent,
+    AvatarComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -27,7 +28,7 @@ export class HeaderComponent {
   messageboardService: MessageboardService = inject(MessageboardService);
   loginService: LoginService = inject(LoginService);
   channelService: ChannelServiceService = inject(ChannelServiceService);
-  
+
   @Output() backButtonClicked = new EventEmitter<void>();
 
   public showProfilMenu: boolean = false;
@@ -41,11 +42,20 @@ export class HeaderComponent {
   userOnlineStatus: string = '';
   userEmail: string = '';
   userStatus: string = '';
+  selectedAvatar: string = '';
+  avatar: string = '';
+  avatarKey: string = '';
 
+  avatarImages = ['1', '2', '3', '4', '5', '6']
+ 
   constructor(private router: Router) {
     this.getCurrentUserData();
   }
 
+
+  selectAvatar(avatar: string) {
+    this.selectedAvatar = avatar;
+  }
 
   getCurrentUserData() {
     this.loginService.currentUser.subscribe(user => {
@@ -53,7 +63,7 @@ export class HeaderComponent {
         this.userId = user.id;
         this.userName = user.name;
         this.tempUserName = user.name;
-        this.userAvatar = user.avatar;
+        this.selectedAvatar = user.avatar;
         this.userEmail = user.email;
         this.userOnlineStatus = user.onlineStatusbar;
       } else {
@@ -96,16 +106,17 @@ export class HeaderComponent {
   }
 
 
-  updateUserName(newName: string) {   
-    if (!newName.trim()) return; 
+  updateUserNameAndAvatar(newName: string) {
+    if (!newName.trim()) return;
+  
     try {
       this.userName = newName;
-      this.tempUserName = newName;
-      this.loginService.editUserName(this.userId, newName);
+      this.tempUserName = newName;      
+      this.loginService.editUserNameAndAvatar(this.userId, newName, this.selectedAvatar);      
       this.closeEditProfil();
     } catch (error) {
-      console.error('Fehler beim Aktualisieren des Namens:', error);
-    }  
+      console.error('Fehler beim Aktualisieren des Namens und Avatars:', error);
+    }
   }
 
 
