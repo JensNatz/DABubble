@@ -87,6 +87,7 @@ export class MessageBoardComponent {
     this.subscription.add(
       this.channelService.threadOpenState$.subscribe(state => {
         this.isThreadOpen = state;
+        console.log('thread open state:', state);
       })
     );
   }
@@ -102,7 +103,6 @@ export class MessageBoardComponent {
           this.channelCreator = channel.creator;
           this.channelMembers = channel.members || [];
           this.loadMessages();
-          this.channelService.setThreadOpenState(false);
           this.modalService.refreshChannelUsers$.subscribe(() => {
             this.getUserFromChannel();
           });

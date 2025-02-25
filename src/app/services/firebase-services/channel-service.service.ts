@@ -42,10 +42,6 @@ export class ChannelServiceService implements OnDestroy {
     return this.currentChannelSubject.value;
   }
 
-  get threadOpenStateValue(): boolean {
-    return this.threadOpenStateSubject.value;
-  }
-
   setThreadOpenState(state: boolean) {
     this.threadOpenStateSubject.next(state);
   }
@@ -321,7 +317,8 @@ export class ChannelServiceService implements OnDestroy {
       if (message.parentMessageId === null) {
         this.scrollToMessage(message.id);
       } else {
-       
+        console.log('thread open state set to true');
+        this.setThreadOpenState(true);
       }
     }
   }

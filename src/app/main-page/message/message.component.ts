@@ -247,8 +247,7 @@ export class MessageComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       })
     } else {
-      this.authorName = 'Unknown User';
-      //this.authorName = (await this.userService.getUserName(userId)) || 'Unknown User';
+      this.authorName = (await this.userService.getUserName(userId)) || 'Unknown User';
     }
   }
 }
