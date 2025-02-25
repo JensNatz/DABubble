@@ -63,15 +63,25 @@ export class UserAddComponent {
     this.inputValue = target.innerText.trim();
   
     if (this.inputValue.length > 0) {
-      this.filteredUsers = this.searchService
-        .filterUsersByName(this.inputValue)
-        .filter(user => user.name !== this.currentName);
+      this.channelService.getChannelById(this.channelId).pipe(take(1)).subscribe(channel => {
+        if (!channel) {
+          return;
+        }
   
-      this.listShown = this.filteredUsers.length > 0;
+        const members = channel.members ?? [];
+  
+        this.filteredUsers = this.searchService
+          .filterUsersByName(this.inputValue)
+          .filter(user => user.name !== this.currentName) // Entfernt den aktuellen Nutzer
+          .filter(user => user.id !== undefined && !members.includes(user.id)); // Prüft, ob user.id definiert ist
+  
+        this.listShown = this.filteredUsers.length > 0;
+      });
     } else {
       this.listShown = false;
     }
   }
+  
   
 
 
@@ -123,12 +133,7 @@ export class UserAddComponent {
 
       let members = channel.members ?? [];
       let newUsers = this.selectedUsers.filter(user => user.id !== undefined && !members.includes(user.id as string));
-
-      if (newUsers.length === 0) {
-        this.errorMessage = 'Alle ausgewählten Benutzer sind bereits Mitglieder.';
-        return;
-      }
-
+     
       const updatedMembers = [...members, ...newUsers.map(user => user.id as string)].filter(id => id !== undefined);
       this.channelService.editChannelMembers(this.channelId, updatedMembers);
       this.modalServe.triggerRefreshChannelUsers();
