@@ -72,3 +72,101 @@
         font-weight: 400;
     }
 }
+
+.all_users {
+    margin: 20px 0;
+}
+
+.add_user_to_channel {
+    h1 {
+        font-size: 24px;
+    }
+
+    label {
+        margin-left: 20px;
+        font-size: 18px;
+    }
+
+    b {
+        color: $purple-1;
+    }
+}
+
+.button_section {
+    display: flex;
+    justify-content: end;
+}
+
+.input_section {
+    width: 100%;
+    margin-bottom: 20px;
+
+    .editable-input {
+        width: 50%;
+        min-width: 100px;
+        font-size: clamp(16px, 2vw, 18px);
+        cursor: text;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow: hidden;
+        word-wrap: break-word;
+    }
+
+    .editable-input:focus {
+        outline: none;
+        border: 0;
+    }
+
+    .editable-input:empty:before {
+        content: "Name eingeben";
+        color: gray;
+    }
+
+    .input_content {
+        height: 58px;
+        display: flex;
+        align-items: center;
+        background-color: white;
+        padding: 8px 15px;
+        border-radius: 100px;
+        border: 1px solid $light-purple;
+        box-sizing: border-box;
+    }
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"] + label {
+    position: relative;
+    padding-left: 30px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+input[type="radio"] + label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid $light-purple;
+    border-radius: 50%;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+input[type="radio"]:checked + label::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: $purple-1;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}

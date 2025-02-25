@@ -76,6 +76,11 @@ export class ChannelServiceService implements OnDestroy {
     return docData(channelDocRef) as Observable<Channel>;
   }
 
+  getChannelByName(channelName: string): Observable<Channel> {
+    const channelDocRef = doc(this.firestore, `channels/${channelName}`);
+    return docData(channelDocRef) as Observable<Channel>;
+  }
+
   async getChannelByIdOnce(channelId: string): Promise<Channel | null> {
     const channelDocRef = doc(this.firestore, `channels/${channelId}`);
     const snapshot = await getDoc(channelDocRef);

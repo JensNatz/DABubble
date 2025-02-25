@@ -5,7 +5,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Channel } from '../../../models/channel';
 import { LoginService } from '../../../services/firebase-services/login-service';
 import { WorkspaceMenuComponent } from '../workspace-menu.component';
-
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-channel',
@@ -22,7 +22,10 @@ export class AddChannelComponent {
   userId: any = '';
   userName: string = '';
   channelExists: boolean = false;
-
+  addChannel = true;
+  addUser = false;
+  memberOption: string = 'all'; 
+  
   @Input() closeFunction!: () => void;
 
   channel: Channel = {
@@ -32,6 +35,8 @@ export class AddChannelComponent {
     members: [],
     type: 'group'
   }
+
+
 
 
   loginService: LoginService = inject(LoginService);
@@ -57,7 +62,7 @@ export class AddChannelComponent {
       this.channelExists = false;
       return;
     }
-  
+
     this.channelService.getAllChannelsFromDatabase().subscribe(channels => {
       if (channels) {
         this.channelExists = channels.some((ch: Channel) => ch.name.toLowerCase() === this.channel.name.toLowerCase());
@@ -74,9 +79,14 @@ export class AddChannelComponent {
         members: [this.userId],
         type: 'group'
       };
-
-      this.channelService.addNewChannel(this.channel);
-      this.closeFunction();
+      
+     
+      // this.channelService.addNewChannel(this.channel);
+      this.addChannel = false;
+      this.addUser = true;
+      // this.closeFunction();
     }
   }
+
+  
 }

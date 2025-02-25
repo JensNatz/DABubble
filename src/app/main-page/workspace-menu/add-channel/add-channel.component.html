@@ -1,19 +1,49 @@
-<div class="add_chanel_form">   
+<div class="add_chanel_form" *ngIf="!addChannel">
     <h1>Channel erstellen</h1>
     <form (ngSubmit)="onSubmit(channelForm)" #channelForm="ngForm">
         <p>Channnels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum
             Beispiel. </p>
-            <div class="name_input">
-                <label for="name">Channel-Name</label>
-                <input #name="ngModel" [(ngModel)]="channel.name" type="text" id="name" name="name" required (input)="checkChannelExists()">
-                <span *ngIf="channelExists" class="error">Dieser Channel existiert bereits!</span>
-            </div>
+        <div class="name_input">
+            <label for="name">Channel-Name</label>
+            <input #name="ngModel" [(ngModel)]="channel.name" type="text" id="name" name="name" required
+                (input)="checkChannelExists()">
+            <span *ngIf="channelExists" class="error">Dieser Channel existiert bereits!</span>
+        </div>
         <div class="description_input">
             <label for="escription">Beschreibung <b>(optional)</b></label>
             <input [(ngModel)]="channel.description" type="text" id="description" name="description">
         </div>
         <div class="button_add">
             <button class="btn-primary" type="submit" [disabled]="channelExists || name.invalid">Erstellen</button>
+        </div>
+    </form>
+</div>
+
+
+<div class="add_user_to_channel" *ngIf="!addUser">
+    <h1>Leute hinzufügen</h1>
+    <form>
+        <div class="radio-group">
+            <div class="all_users">
+                <input type="radio" id="allMembers" name="memberOption" value="all" [(ngModel)]="memberOption">
+                <label for="allMembers">Alle Mitglieder von <b>{{ channel.name }}</b> hinzufügen</label><br>
+            </div>
+
+            <div class="all_users">
+                <input type="radio" id="specificPeople" name="memberOption" value="specific" [(ngModel)]="memberOption">
+                <label for="specificPeople">Bestimmte Leute hinzufügen</label>
+            </div>
+        </div>
+
+        <div class="input_section" *ngIf="memberOption === 'specific'">
+            <div class="input_content">
+                <div class="editable-input" contenteditable="true" #specificMembers>
+                </div>
+            </div>
+        </div>
+
+        <div class="button_section">
+            <button class="btn-primary">Erstellen</button>
         </div>
     </form>
 </div>
