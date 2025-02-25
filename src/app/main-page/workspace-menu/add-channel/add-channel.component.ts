@@ -76,16 +76,23 @@ export class AddChannelComponent {
   onInputChange(event: Event): void {
     const target = event.target as HTMLDivElement;
     this.inputValue = target.innerText.trim();
-  
+
     if (this.inputValue.length > 0) {
       this.filteredUsers = this.searchService
         .filterUsersByName(this.inputValue)
-        .filter(user => user.name !== this.userName)         
-  
+        .filter(user => user.name !== this.userName); 
+
       this.listShown = this.filteredUsers.length > 0;
-    } 
+    }
   }
 
+  onRadioChange(): void {
+    if (this.memberOption === 'all') {
+      this.channel.members = this.allUsers
+        .map(user => user.id)
+        .filter(id => id !== undefined) as string[];
+    }
+  }
 
   getCurrentUserData() {
     this.loginService.currentUser.subscribe(user => {
@@ -145,16 +152,16 @@ export class AddChannelComponent {
     }
   }
 
-  onSubmit(ngForm: NgForm) {
+  onSubmit(ngForm: NgForm): void {
     if (ngForm.valid && !this.channelExists) {
       this.channel = {
         name: this.channel.name,
         description: this.channel.description,
         creator: this.userName,
-        members: [this.userId],
+        members: [this.userId], 
         type: 'group'
       };
-  
+
       this.addChannel = false;
       this.addUser = true;
     }
@@ -164,17 +171,23 @@ export class AddChannelComponent {
     if (!this.channel.members) {
       this.channel.members = [];
     }
-
+  
+    if (this.memberOption === 'all') {
+      this.channel.members = this.allUsers
+        .map(user => user.id)
+        .filter(id => id !== undefined) as string[];
+    }
+  
     this.channel = {
       name: this.channel.name,
       description: this.channel.description,
       creator: this.userName,
       members: this.channel.members, 
       type: 'group'
-    };
-
+    };   
     this.channelService.addNewChannel(this.channel);
-    this.closeFunction();  
+    this.closeFunction();
   }
+  
   
 }
