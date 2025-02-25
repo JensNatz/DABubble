@@ -1,4 +1,4 @@
-<div class="add_chanel_form" *ngIf="!addChannel">
+<div class="add_chanel_form" *ngIf="addChannel">
     <h1>Channel erstellen</h1>
     <form (ngSubmit)="onSubmit(channelForm)" #channelForm="ngForm">
         <p>Channnels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum
@@ -20,7 +20,7 @@
 </div>
 
 
-<div class="add_user_to_channel" *ngIf="!addUser">
+<div class="add_user_to_channel" *ngIf="addUser">
     <h1>Leute hinzufügen</h1>
     <form>
         <div class="radio-group">
@@ -37,7 +37,27 @@
 
         <div class="input_section" *ngIf="memberOption === 'specific'">
             <div class="input_content">
-                <div class="editable-input" contenteditable="true" #specificMembers>
+                <div class="editable-input" contenteditable="true" #specificMembers
+                (input)="onInputChange($event)"
+                (focus)="onInputFocus()"
+                ></div>
+                <ng-container *ngIf="selectedUsers.length > 0">
+                    <div class="selected_users">
+                        <div class="selected_user" *ngFor="let user of selectedUsers">
+                            <img class="avatar" [src]="'assets/img/avatar' + user.avatar + '.svg'" alt="avatar">
+                            <span>{{ user.name }}</span>
+                            <!-- <button class="remove-user-btn" (click)="removeSelectedUser(user)">
+                                <img src="assets/img/close.svg">
+                            </button> -->
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <div *ngIf="listShown" class="users_liste">
+                <div class="user_name" *ngFor="let user of filteredUsers">
+                    <img class="avatar" src="assets/img/avatar{{ user.avatar }}.svg">
+                    <span>{{ user.name }}</span>
                 </div>
             </div>
         </div>

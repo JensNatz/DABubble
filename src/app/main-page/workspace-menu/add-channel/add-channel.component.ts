@@ -6,6 +6,10 @@ import { Channel } from '../../../models/channel';
 import { LoginService } from '../../../services/firebase-services/login-service';
 import { WorkspaceMenuComponent } from '../workspace-menu.component';
 import { take } from 'rxjs/operators';
+import { User } from '../../../models/user';
+import { SearchService } from '../../../services/search.service';
+import { Subscription } from 'rxjs';
+import { UserServiceService } from '../../../services/firebase-services/user-service.service';
 
 @Component({
   selector: 'app-add-channel',
@@ -25,7 +29,13 @@ export class AddChannelComponent {
   addChannel = true;
   addUser = false;
   memberOption: string = 'all'; 
-  
+  tempMembers: string[] = []; 
+  inputValue: string = '';
+  filteredUsers: User[] = [];
+  listShown: boolean = false;
+  selectedUsers: User[] = [];
+  selectedUser: User | null = null;
+
   @Input() closeFunction!: () => void;
 
   channel: Channel = {
@@ -36,16 +46,44 @@ export class AddChannelComponent {
     type: 'group'
   }
 
-
-
-
   loginService: LoginService = inject(LoginService);
   workSpace: WorkspaceMenuComponent = inject(WorkspaceMenuComponent);
+  searchService = inject(SearchService);
+  userService: UserServiceService = inject(UserServiceService);
+
+  private userSubscription: Subscription = new Subscription();
+  private allUsers: User[] = [];
 
   constructor(public channelService: ChannelServiceService) {
     this.getCurrentUserData();
+    
+    this.userSubscription.add(
+      this.userService.getUsers().subscribe((users: User[]) => {
+        this.allUsers = users;
+      })
+    );
   }
 
+  onInputFocus(): void {
+    this.filteredUsers = this.allUsers
+        .filter(user => user.name !== this.userName)      
+      this.listShown = this.filteredUsers.length > 0;
+  }
+
+
+  
+  onInputChange(event: Event): void {
+    const target = event.target as HTMLDivElement;
+    this.inputValue = target.innerText.trim();
+  
+    if (this.inputValue.length > 0) {
+      this.filteredUsers = this.searchService
+        .filterUsersByName(this.inputValue)
+        .filter(user => user.name !== this.userName)         
+  
+      this.listShown = this.filteredUsers.length > 0;
+    } 
+  }
 
   getCurrentUserData() {
     this.loginService.currentUser.subscribe(user => {
@@ -56,6 +94,11 @@ export class AddChannelComponent {
     })
   }
 
+  onAddUser(userId: string): void {
+    if (!this.tempMembers.includes(userId)) {
+      this.tempMembers.push(userId);
+    }
+  }
 
   async checkChannelExists() {
     if (!this.channel.name.trim()) {
@@ -70,21 +113,40 @@ export class AddChannelComponent {
     });
   }
 
+  // onSubmit(ngForm: NgForm) {
+  //   if (ngForm.valid && !this.channelExists) {
+  //     this.channel = {
+  //       name: this.channel.name,
+  //       description: this.channel.description,
+  //       creator: this.userName,
+  //       members: [this.userId],
+  //       type: 'group'
+  //     };
+      
+     
+  //     // this.channelService.addNewChannel(this.channel);
+  //     this.addChannel = false;
+  //     this.addUser = true;
+  //     // this.closeFunction();
+  //   }
+  // }
+
   onSubmit(ngForm: NgForm) {
     if (ngForm.valid && !this.channelExists) {
       this.channel = {
         name: this.channel.name,
         description: this.channel.description,
         creator: this.userName,
-        members: [this.userId],
+        members: [this.userId, ...this.tempMembers], // Добавляем участников до сохранения
         type: 'group'
       };
-      
-     
+
+      // Сохраняем канал в Firebase
       // this.channelService.addNewChannel(this.channel);
       this.addChannel = false;
       this.addUser = true;
-      // this.closeFunction();
+      // Опционально, закрываем модальное окно
+      this.closeFunction();
     }
   }
 

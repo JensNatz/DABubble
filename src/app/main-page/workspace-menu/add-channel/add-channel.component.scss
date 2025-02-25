@@ -1,5 +1,6 @@
 @import './../../../styles/variables';
 @import './../../../styles/mixins';
+@import './../../../shared/avatar/avatar.component.scss';
 
 .add_chanel_form {
     display: flex;
@@ -173,4 +174,59 @@ input[type="radio"]:checked + label::after {
     background-color: $purple-1;
     border-radius: 50%;
     transition: all 0.3s ease;
+}
+
+.user_name {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 8px;
+    cursor: pointer;
+    width: max-content;
+
+    &:hover {
+        @include rounded();
+        color: $purple-3;
+        background-color: $bg-color;
+    }
+
+    img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.users_liste {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    @include rounded();
+    border-top-left-radius: 0;
+    background-color: white;
+    border: 1px solid $light-purple;
+    top: 183px;
+    left: 27px;
+    width: 80%;
+    font-size: clamp(16px, 2vw, 18px);
+    padding: 8px;
+    max-height: 350px;
+    overflow: hidden;
+
+    &:hover {
+        overflow: auto;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        margin: 100px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: $light-purple;
+    }
 }
