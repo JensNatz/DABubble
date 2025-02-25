@@ -75,6 +75,11 @@
 
 .all_users {
     margin: 20px 0;
+    display: flex;
+    align-items: center;
+    input {
+        margin-right: 20px;
+    }
 }
 
 .add_user_to_channel {
@@ -140,7 +145,7 @@ input[type="radio"] {
 
 input[type="radio"] + label {
     position: relative;
-    padding-left: 30px;
+    padding-left: 46px;
     line-height: 20px;
     cursor: pointer;
 }
