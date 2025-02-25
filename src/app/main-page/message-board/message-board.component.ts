@@ -83,6 +83,12 @@ export class MessageBoardComponent {
         this.channelDescription = newDescription;
       })
     );
+
+    this.subscription.add(
+      this.channelService.threadOpenState$.subscribe(state => {
+        this.isThreadOpen = state;
+      })
+    );
   }
   
   ngOnInit() {
@@ -96,7 +102,7 @@ export class MessageBoardComponent {
           this.channelCreator = channel.creator;
           this.channelMembers = channel.members || [];
           this.loadMessages();
-          this.isThreadOpen = false;
+          this.channelService.setThreadOpenState(false);
           this.modalService.refreshChannelUsers$.subscribe(() => {
             this.getUserFromChannel();
           });
@@ -177,9 +183,9 @@ export class MessageBoardComponent {
     this.channelDescription = '';
     this.channelMembers = [];
     this.messages = [];
-    this.isThreadOpen = false;
     this.directMessagePartnerName = '';
     this.userAvatar = '';
+    this.channelService.setThreadOpenState(false);
   }
 
   loadUserName() {
@@ -224,11 +230,11 @@ export class MessageBoardComponent {
     this.messageService.getRepliesFromMessageOrderByTimestampDESC(messageId).subscribe((messages) => {
       this.threadMessages = messages as Message[];
     });
-    this.isThreadOpen = true;
+    this.channelService.setThreadOpenState(true);
   }
 
   closeThread() {
-    this.isThreadOpen = false;
+    this.channelService.setThreadOpenState(false);
   }
 
   onSendMessage(content: string) {
