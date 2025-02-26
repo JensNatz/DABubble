@@ -120,6 +120,15 @@ export class LoginService {
       name: newName,
       avatar: avatar // Speichern des ausgewählten Avatars
     });
+
+    const currentUserValue = this.currentUserSubject.value;
+    if (currentUserValue) {
+      this.currentUserSubject.next({
+        ...currentUserValue,
+        name: newName,
+        avatar: avatar
+      });
+    }
   }
 
   async guestLogin(): Promise<void> {

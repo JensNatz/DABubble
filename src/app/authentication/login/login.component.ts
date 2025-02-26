@@ -66,6 +66,7 @@ export class LoginComponent {
 
   ngOnInit() {
     this.animationPlayed = this.animationService.hasAnimationPlayed();
+    
     setTimeout(() => {
       this.animationService.setAnimationPlayed();
     }, 5000);

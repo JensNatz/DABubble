@@ -98,11 +98,9 @@ export class MessageBoardComponent {
         if (this.isThreadOpen && this.parentMessageId) {
           this.messageService.getRepliesFromMessageOrderByTimestampDESC(this.parentMessageId).subscribe((messages) => {
             this.threadMessages = messages as Message[];
-            console.log('neue nachrichten geladen');
           });
         } else {
           this.threadMessages = [];
-          console.log('thread messages cleared');
         }
       })
     );
