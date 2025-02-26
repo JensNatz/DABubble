@@ -3,115 +3,115 @@
 @import '@ctrl/ngx-emoji-mart/picker';
 
 @font-face {
-    font-family: 'Nunito';
-    src: url('./assets/fonts/Nunito-VariableFont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Nunito';
+  src: url('./assets/fonts/Nunito-VariableFont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 * {
-    margin: 0;
-    box-sizing: border-box;
-    scroll-behavior: smooth; 
-    
-    &::-webkit-scrollbar {
-        height: 5px;
-        width: 5px;
-    }
+  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
 
-    &::-webkit-scrollbar-track {
-        border-radius: 4px;
-        background-color: #DFE9EB;
-    }
+  &::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+  }
 
-    &::-webkit-scrollbar-track:active {
-        background-color: #B8C0C2;
-    }
+  &::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background-color: #DFE9EB;
+  }
 
-    &::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-        background-color: $light-purple;
-    }
+  &::-webkit-scrollbar-track:active {
+    background-color: #B8C0C2;
+  }
 
-    &::-webkit-scrollbar-thumb:active {
-        background-color: $light-purple;
-    }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: $light-purple;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: $light-purple;
+  }
 }
 
-body {   
-    font-family: 'Nunito';
-    font-weight: 400;
-    font-size: 16px;
-    color: $black;
-    background-color: $bg-color;
+body {
+  font-family: 'Nunito';
+  font-weight: 400;
+  font-size: 16px;
+  color: $black;
+  background-color: $bg-color;
 }
 
 .hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
 
-.br-30{
-    border-radius: 30px;
+.br-30 {
+  border-radius: 30px;
 }
 
 .btn-primary {
+  color: $white;
+  background-color: $purple-1;
+  font-size: 18px;
+  width: 136px;
+  height: 48px;
+  border-radius: 25px;
+  border: none;
+  font-weight: 700;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $purple-2;
     color: $white;
-    background-color: $purple-1;
-    font-size: 18px;
-    width: 136px;
-    height: 48px;
-    border-radius: 25px;
-    border: none;
-    font-weight: 700;
-  
-    &:hover {
-      cursor: pointer;
-      background-color: $purple-2;
-      color: $white;
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      background-color: $gray;
-      color: $white;
-    }
-  }
-  
-  .btn-secondary {
-    color: $purple-2;
-    background-color: $white;
-    font-size: 18px;
-    width: 136px;
-    height: 48px;
-    border-radius: 25px;
-    border: 1px solid $purple-2;
-    font-weight: 700;
-  
-    &:hover {
-      cursor: pointer;
-      background-color: $purple-1;
-      color: $white;
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      background-color: $gray;
-      color: $white;
-    }
   }
 
-  .btn-disabled {
-    color: $white;
-    background-color: $gray;
+  &:disabled {
     cursor: not-allowed;
-    pointer-events: none;
-    border: none;
+    background-color: $gray;
+    color: $white;
+  }
+}
+
+.btn-secondary {
+  color: $purple-2;
+  background-color: $white;
+  font-size: 18px;
+  width: 136px;
+  height: 48px;
+  border-radius: 25px;
+  border: 1px solid $purple-2;
+  font-weight: 700;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $purple-1;
+    color: $white;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: $gray;
+    color: $white;
+  }
+}
+
+.btn-disabled {
+  color: $white;
+  background-color: $gray;
+  cursor: not-allowed;
+  pointer-events: none;
+  border: none;
 }
 
 .message-tag {
-    background-color: $purple-3;
-    padding: 0 2px;
-    color: $white;
+  background-color: $purple-3;
+  padding: 0 2px;
+  color: $white;
 }
 
 .highlight {
@@ -121,4 +121,203 @@ body {
 .selected-message {
   background: $light-purple !important;
   transition: background-color 0.5s ease;
+}
+
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
+
+@keyframes moveUpLeft {
+  from {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    top: 75px;
+    left: 75px;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveUpLeft1400 {
+  from {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    top: 40px;
+    left: 40px;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveUpLeft1300 {
+  from {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    top: 15px;
+    left: 15px;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveUpLeftMobile {
+  from {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 330px));
+  }
+}
+
+@keyframes moveUpLeftMobileMaxHeight840px {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        top: 12.5%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes moveUpLeftMobileMaxHeight775px {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        top: 15%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes moveUpLeftMobileMaxHeight680px {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        top: 24px;
+        left: 50%;
+        transform: translate(-50%, 0%);
+    }
+}
+
+@keyframes moveUpLeftMobileMaxHeight650px {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        top: 20px;
+        left: 50%;
+        transform: translate(-50%, 0%);
+    }
+}
+
+
+
+@keyframes moveLeft {
+  from {
+    transform: translateX(200px);
+  }
+
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes moveLeftMobile {
+  from {
+    transform: translateX(100px);
+  }
+
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes shrinkImage {
+  from {
+    height: 184px;
+  }
+
+  to {
+    height: 70px;
+  }
+}
+
+@keyframes shrinkImage1180 {
+  from {
+    height: 80px;
+  }
+
+  to {
+    height: 56px;
+  }
+}
+
+@keyframes slideText {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes shrinkText {
+  from {
+    font-size: 90px;
+  }
+
+  to {
+    font-size: 38px;
+  }
+}
+
+@keyframes shrinkTextMobile {
+  from {
+    font-size: 30px;
+  }
+
+  to {
+    font-size: 25px;
+  }
 }

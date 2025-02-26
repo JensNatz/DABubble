@@ -49,6 +49,9 @@ export class HeaderComponent {
   avatarImages = ['1', '2', '3', '4', '5', '6']
  
   constructor(private router: Router) {
+  }
+
+  ngOnInit() {
     this.getCurrentUserData();
   }
 

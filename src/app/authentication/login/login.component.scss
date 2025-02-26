@@ -7,9 +7,19 @@
     overflow: hidden;
     height: 100vh;
     @include flex(center, center, column);
+    max-width: 1450px;
+    width: 100%;
+    margin: 0 auto;
+
 }
 
-
+.error-message {
+    color: $rose;
+    font-size: 14px;
+    margin-top: 6px;
+    position: absolute;
+    left: 0;
+}
 
 .login-container {
     @include flex(normal, center, column);
@@ -346,7 +356,7 @@ form {
     }
 
     .btn-container {
-        margin-top: 20px;
+        margin-top: 10px;
 
     }
 

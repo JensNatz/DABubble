@@ -59,7 +59,7 @@ export class RegisterComponent {
       return;
     }
 
-    console.log('Formular erfolgreich übermittelt');
+   // console.log('Formular erfolgreich übermittelt');
     this.router.navigate(['/register/avatar'], {
       queryParams: { name, email, password }
     });

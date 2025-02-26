@@ -118,18 +118,20 @@
 
                 @for (message of threadMessages; track message.id; let i = $index) {
                 <app-message [message]="message"
+                    [id]="'message-' + message.id"
                     (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
                 @if (i === threadMessages.length - 1 || !isSameDay(threadMessages[i+1].timestamp, message.timestamp)) {
                 <app-time-seperator [timestamp]="message.timestamp"></app-time-seperator>
                 }
                 }
-                @if (getParentMessage() !== undefined) {
+                
+            </div>
+            }
+            @if (getParentMessage() !== undefined) {
                 <app-answers-seperator
                     [numberOfReplies]="getParentMessage()!.numberOfReplies || 0"></app-answers-seperator>
                 <app-message [message]="getParentMessage()!" [isThreadRootMessage]="true"
                     (messageParseComplete)="handleThreadMessageParsed($event)"></app-message>
-                }
-            </div>
             }
         </div>
         <div class="message-input-container">

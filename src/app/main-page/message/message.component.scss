@@ -37,6 +37,8 @@
           @include rounded($top-left: 0);
           padding: 16px;
           background-color: $bg-color;
+          word-break: break-word;
+          overflow-wrap: break-word;
       
           &.own {
             @include rounded($top-left: 0);

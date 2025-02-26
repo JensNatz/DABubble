@@ -45,8 +45,6 @@ export class MessageInputComponent implements AfterViewInit {
     }
   }
 
-
-
   ngOnChanges() {
     if (this.channelService.currentChannelValue === null) {
       this.isTaggingDisabled = true;
@@ -111,6 +109,13 @@ export class MessageInputComponent implements AfterViewInit {
     this.updateLastRange();
   }
 
+  onPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+    const text = event.clipboardData?.getData('text/plain');
+    document.execCommand('insertText', false, text);
+    this.updateLastRange();
+}
+
   togglePlaceholder() {
     const inputElement = this.messageInput?.element.nativeElement;
     if (inputElement.innerHTML === '') {
@@ -171,7 +176,7 @@ export class MessageInputComponent implements AfterViewInit {
       } else {
         inputElement.appendChild(emojiText);
       }
-    
+    this.togglePlaceholder();
     this.isEmojiPickerOpen = false;
     this.lastRange = null;
   }

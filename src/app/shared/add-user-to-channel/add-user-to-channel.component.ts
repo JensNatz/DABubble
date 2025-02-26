@@ -87,8 +87,7 @@ export class AddUserToChannelComponent {
 
 
   getUserId(id: string) {
-    console.log(id);
-
+    //console.log(id);
   }
 
 

@@ -25,8 +25,9 @@ export class ResetPasswordComponent {
   errorMessage: string = '';
   passwortReset: boolean = false;
   newPasswordForm: any;
-  passwordErrorMessage: string = ErrorMessages.passwordNotTheSame;
-
+  passwordErrorMessage: string = '';
+  passwordNotTheSame: string = ErrorMessages.passwordNotTheSame;
+  userId: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -58,9 +59,14 @@ export class ResetPasswordComponent {
   async verifyResetCode() {
     try {
       const email = await this.userService.verifyPasswordResetCode(this.resetCode);
-      console.log(`Reset code verified for email: ${email}`);
+      //console.log(`Reset code verified for email: ${email}`);
+      this.email = email;
+      const user = await this.userService.getUserByEmail(email);
+      if (user) {
+        this.userId = user.id || '';
+      }
     } catch (error) {
-      console.error('Error verifying reset code:', error);
+     // console.error('Error verifying reset code:', error);
     }
   }
 
@@ -79,6 +85,9 @@ export class ResetPasswordComponent {
     try {
       await this.userService.confirmPasswordReset(this.resetCode, newpw);
       console.log('Password reset successfully');
+      if (this.userId) {
+        await this.userService.updateUserPasswordInDatabase(this.userId, newpw);
+      }
       this.passwortReset = true;
       setTimeout(() => {
         this.passwortReset = false;
@@ -104,9 +113,9 @@ export class ResetPasswordComponent {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value || '';
 
-      if (value.length < 5) {
+      if (value.length < 6) {
         this.passwordErrorMessage = ErrorMessages.passwordMinLength;
-        return { minlength: { requiredLength: 5, actualLength: value.length } };
+        return { minlength: { requiredLength: 6, actualLength: value.length } };
       }
       if (!/[A-Z]/.test(value)) {
         this.passwordErrorMessage = ErrorMessages.passwordCapitalLetter;
