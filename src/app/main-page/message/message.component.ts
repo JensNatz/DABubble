@@ -34,6 +34,7 @@ export class MessageComponent implements OnInit, AfterViewInit, OnDestroy {
   loginService: LoginService = inject(LoginService);
 
   private autorNameSubscription?: Subscription;
+  private avatarSubscription?: Subscription;
 
   @Input() message!: Message;
   @Input() isThreadRootMessage: boolean = false;
@@ -54,12 +55,11 @@ export class MessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private userService: UserService) { }
 
   async ngOnInit() {
-    this.avatar = await this.userService.getUserAvatar(this.message.author);
     this.reactionWithNames = await this.createReactionDisplayArray(this.message.reactions);
     if (this.message.author === this.loginService.currentUserValue?.id) {
       this.isOwn = true;
     }
-    await this.loadAuthorName(this.message.author);
+    await this.loadAuthorDetails(this.message.author);
     if (this.message.parentMessageId === null) {
       this.isMessageInMainChannel = true;
     }
@@ -76,6 +76,9 @@ export class MessageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this.autorNameSubscription) {
       this.autorNameSubscription.unsubscribe();
+    }
+    if (this.avatarSubscription) {
+      this.avatarSubscription.unsubscribe();
     }
   }
 
@@ -237,7 +240,7 @@ export class MessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.hideEmojiPicker();
   }
 
-  private async loadAuthorName(userId: string) {
+  private async loadAuthorDetails(userId: string) {
     if (this.isOwn) {
       this.autorNameSubscription = this.loginService.currentUser.subscribe(user => {
         if (user) {
@@ -246,8 +249,16 @@ export class MessageComponent implements OnInit, AfterViewInit, OnDestroy {
           this.authorName = 'Unknown User';
         }
       })
+      this.avatarSubscription = this.loginService.currentUser.subscribe(user => {
+        if (user) {
+          this.avatar = user.avatar;
+        } else {
+          this.avatar = '0';
+        }
+      });
     } else {
       this.authorName = (await this.userService.getUserName(userId)) || 'Unknown User';
+      this.avatar = await this.userService.getUserAvatar(userId);
     }
   }
 }
