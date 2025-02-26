@@ -8,6 +8,8 @@
     background-color: $white;
     width: 100%;
     position: relative;
+    word-break: break-word;
+    overflow-wrap: break-word;
 
     .tag-selection-list {
         position: absolute;
@@ -42,7 +44,7 @@
     }
 
     .toolbar {
-        @include flex($justify: space-between); 
+        @include flex($justify: space-between);
         padding-top: 8px;
 
         .toolbar-left {
