@@ -69,7 +69,7 @@ export class LoginComponent {
     
     setTimeout(() => {
       this.animationService.setAnimationPlayed();
-    }, 5000);
+    }, 3500);
   }
 
   async checkUserExists() {
