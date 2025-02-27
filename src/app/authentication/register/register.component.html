@@ -21,7 +21,7 @@
             [showError]="registerForm.controls['name'].invalid && registerForm.controls['name'].touched"
             [errorMessage]="nameErrorMessage"
             (blur)="onBlur('name')"
-            imagePath="../../../assets/img/person_filled.svg">
+            imagePath="assets/img/person_filled.svg">
           </app-input-field>
           <app-input-field
             required
@@ -32,7 +32,7 @@
             (blur)="onBlur('email')"
             [showError]="registerForm.controls['email'].invalid && registerForm.controls['email'].touched" 
             [errorMessage]="emailErrorMessage"
-            imagePath="../../../assets/img/mail.svg">
+            imagePath="assets/img/mail.svg">
           </app-input-field>
           <app-input-field
             required            
@@ -43,7 +43,7 @@
             (blur)="onBlur('password')"
             [showError]="registerForm.controls['password'].invalid && registerForm.controls['password'].touched"
             [errorMessage]="passwordErrorMessage"
-            imagePath="../../../assets/img/lock.svg"
+            imagePath="assets/img/lock.svg"
             >
           </app-input-field>
         </div>
